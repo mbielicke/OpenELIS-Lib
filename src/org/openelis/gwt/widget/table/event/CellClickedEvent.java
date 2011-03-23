@@ -1,0 +1,54 @@
+package org.openelis.gwt.widget.table.event;
+
+import com.google.gwt.event.shared.GwtEvent;
+
+public class CellClickedEvent extends GwtEvent<CellClickedHandler> {
+	
+	private static Type<CellClickedHandler> TYPE;
+	private int row;
+	private int col;
+	private boolean cancelled;
+	
+	public static CellClickedEvent fire(HasCellEditedHandlers source, int row, int col) {
+		if(TYPE != null) {
+			CellClickedEvent event = new CellClickedEvent(row, col);
+			source.fireEvent(event);
+			return event;
+		}
+		return null;
+	}
+	
+	protected CellClickedEvent(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+
+	@Override
+	protected void dispatch(CellClickedHandler handler) {
+		handler.onCellClicked(this);
+	}
+
+	@Override
+	public com.google.gwt.event.shared.GwtEvent.Type<CellClickedHandler> getAssociatedType() {
+		return (Type) TYPE;
+	}
+	
+	public static Type<CellClickedHandler> getType() {
+		if(TYPE == null) {
+			TYPE = new Type<CellClickedHandler>();
+		}
+		return TYPE;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
+	public boolean isCancelled() {
+		return cancelled;
+	}
+}

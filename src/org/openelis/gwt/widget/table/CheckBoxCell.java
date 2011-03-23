@@ -54,11 +54,6 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     private boolean query;
     
     /**
-     * Container to hold the widget for formatting and spacing
-     */
-    //private AbsolutePanel container;
-    
-    /**
      * Constructor that takes the editor to be used for the cell.
      * 
      * @param editor
@@ -66,25 +61,7 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     public CheckBoxCell(CheckBox editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        //container = new AbsolutePanel();
-        //container.setStyleName("CellContainer");
-        //container.add(editor);
-        //DOM.setStyleAttribute(container.getElement(), "align", "center");       
     }
-    
-    /**
-     * Pulls value out of the editor returns it to the table. Will pass back a
-     * QueryData object if in QueryMode or the editor value if in edit mode
-     */
-    /*
-    public Object finishEditing(Tree tree, FlexTable flexTable, int row, int col) {
-        tree.ignoreReturn(false);
-        if(tree.getQueryMode()){
-            return editor.getQuery();
-        }
-        return editor.getValue();
-    }
-    */
     
     public Object finishEditing() {
         if(query){
@@ -124,47 +101,6 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         container.setEditor(editor);
         DOM.setStyleAttribute(container.getElement(), "align", "center");          
     }
-
-    /**
-     * Sets the model value to the editor and then places the editor into the
-     * cell to be edited.
-     */
-    /*
-    @SuppressWarnings("unchecked")
-    public void startEditing(Tree tree,
-                             FlexTable flexTable,
-                             int trow,
-                             int row,
-                             int col,
-                             String value,
-                             GwtEvent event) {
-        editor.setQueryMode(false);
-        editor.setValue(value);
-        if(event instanceof ClickEvent)
-            editor.changeValue();
-        placeWidget(tree,flexTable,row,col);
-    }
-    */
-    
-    /**
-     * Makes sure the widget is in query mode and will set its value to the
-     * passed QueryData and will place the widget in the table for editing
-     */
-    /*
-    @SuppressWarnings("unchecked")
-    public void startQueryEditing(Tree tree,
-                                  FlexTable flexTable,
-                                  int trow,
-                                  int row,
-                                  int col,
-                                  QueryData qd,
-                                  GwtEvent event) {
-               editor.setQueryMode(true);
-               editor.setQuery(qd);
-              
-               placeWidget(tree,flexTable,row,col);
-           }
-    */
     
     /**
      * Gets Formatted value from editor and sets it as the cells display
@@ -215,29 +151,6 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     public Widget getWidget() {
     	return editor;
     }
-    
-    /**
-     * Sizes and places the editor into the passed cell into the table.
-     * 
-     * @param table
-     * @param flexTable
-     * @param row
-     * @param col
-     */
-    /*
-    private void placeWidget(Tree tree, FlexTable flexTable, int row, int col) {
-        tree.ignoreReturn(true);
-       
-        container.setWidth((tree.getColumnAt(col).getWidth()-3)+"px");
-        container.setHeight((tree.getRowHeight()-3)+"px");
-        flexTable.setWidget(row, col, container);
-       
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                editor.setFocus(true);
-            }
-        });
-    }
-    */
+  
 
 }

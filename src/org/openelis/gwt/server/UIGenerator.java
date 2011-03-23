@@ -1608,6 +1608,7 @@ public class UIGenerator extends Generator {
                     }
                 }
                 sw.println("panel.addFocusHandler(wid"+id+");");
+                sw.println("wid"+id+".addFocusHandler(panel);");
                 setDefaults(node,"wid"+id);
      	        
      	    }
@@ -2101,8 +2102,8 @@ public class UIGenerator extends Generator {
                 setDefaults(node,"wid"+id);
                 sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-               // sw.println("panel.addFocusHandler(wid"+id+");");
-				sw.println("wid"+id+".addFocusHandler(panel);");
+                sw.println("panel.addFocusHandler(wid"+id+");");
+                sw.println("wid"+id+".addFocusHandler(panel);");
     		}
     	
     		public void addImport() {

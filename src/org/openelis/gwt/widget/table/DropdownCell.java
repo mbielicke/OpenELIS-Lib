@@ -54,10 +54,6 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
     private boolean     query;
 
     /**
-     * Container to hold the AutoComplete widget for formatting and spacing
-     */
-    // private AbsolutePanel container;
-    /**
      * Constructor that takes the editor to be used for the cell.
      * 
      * @param editor

@@ -53,10 +53,6 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
     private boolean  query;
 
     /**
-     * Container to hold the AutoComplete widget for formatting and spacing
-     */
-    // private AbsolutePanel container;
-    /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor

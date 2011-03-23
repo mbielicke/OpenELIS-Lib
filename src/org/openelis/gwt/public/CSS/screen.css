@@ -257,24 +257,14 @@ color:gray;
     font-size:11px;
     border:1px solid #99bbe8;
 }
-<<<<<<< .working
 
  .MenuArrow, .summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
 .worksheetCompletionIcon, .addOrCancelIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
-=======
- .MenuArrow, .summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
-.worksheetCompletionIcon, .addOrCancelIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
->>>>>>> .merge-right.r4868
 .fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
 .panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
 .systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon {
-<<<<<<< .working
     width:20px;
     height:20px;
-=======
-    width:16px;
-    height:16px;
->>>>>>> .merge-right.r4868
 }
 
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
@@ -368,14 +358,9 @@ color:gray;
 .summaryIcon{
     
 }
-<<<<<<< .working
-.MenuArrow{
-	background:url('../Images/nextbuttonimage.gif') no-repeat;
 
-=======
 .MenuArrow{
 	background:url('../Images/nextbuttonimage.gif') no-repeat;
->>>>>>> .merge-right.r4868
 }
 .arrowIcon{
    background:url('../Images/nextbuttonimage.gif') no-repeat center;
@@ -838,16 +823,12 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-<<<<<<< .working
 
 .ButtonAdj {
 	padding-bottom : 3px;
 }
 
 .addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
-=======
-.addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
->>>>>>> .merge-right.r4868
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
@@ -1629,7 +1610,6 @@ padding:8px;
 padding-bottom:0;
 }
 /************** Drag & Drop ************/
-<<<<<<< .working
 .dragdrop-movable-panel .middleCenter{
 background:white;
 opacity:0.8;
@@ -1725,103 +1705,6 @@ tr .DropOnRow{
 
 .DropPositioner {
 		border-top:1px dashed #63B159;}
-=======
-.dragdrop-movable-panel .middleCenter{
-background:white;
-opacity:0.8;
-border:1px solid #d8d8d8;
-border-top:0;
-		}
-.dragdrop-movable-panel .ErrorWindow{
-    width:176px;}
-.dragdrop-movable-panel .ErrorWindow .middle{
-    padding:0px;
-    border:0px;
-}
-.dragdrop-movable-panel .ErrorWindow .topRight {
-    width:6px;
-    height:6px;
-background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
-}
-.dragdrop-movable-panel .ErrorWindow .middleRight {
-    width:6px;
-    height:100%;
-    background: transparent url("../Images/shadow-lr.png") repeat-y -6px 0;
-}
-.dragdrop-movable-panel .ErrorWindow .middleRightInner{
- /*   background: transparent url("../Images/popupright-y.png") top repeat-y;*/
- background:none;
-    height:100%;
-    margin-top:6px;
-}
-.dragdrop-movable-panel .ErrorWindow .bottomRight {
-    background: transparent url("../Images/shadow.png") no-repeat 0 -6px;
-    width:6px;
-    height:6px;
-}
-.dragdrop-movable-panel .ErrorWindow .bottomCenter {
-    background:url("../Images/shadow.png") no-repeat 0 -36px;
-    height:6px;
-}
-.dragdrop-movable-panel .ErrorWindow .bottomCenterInner {
-    background:url("../Images/shadow.png") repeat-x 0 -36px;
-    height:6px;
-    margin-left:6px;
-}
-.dragdrop-movable-panel .ErrorWindow .bottomLeft {
-    width:6px;
-    height:6px;
-    background:url("../Images/shadow.png") no-repeat 0 -12px;
-}
-.dragdrop-movable-panel .ErrorWindow .middleLeft {
-    width:6px;
-    height:100%;
-    background: url("../Images/shadow-lr.png") repeat-y 0 0;
-}
-.dragdrop-movable-panel .ErrorWindow .topLeft {
-    width:6px;
-    height:6px;
-    background: url("../Images/shadow.png") no-repeat 0 0;
-}
-.dragdrop-movable-panel .ErrorWindow .topCenter{
-    background:none;
-    height:6px;
-}
-.dragdrop-movable-panel .ErrorWindow .topCenter .topCenterInner{
-    background:white;
-    height:5px;
-    border:1px solid #d8d8d8;
-    border-bottom:0;
-    opacity:0.8;
-}
-.DragProxy{
- margin-top:-3;
-}
-
-.dragdrop-proxy{
-/**	border:1px solid #d8d8d8;**/
-	background:none;
-opacity:0.9;
-}
-
-tr .DropOnRow{
-	background:#defadc;
-}
-
-.dragdrop-proxy{
-/**	border:1px solid #d8d8d8;**/
-}	
-	
-.dragdrop-proxy .ScreenLabel{
-	border:1px solid #d8d8d8;
-	border-left:0;
-	background:white;
-	padding-right:4px;
-		}
-
-.DropPositioner {
-		border-top:1px dashed #63B159;}
->>>>>>> .merge-right.r4868
 
 .DragSelector{
    border:1px solid #99bbe8;

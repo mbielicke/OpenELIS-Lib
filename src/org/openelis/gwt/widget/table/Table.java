@@ -45,11 +45,14 @@ import org.openelis.gwt.widget.table.event.BeforeRowAddedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowAddedHandler;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedEvent;
 import org.openelis.gwt.widget.table.event.BeforeRowDeletedHandler;
+import org.openelis.gwt.widget.table.event.CellClickedEvent;
+import org.openelis.gwt.widget.table.event.CellClickedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
+import org.openelis.gwt.widget.table.event.HasCellClickedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
@@ -62,6 +65,7 @@ import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -78,9 +82,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -96,7 +98,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		HasBeforeSelectionHandlers<Integer>, HasSelectionHandlers<Integer>,
 		HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
 		HasCellEditedHandlers, HasBeforeRowAddedHandlers, HasRowAddedHandlers,
-		HasBeforeRowDeletedHandlers, HasRowDeletedHandlers,
+		HasBeforeRowDeletedHandlers, HasRowDeletedHandlers, HasCellClickedHandlers,
 		HasValue<ArrayList<? extends Row>>, HasExceptions, FocusHandler {
 
 	/**
@@ -237,12 +239,17 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 							if (col >= getColumnCount()) {
 								col = 0;
 								row++;
-								if (row >= getRowCount())
+								if (row >= getRowCount()){
+									setFocus(true);
 									break;
+								}
 
 							}
-							if (startEditing(row, col))
+							if (startEditing(row, col)) {
+								event.preventDefault();
+								event.stopPropagation();
 								break;
+							}
 						}
 					} else {
 						while (true) {
@@ -250,11 +257,16 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 							if (col < 0) {
 								col = getColumnCount() - 1;
 								row--;
-								if (row < 0)
+								if (row < 0) {
+									setFocus(true);
 									break;
+								}
 							}
-							if (startEditing(row, col))
+							if (startEditing(row, col)) {
+								event.preventDefault();
+								event.stopPropagation();
 								break;
+							}
 						}
 					}
 
@@ -857,7 +869,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return The newly created and added column
 	 */
 	public Column addColumn(String name, String label) {
-		return addColumnAt(columns.size(), name, label);
+		return addColumnAt(columns.size(), name, label, 75);
 	}
 
 	/**
@@ -881,12 +893,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 *            Label used in the Table header.
 	 * @return The newly created and added Column.
 	 */
-	public Column addColumnAt(int index, String name, String label) {
+	public Column addColumnAt(int index, String name, String label, int width) {
 		Column column;
 
 		column = new Column(this, name, label);
-		columns.add(index, column);
-		layout();
+		addColumnAt(index,column);
 
 		return column;
 	}
@@ -899,7 +910,16 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return The newly created and added column.
 	 */
 	public Column addColumnAt(int index) {
-		return addColumnAt(index, "", "");
+		return addColumnAt(index, "", "",75);
+	}
+	
+	public void addColumnAt(int index, Column column) {
+		columns.add(index, column);
+		if(model != null) {
+			for(Row row : model)
+				row.cells.add(index,null);
+		}
+		layout();
 	}
 
 	/**
@@ -911,6 +931,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		Column col;
 
 		col = columns.remove(index);
+		if(model != null) {
+			for(Row row : model) 
+				row.cells.remove(index);
+		}
 		layout();
 
 		return col;
@@ -1292,7 +1316,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		BeforeRowAddedEvent event = null;
 
 		if (!queryMode)
-			BeforeRowAddedEvent.fire(this, index, row);
+			event = BeforeRowAddedEvent.fire(this, index, row);
 
 		return event == null || !event.isCancelled();
 	}
@@ -1324,10 +1348,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	private boolean fireBeforeRowDeletedEvent(int index, Row row) {
-		BeforeRowAddedEvent event = null;
+		BeforeRowDeletedEvent event = null;
 
 		if (!queryMode)
-			BeforeRowDeletedEvent.fire(this, index, row);
+			event = BeforeRowDeletedEvent.fire(this, index, row);
 
 		return event == null || event.isCancelled();
 	}
@@ -1346,7 +1370,16 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			RowDeletedEvent.fire(this, index, row);
 
 		return true;
-
+	}
+	
+	protected boolean fireCellClickedEvent(int row, int col) {
+		CellClickedEvent event = null;
+		
+		if(!queryMode)
+			event = CellClickedEvent.fire(this, row, col);
+		
+		return event == null || !event.isCancelled();
+			
 	}
 
 	// ********* Edit Table Methods *******************
@@ -1431,7 +1464,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 		finishEditing();
 
-		willScroll = view.isRowVisible(row);
+		//willScroll = view.isRowVisible(row);
 
 		/*
 		 * If multiple selection is allowed check event for ctrl or shift keys.
@@ -1508,7 +1541,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		/*
 		 * Make sure the row is in the current view before start editing
 		 */
-		view.scrollToVisible(row);
+		willScroll = view.scrollToVisible(row);
 		if (!willScroll)
 			view.startEditing(row, col, getValueAt(row, col), event);
 		else {
@@ -1516,7 +1549,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			 * Call start editing in Deferred Command to make sure the table is
 			 * scrolled before setting the cell into edit mode
 			 */
-			DeferredCommand.addCommand(new Command() {
+			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 				public void execute() {
 					view.startEditing(row, col, getValueAt(row, col), event);
 				}
@@ -2166,6 +2199,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	public HandlerRegistration addRowDeletedHandler(RowDeletedHandler handler) {
 		return addHandler(handler, RowDeletedEvent.getType());
+	}
+
+	/**
+	 * Register a CellClickedHandler to this Table
+	 */
+	public HandlerRegistration addCellClickedHandler(CellClickedHandler handler) {
+		return addHandler(handler, CellClickedEvent.getType());
 	}
 
 	/**

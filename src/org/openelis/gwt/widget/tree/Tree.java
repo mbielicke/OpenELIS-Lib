@@ -32,6 +32,7 @@ import java.util.HashMap;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasValue;
@@ -41,9 +42,12 @@ import org.openelis.gwt.widget.table.CellEditor;
 import org.openelis.gwt.widget.table.CellRenderer;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
+import org.openelis.gwt.widget.table.event.CellClickedEvent;
+import org.openelis.gwt.widget.table.event.CellClickedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasCellClickedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
 import org.openelis.gwt.widget.table.event.UnselectionEvent;
@@ -74,7 +78,10 @@ import org.openelis.gwt.widget.tree.event.NodeOpenedEvent;
 import org.openelis.gwt.widget.tree.event.NodeOpenedHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -89,9 +96,11 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by screens to display information in a Tree.
@@ -102,12 +111,12 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                                     HasBeforeSelectionHandlers<Integer>,
                                     HasSelectionHandlers<Integer>, HasUnselectionHandlers<Integer>,
-                                    HasBeforeCellEditedHandlers, HasCellEditedHandlers,
+                                    HasBeforeCellEditedHandlers, HasCellEditedHandlers, HasCellClickedHandlers,
                                     HasBeforeNodeAddedHandlers, HasNodeAddedHandlers,
                                     HasBeforeNodeDeletedHandlers, HasNodeDeletedHandlers,
                                     HasBeforeNodeOpenHandlers, HasNodeClosedHandlers,
                                     HasBeforeNodeCloseHandlers, HasNodeOpenedHandlers,
-                                    HasValue<Node>, HasExceptions {
+                                    HasValue<Node>, HasExceptions, FocusHandler {
 
     /**
      * Cell that is currently being edited.
@@ -250,12 +259,17 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                                 if (col >= getColumnCount()) {
                                     col = 0;
                                     row++ ;
-                                    if (row >= getRowCount())
+                                    if (row >= getRowCount()) {
+                                    	setFocus(true);
                                         break;
+                                    }
 
                                 }
-                                if (startEditing(row, col))
+                                if (startEditing(row, col)) {
+                                	event.preventDefault();
+                                    event.stopPropagation();
                                     break;
+                                }
                             }
                         } else {
                             while (true) {
@@ -263,11 +277,16 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                                 if (col < 0) {
                                     col = getColumnCount() - 1;
                                     row-- ;
-                                    if (row < 0)
+                                    if (row < 0) {
+                                    	setFocus(true);
                                         break;
+                                    }
                                 }
-                                if (startEditing(row, col))
+                                if (startEditing(row, col)) {
+                                	event.preventDefault();
+                                	event.stopPropagation();
                                     break;
+                                }
                             }
                         }
 
@@ -452,6 +471,36 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             }
         }
 
+        return children;
+    }
+    
+    private ArrayList<Node> getAllNodes() {
+        ArrayList<Node> children;
+        ArrayList<Node> nodes = new ArrayList<Node>();
+        
+        if(root == null)
+        	return nodes;
+        
+        if (showRoot) 
+            nodes.add(root);
+
+        children = getChildren(root);
+        for (Node child : children) 
+            nodes.add(child);
+        
+        return nodes;
+    }
+    
+    private ArrayList<Node> getChildren(Node node) {
+        ArrayList<Node> children = new ArrayList<Node>();
+
+        if (node.getChildCount() > 0) {
+            for (Node child : node.children) {
+                children.add(child);
+                if ( !child.isLeaf())
+                    children.addAll(getDisplayedChildren(child));
+            }
+        }
         return children;
     }
     
@@ -989,6 +1038,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         column = new Column(this, name, label);
         columns.add(index, column);
+        for(Node node : getAllNodes()) {
+        	if(node.getCells().size() >= index)
+        		node.getCells().add(null);
+        }
         layout();
 
         return column;
@@ -1014,6 +1067,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         Column col;
 
         col = columns.remove(index);
+        for(Node node : getAllNodes()) {
+        	if(index < node.getCells().size())
+        		node.getCells().remove(index);
+        }
         layout();
 
         return col;
@@ -1600,7 +1657,15 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             NodeDeletedEvent.fire(this, index, row);
 
         return true;
-
+    }
+    
+    protected boolean fireCellClickedEvent(int row, int col) {
+    	CellClickedEvent event = null;
+    	
+    	if( !queryMode) 
+    		event = CellClickedEvent.fire(this, row, col);
+    	
+    	return event == null || !event.isCancelled();
     }
 
     // ********* Edit Tree Methods *******************
@@ -1717,7 +1782,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         finishEditing();
 
-        willScroll = view.isRowVisible(row);
+        //willScroll = view.isRowVisible(row);
 
         /*
          * If multiple selection is allowed check event for ctrl or shift keys.
@@ -1798,7 +1863,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         /*
          * Make sure the row is in the current view before start editing
          */
-        view.scrollToVisible(row);
+        willScroll = view.scrollToVisible(row);
         if ( !willScroll)
             view.startEditing(row, col, getValueAt(row, col), event);
         else {
@@ -1806,7 +1871,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
              * Call start editing in Deferred Command to make sure the tree is
              * scrolled before setting the cell into edit mode
              */
-            DeferredCommand.addCommand(new Command() {
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
                 public void execute() {
                     view.startEditing(row, col, getValueAt(row, col), event);
                 }
@@ -1815,11 +1880,15 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         return true;
     }
 
+    public void finishEditing() {
+    	finishEditing(true);
+    }
+    
     /**
      * Method called to complete editing of any cell in the tree. Method does
      * nothing a cell is not currently being edited.
      */
-    public void finishEditing() {
+    public void finishEditing(boolean keepFocus) {
         Object newValue, oldValue;
         int row, col;
 
@@ -1854,11 +1923,13 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             fireCellEditedEvent(row, col);
         }
 
-        /*
-         * Call setFocus(true) so that the KeyHandler will receive events when
-         * no cell is being edited
-         */
-        setFocus(true);
+      
+		/*
+		 * Call setFocus(true) so that the KeyHandler will receive events when
+		 * no cell is being edited
+		 */
+		if(keepFocus)
+			setFocus(true);
     }
 
     /**
@@ -2016,6 +2087,16 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     public void removeFocusStyle(String style) {
         removeStyleName(style);
     }
+    
+	public void onFocus(FocusEvent event) {
+		Widget focused;
+		
+		focused = ((ScreenPanel)event.getSource()).getFocused();
+		
+		if(focused == null || !DOM.isOrHasChild(getElement(),focused.getElement()))
+			finishEditing(false);
+		
+	}
 
     // ********** Implementation of Queryable *******************
     /**
@@ -2452,6 +2533,13 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public HandlerRegistration addNodeOpenedHandler(NodeOpenedHandler handler) {
         return addHandler(handler, NodeOpenedEvent.getType());
+    }
+    
+    /**
+     * Registers a CellClickedEvent to this Tree
+     */
+    public HandlerRegistration addCellClickedHandler(CellClickedHandler handler) {
+    	return addHandler(handler, CellClickedEvent.getType());
     }
 
     /**

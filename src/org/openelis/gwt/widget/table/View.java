@@ -169,8 +169,9 @@ public class View extends Composite {
             @SuppressWarnings("unchecked")
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
-                table.startEditing(firstVisibleRow + cell.getRowIndex(),
-                                   cell.getCellIndex(), (GwtEvent)event);
+                if(!table.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
+                		table.startEditing(firstVisibleRow + cell.getRowIndex(),
+                				cell.getCellIndex(), (GwtEvent)event);
             }
         });
 
@@ -244,7 +245,8 @@ public class View extends Composite {
         } else if ( !table.hasHeader() && header != null) {
             inner.remove(0);
             header = null;
-        }
+        } else if( table.hasHeader() && header != null)
+        	header.layout();
 
         // **** Vertical ScrollBar **************
         if (table.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {

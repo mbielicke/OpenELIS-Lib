@@ -252,6 +252,9 @@ public class Header extends FocusPanel {
                 flexTable.getCellFormatter().removeStyleName(0, i, "Sorted");
            */
         }
+        
+        while(flexTable.getCellCount(0) > tree.getColumnCount())
+        	flexTable.removeCell(0,flexTable.getCellCount(0) - 1);
     }
 
     /**

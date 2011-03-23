@@ -25,8 +25,8 @@
 */
 package org.openelis.gwt.widget.table;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,7 +35,7 @@ public class Container extends AbsolutePanel {
     
     protected int width;
     protected int height;
-    protected Command command;
+    protected Scheduler.ScheduledCommand command;
     protected Widget editor;
     
     public Container() {
@@ -73,7 +73,7 @@ public class Container extends AbsolutePanel {
     }
     
     public void focusWidget() {
-        DeferredCommand.addCommand(command);
+        Scheduler.get().scheduleDeferred(command);
     }
    
 }
