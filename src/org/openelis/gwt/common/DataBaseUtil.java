@@ -134,6 +134,8 @@ public class DataBaseUtil {
      * @return true if object is the same; otherwise false
      */
     public static boolean isDifferent(Object a, Object b) {
+        if (a instanceof String && b instanceof String)
+            return !((String)a).trim().equals(((String)b).trim());
         return (a == null && b != null) || (a != null && !a.equals(b));
     }
 
