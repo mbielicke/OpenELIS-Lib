@@ -50,7 +50,7 @@ public class ExceptionHelper {
         dp             = new DecoratorPanel();
         overHandlers   = new HashMap<HasExceptions,HandlerRegistration>();
         outHandlers    = new HashMap<HasExceptions,HandlerRegistration>();
-
+ 
         dp.setStyleName("ErrorWindow");
         dp.add(exceptionPanel);
         dp.setVisible(true);

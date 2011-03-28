@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
@@ -22,13 +23,11 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -49,17 +48,45 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     DecoratorPanel dp = new DecoratorPanel();
     AbsolutePanel modalGlass;
     AbsolutePanel modalPanel;
-    int active = -1, left = -1, top = -1;
+    int active = -1;
     HorizontalPanel bp;
     HandlerRegistration keyHandler;
     public enum Type {WARN,ERROR,QUESTION,BUSY};
-    private int width = 400;
-    private int height = -1;
+    private int width = 400,height = -1,top = -1, left = -1;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
     Caption cap = new Caption();
     
+    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
 
+    	public String name;
+
+    	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+    		return addDomHandler(handler, MouseDownEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+    		return addDomHandler(handler,MouseUpEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+    		return addDomHandler(handler,MouseOutEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+    		return addDomHandler(handler,MouseOverEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+    		return addDomHandler(handler,MouseMoveEvent.getType());
+    	}
+
+    	public HandlerRegistration addMouseWheelHandler(
+    			MouseWheelHandler handler) {
+    		return addDomHandler(handler,MouseWheelEvent.getType());
+    	}
+    }
+    
     public Confirm(Type type, String caption, String message, String... buttons) {
     	VerticalPanel vp = new VerticalPanel();
     	cap.name = caption;
@@ -67,26 +94,30 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
     	switch(type) {
-    	    case WARN :
-    	        ap.setStyleName("largeWarnIcon");
-    	        if(caption == null || caption.equals(""))
-    	            cap.name = "Warning";
-    	        break;
-    	    case ERROR :
-    	        ap.setStyleName("largeErrorIcon");
-    	        if(caption == null || caption.equals(""))
-    	            cap.name = "Error";
-    	        break;
-    	    case QUESTION :
-    	        ap.setStyleName("largeQuestionIcon");
-    	        if(caption == null || caption.equals(""))
-    	        	cap.name = "Question";
-    	        break;
-    	    case BUSY :
-    	    	ap.setStyleName("spinningIcon");
-    	    	if(caption == null || caption.equals(""))
-    	    		cap.name = "Busy";
-    	    	break;
+    		case WARN : {
+    			ap.setStyleName("largeWarnIcon");
+    			if(caption == null || caption.equals(""))
+    				cap.name = "Warning";
+    			break;
+    		}
+    		case ERROR : {
+        		ap.setStyleName("largeErrorIcon");
+        		if(caption == null || caption.equals(""))
+        			cap.name = "Error";
+        		break;
+        	}
+    		case QUESTION : {
+        		ap.setStyleName("largeQuestionIcon");
+        		if(caption == null || caption.equals(""))
+        			cap.name = "Question";
+        		break;
+        	}
+    		case BUSY : {
+    			ap.setStyleName("spinnerIcon");
+    			if(caption == null || caption.equals(""))
+    				cap.name = "Busy";
+    			break;
+    		}
     	}
    	    
         Label winLabel = new Label();
@@ -147,16 +178,17 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         modalPanel.setHeight(Window.getClientHeight()+"px");
         modalPanel.setWidth(Window.getClientWidth()+"px");
         modalPanel.add(this, left > -1 ? left : Window.getClientWidth()/2 - 400/2,
-	             top > -1 ? top : Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        		             top > -1 ? top : Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
+
         keyHandler = Event.addNativePreviewHandler(this);
         final Widget wid = this;
-        DeferredCommand.addCommand(new Command() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {			
         	public void execute() {
                size();
                if(active > -1){
-                   ((Button)bp.getWidget(active)).setFocus(false);
+               	((Button)bp.getWidget(active)).setFocus(false);
                }
                ((Button)bp.getWidget(0)).setFocus(true);
                active = 0;
@@ -174,7 +206,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	dp.setVisible(true);
     	if(bp.getOffsetWidth() > width)
     		setWidth((bp.getOffsetWidth()+50)+"px");
-    	modalPanel.setWidgetPosition(this, Window.getClientWidth()/2 - this.getOffsetWidth()/2,Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+    	modalPanel.setWidgetPosition(this, left > -1 ? left : Window.getClientWidth()/2 - this.getOffsetWidth()/2,
+    									   top > -1 ? top :  Window.getClientHeight()/2 - this.getOffsetHeight()/2);
     	
     }
     
@@ -182,9 +215,10 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	bp = new HorizontalPanel();
     	for(int i = 0; i < buttons.length; i++) {
     		Button ab = new Button();
+    		ab.setAction(String.valueOf(i));
     		Label bl = new Label(buttons[i]);
     		bl.setStyleName("ScreenLabel");
-    		ab.setDisplay(bl);
+    		ab.setWidget(bl);
     		ab.setStyleName("Button");
     		ab.setEnabled(true);
     		bp.add(ab);
@@ -200,15 +234,16 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	}
 	
 	public void onClick(ClickEvent event) {
-	    int clicked;
-	    
-	    clicked = bp.getWidgetIndex((Widget)event.getSource());
-		SelectionEvent.fire(this,clicked);
+		int clicked;
+		
+		clicked = new Integer(((Button)event.getSource()).getAction()).intValue();
+		SelectionEvent.fire(this,new Integer(((Button)event.getSource()).getAction()));
 		hide();
-		if(active > -1)
-		    ((Button)bp.getWidget(active)).setFocus(false);
-		active = -1;
-		((Button)bp.getWidget(clicked)).setFocus(false);
+        if(active > -1)
+           	((Button)bp.getWidget(active)).setFocus(true);
+        active = -1;
+        ((Button)bp.getWidget(clicked)).setFocus(false);
+           
 		
 	}
 
@@ -226,6 +261,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 				hide();
 			}
 		}
+		//if(event.getTypeInt() != Event.ONCLICK)
+			//event.cancel();
 	}
 	
 	public void setSize(int width, int height) {
@@ -240,40 +277,5 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
-	/**
-	 * This private class is used to create a caption that can accept drag events
-	 * @author tschmidt
-	 *
-	 */
-    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
-
-        public String name;
-
-        public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-            return addDomHandler(handler, MouseDownEvent.getType());
-        }
-
-        public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-            return addDomHandler(handler,MouseUpEvent.getType());
-        }
-
-        public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-            return addDomHandler(handler,MouseOutEvent.getType());
-        }
-
-        public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-            return addDomHandler(handler,MouseOverEvent.getType());
-        }
-
-        public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-            return addDomHandler(handler,MouseMoveEvent.getType());
-        }
-
-        public HandlerRegistration addMouseWheelHandler(
-                MouseWheelHandler handler) {
-            return addDomHandler(handler,MouseWheelEvent.getType());
-        }
-    }
     
 }

@@ -1127,6 +1127,15 @@ public class UIGenerator extends Generator {
     		}
     	});
     	
+    	factoryMap.put("image", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			//do nothing for now 
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widet.table.ImageCell");
+    		}
+    	});
+    	
         factoryMap.put("Integer", new Factory(){
             public void getNewInstance(Node node, int id) {
             	String pattern;
@@ -1598,11 +1607,12 @@ public class UIGenerator extends Generator {
                                 sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
                             else if(name.equals("calendar"))
                                 sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                            else if(name.equals("image"))
+                            	sw.println("ImageCell cell"+child+" = new ImageCell(wid"+child+");");
                             else
                                 sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
                             
                             sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
-                            //sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
                             break;
                         }
                     }
@@ -2036,11 +2046,12 @@ public class UIGenerator extends Generator {
                                     sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
                                 else if(editor.item(j).getNodeName().equals("calendar"))
                                     sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                                else if(editor.item(j).getNodeName().equals("image"))
+                                	sw.println("ImageCell cell"+child+" = new ImageCell(wid"+child+");");
                                 else
                                 	sw.println("LabelCell<"+field+"> cell"+child+" = new LabelCell<"+field+">(wid"+child+");");
                                 
                                 sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
-                                //sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
                                 break;
                             }
                         }
