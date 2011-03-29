@@ -129,7 +129,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	lb.setStyleName("Form ScreenLabel");
     	hp.add(lb);
     	vp.add(hp);
-    	if(buttons != null){
+    	if(buttons != null && buttons[0] != null ){
     		createButtons(buttons);
     		vp.add(bp);
     		vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
