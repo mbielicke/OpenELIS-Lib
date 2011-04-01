@@ -90,6 +90,7 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.DoubleField");
         composer.addImport("org.openelis.gwt.widget.CheckField");
         composer.addImport("org.openelis.gwt.common.Util");
+        composer.addImport("org.openelis.cache.UserCache");
 
         findImports(doc.getElementsByTagName("screen").item(0));
 
@@ -468,9 +469,10 @@ public class UIGenerator extends Generator {
     	            sw.println("wid"+id+".addStyleName(\""+node.getAttributes().getNamedItem("style").getNodeValue()+"\");");
     	        }
     	        
-    	        NodeList rows = ((Element)node).getElementsByTagName("row");
+    	        NodeList rows = ((Element)node).getChildNodes();
     	        for (int k = 0; k < rows.getLength(); k++) {
-    	        	
+    	        	if(!rows.item(k).getNodeName().equals("row"))
+    	        		continue;
     	            NodeList widgets = rows.item(k).getChildNodes();
     	            int w = -1;
     	            for (int l = 0; l < widgets.getLength(); l++) {
@@ -488,6 +490,12 @@ public class UIGenerator extends Generator {
     	                    						widgets.item(l)
     	                    						.getAttributes()
     	                    						.getNamedItem("width")
+    	                    						.getNodeValue()+"\");");
+    	                    	if (widgets.item(l).getAttributes().getNamedItem("height") != null)
+    	                    		sw.println("wid"+id+".getFlexCellFormatter().setHeight("+k+","+w+",\""+
+    	                    						widgets.item(l)
+    	                    						.getAttributes()
+    	                    						.getNamedItem("height")
     	                    						.getNodeValue()+"\");");
     	                    	if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
     	                    		sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+
