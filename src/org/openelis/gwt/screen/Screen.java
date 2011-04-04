@@ -254,23 +254,21 @@ public class Screen extends Composite implements
 		def.getPanel().setFocusWidget(widget);
 	}
 
-	/**
-	 * Event handlers inherited methods 
-	 */
-	public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
-		return addHandler(handler, DataChangeEvent.getType());
-	}
+    /**
+     * Event handlers inherited methods
+     */
+    public HandlerRegistration addDataChangeHandler(DataChangeHandler handler) {
+        return addHandler(handler, DataChangeEvent.getType());
+    }
 
-	public HandlerRegistration addStateChangeHandler(
-			StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
-		return addHandler(handler, StateChangeEvent.getType());
-	}
+    public HandlerRegistration addStateChangeHandler(StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
+        return addHandler(handler, StateChangeEvent.getType());
+    }
 
-	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
-		return addHandler(handler, ResizeEvent.getType());
-	}
-	
-	public void setWindowInt(ScreenWindowInt window) {
-		
-	}
+    public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+        return addHandler(handler, ResizeEvent.getType());
+    }
+
+    public void setWindowInt(ScreenWindowInt window) {
+    }
 }
