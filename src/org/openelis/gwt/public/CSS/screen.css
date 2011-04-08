@@ -1830,6 +1830,12 @@ color:blue;
 text-decoration:underline;
 cursor:pointer;
 }
+.WarningLabel{
+	color: #F75456;    
+	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    padding: 5px 0 0 12px;
+}
 .StatusBar a.header{
     text-decoration:none;
 }
