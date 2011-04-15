@@ -1,28 +1,3 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is OpenELIS code.
-* 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
-*/
 package org.openelis.gwt.common;
 
 import org.openelis.gwt.screen.Screen;
@@ -30,52 +5,60 @@ import org.openelis.gwt.screen.Screen;
 public class LocalizedException extends Exception implements Cloneable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String key;
 	private String[] params;
-	
+
 	public LocalizedException() {
 		super();
 	}
-	
+
 	public LocalizedException(String key) {
 		super();
 		this.key = key;
 	}
-	
+
 	public LocalizedException(String key, String... params) {
 		this(key);
-		this.params = params;		
+		this.params = params;
 	}
-	
+
 	public String getKey() {
-	    return key;
+		return key;
 	}
-	
+
 	public String[] getParams() {
-	    return params;
+		return params;
 	}
 
 	@Override
 	public String getMessage() {
-		String message = Screen.consts.get(key);
-		if(params != null) {
-			for(int i = 0; i < params.length; i++) {
-				message = message.replaceFirst("\\{"+i+"\\}", params[i]);
+		String m;
+
+		try {
+		    m = Screen.consts.get(key);
+        } catch (Throwable any) {
+            m = null;
+        }
+		if (m != null) {
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					m = m.replaceFirst("\\{" + i + "\\}", params[i]);
+				}
 			}
+		} else {
+			m = key;
 		}
-		return message;
+		return m;
 	}
-	
+
 	public Object clone() {
-		return new LocalizedException(key,params);
+		return new LocalizedException(key, params);
 	}
-	
+
 	public boolean equals(Object obj) {
-		if(obj instanceof LocalizedException) 
-			return ((LocalizedException)obj).key.equals(key);
+		if (obj instanceof LocalizedException)
+			return ((LocalizedException) obj).key.equals(key);
 		return false;
 	}
-	
-
 }
