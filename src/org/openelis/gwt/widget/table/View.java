@@ -169,7 +169,7 @@ public class View extends Composite {
             @SuppressWarnings("unchecked")
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
-                if(!table.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
+                if(table.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
                 		table.startEditing(firstVisibleRow + cell.getRowIndex(),
                 				cell.getCellIndex(), (GwtEvent)event);
             }
