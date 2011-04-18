@@ -79,6 +79,6 @@ public class SessionManager implements HttpSessionListener {
     }
 
     public void sessionDestroyed(HttpSessionEvent arg0) {
-        removeSession(((HttpSession)arg0).getId());
+        removeSession(arg0.getSession().getId());
     }
 }
