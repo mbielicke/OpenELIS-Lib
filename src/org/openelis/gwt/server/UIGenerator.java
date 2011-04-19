@@ -1461,7 +1461,7 @@ public class UIGenerator extends Generator {
     	                		count--;
     	    	            	continue;
     	    	            }
-    	                	text = (attrib = widget.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
+    	                	text = (attrib = stack.getAttributes().getNamedItem("text")) != null ? attrib.getNodeValue() : "";
     	                    sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
     	                }
     	            }
