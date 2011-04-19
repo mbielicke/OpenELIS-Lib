@@ -11,8 +11,8 @@ public class StackPanel extends com.google.gwt.user.client.ui.StackPanel {
 		// TODO Auto-generated method stub
 		super.add(w, stackText);
 		if(!isAttached()) {
-		    UIObject.setVisible(DOM.getParent(getWidget(getWidgetCount()-1).getElement()),true);
-		    getWidget(getWidgetCount()-1).setVisible(true);
+		    UIObject.setVisible(DOM.getParent(getWidget(getWidgetIndex(w)).getElement()),true);
+		    getWidget(getWidgetIndex(w)).setVisible(true);
 		}
 	}
 	
@@ -21,12 +21,12 @@ public class StackPanel extends com.google.gwt.user.client.ui.StackPanel {
 	    boolean firstAttach = !isOrWasAttached();
 		super.onAttach();
 	
-		if(firstAttach) {
-		    for(int i = 1; i < getWidgetCount(); i++) {
-		        UIObject.setVisible(DOM.getParent(getWidget(i).getElement()),false);
-		        getWidget(i).setVisible(false);
-		    }
-		}
+		//if(firstAttach) {
+		//    for(int i = 1; i < getWidgetCount(); i++) {
+		//        UIObject.setVisible(DOM.getParent(getWidget(i).getElement()),false);
+		//        getWidget(i).setVisible(false);
+		//    }
+	//	}
 	}
 
 }
