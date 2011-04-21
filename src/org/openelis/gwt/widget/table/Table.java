@@ -1087,7 +1087,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	public Row getRowAt(int row) {
-		if(row < 0 || row > getRowCount())
+		if(row < 0 || row >= getRowCount())
 			return null;
 		return modelView.get(row);
 	}
