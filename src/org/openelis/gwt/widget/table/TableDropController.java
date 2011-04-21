@@ -85,7 +85,7 @@ public final class TableDropController extends SimpleDropController implements
      */
     public TableDropController(Table tbl) {
         /* Pass the Drop area to the base class */
-        super(tbl.view.flexTable);
+        super(tbl.view);
         this.table = tbl;
 
         /*
