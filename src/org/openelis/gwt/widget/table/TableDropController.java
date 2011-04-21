@@ -225,8 +225,15 @@ public final class TableDropController extends SimpleDropController implements
                 (targetRow == table.getVisibleRows() - 1 && dropPos == DropPosition.BELOW))
                 scroll();
         } else {
-            RootPanel.get().add(positioner, table.view.flexTable.getAbsoluteLeft(),
-                                table.view.flexTable.getAbsoluteTop());
+        	context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(),0);
+            event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getRowAt(targetIndex),
+                    dropPos);
+            if (event != null && event.isCancelled()) {
+                validDrop = false;
+                ((TableDragController)context.dragController).setDropIndicator(false);
+                positioner.removeFromParent();
+            }else
+            	((TableDragController)context.dragController).setDropIndicator(true);
         }
 
     }
