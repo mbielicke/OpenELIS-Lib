@@ -374,24 +374,25 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
         FormErrorException formE;
         FieldErrorException fieldE;
         Table tableWid;
+        HasExceptions field;
 
         formErrors = new ArrayList<LocalizedException>();
         for (Exception ex : errors.getErrorList()) {
             if (ex instanceof TableFieldErrorException) {
                 tableE = (TableFieldErrorException) ex;
                 tableWid = (Table)def.getWidget(tableE.getTableKey());
-                //tableWid.setCellException(tableE.getRowIndex(), tableE.getFieldName(), tableE);
+                tableWid.addException(tableE.getRowIndex(),tableWid.getColumnByName(tableE.getFieldName()),tableE);
             } else if (ex instanceof FormErrorException) {
                 formE = (FormErrorException)ex;
                 formErrors.add(formE);
             } else if (ex instanceof FieldErrorException) {
                 fieldE = (FieldErrorException)ex;
-                /*
-                field = (HasField)def.getWidget(fieldE.getFieldName());
                 
+                field = (HasExceptions)def.getWidget(fieldE.getFieldName());
+                                
                 if(field != null)
                  field.addException(fieldE);
-                 */
+                
             }
         }
 
