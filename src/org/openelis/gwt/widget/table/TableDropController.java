@@ -226,8 +226,8 @@ public final class TableDropController extends SimpleDropController implements
                 scroll();
         } else {
         	context.boundaryPanel.add(positioner, table.view.flexTable.getAbsoluteLeft(),0);
-            event = DropEnterEvent.fire(this, (DragItem)context.draggable, table.getRowAt(targetIndex),
-                    dropPos);
+            event = DropEnterEvent.fire(this, (DragItem)context.draggable, 0,
+                    DropPosition.ABOVE);
             if (event != null && event.isCancelled()) {
                 validDrop = false;
                 ((TableDragController)context.dragController).setDropIndicator(false);
