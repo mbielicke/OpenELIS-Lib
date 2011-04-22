@@ -250,16 +250,17 @@ public class View extends Composite {
             return;
         
         if(!isWidgetVisible()) {
+        	//removeVisibleHandler();
         	addVisibleHandler(new VisibleEvent.Handler() {
         		public void onVisibleOrInvisible(VisibleEvent event) {
         			if(event.isVisible()){
         				firstAttach = true;
         				layout();
-        				Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-							public void execute() {
-								removeVisibleHandler();
-							}
-						});
+        				//Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+						//	public void execute() {
+						//		removeVisibleHandler();
+						//	}
+						//});
         			}
         		}
         	});

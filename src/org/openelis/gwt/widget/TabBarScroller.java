@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.VisibleEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -49,6 +50,12 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 		hp.setCellPadding(0);
 		hp.setCellSpacing(0);
 		initWidget(hp);
+		addVisibleHandler(new VisibleEvent.Handler() {			
+			public void onVisibleOrInvisible(VisibleEvent event) {
+				if(event.isVisible())
+					checkScroll();
+			}
+		});
 	}
 
 	public void onClick(ClickEvent event) {
