@@ -1662,14 +1662,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * columns
 	 */
 	protected void resize() {
+		computeColumnsWidth();
+		
 		if (!isAttached()) {
 			layout();
 			return;
 		}
 
 		finishEditing();
-
-		computeColumnsWidth();
 
 		if (hasHeader)
 			view.getHeader().resize();

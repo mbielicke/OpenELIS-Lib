@@ -310,9 +310,6 @@ public class View extends Composite {
             // rowHeight = table.getRowHeight() + rowHeightAdj;
             rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
             
-            if(rowHeight == 0)
-            	rowHeight = 20;
-
             if (table.getFixScrollbar())
                 scrollView.setHeight(scrollView.getOffsetHeight() + "px");
             else
