@@ -1470,7 +1470,7 @@ public class UIGenerator extends Generator {
     	        setDefaults(node, "wid"+id);
     		}
     		public void addImport(){
-    			composer.addImport("org.openelis.gwt.widget.StackPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.StackPanel");
     		}
     	});
     	
