@@ -215,6 +215,8 @@ public class Dropdown<T> extends TextBox<T> {
         }
         
         popup.showRelativeTo(this);
+        
+        table.layout();
 
         /*
          * Scroll if needed to make selection visible
