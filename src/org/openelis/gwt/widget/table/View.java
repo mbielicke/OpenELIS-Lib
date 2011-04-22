@@ -25,6 +25,8 @@
  */
 package org.openelis.gwt.widget.table;
 
+import java.util.logging.Logger;
+
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
@@ -34,12 +36,14 @@ import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.table.Table.Scrolling;
 import org.openelis.gwt.widget.table.CellEditor;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.VisibleEvent;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -219,6 +223,16 @@ public class View extends Composite {
         };
         
         container = new Container();
+        
+        /*
+        addVisibleHandler(new VisibleEvent.Handler() {
+			
+			@Override
+			public void onVisibleOrInvisible(VisibleEvent event) {
+				Logger.getLogger("OpenELISClient").info("Is Table now visible = "+event.isVisible());
+			}
+		});
+		*/
     }
 
     /**
@@ -234,6 +248,23 @@ public class View extends Composite {
 
         if ( !attached)
             return;
+        
+        if(!isWidgetVisible()) {
+        	addVisibleHandler(new VisibleEvent.Handler() {
+        		public void onVisibleOrInvisible(VisibleEvent event) {
+        			if(event.isVisible()){
+        				firstAttach = true;
+        				layout();
+        				Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+							public void execute() {
+								removeVisibleHandler();
+							}
+						});
+        			}
+        		}
+        	});
+        	return;
+        }
 
         flexTable.setStyleName(table.TABLE_STYLE);
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
@@ -272,6 +303,7 @@ public class View extends Composite {
 
             firstAttach = false;
 
+            flexTable.removeAllRows();
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 createRow(i);
 
@@ -720,6 +752,8 @@ public class View extends Composite {
         super.onAttach();
 
     }
+    
+    
 
     /**
      * Returns the Header for this view

@@ -43,15 +43,15 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
         super.add(scroll, tabText);
 		scroll.setWidth(width);
         scroll.setHeight(height);
+        /*
 		if(!isAttached()) {
 		    UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).getElement()),true);
 		    getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).setVisible(true);
 		}
-		
+		*/
 		if(isAttached()) {
 			DeferredCommand.addCommand(new Command() {
 				public void execute() {
-				   
 					barScroller.checkScroll();
 				}
 			});
@@ -101,13 +101,14 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 				barScroller.checkScroll();
 			}
 		});
-		
+		/*
 		if(firstAttach) {
 		    for(int i = 1; i < getDeckPanel().getWidgetCount(); i++) {
 		        UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(i).getElement()),false);
 		        getDeckPanel().getWidget(i).setVisible(false);
 		    }
 		}
+		*/
 	}
 	
 	public void checkScroll() {

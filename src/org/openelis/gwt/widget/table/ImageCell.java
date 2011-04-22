@@ -64,5 +64,6 @@ public class ImageCell implements CellRenderer<String> {
                             QueryData qd) {
         
     }
+
     
 }

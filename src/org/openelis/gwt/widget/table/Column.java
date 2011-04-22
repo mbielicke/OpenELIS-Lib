@@ -242,7 +242,7 @@ public class Column {
      */
     public void setWidth(int width) {
         this.width = Math.max(width, minWidth);
-        table.resize();
+        //table.resize();
     }
 
     /**

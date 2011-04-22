@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
+import org.openelis.gwt.screen.ScreenSessionTimer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,6 +36,8 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	 */
 	private ScreenServiceIntAsync service;
 
+	private static ScreenSessionTimer timer;
+	
 	/**
 	 * Constructor that takes an already created service to make calls
 	 * @param service
@@ -64,6 +67,363 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
     }
 
     /**
+     * Synchronous call to the method passed expecting an Integer parameter
+     */
+    public <T extends RPC> T call(String method, Integer param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+    }
+
+    /**
+     * Synchronous call to the method passed expecting a parameter that implements RPC
+     */
+    public <T extends RPC> T call(String method, RPC param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+    }
+    
+    /**
+     * Synchronous call to the method passed expecting a String parameter
+     */
+    public <T extends RPC> T call(String method, String param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+    }
+
+    /**
+     * Synchronous call to the method passed expecting a Double parameter
+     */
+	public <T extends RPC> T call(String method, Double param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed expecting a Datetime parameter
+	 */
+	public <T extends RPC> T call(String method, Datetime param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that returns a Boolean value
+	 */
+	public Boolean callBoolean(String method) throws Exception {
+        Callback<Boolean> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<Boolean>();
+        service.callBoolean(method, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that returns a Datetime value
+	 */
+	public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
+        Callback<Datetime> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<Datetime>();
+        service.callDatetime(method, begin, end, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that returns a Double value
+	 */
+	public Double callDouble(String method) throws Exception {
+        Callback<Double> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<Double>();
+        service.callDouble(method, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that returns an Integer value
+	 */
+	public Integer callInteger(String method) throws Exception {
+        Callback<Integer> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<Integer>();
+        service.callInteger(method, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that returns a String value
+	 */
+	public String callString(String method) throws Exception {
+        Callback<String> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<String>();
+        service.callString(method, callback);
+        return callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call to the method passed that expects a String parameter and returns a String value
+	 */
+	public String callString(String method, String param) throws Exception {
+        Callback<String> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<String>();
+        service.callString(method, param, callback);
+        return callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call the method called that expects no parameter
+	 */
+	public <T extends RPC> T call(String method) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, callback);
+        return callback.getResult();
+	}
+
+	/**
+	 * Synchronous call to the method passed that expects no parameter and returns void
+	 */
+	public void callVoid(String method) throws Exception {
+        Callback<RPC> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<RPC>();
+        service.callVoid(method, callback);
+        callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call to the method passed that expects a Long parameter
+	 */
+	public <T extends RPC> T call(String method, Long param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.call(method, param, callback);
+        return callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call the method passed that returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> T callList(String method)	throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+	    service.callList(method, callback);
+	    return callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call to the method passed the expects a parameter that implements RPC and returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> T  callList(String method, RPC param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+	    service.callList(method, param, callback);
+	    return callback.getResult();
+	}
+	
+	/**
+	 * Synchronous call to the method passed that expects a String parameter and returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> T callList(String method, String param) throws Exception {
+	       Callback<T> callback = new Callback<T>();
+	       service.callList(method, param, callback);
+	       return callback.getResult();
+	}
+
+    /**
+     * Synchronous call to the method passes that expects an Integer parameter and returns a List of RPC
+     */
+    public <T extends ArrayList<? extends RPC>> T  callList(String method, Integer param) throws Exception {
+        Callback<T> callback;
+
+        resetSessionScreenTimer();
+        callback = new Callback<T>();
+        service.callList(method, param, callback);
+        return callback.getResult();
+    }
+	
+    /**
+     * Asynchronous call to the method passed expecting an Integer parameter
+     */
+    public void call(String method, Integer param, AsyncCallback<? extends RPC> callback) {
+    	resetSessionScreenTimer();
+    	service.call(method, param, callback);
+    }
+
+    /**
+     * Asynchronous call to the method passed expecting a parameter the implements RPC
+     */
+    public void call(String method, RPC param, AsyncCallback<? extends RPC> callback) {
+    	resetSessionScreenTimer();
+    	service.call(method, param, callback);
+    }
+
+    /**
+     * Asynchronous call to the method passed expecting a String parameter
+     */
+    public void call(String method, String param, AsyncCallback<? extends RPC> callback) {
+    	resetSessionScreenTimer();
+    	service.call(method, param, callback);
+    }
+
+	/**
+	 * Asynchronous call to the method passed that expects a Double parameter
+	 */
+	public void call(String method, Double param, AsyncCallback<? extends RPC> callback) {
+		resetSessionScreenTimer();
+		service.call(method,param,callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that expects a Datetime parameter
+	 */
+	public void call(String method, Datetime param, AsyncCallback<? extends RPC> callback) {
+		resetSessionScreenTimer();
+		service.call(method, param, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns a Boolean value
+	 */
+	public void callBoolean(String method, AsyncCallback<Boolean> callback) {
+		resetSessionScreenTimer();
+		service.callBoolean(method, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns a Datetime value
+	 */
+	public void callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback) {
+		resetSessionScreenTimer();
+		service.callDatetime(method, begin, end, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns a Double value
+	 */
+	public void callDouble(String method, AsyncCallback<Double> callback) {
+		resetSessionScreenTimer();
+		service.callDouble(method, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns an Integer value
+	 */
+	public void callInteger(String method, AsyncCallback<Integer> callback) {
+		resetSessionScreenTimer();
+		service.callInteger(method, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns a String value
+	 */
+	public void callString(String method, AsyncCallback<String> callback) {
+		resetSessionScreenTimer();
+		service.callString(method, callback);
+	}
+	
+	/**
+	 * Asynchronous call to the method passed that expects a String parameter and returns a String value
+	 */
+	public void callString(String method, String param, AsyncCallback<String> callback) {
+		resetSessionScreenTimer();
+		service.callString(method, param, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that expects no parameter
+	 */
+	public void call(String method, AsyncCallback<? extends RPC> callback) {
+		resetSessionScreenTimer();
+		service.call(method,callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that expects no parameter and returns void
+	 */
+	public void callVoid(String method, AsyncCallback<? extends RPC> callback) {
+		resetSessionScreenTimer();
+		service.callVoid(method,callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that expects a Long parameter 
+	 */
+	public void call(String method, Long param,AsyncCallback<? extends RPC> callback) {
+		resetSessionScreenTimer();
+		service.call(method,param, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that expects a String parameter and returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> void callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		resetSessionScreenTimer();
+		service.callList(method, param, callback);
+	}
+	
+	/**
+	 * Asynchronous call to the method passed that expects a parameter that implements RPC and returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> void callList(String method, RPC param,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		resetSessionScreenTimer();
+		service.callList(method,param, callback);
+	}
+
+	/**
+	 * Asynchronous call to the method passed that returns a List of RPC
+	 */
+	public <T extends ArrayList<? extends RPC>> void callList(String method,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+		resetSessionScreenTimer();
+		service.callList(method, callback);
+	}
+
+    /**
+     * Asynchronous call to the method passed that expects an Integer parameter and returns a List of RPC 
+     */
+    public <T extends ArrayList<? extends RPC>> void callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
+    	resetSessionScreenTimer();
+    	service.callList(method,param, callback);
+    }
+    
+    /**
      * This class handles the callback of synchronous calls and will return the result
      * or throw an exception back to the caller
      *
@@ -88,293 +448,17 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         }
     }
 
-    /**
-     * Synchronous call to the method passed expecting an Integer parameter
-     */
-    public <T extends RPC> T call(String method, Integer param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
-    }
-
-    /**
-     * Synchronous call to the method passed expecting a parameter that implements RPC
-     */
-    public <T extends RPC> T call(String method, RPC param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
-    }
     
-    /**
-     * Synchronous call to the method passed expecting a String parameter
-     */
-    public <T extends RPC> T call(String method, String param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
+    //
+    // Session screen timer implementation
+    //
+    public static void setScreenSessionTimer(ScreenSessionTimer timer) {
+        ScreenService.timer = timer;
     }
 
-    /**
-     * Asynchronous call to the method passed expecting an Integer parameter
-     */
-    public void call(String method, Integer param, AsyncCallback<? extends RPC> callback) {
-        service.call(method, param, callback);
-    }
-
-    /**
-     * Asynchronous call to the method passed expecting a parameter the implements RPC
-     */
-    public void call(String method, RPC param, AsyncCallback<? extends RPC> callback) {
-        service.call(method, param, callback);
-    }
-
-    /**
-     * Asynchronous call to the method passed expecting a String parameter
-     */
-    public void call(String method, String param, AsyncCallback<? extends RPC> callback) {
-        service.call(method, param, callback);
-    }
-
-    /**
-     * Synchronous call to the method passed expecting a Double parameter
-     */
-	public <T extends RPC> T call(String method, Double param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed expecting a Datetime parameter
-	 */
-	public <T extends RPC> T call(String method, Datetime param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that returns a Boolean value
-	 */
-	public Boolean callBoolean(String method) throws Exception {
-        Callback<Boolean> callback = new Callback<Boolean>();
-        service.callBoolean(method, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that returns a Datetime value
-	 */
-	public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
-        Callback<Datetime> callback = new Callback<Datetime>();
-        service.callDatetime(method, begin, end, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that returns a Double value
-	 */
-	public Double callDouble(String method) throws Exception {
-        Callback<Double> callback = new Callback<Double>();
-        service.callDouble(method, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that returns an Integer value
-	 */
-	public Integer callInteger(String method) throws Exception {
-        Callback<Integer> callback = new Callback<Integer>();
-        service.callInteger(method, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that returns a String value
-	 */
-	public String callString(String method) throws Exception {
-        Callback<String> callback = new Callback<String>();
-        service.callString(method, callback);
-        return callback.getResult();
-	}
-	
-	/**
-	 * Synchronous call to the method passed that expects a String parameter and returns a String value
-	 */
-	public String callString(String method, String param) throws Exception {
-        Callback<String> callback = new Callback<String>();
-        service.callString(method, param, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects a Double parameter
-	 */
-	public void call(String method, Double param, AsyncCallback<? extends RPC> callback) {
-		service.call(method,param,callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects a Datetime parameter
-	 */
-	public void call(String method, Datetime param, AsyncCallback<? extends RPC> callback) {
-		service.call(method, param, callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns a Boolean value
-	 */
-	public void callBoolean(String method, AsyncCallback<Boolean> callback) {
-		service.callBoolean(method, callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns a Datetime value
-	 */
-	public void callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback) {
-		service.callDatetime(method, begin, end, callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns a Double value
-	 */
-	public void callDouble(String method, AsyncCallback<Double> callback) {
-		service.callDouble(method, callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns an Integer value
-	 */
-	public void callInteger(String method, AsyncCallback<Integer> callback) {
-		service.callInteger(method, callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns a String value
-	 */
-	public void callString(String method, AsyncCallback<String> callback) {
-		service.callString(method, callback);
-	}
-	
-	/**
-	 * Asynchronous call to the method passed that expects a String parameter and returns a String value
-	 */
-	public void callString(String method, String param, AsyncCallback<String> callback) {
-		service.callString(method, param, callback);
-	}
-
-	/**
-	 * Synchronous call the method called that expects no parameter
-	 */
-	public <T extends RPC> T call(String method) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, callback);
-        return callback.getResult();
-	}
-
-	/**
-	 * Synchronous call to the method passed that expects no parameter and returns void
-	 */
-	public void callVoid(String method) throws Exception {
-        Callback<RPC> callback = new Callback<RPC>();
-        service.callVoid(method, callback);
-        callback.getResult();
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects no parameter
-	 */
-	public void call(String method, AsyncCallback<? extends RPC> callback) {
-		service.call(method,callback);
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects no parameter and returns void
-	 */
-	public void callVoid(String method, AsyncCallback<? extends RPC> callback) {
-		service.callVoid(method,callback);
-	}
-
-	/**
-	 * Synchronous call to the method passed that expects a Long parameter
-	 */
-	public <T extends RPC> T call(String method, Long param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.call(method, param, callback);
-        return callback.getResult();
-        
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects a Long parameter 
-	 */
-	public void call(String method, Long param,AsyncCallback<? extends RPC> callback) {
-		service.call(method,param, callback);
-	}
-
-	/**
-	 * Synchronous call to the method passed the expects a parameter that implements RPC and returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> T  callList(String method, RPC param) throws Exception {
-	       Callback<T> callback = new Callback<T>();
-	       service.callList(method, param, callback);
-	       return callback.getResult();
-	}
-
-	/**
-	 * Asynchronous call to the method passed that expects a String parameter and returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> void callList(String method, String param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		service.callList(method, param, callback);
-	}
-	
-	/**
-	 * Asynchronous call to the method passed that expects a parameter that implements RPC and returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> void callList(String method, RPC param,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		service.callList(method,param, callback);
-	}
-	
-	/**
-	 * Synchronous call the method passed that returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> T callList(String method)	throws Exception {
-	       Callback<T> callback = new Callback<T>();
-	       service.callList(method, callback);
-	       return callback.getResult();
-	}
-
-	/**
-	 * Asynchronous call to the method passed that returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> void callList(String method,AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-		service.callList(method, callback);
-	}
-
-	/**
-	 * Synchronous call to the method passed that expects a String parameter and returns a List of RPC
-	 */
-	public <T extends ArrayList<? extends RPC>> T callList(String method, String param) throws Exception {
-	       Callback<T> callback = new Callback<T>();
-	       service.callList(method, param, callback);
-	       return callback.getResult();
-	}
-
-    /**
-     * Synchronous call to the method passes that expects an Integer parameter and returns a List of RPC
-     */
-    public <T extends ArrayList<? extends RPC>> T  callList(String method, Integer param) throws Exception {
-        Callback<T> callback = new Callback<T>();
-        service.callList(method, param, callback);
-        return callback.getResult();
-    }
-
-    /**
-     * Asynchronous call to the method passed that expects an Integer parameter and returns a List of RPC 
-     */
-    public <T extends ArrayList<? extends RPC>> void callList(String method, Integer param, AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
-        service.callList(method,param, callback);
+    private void resetSessionScreenTimer() {
+        if (timer != null)
+            timer.resetTimeout();
     }
 
 }

@@ -151,4 +151,6 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 		  }
 		  checkScroll();
 	  }
+	  
+	  
 }
