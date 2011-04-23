@@ -48,6 +48,10 @@ public class CellClickedEvent extends GwtEvent<CellClickedHandler> {
 		return col;
 	}
 	
+	public void cancel() {
+		cancelled = true;
+	}
+	
 	public boolean isCancelled() {
 		return cancelled;
 	}

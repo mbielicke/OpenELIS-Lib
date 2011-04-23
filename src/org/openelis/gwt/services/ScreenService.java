@@ -161,6 +161,12 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         service.callDouble(method, callback);
         return callback.getResult();
 	}
+	
+	public Long callLong(String method, RPC rpc) throws Exception {
+		Callback<Long> callback = new Callback<Long>();
+		service.callLong(method,rpc,callback);
+		return callback.getResult();
+	}
 
 	/**
 	 * Synchronous call to the method passed that returns an Integer value
@@ -341,6 +347,10 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 	public void callDouble(String method, AsyncCallback<Double> callback) {
 		resetSessionScreenTimer();
 		service.callDouble(method, callback);
+	}
+	
+	public void callLong(String method, RPC rpc, AsyncCallback<Long> callback) {
+		service.callLong(method,rpc,callback);
 	}
 
 	/**

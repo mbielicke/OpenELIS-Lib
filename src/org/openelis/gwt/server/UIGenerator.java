@@ -1132,7 +1132,7 @@ public class UIGenerator extends Generator {
     			//do nothing for now 
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widet.table.ImageCell");
+    			composer.addImport("org.openelis.gwt.widget.table.ImageCell");
     		}
     	});
     	
@@ -1513,7 +1513,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("table", new Factory() {
      	   public void getNewInstance(Node node, int id) {
-     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect;
+     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect,fixScroll;
      		   Node attrib,col;
      		   NodeList cols,editor;
      		   
@@ -1523,6 +1523,7 @@ public class UIGenerator extends Generator {
      		   hscroll = (attrib = node.getAttributes().getNamedItem("hscroll")) != null ? attrib.getNodeValue() : "AS_NEEDED";
      		   rowHeight = (attrib = node.getAttributes().getNamedItem("rowHeight")) != null ? attrib.getNodeValue() : null;
      		   multiSelect = (attrib = node.getAttributes().getNamedItem("multiSelect")) != null ? attrib.getNodeValue() : null;
+     		   fixScroll = (attrib = node.getAttributes().getNamedItem("fixScroll")) != null ? attrib.getNodeValue() : "true";
      		   
      	       sw.println("Table wid"+id+" = new Table();");
      		   
@@ -1543,6 +1544,7 @@ public class UIGenerator extends Generator {
                 if(multiSelect != null) 
              	   sw.println("wid"+id+".setAllowMultipleSelection("+multiSelect+");");
                 
+                sw.println("wid"+id+".setFixScrollbar("+fixScroll+");");
      	       
                 cols = node.getChildNodes();
                 for(int i = 0; i < cols.getLength(); i++) {
@@ -1608,7 +1610,7 @@ public class UIGenerator extends Generator {
                             else if(name.equals("calendar"))
                                 sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
                             else if(name.equals("image"))
-                            	sw.println("ImageCell cell"+child+" = new ImageCell(wid"+child+");");
+                            	sw.println("ImageCell cell"+child+" = new ImageCell();");
                             else
                                 sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
                             
@@ -1618,7 +1620,7 @@ public class UIGenerator extends Generator {
                     }
                 }
                 sw.println("panel.addFocusHandler(wid"+id+");");
-                sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
                 setDefaults(node,"wid"+id);
      	        
      	    }
@@ -1630,7 +1632,8 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.AutoCompleteCell");
                 composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
                 composer.addImport("org.openelis.gwt.widget.table.CheckBoxCell");
-                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");    	        
+                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");  
+                composer.addImport("org.openelis.gwt.widget.table.ImageCell");
       	   }
      	});    	
     	
@@ -2047,7 +2050,7 @@ public class UIGenerator extends Generator {
                                 else if(editor.item(j).getNodeName().equals("calendar"))
                                     sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
                                 else if(editor.item(j).getNodeName().equals("image"))
-                                	sw.println("ImageCell cell"+child+" = new ImageCell(wid"+child+");");
+                                	sw.println("ImageCell cell"+child+" = new ImageCell();");
                                 else
                                 	sw.println("LabelCell<"+field+"> cell"+child+" = new LabelCell<"+field+">(wid"+child+");");
                                 
@@ -2126,7 +2129,8 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.AutoCompleteCell");
                 composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
                 composer.addImport("org.openelis.gwt.widget.table.CheckBoxCell");
-                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");    
+                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");  
+                composer.addImport("org.openelis.gwt.widget.table.ImageCell");
     		}
     	});    	
     	

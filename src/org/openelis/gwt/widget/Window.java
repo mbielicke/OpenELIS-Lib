@@ -288,7 +288,7 @@ public class Window extends FocusPanel implements WindowInt {
             setName(((Screen)content).getDefinition().getName());
             setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
-            setStatus(Screen.consts.get("loadCompleteMessage"),"");
+            setStatus("Done","");
             
             /**
              * This handler is added to forward the key press event if received by the window 

@@ -126,8 +126,9 @@ public class Column {
      * @param editor
      */
     @SuppressWarnings("unchecked")
-    public void setCellEditor(CellEditor editor) {
+    public Column setCellEditor(CellEditor editor) {
         this.editor = editor;
+        return this;
     }
     
     
@@ -149,10 +150,11 @@ public class Column {
      * @param renderer
      */
     @SuppressWarnings("unchecked")
-    public void setCellRenderer(CellRenderer renderer) {
+    public Column setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
         if (renderer instanceof CellEditor)
             editor = (CellEditor)renderer;
+        return this;
     }
 
     /**
@@ -169,8 +171,9 @@ public class Column {
      * 
      * @param table
      */
-    public void setTable(Table table) {
+    public Column setTable(Table table) {
         this.table = table;
+        return this;
     }
 
     /**
@@ -187,8 +190,9 @@ public class Column {
      * 
      * @param name
      */
-    public void setName(String name) {
+    public Column setName(String name) {
         this.name = name;
+        return this;
     }
 
     /**
@@ -205,8 +209,9 @@ public class Column {
      * 
      * @param label
      */
-    public void setLabel(String label) {
+    public Column setLabel(String label) {
         this.label = label;
+        return this;
     }
 
     /**
@@ -240,9 +245,10 @@ public class Column {
      * 
      * @param width
      */
-    public void setWidth(int width) {
+    public Column setWidth(int width) {
         this.width = Math.max(width, minWidth);
         table.resize();
+        return this;
     }
 
     /**
@@ -259,8 +265,9 @@ public class Column {
      * 
      * @param minWidth
      */
-    public void setMinWidth(int minWidth) {
+    public Column setMinWidth(int minWidth) {
         this.minWidth = minWidth;
+        return this;
     }
 
     /**
@@ -277,8 +284,9 @@ public class Column {
      * 
      * @param enabled
      */
-    public void setEnabled(boolean enabled) {
+    public Column setEnabled(boolean enabled) {
         this.enabled = enabled;
+        return this;
     }
     
     /**
@@ -286,8 +294,9 @@ public class Column {
      * 
      * @param resizable
      */
-    public void setResizable(boolean resizable) {
+    public Column setResizable(boolean resizable) {
         this.resizable = resizable;
+        return this;
     }
 
     /**
@@ -304,8 +313,9 @@ public class Column {
      * being filtered.
      * @param isFiltered
      */
-    public void setFiltered(boolean isFiltered) {
+    public Column setFiltered(boolean isFiltered) {
         this.isFiltered = isFiltered;
+        return this;
     }
 
     /**
@@ -316,8 +326,9 @@ public class Column {
         return isFilterable;
     }
     
-    public void setFilterable(boolean filterable) {
+    public Column setFilterable(boolean filterable) {
         isFilterable = filterable;
+        return this;
     }
     
     /**
@@ -332,10 +343,11 @@ public class Column {
      * Sets the filter to be used when filtering this column
      * @param filter
      */
-    public void setFilter(Filter filter) {
+    public Column setFilter(Filter filter) {
         this.filter = filter;
         isFiltered = false;
         isSortable = true;
+        return this;
     }
     
     /**
@@ -358,8 +370,9 @@ public class Column {
      * Method used to set the flag if this column is allowed to be sorted
      * @param isSortable
      */
-    public void setSortable(boolean isSortable) {
+    public Column setSortable(boolean isSortable) {
         this.isSortable = isSortable;
+        return this;
     }
 
     /**
@@ -367,10 +380,11 @@ public class Column {
      * @param filterable
      */
     @SuppressWarnings("unchecked")
-    public void setSort(Comparator sort) {
+    public Column setSort(Comparator sort) {
         this.sort = sort;
         isSorted = false;
         isSortable = true;
+        return this;
     }
     
     /**
@@ -385,8 +399,9 @@ public class Column {
      * Method used to set the required flag for this column
      * @param required
      */
-    public void setRequired(boolean required) {
+    public Column setRequired(boolean required) {
         this.required = required;
+        return this;
     }
     
     /**

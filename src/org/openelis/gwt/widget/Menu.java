@@ -57,7 +57,7 @@ public class Menu extends Composite {
      * Flags used for checking if this item has a child Menu and it's position
      * and if enabled
      */
-    protected boolean         showBelow, enabled;
+    protected boolean         showBelow, enabled, showPanel;
 
     /**
      * Reference to Parent Menu
@@ -68,10 +68,11 @@ public class Menu extends Composite {
      * No-Arg constructor that sets up Hovering
      */
     public Menu() {
-
+    	
         panel = new PopupMenuPanel();
         panel.addStyleName("MenuPanel");
-
+		panel.setVisible(false);
+		
         addHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
                 addStyleName("Hover");
@@ -149,6 +150,7 @@ public class Menu extends Composite {
 				removeStyleName("Hover");
 			}
 		});
+		
     }
 
     /**
@@ -222,6 +224,7 @@ public class Menu extends Composite {
      * @param showBelow
      */
     public void addItem(MenuItem item) {
+    	showPanel = true;
         panel.addItem(item);
         if (item.autoClose()) {
             item.addCommand(new Command() {
@@ -244,6 +247,7 @@ public class Menu extends Composite {
      * @param menu
      */
     public void addItem(Menu menu) {
+    	showPanel = true;
         panel.addItem(menu);
         menu.setParentMenu(this);
     }
@@ -271,15 +275,19 @@ public class Menu extends Composite {
      * @return
      */
     protected PopupMenuPanel showSubMenu() {
-        if (panel.isShowing())
+    	
+        if (panel.isShowing() || !showPanel)
             return panel;
 
+        /*
         if (showBelow)
             panel.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
         else
             panel.setPopupPosition(getAbsoluteLeft() + getOffsetWidth(), getAbsoluteTop());
 
-        panel.show();
+		*/
+        
+        panel.showRelativeTo(this);
 
         return panel;
     }

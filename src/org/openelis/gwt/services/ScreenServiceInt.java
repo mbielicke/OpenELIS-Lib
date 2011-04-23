@@ -53,6 +53,8 @@ public interface ScreenServiceInt extends RemoteService {
     
     public Double            callDouble(String method) throws Exception;
     
+    public Long              callLong(String method,RPC param) throws Exception;
+    
     public <T extends RPC>  T call(String method) throws Exception;
     
     public void callVoid(String method) throws Exception;

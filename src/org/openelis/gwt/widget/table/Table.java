@@ -222,9 +222,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				row = editingRow;
 				col = editingCol;
 				
-				 if(isEditing() && getColumnAt(col).getCellEditor(row).ignoreKey(keyCode))
-	                    return;
+				if(isEditing() && getColumnAt(col).getCellEditor(row).ignoreKey(keyCode))
+					return;
 
+				
 				switch (keyCode) {
 				case (KeyCodes.KEY_TAB):
 
@@ -245,7 +246,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 								}
 
 							}
-							if (startEditing(row, col)) {
+							if (startEditing(row, col)){
 								event.preventDefault();
 								event.stopPropagation();
 								break;
@@ -262,7 +263,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 									break;
 								}
 							}
-							if (startEditing(row, col)) {
+							if (startEditing(row, col)){
 								event.preventDefault();
 								event.stopPropagation();
 								break;
@@ -869,7 +870,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return The newly created and added column
 	 */
 	public Column addColumn(String name, String label) {
-		return addColumnAt(columns.size(), name, label, 75);
+		return addColumnAt(columns.size(), name, label,75);
 	}
 
 	/**
@@ -897,6 +898,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		Column column;
 
 		column = new Column(this, name, label);
+		column.setWidth(width);
 		addColumnAt(index,column);
 
 		return column;
@@ -913,7 +915,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return addColumnAt(index, "", "",75);
 	}
 	
-	public void addColumnAt(int index, Column column) {
+	public void addColumnAt(int index,Column column) {
 		columns.add(index, column);
 		if(model != null) {
 			for(Row row : model)

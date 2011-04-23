@@ -270,7 +270,7 @@ public class Header extends FocusPanel {
         }
         
         while(flexTable.getCellCount(0) > table.getColumnCount())
-        	flexTable.removeCell(0, flexTable.getCellCount(0)-1);
+        	flexTable.removeCell(0, flexTable.getCellCount(0) -1);
     }
 
     /**

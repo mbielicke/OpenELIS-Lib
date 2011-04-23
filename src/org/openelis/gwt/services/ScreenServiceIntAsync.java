@@ -50,6 +50,8 @@ public interface ScreenServiceIntAsync {
     
     public void callDouble(String method, AsyncCallback<Double> callback);
     
+    public void callLong(String method, RPC param, AsyncCallback<Long> callback);
+    
     public void call(String method, AsyncCallback<? extends RPC> callback);
     
     public void callVoid(String method, AsyncCallback<? extends RPC> callback);

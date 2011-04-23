@@ -128,6 +128,13 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
     public Double callDouble(String method) throws Exception {
         return (Double)invoke(getThreadLocalRequest().getParameter("service"), method);
     }
+    
+    public Long callLong(String method, RPC param) throws Exception {
+    	return (Long)invoke(getThreadLocalRequest().getParameter("service"), 
+    					    method,
+    					    new Class[] {param.getClass()},
+    					    new Object[] {param});
+    }
 
     public Integer callInteger(String method) throws Exception {
         return (Integer)invoke(getThreadLocalRequest().getParameter("service"), method);

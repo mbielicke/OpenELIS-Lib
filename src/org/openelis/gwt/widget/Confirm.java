@@ -184,16 +184,20 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
 
         keyHandler = Event.addNativePreviewHandler(this);
         final Widget wid = this;
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {			
-        	public void execute() {
-               size();
-               if(active > -1){
-               	((Button)bp.getWidget(active)).setFocus(false);
-               }
-               ((Button)bp.getWidget(0)).setFocus(true);
-               active = 0;
-        	}
-        });
+    	
+    		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {			
+    			public void execute() {
+    				size();
+    				if(bp != null ){
+    					if(active > -1){
+    						((Button)bp.getWidget(active)).setFocus(false);
+    					}
+    					((Button)bp.getWidget(0)).setFocus(true);
+    					active = 0;
+    				}
+    			}
+    		
+    		});
         //if(dragController == null) {
         	dragController = new PickupDragController(modalPanel,true);
         	dropController = new AbsolutePositionDropController(modalPanel);
@@ -204,8 +208,10 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     
     private void size() {
     	dp.setVisible(true);
-    	if(bp.getOffsetWidth() > width)
-    		setWidth((bp.getOffsetWidth()+50)+"px");
+    	if(bp != null) {
+    		if(bp.getOffsetWidth() > width)
+    			setWidth((bp.getOffsetWidth()+50)+"px");
+    	}
     	modalPanel.setWidgetPosition(this, left > -1 ? left : Window.getClientWidth()/2 - this.getOffsetWidth()/2,
     									   top > -1 ? top :  Window.getClientHeight()/2 - this.getOffsetHeight()/2);
     	

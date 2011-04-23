@@ -215,8 +215,6 @@ public class Dropdown<T> extends TextBox<T> {
         }
         
         popup.showRelativeTo(this);
-        
-        table.layout();
 
         /*
          * Scroll if needed to make selection visible
@@ -844,6 +842,9 @@ public class Dropdown<T> extends TextBox<T> {
     	textbox.removeStyleName(style);
     }
 
+    public void closePopup() {
+    	popup.hide();
+    }
     /*
     /** 
      * This class is used to create a sortable and searchable ArrayList 
