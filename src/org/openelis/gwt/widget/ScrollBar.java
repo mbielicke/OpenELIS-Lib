@@ -131,7 +131,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
     /**
      * Gets the current ScrollPostion of this ScrollBar
      */
-    public int getScrollPosition() {
+    public int getScrollBarPosition() {
         if(horizontal)
             return getHorizontalScrollPosition();
      
