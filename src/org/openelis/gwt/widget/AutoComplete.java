@@ -333,7 +333,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * disabled.
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
-            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+            @SuppressWarnings("unchecked")
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if ( !((Item<Integer>)table.getModel().get(event.getItem())).isEnabled())
                     event.cancel();
             }
@@ -655,7 +656,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * @param index
          * @return
          */
-        private int findNextActive(int index) {
+        @SuppressWarnings("rawtypes")
+		private int findNextActive(int index) {
             int next;
 
             next = index + 1;
@@ -675,7 +677,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * @param index
          * @return
          */
-        private int findPrevActive(int index) {
+        @SuppressWarnings("rawtypes")
+		private int findPrevActive(int index) {
             int prev;
 
             prev = index - 1;

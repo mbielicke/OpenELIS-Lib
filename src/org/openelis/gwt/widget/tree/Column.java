@@ -47,13 +47,13 @@ public class Column {
     /**
      * Editor widget used for this column
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"rawtypes" })
     protected CellEditor   editor;
 
     /**
      * Render widget used for this column
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes" })
     protected CellRenderer renderer = new LabelCell<String>(new Label<String>());
     
     /**
@@ -98,7 +98,7 @@ public class Column {
     /**
      * Returns the Editor currently being used by this Column
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes" })
     public CellEditor getCellEditor() {
         return editor;
     }
@@ -111,18 +111,18 @@ public class Column {
      * 
      * @param editor
      */
-    @SuppressWarnings("unchecked")
-    public void setCellEditor(CellEditor editor) {
+    @SuppressWarnings("rawtypes")
+	public Column setCellEditor(CellEditor editor) {
         this.editor = editor;
-      
+        return this;
     }
     
     /**
      * Method will return the currently set Renderer for this column
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public CellRenderer getCellRenderer() {
+    @SuppressWarnings("rawtypes")
+	public CellRenderer getCellRenderer() {
         return renderer;
     }
 
@@ -130,11 +130,12 @@ public class Column {
      * Method will set the current renderer for this column
      * @param renderer
      */
-    @SuppressWarnings("unchecked")
-    public void setCellRenderer(CellRenderer renderer) {
+    @SuppressWarnings("rawtypes")
+	public Column setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
         if (renderer instanceof CellEditor)
             editor = (CellEditor)renderer;
+        return this;
     }
 
     /**
@@ -151,8 +152,9 @@ public class Column {
      * 
      * @param tree
      */
-    public void setTree(Tree tree) {
+    public Column setTree(Tree tree) {
         this.tree = tree;
+        return this;
     }
 
     /**
@@ -169,8 +171,9 @@ public class Column {
      * 
      * @param name
      */
-    public void setName(String name) {
+    public Column setName(String name) {
         this.name = name;
+        return this;
     }
 
     /**
@@ -187,8 +190,9 @@ public class Column {
      * 
      * @param label
      */
-    public void setLabel(String label) {
+    public Column setLabel(String label) {
         this.label = label;
+        return this;
     }
 
     /**
@@ -222,9 +226,10 @@ public class Column {
      * 
      * @param width
      */
-    public void setWidth(int width) {
+    public Column setWidth(int width) {
         this.width = Math.max(width, minWidth);
         tree.resize();
+        return this;
     }
 
     /**
@@ -241,8 +246,9 @@ public class Column {
      * 
      * @param minWidth
      */
-    public void setMinWidth(int minWidth) {
+    public Column setMinWidth(int minWidth) {
         this.minWidth = minWidth;
+        return this;
     }
 
     /**
@@ -259,8 +265,9 @@ public class Column {
      * 
      * @param enabled
      */
-    public void setEnabled(boolean enabled) {
+    public Column setEnabled(boolean enabled) {
         this.enabled = enabled;
+        return this;
     }
     
     /**
@@ -268,8 +275,9 @@ public class Column {
      * 
      * @param resizable
      */
-    public void setResizable(boolean resizable) {
+    public Column setResizable(boolean resizable) {
         this.resizable = resizable;
+        return this;
     }
 
     /**
@@ -285,8 +293,9 @@ public class Column {
      * Method used to set the required flag for this column
      * @param required
      */
-    public void setRequired(boolean required) {
+    public Column setRequired(boolean required) {
         this.required = required;
+        return this;
     }
     
     /**

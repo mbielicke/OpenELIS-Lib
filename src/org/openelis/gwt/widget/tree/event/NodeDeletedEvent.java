@@ -27,6 +27,7 @@ public class NodeDeletedEvent extends GwtEvent<NodeDeletedHandler> {
 		handler.onNodeDeleted(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<NodeDeletedHandler> getAssociatedType() {
 		return (Type) TYPE;

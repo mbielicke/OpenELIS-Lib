@@ -82,7 +82,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
     /**
      * Returns the Date associated with this datetime field.
      */
-    public Date getDate() {
+    @SuppressWarnings("deprecation")
+	public Date getDate() {
         if (endCode < HOUR)
             return new Date(year, month, date);
         return timestamp;
@@ -110,7 +111,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
         return before(when.getDate());
     }
 
-    public boolean before(Date when) {
+    @SuppressWarnings("deprecation")
+	public boolean before(Date when) {
         if (endCode < HOUR)
             return new Date(year, month, date).before(when);
 
@@ -125,7 +127,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
         return after(when.getDate());
     }
 
-    public boolean after(Date when) {
+    @SuppressWarnings("deprecation")
+	public boolean after(Date when) {
         if (endCode < HOUR) {
             return new Date(year, month, date).after(when);
         }
@@ -136,7 +139,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
      * Returns true if the current value of this Datetime is equal the value of
      * Datetime when; false otherwise.
      */
-    public boolean equals(Object obj) {
+    @SuppressWarnings("deprecation")
+	public boolean equals(Object obj) {
         Date compDate;
 
         if (obj instanceof Datetime)
@@ -159,7 +163,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
      * 
      * @see java.util.Calendar
      */
-    public Datetime add(int days) {
+    @SuppressWarnings("deprecation")
+	public Datetime add(int days) {
     	Date cal = getDate();
     	cal.setDate(cal.getDate()+days);
     	return Datetime.getInstance(startCode,endCode,cal);
@@ -179,7 +184,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
     /**
      * Returns the portion of datetime requested 
      */
-    public int get(byte field) {
+    @SuppressWarnings("deprecation")
+	public int get(byte field) {
         switch (field) {
             case YEAR:
                 if (endCode < HOUR)
@@ -225,7 +231,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
         return timestamp.toString();
     }
 
-    protected void parse() {
+    @SuppressWarnings("deprecation")
+	protected void parse() {
         /*
          * Clear out values past set endCode
          */

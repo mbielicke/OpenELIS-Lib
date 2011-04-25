@@ -26,7 +26,6 @@
 package org.openelis.gwt.server;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.util.UTFResource;
 
 /**
  * This class provides a service to the client to pull the current time from the server.
@@ -35,10 +34,6 @@ import org.openelis.util.UTFResource;
 public class CalendarService {
 
     private static final long serialVersionUID = 1L;
-
-    private static String appRoot ;
-    
-    private static UTFResource resource;
     
     /**
      * Returns the current Datetime with the given precision

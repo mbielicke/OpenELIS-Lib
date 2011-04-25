@@ -64,6 +64,7 @@ public class DropEnterEvent<I> extends GwtEvent<DropEnterHandler<I>> {
 		handler.onDropEnter(this);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<DropEnterHandler<I>> getAssociatedType() {
 		return (Type) TYPE;

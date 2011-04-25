@@ -27,7 +27,8 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
      * value and helper fields
      */
     protected T               value;
-    protected WidgetHelper<T> helper = (WidgetHelper<T>)new StringHelper();
+    @SuppressWarnings("unchecked")
+	protected WidgetHelper<T> helper = (WidgetHelper<T>)new StringHelper();
 
     /*
      * Exceptions list
@@ -81,7 +82,6 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
      * Stub method to satisfy HasValue interface.
      */
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
-        // TODO Auto-generated method stub
         return null;
     }
 

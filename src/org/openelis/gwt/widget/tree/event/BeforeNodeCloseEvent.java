@@ -30,7 +30,7 @@ public class BeforeNodeCloseEvent extends GwtEvent<BeforeNodeCloseHandler> {
 		handler.onBeforeNodeClose(this);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeNodeCloseHandler> getAssociatedType() {
 		return (Type) TYPE;

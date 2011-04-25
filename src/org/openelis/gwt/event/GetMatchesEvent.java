@@ -57,6 +57,7 @@ public class GetMatchesEvent extends GwtEvent<GetMatchesHandler>{
 		
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public final Type<GetMatchesHandler> getAssociatedType() {
 		return (Type) TYPE;

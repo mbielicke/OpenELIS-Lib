@@ -55,6 +55,7 @@ public class DropEvent<I> extends GwtEvent<DropHandler<I>> {
 		handler.onDrop(this);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final Type<DropHandler<I>> getAssociatedType() {
 		return (Type) TYPE;
 	}

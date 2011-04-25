@@ -1,7 +1,6 @@
 package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -10,9 +9,9 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
+import com.google.gwt.user.client.ui.Label;
 /**
  * This class is composite widget that displays a Calendar month.  
  * @author tschmidt

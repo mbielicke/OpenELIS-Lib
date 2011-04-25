@@ -65,12 +65,14 @@ public class DataChangeEvent extends GwtEvent<DataChangeHandler>{
     	this.target = target;
     }
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void dispatch(DataChangeHandler handler) {
 		if(target == null || (handler instanceof ScreenEventHandler && target == ((ScreenEventHandler)handler).target))
 			handler.onDataChange(this);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Type<DataChangeHandler> getAssociatedType() {
 		return (Type) TYPE;

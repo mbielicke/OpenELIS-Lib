@@ -32,20 +32,16 @@ import org.openelis.gwt.screen.Screen;
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -106,7 +102,6 @@ public class Browser extends Composite {
         dropController = new AbsolutePositionDropController(browser) {
             @Override
             public void onDrop(DragContext context) {
-                // TODO Auto-generated method stub
                 super.onDrop(context);
                 ((Window)context.draggable).positionGlass();
             }
@@ -129,11 +124,11 @@ public class Browser extends Composite {
 				}
 
             });
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    resize();
-                }
-            });
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+				public void execute() {
+					 resize();
+				}
+			});
         }
         
         /**
@@ -175,7 +170,7 @@ public class Browser extends Composite {
         /*
          * If Screen is already being shown bring the Screen to focus and exit.
          */
-        if (windows.containsKey(key)) {
+        if (windowsByKey.containsKey(key)) {
             selectScreen(key);
             return;
         }

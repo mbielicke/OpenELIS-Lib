@@ -40,11 +40,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ReportServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
+	@SuppressWarnings("rawtypes")
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String service = req.getParameter("service");
 		String method = req.getParameter("method");
+		
 		Class[] paramTypes = {HttpServletRequest.class, HttpServletResponse.class};
 		Object[] params = {req,resp};
 		try {
@@ -62,14 +66,12 @@ public class ReportServlet extends HttpServlet {
             e.printStackTrace();
             throw new ServletException(e.getMessage());
         }
-		//super.doGet(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		doGet(req,resp);
-		//super.doPost(req, resp);
 	}
 	
 }

@@ -319,7 +319,8 @@ public class Dropdown<T> extends TextBox<T> {
          * disabled.
          */
         table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
-            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+            @SuppressWarnings("rawtypes")
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
                 if (!((Item)table.getModel().get(event.getItem())).isEnabled())
                     event.cancel();
             }
@@ -581,7 +582,8 @@ public class Dropdown<T> extends TextBox<T> {
         return qd;
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void setQuery(QueryData qd) {
         String[] params;
         T key;
@@ -786,7 +788,8 @@ public class Dropdown<T> extends TextBox<T> {
          * @param index
          * @return
          */
-        private int findNextActive(int index) {
+        @SuppressWarnings("unchecked")
+		private int findNextActive(int index) {
             int next;
 
             next = index + 1;
@@ -806,7 +809,8 @@ public class Dropdown<T> extends TextBox<T> {
          * @param index
          * @return
          */
-        private int findPrevActive(int index) {
+        @SuppressWarnings("unchecked")
+		private int findPrevActive(int index) {
             int prev;
 
             prev = index - 1;
@@ -818,8 +822,6 @@ public class Dropdown<T> extends TextBox<T> {
 
             return index;
         }
-
-
     }
 
     /**
@@ -845,27 +847,4 @@ public class Dropdown<T> extends TextBox<T> {
     public void closePopup() {
     	popup.hide();
     }
-    /*
-    /** 
-     * This class is used to create a sortable and searchable ArrayList 
-     * for efficiently finding Items by display names when typing.
-     * @author tschmidt
-     *
-     
-    private class SearchPair implements Comparable<SearchPair> {
-
-        public int    modelIndex;
-        public String display;
-
-        public SearchPair(int index, String display) {
-            this.modelIndex = index;
-            this.display = display;
-        }
-
-        public int compareTo(SearchPair o) {
-            return display.compareTo(o.display);
-        }
-
-    }
-     */
 }

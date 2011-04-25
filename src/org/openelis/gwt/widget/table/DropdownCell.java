@@ -116,7 +116,8 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
     /**
      * Returns the current widget set as this cells editor.
      */
-    public void startEditing(T value, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditing(T value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
@@ -124,7 +125,8 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
         container.setEditor(editor);
     }
 
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);

@@ -25,6 +25,7 @@
 */
 package org.openelis.gwt.widget;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -35,8 +36,6 @@ import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -76,12 +75,11 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
         panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
-        
-        DeferredCommand.addCommand(new Command(){
-           public void execute(){
-               panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
-           }
-        });
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+			}
+		});
         
         if(open)
         	open();
@@ -126,7 +124,6 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     @Override
     protected void onAttach() {
         boolean firstAttach = !isOrWasAttached();
-       // panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
         super.onAttach();
         
         if(firstAttach) 

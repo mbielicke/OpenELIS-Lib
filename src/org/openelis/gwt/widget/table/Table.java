@@ -569,7 +569,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param sort
 	 * @param desc
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public void applySort(int col, int dir, Comparator comp) {
 		/*
 		 * Setup the modelView as its own object if not already
@@ -1267,10 +1267,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	public void fireUnselectEvent(int index) {
-		UnselectionEvent<Integer> event = null;
-
+	
 		if (!queryMode)
-			event = UnselectionEvent.fire(this, index);
+			UnselectionEvent.fire(this, index);
 	}
 
 	/**
@@ -1453,7 +1452,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param col
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	protected boolean startEditing(final int row, final int col,
 			final GwtEvent event) {
 		boolean willScroll, ctrlKey, shiftKey;
@@ -2319,17 +2318,21 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * Private inner class that implements Comparator<Row> interface and will
 	 * sort the table model using the Collections.sort() method
 	 */
-	@SuppressWarnings("unchecked")
+
 	private class Sort implements Comparator<Row> {
 		int col, dir;
+	
+		@SuppressWarnings("rawtypes")
 		Comparator comparator;
 
+		@SuppressWarnings("rawtypes")
 		public Sort(int col, int dir, Comparator comparator) {
 			this.col = col;
 			this.dir = dir;
 			this.comparator = comparator;
 		}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public int compare(Row o1, Row o2) {
 			if (comparator != null)
 				return dir
@@ -2345,6 +2348,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		ArrayList<FilterChoice> choices;
 		HashMap<Object, FilterChoice> values;
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model) {
 			Object value;
 			FilterChoice choice;

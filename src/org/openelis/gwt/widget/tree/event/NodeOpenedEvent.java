@@ -27,7 +27,7 @@ public class NodeOpenedEvent extends GwtEvent<NodeOpenedHandler> {
 		handler.onNodeOpened(this);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public com.google.gwt.event.shared.GwtEvent.Type<NodeOpenedHandler> getAssociatedType() {
 		return (Type) TYPE;

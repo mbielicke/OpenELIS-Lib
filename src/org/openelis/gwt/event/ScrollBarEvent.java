@@ -50,7 +50,8 @@ public class ScrollBarEvent extends GwtEvent<ScrollBarHandler>{
         handler.onScroll(this);
     }
 
-    @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
     public Type<ScrollBarHandler> getAssociatedType() {
         return (Type) TYPE;
     }

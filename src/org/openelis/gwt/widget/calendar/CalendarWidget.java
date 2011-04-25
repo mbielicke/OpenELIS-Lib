@@ -104,7 +104,8 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
     /*
      * Initialize widgets on Screen.
      */
-    private void initialize() throws Exception {
+    @SuppressWarnings("unchecked")
+	private void initialize() throws Exception {
 
         /*
          * Final reference to this class to be used by anon handlers

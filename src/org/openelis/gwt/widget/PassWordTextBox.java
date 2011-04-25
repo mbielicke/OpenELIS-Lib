@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -21,8 +20,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
+import com.google.gwt.user.client.ui.ValueBoxBase;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<String>, HasValue<String>,  HasExceptions {
 
@@ -35,7 +34,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
      * Textbox attributes
      */
     protected int                                   maxLength = 255;
-    protected TextAlignConstant                     alignment = TextBoxBase.ALIGN_LEFT;
+    protected TextAlignment                         alignment = ValueBoxBase.TextAlignment.LEFT;
 
     /**
      * Exceptions list
@@ -96,9 +95,9 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
     /**
      * Set the text alignment.
      */
-    public void setTextAlignment(TextAlignConstant alignment) {
+    public void setTextAlignment(ValueBoxBase.TextAlignment alignment) {
         this.alignment = alignment;
-        textbox.setTextAlignment(alignment);
+        textbox.setAlignment(alignment);
     }
     
     // ************** Implementation of ScreenWidgetInt ********************
@@ -131,11 +130,11 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
         } else if (query) {
             queryMode = true;
             textbox.setMaxLength(255);
-            textbox.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textbox.setAlignment(ValueBoxBase.TextAlignment.LEFT);
         } else {
             queryMode = false;
             textbox.setMaxLength(maxLength);
-            textbox.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textbox.setAlignment(ValueBoxBase.TextAlignment.LEFT);
         }
     }
 

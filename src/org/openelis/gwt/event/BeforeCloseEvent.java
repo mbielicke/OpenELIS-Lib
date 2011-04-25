@@ -58,7 +58,7 @@ public class BeforeCloseEvent<T> extends GwtEvent<BeforeCloseHandler<T>> {
 		handler.onBeforeClosed(this);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeCloseHandler<T>> getAssociatedType() {
 		return (Type) TYPE;

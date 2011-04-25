@@ -37,13 +37,30 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+/**
+ * This class is used to draw a scroll bar by itself that can be used to scroll other widgets
+ * Specifically used in the Table and Tree View classes
+ * @author tschmidt
+ *
+ */
 public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
 
+	/**
+	 * Widget used to cause the ScrollPanel to scroll the desired amount
+	 */
     private AbsolutePanel ap;
+    /**
+     * This is the maximum amount the ScrollBar should be able to scroll
+     */
     protected int scrollMax;
-
+    /**
+     * Flag to display the ScrollBar Horizontally
+     */
     private boolean       horizontal;
 
+    /**
+     * No-arg constructor
+     */
     public ScrollBar() {
         final ScrollBar source = this;
         ap = new AbsolutePanel();
@@ -53,7 +70,6 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         setWidth("18px");
         setHeight("0px");
         
-       // setStyleName("TableVertScroll");
         setAlwaysShowScrollBars(true);
         setWidget(ap);
         addScrollHandler(new ScrollHandler() {
@@ -64,15 +80,27 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         scrollMax = -1;
     }
 
+    /**
+     * Constructor the sets the ScrollBar into Horizontal layout
+     * @param horizontal
+     */
     public ScrollBar(boolean horizontal) {
         this();
         this.horizontal = horizontal;
     }
 
+    /**
+     * Method to set the ScrollBar into Horizontal layout
+     * @param horizontal
+     */
     public void setHorizontal(boolean horizontal) {
         this.horizontal = horizontal;
     }
 
+    /**
+     * This method will adjust the amount the ScrollBar is allowed to scroll
+     * @param scrollMax
+     */
     public void adjustScrollMax(int scrollMax) {
         if(scrollMax == this.scrollMax)
             return;
@@ -85,27 +113,34 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         }
     }
 
-
+    /**
+     * Moves the ScrollBar to the passed position
+     * @param position
+     */
     public void scrollTo(int position) {
-        setScrollPosition(position);
+        setVerticalScrollPosition(position);
     }
 
+    /**
+     * Adds a handler to this scrollbar
+     */
     public HandlerRegistration addScrollBarHandler(ScrollBarHandler handler) {
         return addHandler(handler, ScrollBarEvent.getType());
     }
 
-    
+    /**
+     * Gets the current ScrollPostion of this ScrollBar
+     */
     public int getScrollPosition() {
         if(horizontal)
             return getHorizontalScrollPosition();
      
-        return super.getScrollPosition();
+        return super.getVerticalScrollPosition();
     }
 
     @Override
     protected void onAttach() {
         super.onAttach();
         DOM.setStyleAttribute(getElement(), "overflowX", "hidden");
-        //Window.alert( getOffsetHeight()+" : "+getOffsetWidth());        
     }
 }

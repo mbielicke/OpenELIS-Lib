@@ -56,6 +56,7 @@ public class FTPStartUploadEvent extends GwtEvent<FTPStartUploadHandler> {
 		
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public final Type<FTPStartUploadHandler> getAssociatedType() {
 		return (Type) TYPE;

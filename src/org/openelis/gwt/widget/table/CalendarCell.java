@@ -66,7 +66,8 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
     /**
      * Method to return the editor set for this cell
      */
-    public void startEditing(Datetime value, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditing(Datetime value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
@@ -74,7 +75,8 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         container.setEditor(editor);
     }
 
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);

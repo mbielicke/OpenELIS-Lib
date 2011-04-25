@@ -59,6 +59,7 @@ public class BeforeDragStartEvent<I> extends GwtEvent<BeforeDragStartHandler<I>>
 		handler.onBeforeDragStart(this);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public final Type<BeforeDragStartHandler<I>> getAssociatedType() {
 		return (Type) TYPE;
 	}

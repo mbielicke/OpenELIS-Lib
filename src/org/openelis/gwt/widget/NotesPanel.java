@@ -34,9 +34,9 @@ public class NotesPanel extends Composite {
 		field.setBegin(Datetime.YEAR);
 		field.setEnd(Datetime.SECOND);
 		field.setPattern("yyyy-MM-dd HH:mm");
-		Label titleText = new Label(subject);
-		Label userDateText = new Label(" by "+userName + " on " + field.format(time));
-		Label bodyText = new Label(text);
+		Label<String> titleText = new Label<String>(subject);
+		Label<String> userDateText = new Label<String>(" by "+userName + " on " + field.format(time));
+		Label<String> bodyText = new Label<String>(text);
 		bodyText.setWordWrap(true);
 		note.setWidth(width);
 		topRow.setWidth(width);

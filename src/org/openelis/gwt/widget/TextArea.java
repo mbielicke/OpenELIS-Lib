@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -22,8 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 
 public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<String>, HasValue<String>,  HasExceptions {
@@ -36,7 +34,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     /**
      * Textbox attributes
      */
-    protected TextAlignConstant                     alignment = TextBoxBase.ALIGN_LEFT;
+    protected TextAlignment                        alignment = TextAlignment.LEFT;
 
     /**
      * Exceptions list
@@ -88,9 +86,9 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     /**
      * Set the text alignment.
      */
-    public void setTextAlignment(TextAlignConstant alignment) {
+    public void setTextAlignment(TextAlignment alignment) {
         this.alignment = alignment;
-        textarea.setTextAlignment(alignment);
+        textarea.setAlignment(alignment);
     }
     
     public int getCursorPos() {
@@ -130,10 +128,10 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
             return;
         } else if (query) {
             queryMode = true;
-            textarea.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textarea.setAlignment(TextAlignment.LEFT);
         } else {
             queryMode = false;
-            textarea.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textarea.setAlignment(TextAlignment.LEFT);
         }
     }
 

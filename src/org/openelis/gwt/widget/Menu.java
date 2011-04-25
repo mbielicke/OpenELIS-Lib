@@ -95,9 +95,9 @@ public class Menu extends Composite {
      */
     public Menu(String display) {
         this();
-        Label label;
+        Label<String> label;
 
-        label = new Label(display);
+        label = new Label<String>(display);
         label.setStyleName("ScreenLabel");
         initWidget(label);
         setEnabled(true);

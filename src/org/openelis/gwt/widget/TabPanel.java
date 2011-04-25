@@ -2,12 +2,9 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -43,20 +40,6 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
         super.add(scroll, tabText);
 		scroll.setWidth(width);
         scroll.setHeight(height);
-        /*
-		if(!isAttached()) {
-		    UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).getElement()),true);
-		    getDeckPanel().getWidget(getDeckPanel().getWidgetCount()-1).setVisible(true);
-		}
-		*/
-		if(isAttached()) {
-			DeferredCommand.addCommand(new Command() {
-				public void execute() {
-					barScroller.checkScroll();
-				}
-			});
-		}		
-	
 	}
 	
 	public String getNextTabWidget() {
@@ -83,7 +66,7 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	public void setTabVisible(int index, boolean visible) {
 		((Widget)getTabBar().getTab(index)).setVisible(visible);
 		if(isAttached()) {
-			DeferredCommand.addCommand(new Command() {
+			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 				public void execute() {
 					barScroller.checkScroll();
 				}
@@ -91,31 +74,8 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		}
 	}
 	
-	@Override
-	protected void onAttach() {
-	    boolean firstAttach = !isOrWasAttached();
-		super.onAttach();
-		
-		DeferredCommand.addCommand(new Command() {
-			public void execute() {
-				barScroller.checkScroll();
-			}
-		});
-		/*
-		if(firstAttach) {
-		    for(int i = 1; i < getDeckPanel().getWidgetCount(); i++) {
-		        UIObject.setVisible(DOM.getParent(getDeckPanel().getWidget(i).getElement()),false);
-		        getDeckPanel().getWidget(i).setVisible(false);
-		    }
-		}
-		*/
-	}
-	
 	public void checkScroll() {
 		barScroller.checkScroll();
 	}
-	
-
-	
 
 }

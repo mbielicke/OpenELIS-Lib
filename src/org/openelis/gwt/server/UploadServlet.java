@@ -99,6 +99,7 @@ public class UploadServlet extends UploadAction {
 	/**
 	 * Get the content of an uploaded file
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void getUploadedFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String fieldName = request.getParameter(PARAM_SHOW);
@@ -200,6 +201,7 @@ public class UploadServlet extends UploadAction {
 
 	private static class FTPStatus {
 		long currentBytes;
+		@SuppressWarnings("unused")
 		long percent;
 		long totalBytes;
 		enum Status {IN_PROGRESS,FINISHED,CANCELED,ERROR}

@@ -51,7 +51,7 @@ public class UnselectionEvent<I>  extends GwtEvent<UnselectionHandler<I>> {
 
 	  // The instance knows its BeforeSelectionHandler is of type I, but the TYPE
 	  // field itself does not, so we have to do an unsafe cast here.
-	  @SuppressWarnings("unchecked")
+	  @SuppressWarnings({ "unchecked", "rawtypes" })
 	  @Override
 	  public final Type<UnselectionHandler<I>> getAssociatedType() {
 	    return (Type) TYPE;

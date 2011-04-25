@@ -120,7 +120,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     		}
     	}
    	    
-        Label winLabel = new Label();
+        Label<String> winLabel = new Label<String>();
         winLabel.setStyleName("ConfirmCaptionLabel");
         winLabel.setText(cap.name);
         cap.add(winLabel);
@@ -128,7 +128,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	vp.add(cap);
     	hp.add(ap);
     	hp.setCellVerticalAlignment(ap, HasAlignment.ALIGN_MIDDLE);
-    	Label lb = new Label();
+    	Label<String> lb = new Label<String>();
     	lb.setText(message);
     	lb.setWordWrap(true);
     	lb.setStyleName("Form ScreenLabel");
@@ -183,7 +183,6 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
 
         keyHandler = Event.addNativePreviewHandler(this);
-        final Widget wid = this;
     	
     		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {			
     			public void execute() {
@@ -222,7 +221,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	for(int i = 0; i < buttons.length; i++) {
     		Button ab = new Button();
     		ab.setAction(String.valueOf(i));
-    		Label bl = new Label(buttons[i]);
+    		Label<String> bl = new Label<String>(buttons[i]);
     		bl.setStyleName("ScreenLabel");
     		ab.setWidget(bl);
     		ab.setStyleName("Button");

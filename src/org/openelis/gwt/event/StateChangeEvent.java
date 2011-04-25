@@ -37,6 +37,7 @@ public class StateChangeEvent<I> extends GwtEvent<StateChangeHandler<I>>{
 	private static Type<StateChangeHandler<?>> TYPE;
 	private I state;
 	
+	@SuppressWarnings("rawtypes")
     public static <I> void fire(HasStateChangeHandlers source, I state) {
 	    if (TYPE != null) {
 	      StateChangeEvent<I> event = new StateChangeEvent<I>(state);
@@ -54,6 +55,7 @@ public class StateChangeEvent<I> extends GwtEvent<StateChangeHandler<I>>{
 		
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public final Type<StateChangeHandler<I>> getAssociatedType() {
 		return (Type) TYPE;

@@ -27,8 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 /**
  * This class is used by OpenELIS Screens to display and input values in forms
@@ -58,7 +57,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * Textbox attributes
      */
     protected int                                   maxLength = 255;
-    protected TextAlignConstant                     alignment = TextBoxBase.ALIGN_LEFT;
+    protected TextAlignment                         alignment = TextAlignment.LEFT;
     protected Case                                  textCase  = Case.MIXED;
 
     /**
@@ -169,9 +168,9 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     /**
      * Set the text alignment.
      */
-    public void setTextAlignment(TextAlignConstant alignment) {
+    public void setTextAlignment(TextAlignment alignment) {
         this.alignment = alignment;
-        textbox.setTextAlignment(alignment);
+        textbox.setAlignment(alignment);
     }
 
     /**
@@ -242,13 +241,13 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
             if (maskHandler != null)
                 maskHandler.suspend();
             textbox.setMaxLength(255);
-            textbox.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textbox.setAlignment(TextAlignment.LEFT);
         } else {
             queryMode = false;
             if (maskHandler != null)
                 maskHandler.resume();
             textbox.setMaxLength(maxLength);
-            textbox.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+            textbox.setAlignment(TextAlignment.LEFT);
         }
     }
 

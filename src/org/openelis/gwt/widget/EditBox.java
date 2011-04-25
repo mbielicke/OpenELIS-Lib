@@ -124,13 +124,13 @@ public class EditBox extends TextBox<String> {
             ta.setStyleName("ScreenTextArea");
             
             Button ok = new Button();
-            Label okText = new Label("OK");
+            Label<String> okText = new Label<String>("OK");
             okText.setStyleName("ScreenLabel");
             ok.setDisplay(okText);
             ok.setStyleName("Button");
             
             Button cancel = new Button();
-            Label cancelText = new Label("Cancel");
+            Label<String> cancelText = new Label<String>("Cancel");
             cancelText.setStyleName("ScreenLabel");
             cancel.setDisplay(cancelText);
             cancel.setStyleName("Button");

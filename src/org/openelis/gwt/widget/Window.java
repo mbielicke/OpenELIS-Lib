@@ -31,19 +31,15 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.event.BeforeCloseEvent;
 import org.openelis.gwt.event.BeforeCloseHandler;
-import org.openelis.gwt.event.HasBeforeCloseHandlers;
 import org.openelis.gwt.screen.Screen;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
-import com.google.gwt.dom.client.Document;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -58,14 +54,10 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.HasCloseHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -302,13 +294,13 @@ public class Window extends FocusPanel implements WindowInt {
             
         }
         
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
                 if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
                     body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
                 setFocus(true);
-            }
-        });
+			}
+		});
     }
     
     public void setName(String name) {
@@ -459,8 +451,8 @@ public class Window extends FocusPanel implements WindowInt {
      *
      */
     private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
-
-        public String name;
+    	
+    	public String name;
 
         public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
             return addDomHandler(handler, MouseDownEvent.getType());

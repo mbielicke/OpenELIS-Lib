@@ -80,6 +80,7 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 		setTime(new Date());		
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void setTime(Date date) {
 		set(time.getYear(),time.getMonth(),time.getDate(),time.getHours(),time.getMinutes(),time.getSeconds());
 		set(ZONE_OFFSET,time.getTimezoneOffset());
@@ -94,6 +95,7 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 		return new CalendarImpl();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void add(int field, int amount) {
 		time = getTime();
 		switch (field) {
@@ -287,6 +289,7 @@ public class CalendarImpl implements Comparable<CalendarImpl> {
 		return -1;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Date getTime() {
 		time = new Date(year,month,date,hour,minute,second);
 		setTime(time);

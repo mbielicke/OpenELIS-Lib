@@ -56,6 +56,7 @@ public class BeforeGetMatchesEvent extends GwtEvent<BeforeGetMatchesHandler> {
 		handler.onBeforeGetMatches(this);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeGetMatchesHandler> getAssociatedType() {
 		return (Type) TYPE;

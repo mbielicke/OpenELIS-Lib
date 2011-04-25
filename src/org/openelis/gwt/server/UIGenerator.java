@@ -352,7 +352,7 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("autoComplete", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String fcase,visibleItems,width,enabled,delay,required,tableWidth;
+            	String fcase,visibleItems,enabled,delay,required,tableWidth;
                 Element table,label,col; 
                 NodeList cols,list;
                 Node attrib;
@@ -360,7 +360,6 @@ public class UIGenerator extends Generator {
     		    visibleItems = (attrib = node.getAttributes().getNamedItem("visibleItems")) != null ? attrib.getNodeValue() : "10";
     		    fcase = (attrib = node.getAttributes().getNamedItem("case")) != null ? attrib.getNodeValue() : "MIXED";
     		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
-    		    width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : "-1";
     		    enabled = (attrib = node.getAttributes().getNamedItem("enabled")) != null ? attrib.getNodeValue() : null;
     		    delay = (attrib = node.getAttributes().getNamedItem("delay")) != null ? attrib.getNodeValue() : null;
     		    required = (attrib = node.getAttributes().getNamedItem("required")) != null ? attrib.getNodeValue() : null;
@@ -1036,7 +1035,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("HorizontalPanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String spacing,halign,valign,style;
+    			String spacing,halign,valign;
     			NodeList widgets;
     			Node attrib,widget;
     			
@@ -1058,7 +1057,6 @@ public class UIGenerator extends Generator {
      	                }
     				    halign = (attrib = widget.getAttributes().getNamedItem("halign")) != null ? attrib.getNodeValue().toUpperCase() : "LEFT";
     				    valign = (attrib = widget.getAttributes().getNamedItem("valign")) != null ? attrib.getNodeValue().toUpperCase() : "TOP";
-    				    style = (attrib = widget.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
     				    
     					sw.println("wid"+id+".add(wid"+child+");");
 						sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_"+halign+");");
@@ -1581,8 +1579,9 @@ public class UIGenerator extends Generator {
                     if(filter != null)
                  	   sw.println("column"+id+"_"+i+".setFilterable("+filter+");");
                     
+                    
                     //if(align != null)
-                 	 //  sw.println("column"+id+"_"+i+".setAlignment(\")
+                 	  // sw.println("column"+id+"_"+i+".setAlignment(\")
                     
                     editor = col.getChildNodes();
                     for(int j = 0; j < editor.getLength(); j++){

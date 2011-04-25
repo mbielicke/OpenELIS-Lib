@@ -3,13 +3,13 @@ package org.openelis.gwt.widget.tree;
 import org.openelis.gwt.event.BeforeDropEvent;
 import org.openelis.gwt.event.BeforeDropHandler;
 import org.openelis.gwt.event.DropEnterEvent;
+import org.openelis.gwt.event.DropEnterEvent.DropPosition;
 import org.openelis.gwt.event.DropEnterHandler;
 import org.openelis.gwt.event.DropEvent;
 import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
 import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
-import org.openelis.gwt.event.DropEnterEvent.DropPosition;
 import org.openelis.gwt.widget.DragItem;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -19,9 +19,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -87,7 +85,7 @@ public final class TreeDropController extends SimpleDropController implements
      */
     public TreeDropController(Tree tre) {
         /* Pass the Drop area to the base class */
-        super(tre.view.flexTable);
+        super(tre.view);
         this.tree = tre;
 
         /*

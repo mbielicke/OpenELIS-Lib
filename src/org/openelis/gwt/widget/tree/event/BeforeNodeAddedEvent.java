@@ -36,6 +36,7 @@ public class BeforeNodeAddedEvent extends GwtEvent<BeforeNodeAddedHandler> {
 		handler.onBeforeNodeAdded(this);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeNodeAddedHandler> getAssociatedType() {
 		return (Type) TYPE;

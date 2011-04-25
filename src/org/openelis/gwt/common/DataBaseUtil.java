@@ -233,7 +233,7 @@ public class DataBaseUtil {
      * For paged result list, this method returns a subList of the query list
      * starting at first for max number of results.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static ArrayList subList(List query, int first, int max) {
         int to;
         Iterator e;
@@ -254,7 +254,7 @@ public class DataBaseUtil {
     /**
      * Convert a List to ArrayList
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static ArrayList toArrayList(List from) {
         if (from instanceof ArrayList)
             return (ArrayList)from;

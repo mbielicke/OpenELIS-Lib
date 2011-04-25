@@ -36,12 +36,14 @@ import org.openelis.gwt.widget.table.CellRenderer;
 import org.openelis.gwt.widget.table.Container;
 import org.openelis.gwt.widget.tree.Tree.Scrolling;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.VisibleEvent;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -168,16 +170,16 @@ public class View extends Composite {
                     delta = -rowHeight;
                 if (delta > 0 && delta < rowHeight)
                     delta = rowHeight;
-                vertScrollBar.setScrollPosition(pos + delta);
+                vertScrollBar.setVerticalScrollPosition(pos + delta);
             }
         }, MouseWheelEvent.getType());
 
         flexTable = new FlexTable();
         flexTable.addClickHandler(new ClickHandler() {
-            @SuppressWarnings("unchecked")
-            public void onClick(ClickEvent event) {
+            @SuppressWarnings("rawtypes")
+			public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
-                if(!tree.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
+                if(tree.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
                 	tree.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),
                 			(GwtEvent)event);
             }
@@ -252,6 +254,23 @@ public class View extends Composite {
         if ( !attached)
             return;
 
+        if(!isWidgetVisible()) {
+        	addVisibleHandler(new VisibleEvent.Handler() {
+        		public void onVisibleOrInvisible(VisibleEvent event) {
+        			if(event.isVisible() && isWidgetVisible()){
+        				firstAttach = true;
+        				layout();
+        				Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+							public void execute() {
+								removeVisibleHandler();
+							}
+						});
+        			}
+        		}
+        	});
+        	return;
+        }
+        
         flexTable.setStyleName(tree.TREE_STYLE);
         flexTable.setWidth(tree.getTotalColumnWidth() + "px");
 
@@ -530,7 +549,7 @@ public class View extends Composite {
             renderCell(rc, c, r);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void renderCell(int rc, int c, int r) {
         CellRenderer cellRenderer;
         HTMLTable table;
@@ -580,7 +599,7 @@ public class View extends Composite {
      * @param event
      */
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void startEditing(int r, final int c, Object value, GwtEvent event) {
         int rc, x1, x2, v1, v2;
         CellEditor cellEditor;
@@ -627,7 +646,7 @@ public class View extends Composite {
      * @param c
      * @return
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected Object finishEditing(int r, int c) {
         CellEditor cellEditor;
 
@@ -705,7 +724,7 @@ public class View extends Composite {
         if (r >= firstVisibleRow)
             r -= tree.getVisibleRows() + 1;
 
-        vertScrollBar.setScrollPosition(r * rowHeight);
+        vertScrollBar.setVerticalScrollPosition(r * rowHeight);
 
         return true;
     }
@@ -731,7 +750,7 @@ public class View extends Composite {
         else if (fr >= tree.getRowCount())
             fr = tree.getRowCount() - tree.getVisibleRows() + 1;
 
-        vertScrollBar.setScrollPosition(fr * rowHeight);
+        vertScrollBar.setVerticalScrollPosition(fr * rowHeight);
 
     }
 
@@ -752,7 +771,7 @@ public class View extends Composite {
     @Override
     protected void onAttach() {
 
-        if ( !isOrWasAttached()) {
+        if ( !isOrWasAttached() || firstAttach) {
             attached = true;
             firstAttach = true;
             layout();

@@ -50,7 +50,6 @@ import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TabPanel;
-import org.openelis.gwt.widget.Window;
 import org.openelis.gwt.widget.WindowInt;
 import org.openelis.gwt.widget.table.Table;
 
@@ -61,8 +60,6 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -310,7 +307,8 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * false.
      * @return
      */
-    public boolean validate() {
+    @SuppressWarnings("rawtypes")
+	public boolean validate() {
         boolean valid = true;
 
         for (Widget wid : def.getWidgets().values()) {
@@ -344,16 +342,13 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 
         list = new ArrayList<QueryData>();
         keys = def.getWidgets().keySet();
-        for (String key : def.getWidgets().keySet()) {
+        for (String key : keys) {
             if (def.getWidget(key) instanceof Queryable) {
-            	System.out.println("key = "+key);
                 Object query = ((Queryable)def.getWidget(key)).getQuery();
                 if(query instanceof Object[]){
                     QueryData[] qds = (QueryData[])query;
-                    for(int i = 0; i < qds.length; i++) {
-                       // ((QueryData)qds[i]).key = key;
-                        list.add(qds[i]);
-                    }
+                    for(int i = 0; i < qds.length; i++) 
+                        list.add(qds[i]);                    
                 }else if(query != null) {
                     ((QueryData)query).setKey(key);
                     list.add((QueryData)query);
@@ -453,7 +448,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * @param wid
      * @param screenHandler
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addScreenHandler(Widget wid, ScreenEventHandler<?> screenHandler) {
         assert wid != null : "addScreenHandler received a null widget";
 

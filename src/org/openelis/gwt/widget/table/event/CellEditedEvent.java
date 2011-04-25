@@ -25,6 +25,7 @@ public class CellEditedEvent extends GwtEvent<CellEditedHandler> {
 		handler.onCellUpdated(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<CellEditedHandler> getAssociatedType() {
 		return (Type) TYPE;

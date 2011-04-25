@@ -72,7 +72,8 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     /**
      * Returns the current widget set as this cells editor.
      */
-    public void startEditing(T value, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditing(T value, Container container, GwtEvent event) {
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
@@ -104,7 +105,8 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
         return editor.getValue();
     }
 
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);

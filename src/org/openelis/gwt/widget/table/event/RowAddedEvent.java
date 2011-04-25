@@ -27,6 +27,7 @@ public class RowAddedEvent extends GwtEvent<RowAddedHandler> {
 		handler.onRowAdded(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<RowAddedHandler> getAssociatedType() {
 		return (Type) TYPE;

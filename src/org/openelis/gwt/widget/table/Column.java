@@ -50,20 +50,20 @@ public class Column {
     /**
      * Comparator implementation to use when sorting this column
      */
-    @SuppressWarnings("unchecked")
-    protected Comparator   sort;
+    @SuppressWarnings("rawtypes")
+	protected Comparator   sort;
     
     /**
      * Editor widget used for this column
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes" })
     protected CellEditor   editor;
 
     /**
      * Render widget used for this column
      */
-    @SuppressWarnings("unchecked")
-    protected CellRenderer renderer = new LabelCell<String>(new Label<String>());
+    @SuppressWarnings("rawtypes")
+	protected CellRenderer renderer = new LabelCell<String>(new Label<String>());
     
     /**
      * name used to reference column and label for the Header
@@ -104,16 +104,16 @@ public class Column {
         minWidth = 15;
     }
     
-    @SuppressWarnings("unchecked")
-    public CellEditor getCellEditor() {
+    @SuppressWarnings("rawtypes")
+	public CellEditor getCellEditor() {
         return editor;
     }
 
     /**
      * Returns the Editor currently being used by this Column
      */
-    @SuppressWarnings("unchecked")
-    public CellEditor getCellEditor(int row) {
+    @SuppressWarnings("rawtypes")
+	public CellEditor getCellEditor(int row) {
         return editor;
     }
 
@@ -125,23 +125,23 @@ public class Column {
      * 
      * @param editor
      */
-    @SuppressWarnings("unchecked")
-    public Column setCellEditor(CellEditor editor) {
+    @SuppressWarnings("rawtypes")
+	public Column setCellEditor(CellEditor editor) {
         this.editor = editor;
         return this;
     }
     
     
-    @SuppressWarnings("unchecked")
-    public CellRenderer getCellRenderer() {
+    @SuppressWarnings("rawtypes")
+	public CellRenderer getCellRenderer() {
         return renderer;
     }
     /**
      * Method will return the currently set Renderer for this column
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public CellRenderer getCellRenderer(int row) {
+    @SuppressWarnings("rawtypes")
+	public CellRenderer getCellRenderer(int row) {
         return renderer;
     }
 
@@ -149,8 +149,8 @@ public class Column {
      * Method will set the current renderer for this column
      * @param renderer
      */
-    @SuppressWarnings("unchecked")
-    public Column setCellRenderer(CellRenderer renderer) {
+    @SuppressWarnings("rawtypes")
+	public Column setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
         if (renderer instanceof CellEditor)
             editor = (CellEditor)renderer;
@@ -379,8 +379,8 @@ public class Column {
      * Method used to set the sortable flag for this column
      * @param filterable
      */
-    @SuppressWarnings("unchecked")
-    public Column setSort(Comparator sort) {
+    @SuppressWarnings("rawtypes")
+	public Column setSort(Comparator sort) {
         this.sort = sort;
         isSorted = false;
         isSortable = true;

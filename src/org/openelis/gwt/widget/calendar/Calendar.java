@@ -31,6 +31,7 @@ import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,8 +45,6 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -226,12 +225,11 @@ public class Calendar extends TextBox<Datetime> {
         /*
          * SetFocus to the popup so the calendar will take over the key events
          */
-        DeferredCommand.addCommand(new Command() {
-            public void execute() {
-                ((FocusPanel)calendar.getDefinition().getWidget("CalFocus")).setFocus(true);
-            }
-        });
-        
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				 ((FocusPanel)calendar.getDefinition().getWidget("CalFocus")).setFocus(true);
+			}
+		});
     }
     
     @Override

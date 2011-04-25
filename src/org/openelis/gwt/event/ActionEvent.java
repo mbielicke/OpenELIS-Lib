@@ -59,6 +59,7 @@ public class ActionEvent<I> extends GwtEvent<ActionHandler<I>>{
 		
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public final Type<ActionHandler<I>> getAssociatedType() {
 		return (Type) TYPE;

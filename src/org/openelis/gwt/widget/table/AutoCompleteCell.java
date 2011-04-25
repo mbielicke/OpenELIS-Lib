@@ -114,7 +114,8 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
     /**
      * Returns the current widget set as this cells editor.
      */
-    public void startEditing(AutoCompleteValue value, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditing(AutoCompleteValue value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
@@ -122,7 +123,8 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         container.setEditor(editor);
     }
 
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);

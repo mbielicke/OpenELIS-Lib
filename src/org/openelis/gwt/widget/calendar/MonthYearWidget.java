@@ -3,11 +3,11 @@ package org.openelis.gwt.widget.calendar;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.Button;
-import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * This screen is used by the Calendar widget to display buttons to select

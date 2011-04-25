@@ -61,7 +61,8 @@ public class Item<T> extends Row {
         this.enabled =  enabled;
     }
     
-    public Object clone() {
+    @SuppressWarnings("unchecked")
+	public Object clone() {
     	Item<T> clone = (Item<T>)super.clone();
     	clone.setKey(key);
     	return clone;

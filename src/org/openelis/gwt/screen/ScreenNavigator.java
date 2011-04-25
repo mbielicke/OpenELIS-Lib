@@ -70,7 +70,8 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 public abstract class ScreenNavigator {
     protected int         selection, oldPage;
     protected boolean     byRow, enable;
-    protected ArrayList   result;
+    @SuppressWarnings("rawtypes")
+	protected ArrayList   result;
     protected Query       query;
     protected Table       table;
     protected Button   atozNext, atozPrev;
@@ -141,7 +142,8 @@ public abstract class ScreenNavigator {
      * @param result
      *        should be null to indicate no records were found.
      */
-    public void setQueryResult(ArrayList result) {
+    @SuppressWarnings("rawtypes")
+	public void setQueryResult(ArrayList result) {
         int row;
 
         enable(true);
@@ -170,7 +172,8 @@ public abstract class ScreenNavigator {
         select(row);
     }
 
-    public ArrayList getQueryResult() {
+    @SuppressWarnings("rawtypes")
+	public ArrayList getQueryResult() {
         return result;
     }
 

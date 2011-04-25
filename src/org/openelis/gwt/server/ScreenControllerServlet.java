@@ -15,12 +15,10 @@ package org.openelis.gwt.server;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.services.ScreenServiceInt;
-import org.openelis.util.SessionManager;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
@@ -32,10 +30,10 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
         return invoke(service, method, new Class[] {}, new Object[] {});
     }
 
-    @SuppressWarnings("unchecked")
-    private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
+    @SuppressWarnings("rawtypes")
+	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
         Object serviceInst;
-        HashMap<String, Object> busyPool;
+        //HashMap<String, Object> busyPool;
 
         try {
             serviceInst = Class.forName(service).newInstance();

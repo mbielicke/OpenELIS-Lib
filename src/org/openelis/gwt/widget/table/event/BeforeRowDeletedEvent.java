@@ -30,6 +30,7 @@ public class BeforeRowDeletedEvent extends GwtEvent<BeforeRowDeletedHandler> {
 		handler.onBeforeRowDeleted(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeRowDeletedHandler> getAssociatedType() {
 		return (Type) TYPE;

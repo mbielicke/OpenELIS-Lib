@@ -82,7 +82,8 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     /**
      * Returns the current widget set as this cells editor.
      */
-    public void startEditing(String value, Container container, GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	public void startEditing(String value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
@@ -92,7 +93,8 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         DOM.setStyleAttribute(container.getElement(), "align", "center");  
     }
     
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {        
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {        
         query = true;
         editor.setQueryMode(true);
         editor.setQuery(qd);

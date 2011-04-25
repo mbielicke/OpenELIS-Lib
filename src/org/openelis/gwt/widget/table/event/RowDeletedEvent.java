@@ -27,6 +27,7 @@ public class RowDeletedEvent extends GwtEvent<RowDeletedHandler> {
 		handler.onRowDeleted(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<RowDeletedHandler> getAssociatedType() {
 		return (Type) TYPE;

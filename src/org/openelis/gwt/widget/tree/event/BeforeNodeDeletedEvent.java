@@ -1,6 +1,5 @@
 package org.openelis.gwt.widget.tree.event;
 
-import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.tree.Node;
 
 import com.google.gwt.event.shared.GwtEvent;
@@ -31,6 +30,7 @@ public class BeforeNodeDeletedEvent extends GwtEvent<BeforeNodeDeletedHandler> {
 		handler.onBeforeNodeDeleted(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeNodeDeletedHandler> getAssociatedType() {
 		return (Type) TYPE;

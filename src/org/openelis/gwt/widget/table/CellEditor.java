@@ -45,14 +45,16 @@ public interface CellEditor<T> {
      * Returns the widget used as the editor for this cell
      * @return
      */
-    public void startEditing(T value, Container container, GwtEvent event);
+    @SuppressWarnings("rawtypes")
+	public void startEditing(T value, Container container, GwtEvent event);
     
     /**
      * Returns the widget used for querying this cell
      * @param qd
      * @return
      */
-    public void startEditingQuery(QueryData qd, Container container, GwtEvent event); 
+    @SuppressWarnings("rawtypes")
+	public void startEditingQuery(QueryData qd, Container container, GwtEvent event); 
     
     /**
      * Pulls the edited value from the editor and returns it.  If in Query mode and QueryData object will be returned 

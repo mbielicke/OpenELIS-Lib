@@ -32,39 +32,80 @@ package org.openelis.gwt.widget;
  */
 public class AutoCompleteValue {
     
+	/**
+	 * The database key for this item
+	 */
     protected Integer id;
+    /**
+     * The string used for display in the UI
+     */
     protected String  display;
+    /**
+     * Optional Data object that can be attached and referenced on selection
+     */
     protected Object  data;
     
+    /**
+     * Default no-arg constructor
+     */
     public AutoCompleteValue() {
         
     }
     
+    /**
+     * Constructor that takes an integer key and a String display value
+     * @param id
+     * @param display
+     */
     public AutoCompleteValue(Integer id, String display){
         this.id = id;
         this.display = display;
     }
 
+    /**
+     * Returns the database row key for this item
+     * @return
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Sets the key value for this item
+     * @param id
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * Returns the display for this AutoComplete
+     * @return
+     */
     public String getDisplay() {
         return display;
     }
 
+    /**
+     * Sets the diplay String for this AutoCompleteValue 
+     * @param display
+     */
     public void setDisplay(String display) {
         this.display = display;
     }
     
+    /**
+     * Returns the data object associated with this Autocompelte Value
+     * @return
+     */
     public Object getData() {
     	return data;
     }
     
+    /**
+     * Sets the data object for this Autocomplete value
+     * @param data
+     */
     public void setData(Object data) {
     	this.data = data;
     }

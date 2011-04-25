@@ -59,6 +59,7 @@ public class BeforeDropEvent<I> extends GwtEvent<BeforeDropHandler<I>> {
 		handler.onBeforeDrop(this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<BeforeDropHandler<I>> getAssociatedType() {
 		return (Type) TYPE;

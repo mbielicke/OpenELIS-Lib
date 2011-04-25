@@ -53,6 +53,7 @@ public class DragStartEvent<I> extends GwtEvent<DragStartHandler<I>> {
 		handler.onDragStart(this);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public final Type<DragStartHandler<I>> getAssociatedType() {
 		return (Type) TYPE;
 	}

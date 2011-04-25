@@ -95,9 +95,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -1550,10 +1548,9 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @return
      */
     public void fireUnselectEvent(int index) {
-        UnselectionEvent<Integer> event = null;
 
         if ( !queryMode)
-            event = UnselectionEvent.fire(this, index);
+            UnselectionEvent.fire(this, index);
     }
 
     /**
@@ -1768,8 +1765,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param col
      * @return
      */
-    @SuppressWarnings("unchecked")
-    protected boolean startEditing(final int row, final int col, final GwtEvent event) {
+    @SuppressWarnings("rawtypes")
+	protected boolean startEditing(final int row, final int col, final GwtEvent event) {
         boolean willScroll, ctrlKey, shiftKey;
         int startSelect, endSelect, maxSelected, minSelected, i;
 
@@ -1950,11 +1947,13 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         return editingCol;
     }
     
-    protected CellEditor getCellEditor(int r, int c) {
+    @SuppressWarnings("rawtypes")
+	protected CellEditor getCellEditor(int r, int c) {
         return getNodeDefinitionAt(getNodeAt(r).getType(), c).getCellEditor();
     }
     
-    protected CellRenderer getCellRenderer(int r, int c) {
+    @SuppressWarnings("rawtypes")
+	protected CellRenderer getCellRenderer(int r, int c) {
         return getNodeDefinitionAt(getNodeAt(r).getType(),c).getCellRenderer();
     }
 

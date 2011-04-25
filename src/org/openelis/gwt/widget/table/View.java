@@ -25,8 +25,6 @@
  */
 package org.openelis.gwt.widget.table;
 
-import java.util.logging.Logger;
-
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.ScrollBarEvent;
 import org.openelis.gwt.event.ScrollBarHandler;
@@ -34,7 +32,6 @@ import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.table.Table.Scrolling;
-import org.openelis.gwt.widget.table.CellEditor;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -50,10 +47,10 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 /**
  * Composite GWT widget to draw and handle logic for displaying a Table. All
@@ -164,13 +161,13 @@ public class View extends Composite {
                     delta = -rowHeight;
                 if (delta > 0 && delta < rowHeight)
                     delta = rowHeight;
-                vertScrollBar.setScrollPosition(pos + delta);
+                vertScrollBar.setVerticalScrollPosition(pos + delta);
             }
         }, MouseWheelEvent.getType());
 
         flexTable = new FlexTable();
         flexTable.addClickHandler(new ClickHandler() {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings({ "rawtypes" })
             public void onClick(ClickEvent event) {
                 Cell cell = flexTable.getCellForEvent(event);
                 if(table.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
@@ -355,7 +352,6 @@ public class View extends Composite {
         for (int c = 0; c < table.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
-      // scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar(), 0) + "px");
     }
 
     /**
@@ -572,7 +568,7 @@ public class View extends Composite {
      * @param value
      * @param event
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void startEditing(int r, final int c, Object value, GwtEvent event) {
         int rc, x1, x2, v1, v2;
 
@@ -617,7 +613,8 @@ public class View extends Composite {
      * @param c
      * @return
      */
-    protected Object finishEditing(int r, int c) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Object finishEditing(int r, int c) {
         CellEditor cellEditor;
 
         cellEditor = table.getColumnAt(c).getCellEditor(r);
@@ -694,7 +691,7 @@ public class View extends Composite {
         if (r >= firstVisibleRow)     
             r = table.getVisibleRows() + 1 - r;
 
-        vertScrollBar.setScrollPosition(r * rowHeight);
+        vertScrollBar.setVerticalScrollPosition(r * rowHeight);
 
         return true;
     }
@@ -720,7 +717,7 @@ public class View extends Composite {
         else if (fr >= table.getRowCount())
             fr = table.getRowCount() - table.getVisibleRows() + 1;
 
-        vertScrollBar.setScrollPosition(fr * rowHeight);
+        vertScrollBar.setVerticalScrollPosition(fr * rowHeight);
 
     }
 
@@ -741,16 +738,13 @@ public class View extends Composite {
     @Override
     protected void onAttach() {
 
-        if ( !isOrWasAttached() || firstAttach == true) {
+        if ( !isOrWasAttached() || firstAttach) {
             attached = true;
             firstAttach = true;
             layout();
         }
         super.onAttach();
-
     }
-    
-    
 
     /**
      * Returns the Header for this view
@@ -777,9 +771,5 @@ public class View extends Composite {
     protected void setVisibleChanged(boolean changed) {
         visibleChanged = changed;
     }
-
-    /*
-     * private static native String getUserAgent()/- { return user.agent; }-
-     */
 
 }
