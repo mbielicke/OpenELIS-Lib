@@ -1876,7 +1876,7 @@ public class UIGenerator extends Generator {
 				if (max != null) 
 					sw.println("wid"+id+".setMaxLength("+max+");");
 
-				sw.println("wid"+id+".setTextAlignment(TextBoxBase.ALIGN_"+textAlign.toUpperCase()+");");
+				sw.println("wid"+id+".setTextAlignment(ValueBoxBase.TextAlignment."+textAlign.toUpperCase()+");");
 	        
 				/*
 				if (node.getAttributes().getNamedItem("autoNext") != null){
@@ -1907,7 +1907,7 @@ public class UIGenerator extends Generator {
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
 				composer.addImport("org.openelis.gwt.widget.TextBox.Case");
-				composer.addImport("com.google.gwt.user.client.ui.TextBoxBase");
+				composer.addImport("com.google.gwt.user.client.ui.ValueBoxBase");
                 composer.addImport("org.openelis.gwt.widget.IntegerHelper");
                 composer.addImport("org.openelis.gwt.widget.DoubleHelper");
                 composer.addImport("org.openelis.gwt.widget.LongHelper");
