@@ -135,7 +135,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         if(horizontal)
             return getHorizontalScrollPosition();
      
-        return super.getVerticalScrollPosition();
+        return getVerticalScrollPosition();
     }
 
     @Override
