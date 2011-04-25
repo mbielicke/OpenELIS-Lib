@@ -215,7 +215,7 @@ public class Dropdown<T> extends TextBox<T> {
         }
         
         popup.showRelativeTo(this);
-
+        
         /*
          * Scroll if needed to make selection visible
          */
@@ -828,7 +828,7 @@ public class Dropdown<T> extends TextBox<T> {
      */
     protected class DefaultRenderer implements Renderer {
         public String getDisplay(Row row) {
-            return row.getCells().get(0).toString();
+            return row != null ? row.getCells().get(0).toString() : "";
         }
     }
     
