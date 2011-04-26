@@ -25,6 +25,7 @@
  */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 
 /**
@@ -110,4 +111,13 @@ public class StringField extends Field<String> {
 
         return obj;
     }
+    
+	@Override
+	public void setValue(String value) {
+		this.value = value;
+		if(queryMode){
+			queryString = value != null ? value : "";
+			validateQuery();
+		}
+	}
 }
