@@ -140,4 +140,13 @@ public class IntegerField extends Field<Integer> {
             }
         }
     }
+    
+	@Override
+	public void setValue(Integer value) {
+		this.value = value;
+		if(queryMode){
+			queryString = value != null ? value.toString() : "";
+			validateQuery();
+		}
+	}
 }
