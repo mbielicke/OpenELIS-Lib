@@ -46,7 +46,8 @@ public class Screen extends Composite implements
 	};
 
 	public State state = null;
-	public ScreenWindow window;
+	public ScreenWindowInt window;
+	
 
 	protected ScreenDefInt def;
 	protected ScreenService service;
@@ -88,7 +89,7 @@ public class Screen extends Composite implements
 	}
 
 	public ScreenWindow getWindow() {
-		return window;
+		return (ScreenWindow)window;
 	}
 
 	/**
@@ -270,5 +271,6 @@ public class Screen extends Composite implements
     }
 
     public void setWindowInt(ScreenWindowInt window) {
+    	window = this.window;
     }
 }
