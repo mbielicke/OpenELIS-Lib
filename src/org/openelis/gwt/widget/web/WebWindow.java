@@ -105,7 +105,7 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 		contentPanel.add(content);
 		this.content = content;
 		if(content instanceof Screen) {
-			((Screen)content).setWindowInt(this);
+			((Screen)content).setWindow(this);
 			setName(((Screen)content).getDefinition().getName());
 		}	
 	}

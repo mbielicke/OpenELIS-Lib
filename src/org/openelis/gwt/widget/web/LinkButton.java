@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget.web;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -58,22 +60,20 @@ public class LinkButton extends FocusPanel {
 				public void onMouseOver(MouseOverEvent event) {
 					if(pop.isShowing())
 						return;
-					/*
-			        pop.setPopupPositionAndShow(new PositionCallback() {
-			            public void setPosition(int offsetWidth, int offsetHeight) {
-			               int y = dp.getAbsoluteTop() + (dp.getAbsoluteTop() + dp.getOffsetHeight()/2) - (offsetHeight /2 );
-			               int x = dp.getAbsoluteLeft() + dp.getOffsetWidth();
-			               pop.setPopupPosition(x,y);
-			            }
-			        });
-					*/
 					pop.showRelativeTo(dp);
-			        timer.schedule(5000); 
+			        timer.schedule(10000); 
 					
 				}
 			});
 			addMouseOutHandler(new MouseOutHandler() {
 				public void onMouseOut(MouseOutEvent event) {
+					timer.cancel();
+					pop.hide();
+				}
+			});
+			
+			addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
 					timer.cancel();
 					pop.hide();
 				}

@@ -46,7 +46,7 @@ public class Screen extends Composite implements
 	};
 
 	public State state = null;
-	public ScreenWindow window;
+	public ScreenWindowInt window;
 	
 
 	protected ScreenDefInt def;
@@ -84,11 +84,11 @@ public class Screen extends Composite implements
 	/**
 	 * Sets the parent window for this screen.
 	 */
-	public void setWindow(ScreenWindow window) {
+	public void setWindow(ScreenWindowInt window) {
 		this.window = window;
 	}
 
-	public ScreenWindow getWindow() {
+	public ScreenWindowInt getWindow() {
 		return window;
 	}
 
@@ -268,8 +268,5 @@ public class Screen extends Composite implements
 
     public HandlerRegistration addResizeHandler(ResizeHandler handler) {
         return addHandler(handler, ResizeEvent.getType());
-    }
-
-    public void setWindowInt(ScreenWindowInt window) {
     }
 }
