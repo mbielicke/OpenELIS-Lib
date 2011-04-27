@@ -293,6 +293,17 @@ public class View extends Composite {
 
         scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
 
+        // *** Horizontal ScrollBar *****************
+        if (table.getHorizontalScroll() == Scrolling.NEVER)
+            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            else
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        }
+        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
+        
         /*
          * This code is executed the first time the Table is attached
          */
@@ -327,16 +338,7 @@ public class View extends Composite {
             visibleChanged = true;
         }
 
-        // *** Horizontal ScrollBar *****************
-        if (table.getHorizontalScroll() == Scrolling.NEVER)
-            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
-            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
-            else
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        }
-        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
+
 
         renderView( -1, -1);
 
