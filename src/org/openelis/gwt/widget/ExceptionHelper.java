@@ -183,7 +183,7 @@ public class ExceptionHelper {
                     grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
                     grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
                 }
-                grid.setText(0, 1, "Field Required");//exception.getMessage());
+                grid.setText(0, 1, exception.getMessage());
             }
         }
         
