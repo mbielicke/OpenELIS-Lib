@@ -149,7 +149,7 @@ version="1.0">
     <xsl:param name="label"/>
     <xsl:param name="enabled"/>
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
-  	<menuItem key="{$key}" style="TopMenuRowContainer" enable="{$enabled}"  
+  	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
 	          icon="{$label}Icon"
 	   		  label="{resource:getString($constants,$label)}"
 	          description="{resource:getString($constants,$descrip)}"/>
