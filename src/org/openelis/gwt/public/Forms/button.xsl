@@ -103,7 +103,7 @@ version="1.0">
 	<xsl:call-template name="menuItem">
 		<xsl:with-param name="key">duplicateRecord</xsl:with-param>
 		<xsl:with-param name="label">duplicateRecord</xsl:with-param>
-		<xsl:with-param name="enable">false</xsl:with-param>
+		<xsl:with-param name="enabled">false</xsl:with-param>
 	</xsl:call-template>
 </xsl:template>
 
@@ -112,7 +112,7 @@ version="1.0">
 	<xsl:call-template name="menuItem">
 		<xsl:with-param name="key">history</xsl:with-param>
 		<xsl:with-param name="label">history</xsl:with-param>
-		<xsl:with-param name="enable">false</xsl:with-param>
+		<xsl:with-param name="enabled">false</xsl:with-param>
 	</xsl:call-template>
 </xsl:template>
 
