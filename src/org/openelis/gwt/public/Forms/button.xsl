@@ -151,7 +151,7 @@ version="1.0">
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
   	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
 	          icon="{$label}Icon"
-	   		  label="{resource:getString($constants,$label)}"
+	   		  display="{resource:getString($constants,$label)}"
 	          description="{resource:getString($constants,$descrip)}"/>
   </xsl:template>
 </xsl:stylesheet>
