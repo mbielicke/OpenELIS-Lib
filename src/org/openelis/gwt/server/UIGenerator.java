@@ -220,7 +220,8 @@ public class UIGenerator extends Generator {
     	if(node.getNodeName().equals("code")){
     		sw.println(node.getTextContent());
     		return false;
-    	}
+    	}else if(node.getNodeName().equals("import"))
+    		return false;
     	
         widName = node.getNodeName();
         factoryMap.get(widName).getNewInstance(node,id);
