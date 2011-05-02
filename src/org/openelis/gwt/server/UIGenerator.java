@@ -183,8 +183,19 @@ public class UIGenerator extends Generator {
     }
     
     public void findImports(Node node) {
-        NodeList widgets;
-        Node widget;
+        NodeList widgets, imports;
+        Node widget,imprt;
+        String[] clases;
+        
+        imports = ((Element)node).getElementsByTagName("import");
+        
+        for(int i = 0; i < imports.getLength(); i++) {
+        	imprt = imports.item(i);
+        	clases = imprt.getAttributes().getNamedItem("class").getNodeValue().split(",");
+        	for(String clss : clases){
+        		composer.addImport(clss);
+        	}
+        }
         
         widgets = node.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
