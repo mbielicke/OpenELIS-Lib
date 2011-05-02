@@ -170,7 +170,9 @@ public class UIGenerator extends Generator {
         for (int i = 0; i < widgets.getLength(); i++) {
         	widget = widgets.item(i);
             if (widget.getNodeType() == Node.ELEMENT_NODE) {
-                createWidget(widget,0);
+                if(!createWidget(widget,0)) 
+                	continue;
+                
                 key = (attrib = widget.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
                 
                 if(key != null)
