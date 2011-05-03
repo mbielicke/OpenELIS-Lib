@@ -70,7 +70,7 @@ public class CalendarService {
             if(cal.get(Calendar.DAY_OF_WEEK) > 1)
                 cal.add(Calendar.DATE, -cal.get(Calendar.DAY_OF_WEEK)+1);
             else
-                cal.add(Calendar.DATE, -8);
+                cal.add(Calendar.DATE, -7);
             
             for(int i = 0; i < 6; i++) {
             	for(int j = 0; j < 7; j++) {
