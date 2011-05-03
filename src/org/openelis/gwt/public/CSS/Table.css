@@ -10,7 +10,7 @@
 	-webkit-user-select : none;
 	-moz-user-select : none;
 	user-select : none;	
-	border : 1px solid white;
+	border : 0px solid white;
 }
 
 .Table tr {
