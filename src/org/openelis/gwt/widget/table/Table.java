@@ -1883,6 +1883,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		
 		HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
 		HashMap<Integer, ArrayList<LocalizedException>> rowExceptions; 
+		
+		if(endUserExceptions != null){
+			if(endUserExceptions.containsKey(getRowAt(row))) {
+				rowExceptions = endUserExceptions.get(getRowAt(row));
+				rowExceptions.remove(col);
+				if(rowExceptions.isEmpty())
+					endUserExceptions.remove(getRowAt(row));
+			}
+		}
 
 		// If hash is null and errors are passed as null, nothing to reset so
 		// return
