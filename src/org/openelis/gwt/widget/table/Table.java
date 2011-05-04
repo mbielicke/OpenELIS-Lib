@@ -1880,7 +1880,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	protected void setValidateException(int row, int col,
 			ArrayList<LocalizedException> errors) {
+		
 		HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
+		HashMap<Integer, ArrayList<LocalizedException>> rowExceptions; 
 
 		// If hash is null and errors are passed as null, nothing to reset so
 		// return
@@ -1890,8 +1892,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// If hash is not null, but errors passed is null then make sure the
 		// passed cell entry removed
 		if (validateExceptions != null && errors == null) {
-			if(validateExceptions.containsKey(getRowAt(row)))
-				validateExceptions.get(getRowAt(row)).remove(col);
+			if(validateExceptions.containsKey(getRowAt(row))){
+				rowExceptions = validateExceptions.get(getRowAt(row));
+			    rowExceptions.remove(col);
+			    if(rowExceptions.isEmpty())
+			    	validateExceptions.remove(getRowAt(row));
+			}
 			return;
 		}
 
