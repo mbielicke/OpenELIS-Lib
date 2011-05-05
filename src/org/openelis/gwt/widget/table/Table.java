@@ -1883,15 +1883,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		
 		HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
 		HashMap<Integer, ArrayList<LocalizedException>> rowExceptions; 
-		
-		if(endUserExceptions != null){
-			if(endUserExceptions.containsKey(getRowAt(row))) {
-				rowExceptions = endUserExceptions.get(getRowAt(row));
-				rowExceptions.remove(col);
-				if(rowExceptions.isEmpty())
-					endUserExceptions.remove(getRowAt(row));
-			}
-		}
 
 		// If hash is null and errors are passed as null, nothing to reset so
 		// return
@@ -1999,6 +1990,37 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				cellExceptions.remove(col);
 				if (cellExceptions.size() == 0)
 					validateExceptions.remove(key);
+			}
+		}
+
+		renderView(row, row);
+
+	}
+	
+	public void clearEndUserExceptions(Row row, int col) {
+		if(rowIndex != null && rowIndex.containsKey(row))
+			clearEndUserExceptions(rowIndex.get(row).model,col);
+		else
+			clearEndUserExceptions(model.indexOf(row),col);
+	}
+
+	/**
+	 * Clears all exceptions from the table cell passed
+	 * 
+	 * @param row
+	 * @param col
+	 */
+	public void clearEndUserExceptions(int row, int col) {
+		HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
+		Row key;
+
+		key = getRowAt(row);
+		if (endUserExceptions != null) {
+			cellExceptions = endUserExceptions.get(key);
+			if (cellExceptions != null) {
+				cellExceptions.remove(col);
+				if (cellExceptions.size() == 0)
+					endUserExceptions.remove(key);
 			}
 		}
 
