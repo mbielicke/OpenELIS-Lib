@@ -330,16 +330,18 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						finishEditing();
 						return;
 					}
-					// If not editing and a row is selected, focus on first
-					// editable cell
-					if (isAnyRowSelected()) {
+					
+     				// If not editing and a row is selected, focus on first
+	    			// editable cell
+					if(!isAnyRowSelected())
+						row = 0;
+					else 
 						row = getSelectedRow();
-						col = 0;
-						while (col < getColumnCount()) {
-							if (startEditing(row, col))
-								break;
-							col++;
-						}
+					col = 0;
+					while (col < getColumnCount()) {
+						if (startEditing(row, col))
+							break;
+						col++;
 					}
 					break;
 				}
