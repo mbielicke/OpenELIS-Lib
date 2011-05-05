@@ -2204,6 +2204,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public void setValidateException(int row, int col, ArrayList<LocalizedException> errors) {
         HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
+        HashMap<Integer, ArrayList<LocalizedException>> rowExceptions; 
+        Node node;
+        
+        node = getNodeAt(row);
 
         // If hash is null and errors are passed as null, nothing to reset so
         // return
@@ -2213,7 +2217,12 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         // If hash is not null, but errors passed is null then make sure the
         // passed cell entry removed
         if (validateExceptions != null && errors == null) {
-            validateExceptions.get(getNodeAt(row)).remove(col);
+        	if(validateExceptions.containsKey(node)) {
+        		rowExceptions = validateExceptions.get(node);
+        		rowExceptions.remove(col);
+        		if(rowExceptions.isEmpty())
+        			validateExceptions.remove(node);
+        	}
             return;
         }
 
@@ -2222,12 +2231,17 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             validateExceptions = new HashMap<Node, HashMap<Integer, ArrayList<LocalizedException>>>();
             cellExceptions = new HashMap<Integer, ArrayList<LocalizedException>>();
 
-            validateExceptions.put(getNodeAt(row), cellExceptions);
+            validateExceptions.put(node, cellExceptions);
         }
 
-        if (cellExceptions == null)
-            cellExceptions = validateExceptions.get(getNodeAt(row));
-
+        if (cellExceptions == null) {
+        	if(!validateExceptions.containsKey(node)) {
+        		cellExceptions = new HashMap<Integer, ArrayList<LocalizedException>>();
+        		validateExceptions.put(node,cellExceptions);
+        	}else
+        		cellExceptions = validateExceptions.get(node);
+        }
+        
         cellExceptions.put(col, errors);
     }
 
@@ -2264,6 +2278,20 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         }
     }
     
+    public void clearEndUserExceptions() {
+        if (endUserExceptions != null) {
+            endUserExceptions = null;
+            renderView( -1, -1);
+        }
+    }
+    
+    public void clearValidateExceptions() {
+        if (validateExceptions != null) {
+            validateExceptions = null;
+            renderView( -1, -1);
+        }
+    }
+    
     public void clearExceptions(Node node, int col) {
     	clearExceptions(nodeIndex.get(node).index,col);
     }
@@ -2294,6 +2322,34 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                 cellExceptions.remove(col);
                 if (cellExceptions.size() == 0)
                     validateExceptions.remove(key);
+            }
+        }
+
+        renderView(row, row);
+
+    }
+    
+    public void clearEndUserExceptions(Node node, int col) {
+    	clearEndUserExceptions(nodeIndex.get(node).index,col);
+    }
+
+    /**
+     * Clears all exceptions from the tree cell passed
+     * 
+     * @param row
+     * @param col
+     */
+    public void clearEndUserExceptions(int row, int col) {
+        HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
+        Node key;
+
+        key = getNodeAt(row);
+        if (endUserExceptions != null) {
+            cellExceptions = endUserExceptions.get(key);
+            if (cellExceptions != null) {
+                cellExceptions.remove(col);
+                if (cellExceptions.size() == 0)
+                    endUserExceptions.remove(key);
             }
         }
 

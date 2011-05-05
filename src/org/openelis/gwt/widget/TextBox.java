@@ -418,6 +418,17 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         validateExceptions = null;
         ExceptionHelper.checkExceptionHandlers(this);
     }
+    
+    public void clearEndUserExceptions() {
+        endUserExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+    
+    public void clearValidateExceptions() {
+        validateExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
 
     /**
      * Will add the style to the widget.

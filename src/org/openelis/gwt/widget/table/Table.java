@@ -1878,11 +1878,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param col
 	 * @param error
 	 */
-	protected void setValidateException(int row, int col,
+	protected void setValidateException(int rw, int col,
 			ArrayList<LocalizedException> errors) {
 		
 		HashMap<Integer, ArrayList<LocalizedException>> cellExceptions = null;
 		HashMap<Integer, ArrayList<LocalizedException>> rowExceptions; 
+		Row row;
+		
+		row = getRowAt(rw);
 
 		// If hash is null and errors are passed as null, nothing to reset so
 		// return
@@ -1892,11 +1895,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// If hash is not null, but errors passed is null then make sure the
 		// passed cell entry removed
 		if (validateExceptions != null && errors == null) {
-			if(validateExceptions.containsKey(getRowAt(row))){
-				rowExceptions = validateExceptions.get(getRowAt(row));
+			if(validateExceptions.containsKey(row)){
+				rowExceptions = validateExceptions.get(row);
 			    rowExceptions.remove(col);
 			    if(rowExceptions.isEmpty())
-			    	validateExceptions.remove(getRowAt(row));
+			    	validateExceptions.remove(row);
 			}
 			return;
 		}
@@ -1906,15 +1909,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			validateExceptions = new HashMap<Row, HashMap<Integer, ArrayList<LocalizedException>>>();
 			cellExceptions = new HashMap<Integer, ArrayList<LocalizedException>>();
 
-			validateExceptions.put(getRowAt(row), cellExceptions);
+			validateExceptions.put(row, cellExceptions);
 		}
 
 		if (cellExceptions == null) {
-			if(!validateExceptions.containsKey(getRowAt(row))) {
+			if(!validateExceptions.containsKey(row)) {
 				cellExceptions = new HashMap<Integer, ArrayList<LocalizedException>>();
-				validateExceptions.put(getRowAt(row), cellExceptions);
+				validateExceptions.put(row, cellExceptions);
 			}else
-				cellExceptions = validateExceptions.get(getRowAt(row));
+				cellExceptions = validateExceptions.get(row);
 		}
 
 		cellExceptions.put(col, errors);
@@ -1954,6 +1957,20 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			endUserExceptions = null;
 			validateExceptions = null;
 			renderView(-1, -1);
+		}
+	}
+	
+	public void clearEndUserExceptions() {
+		if (endUserExceptions != null) {
+			endUserExceptions = null;
+			renderView(-1,-1);
+		}
+	}
+	
+	public void clearValidateExceptions() {
+		if (validateExceptions != null) {
+			validateExceptions = null;
+			renderView(-1,-1);
 		}
 	}
 	

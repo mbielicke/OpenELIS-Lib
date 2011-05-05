@@ -49,6 +49,16 @@ public interface HasExceptions extends HasMouseOverHandlers, HasMouseOutHandlers
      * Clears both Logical and validation exceptions list.
      */
     public void clearExceptions();
+    
+    /**
+     * Clears only exceptions added by the programmer
+     */
+    public void clearEndUserExceptions();
+    
+    /**
+     * Clears only the excpetions add by widgets
+     */
+    public void clearValidateExceptions();
 
     /**
      * Used to add an exception style to a widget. A composite widget may need
