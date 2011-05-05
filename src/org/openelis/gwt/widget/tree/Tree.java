@@ -349,14 +349,16 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
                         }
                         // If not editing and a row is selected, focus on first
                         // editable cell
-                        if (isAnyNodeSelected()) {
+                        if (!isAnyNodeSelected()) 
+                        	row = 0;
+                        else
                             row = getSelectedNode();
-                            col = 0;
-                            while (col < getColumnCount()) {
-                                if (startEditing(row, col))
-                                    break;
-                                col++ ;
-                            }
+                        
+                        col = 0;
+                        while (col < getColumnCount()) {
+                            if (startEditing(row, col))
+                                break;
+                            col++ ;
                         }
                         break;
                 }
