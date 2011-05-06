@@ -230,6 +230,14 @@ public class Window extends FocusPanel implements WindowInt {
         status.setCellWidth(message, "100%");
         message.setStyleName("ScreenWindowLabel");
         outer.add(hp);
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			
+			@Override
+			public void execute() {
+				message.setWidth(message.getOffsetWidth()+"px");
+				DOM.setStyleAttribute(message.getElement(), "overflow", "hidden");
+			}
+		});
         
         bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         
