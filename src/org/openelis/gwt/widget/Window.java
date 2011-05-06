@@ -234,7 +234,7 @@ public class Window extends FocusPanel implements WindowInt {
 			
 			@Override
 			public void execute() {
-				message.setWidth(message.getOffsetWidth()+"px");
+				message.setWordWrap(false);
 				DOM.setStyleAttribute(message.getElement(), "overflow", "hidden");
 			}
 		});
