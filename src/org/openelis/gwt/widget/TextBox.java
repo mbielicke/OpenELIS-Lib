@@ -135,6 +135,15 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     public void setText(String text) {
         textbox.setText(text);
     }
+    
+    /**
+     * This method is overridden to make sure the Case style is applied to the widget  
+     */
+    @Override
+    public void setStyleName(String style) {
+    	super.setStyleName(style);
+    	setCase(this.textCase == null ? TextBox.Case.MIXED : this.textCase);
+    }
 
     /**
      * Set the text case for input.
