@@ -230,7 +230,7 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
         validateExceptions = null;
         setValue(area.getHTML(), fireEvents);
         if(required && value == null)
-            addValidateException(new LocalizedException("fieldRequiredException"));
+            addValidateException(new LocalizedException("gen.fieldRequiredException"));
         ExceptionHelper.checkExceptionHandlers(this);
     }
     

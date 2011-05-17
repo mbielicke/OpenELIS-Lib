@@ -392,7 +392,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
         }
 
         if (formErrors.size() == 0)
-            window.setError(consts.get("correctErrors"));
+            window.setError(consts.get("gen.correctErrors"));
         else if (formErrors.size() == 1)
             window.setError(formErrors.get(0).getMessage());
         else {

@@ -358,7 +358,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         try {
             setValue(helper.getValue(getText()), fireEvents);
             if (required && value == null)
-                addValidateException(new LocalizedException("fieldRequiredException"));
+                addValidateException(new LocalizedException("gen.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
             setValue(null,fireEvents);

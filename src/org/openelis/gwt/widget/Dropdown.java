@@ -519,7 +519,7 @@ public class Dropdown<T> extends TextBox<T> {
             setValue(item.key, fireEvents);
 
         if (required && value == null) {
-            addValidateException(new LocalizedException("fieldRequiredException"));
+            addValidateException(new LocalizedException("gen.fieldRequiredException"));
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }

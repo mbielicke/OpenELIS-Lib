@@ -174,7 +174,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
         try {
             setValue(helper.getValue(textarea.getText()), fireEvents);
             if(required && value == null)
-                addValidateException(new LocalizedException("fieldRequiredException"));
+                addValidateException(new LocalizedException("gen.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
         }
