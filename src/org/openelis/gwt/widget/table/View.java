@@ -693,7 +693,7 @@ public class View extends Composite {
         if (r >= firstVisibleRow)     
             r = table.getVisibleRows() + 1 - r;
 
-        vertScrollBar.setVerticalScrollPosition(r * rowHeight);
+        vertScrollBar.setVerticalScrollPosition(r * rowHeight + 1);
 
         return true;
     }
