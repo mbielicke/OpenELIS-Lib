@@ -1083,7 +1083,7 @@ public class UIGenerator extends Generator {
     				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Long"))
     					sw.println("org.openelis.gwt.widget.Label<Long> wid"+id+" = new org.openelis.gwt.widget.Label<Long>();");
     				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("Date"))
-    					sw.println("org.openelis.gwt.widget.Label<Date> wid"+id+" = new org.openelis.gwt.widget.Label<Date>();");
+    					sw.println("org.openelis.gwt.widget.Label<Datetime> wid"+id+" = new org.openelis.gwt.widget.Label<Datetime>();");
     				else if(node.getAttributes().getNamedItem("field").getNodeValue().equals("String"))
     					sw.println("org.openelis.gwt.widget.Label<String> wid"+id+" = new org.openelis.gwt.widget.Label<String>();");
     				sw.println("wid"+id+".setField(field"+id+");");
