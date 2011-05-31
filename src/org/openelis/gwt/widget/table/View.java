@@ -491,7 +491,10 @@ public class View extends Composite {
      */
     protected void applyRowStyle(int r, int rc) {
         String style;
-
+        
+        if(r >= table.getRowCount())
+        	return;
+        
         style = table.getRowAt(r).getStyle(r);
         if (style != null)
             flexTable.getRowFormatter().setStyleName(rc, style);
