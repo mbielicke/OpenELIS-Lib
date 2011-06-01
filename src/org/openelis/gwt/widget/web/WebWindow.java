@@ -38,6 +38,8 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -53,7 +55,8 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	protected Widget content;
 	private Confirm confirm;
 	private VerticalPanel vp;
-	private Label name;
+	//private Label name,crumbLink;
+	private Grid grid;
 	
 	/**
 	 * No-Arg constructor that sets up the skeleton of the Window.
@@ -61,11 +64,14 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	public WebWindow() {
 		vp = new VerticalPanel();
 		title = new AbsolutePanel();
-		name = new Label();
+		//name = new Label();
+		//crumbLink = new Label();
 		
 		title.setStyleName("crumbline");
-		name.setStyleName("webLabel");
-		title.add(name);
+		//name.setStyleName("webLabel");
+		grid = new Grid(1,2);
+		grid.setWidth("100%");
+		title.add(grid);
 		
 		contentPanel = new AbsolutePanel();
 		contentPanel.setWidth("100%");
@@ -114,7 +120,10 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	 * Sets the text in the name label of the screen
 	 */
 	public void setName(String nme) {
-		name.setText(nme);
+		grid.setText(0,1,nme);
+		grid.getCellFormatter().setHorizontalAlignment(0, 1, HasAlignment.ALIGN_CENTER );
+		grid.getCellFormatter().setStyleName(0, 1, "webLabel");
+		grid.getCellFormatter().setWidth(0, 1, "100%");
 	}
 
 	/**
@@ -217,5 +226,9 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	 */
 	public void setProgress(int percent) {
 
+	}
+	
+	public void setCrumbLink(Widget widget) {
+		grid.setWidget(0, 0, widget);
 	}
 }
