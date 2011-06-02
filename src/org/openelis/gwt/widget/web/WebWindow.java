@@ -229,6 +229,9 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	}
 	
 	public void setCrumbLink(Widget widget) {
-		grid.setWidget(0, 0, widget);
+		if(widget == null)
+			grid.clearCell(0,0);
+		else
+			grid.setWidget(0, 0, widget);
 	}
 }
