@@ -17,9 +17,6 @@
 	background: white;
 }
 
-.Table tr.Selection {
-    background:#f0f0f0;
-}
 
 .Table td {
 	overflow : hidden;
@@ -33,14 +30,24 @@
 	font-size: 10px;
 	padding: 0px 2px 0px 2px;
 }
-
 .Table td.InputError {
       border-bottom : 1px red dashed;
 }
-
 .Table td.InputWarning {
       border-bottom : 1px #f5d852 dashed;
 }
+.Table tr.Selection td.InputError {
+      border-bottom : 1px red dashed;
+}
+.Table tr.Selection {
+background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
+}
+.Table tr.Selection td{
+	border-color: #FFFFFF #A9BFD3 #A9BFD3;
+	border-style: solid;
+	border-width: 0px 1px 1px 0px;
+}
+
 
 .Table tr.SubHeader td{
 	border: 1px solid #B5B8C8;
@@ -51,7 +58,6 @@
 }
 
 .Header {
-	background: #d8d8d8;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	table-layout : fixed;	
@@ -64,17 +70,18 @@
 }
 
 .Header tr {
-	background:  #d8d8d8;
+	/*background:  #d8d8d8;*/
 }
 
 .Header td {
 	overflow : hidden;
 	white-space : nowrap;
-	border-color: #FFFFFF;
+	border-color: #B5B8C8;
 	border-style: solid;
 	border-width: 0px 0px 0px 1px;
 	padding : 0px 2px 4px 2px;
-	color: black;
+	color: grey;
+    background: transparent url("../Images/headersprite.gif") 0 1px repeat-x;
 	cursor: pointer;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
@@ -93,7 +100,7 @@
 }
 
 .Header td.ResizeCol {
-	cursor : col-resize; 
+	cursor : col-resize;
 }
 
 .DropdownTable {
@@ -126,7 +133,7 @@
 }
 
 .CellContainer {
-	border:1px solid gold;
+	border:1px solid #63B159;
 	padding : 0px 0px 0px 0px;
 	margin-left : -2px;
 		
@@ -138,6 +145,7 @@
 	font-size:10px;
 	font-weight:normal;
 	outline : none;
+	padding-top:3px;
 }
 
 .TableTextBox.Focus {

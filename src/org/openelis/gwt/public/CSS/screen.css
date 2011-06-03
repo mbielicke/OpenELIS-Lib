@@ -475,9 +475,7 @@ background:white;
     cursor:default;
 }
 
-.disabled .ScreenLabel{
-    color:gray;
-}
+
 
 
 .selectIcon, .completeIcon, .reviewAndReleaseIcon, .unreleaseIcon, .PrintButtonImage, .EditMultipleButtonImage, .sdwisSampleLoginIcon, .DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .popoutButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
@@ -766,14 +764,19 @@ border:1px solid #D8D8D8;
     cursor:default
 }
 .ButtonPanelButton .ButtonContent .ScreenLabel{
-    color:black;
+    /*color:black;*/
     background:none;
 }
-
+.disabled .ScreenLabel{
+    color:gray;
+}
 .disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
     cursor:default;
     color:gray;
     background:none;
+}
+.pressed .ScreenLabel{
+    color:black;
 }
 /*.disabled  .ButtonPanelButton .ButtonContent{
 cursor:default;
@@ -860,6 +863,7 @@ background:none;
 
 .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
 .disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
+.pressed .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
 
 .PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
 .disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
@@ -869,12 +873,14 @@ background:none;
 
 .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
 .disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+.pressed .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
 
 .AddButtonIcon{background:url("../Images/addButtonIcon.png") no-repeat;}
 .disabled .AddButtonIcon{background:url("../Images/addButtonIcondisabled.png") no-repeat;}
 
 .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
 .disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
+.pressed .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
 
 .DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
 .disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
@@ -924,7 +930,7 @@ background:none;
     height:16px;
 }
 
-.Hover .smallButton .ButtonContent, .Pressed .smallButton .ButtonContent, .Hover .FavHeaderButton .ButtonContent {
+.AtoZ .Hover .ButtonContent, .AtoZ .Pressed .ButtonContent, .Hover .FavHeaderButton .ButtonContent {
     cursor:pointer;
     background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
 }
@@ -944,7 +950,7 @@ background:none;
     cursor:default;
     background:none;
 }
-.Hover .smallButton .ButtonRightSide, .Pressed .smallButton .ButtonRightSide, .Hover .FavHeaderButton .ButtonRightSide{
+.AtoZ .Hover .ButtonRightSide, .AtoZ .Pressed .ButtonRightSide, .AtoZ .Hover .FavHeaderButton .ButtonRightSide{
     cursor:pointer;
     background:url("../Images/screenbuttonrssmall.gif") no-repeat;
 }
@@ -952,7 +958,7 @@ background:none;
     cursor:default;
 }
 
-.Hover .smallButton .ButtonLeftSide, .Pressed .smallButton .ButtonLeftSide,
+.AtoZ .Hover .ButtonLeftSide, .AtoZ .Pressed .ButtonLeftSide,
 .Hover .FavHeaderButton .ButtonLeftSide{
     cursor:pointer;
     background:url("../Images/screenbuttonlssmall.gif") no-repeat;
