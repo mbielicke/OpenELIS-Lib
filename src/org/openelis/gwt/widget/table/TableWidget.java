@@ -187,6 +187,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected boolean mouseOver;
     protected boolean fireEvents = true;    
     protected boolean multiSelect;
+    protected boolean byClick;
     public HashMap<Object,Integer> searchKey;
     
     /**
@@ -287,7 +288,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
     		if(tableIndex(selectedRow) == cell.getRowIndex() && selectedCol == cell.getCellIndex())
     			return;
+    		byClick = true;
     		select(modelIndexList[cell.getRowIndex()], cell.getCellIndex(),true);
+    		byClick = false;
     	}
     	ctrlKey = false;
     	shiftKey = false;
@@ -1093,7 +1096,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	protected boolean canEditCell(int row, int col) {
-		if(columns.get(col).colWidget instanceof PercentBar) {
+		if(columns.get(col).colWidget instanceof PercentBar || (columns.get(col).colWidget instanceof TableImage && !byClick) ) {
 			return false;
 		}
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
