@@ -39,6 +39,7 @@ import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.DropdownWidget;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.IconContainer;
+import org.openelis.gwt.widget.PercentBar;
 import org.openelis.gwt.widget.QueryFieldUtil;
 
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -52,6 +53,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -119,6 +121,21 @@ public class TableColumn {
     		((AbsolutePanel)wid).add(icon);
     		DOM.setStyleAttribute(wid.getElement(), "align", "center");
     		wid.setWidth((currentWidth)+ "px");
+    	}else if(colWidget instanceof PercentBar) {
+    		if(controller.queryMode)
+    			return new Label("");
+    		PercentBar newBar = (PercentBar)colWidget;
+    		//newBar.setColors(((PercentBar)colWidget).getColors());
+    		newBar.setWidth(currentWidth);
+    		newBar.setPercent((Double)cell.getValue());
+    		return new HTML(DOM.getInnerHTML(newBar.getElement()));
+    	}else if(colWidget instanceof TableImage) {
+    		if(controller.queryMode)
+    			return new Label("");
+    		TableImage newImg = new TableImage();
+    		newImg.setStyleName((String)cell.getValue());
+    		setAlign(HasHorizontalAlignment.ALIGN_CENTER);
+    		return newImg;
     	}else{
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -196,6 +213,19 @@ public class TableColumn {
     	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNKNOWN_STYLE);
     	    else
     	    	((AbsolutePanel)widget).getWidget(0).setStyleName(CheckBox.UNCHECKED_STYLE);
+    	}else if(colWidget instanceof PercentBar){
+    		if(controller.queryMode)
+    			return;
+    		PercentBar newBar = (PercentBar)colWidget;
+    		//newBar.setColors(((PercentBar)colWidget).getColors());
+    		newBar.setWidth(currentWidth);
+    		newBar.setPercent((Double)cell.getValue());
+    		((HTML)widget).setHTML((DOM.getInnerHTML(newBar.getElement())));
+    	}else if(colWidget instanceof TableImage) {
+    		if(controller.queryMode)
+    			return;
+    		TableImage newImg = (TableImage)widget;
+    		newImg.setStyleName((String)cell.getValue());
     	}else if(widget instanceof Label) {
     		if(colWidget instanceof AutoComplete) {
     			if(controller.queryMode){
@@ -256,6 +286,22 @@ public class TableColumn {
     		ap.setWidth((currentWidth)+ "px");
     		ap.add(editor);
     		return ap;
+    	}
+    	if(colWidget instanceof PercentBar) {
+    		if(controller.queryMode)
+    			return new Label("");
+    		PercentBar newBar = (PercentBar)colWidget;
+    		//newBar.setColors(((PercentBar)colWidget).getColors());
+    		newBar.setWidth(currentWidth);
+    		newBar.setPercent((Double)cell.getValue());
+    		return new HTML(DOM.getInnerHTML(newBar.getElement()));
+    	}
+    	if(colWidget instanceof TableImage) {
+    		if(controller.queryMode)
+    			return new Label("");
+    		TableImage newImg = new TableImage();
+    		newImg.setStyleName((String)cell.getValue());
+    		return newImg;
     	}
     	editor = colWidget;
     	editor.setWidth((currentWidth)+ "px");

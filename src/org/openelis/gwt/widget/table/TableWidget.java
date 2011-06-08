@@ -51,6 +51,7 @@ import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.NavigationWidget;
+import org.openelis.gwt.widget.PercentBar;
 import org.openelis.gwt.widget.table.TableView.VerticalScroll;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
@@ -1092,6 +1093,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	protected boolean canEditCell(int row, int col) {
+		if(columns.get(col).colWidget instanceof PercentBar) {
+			return false;
+		}
         if(getHandlerCount(BeforeCellEditedEvent.getType()) > 0) {
         	if(fireEvents) {
         		BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
@@ -1099,10 +1103,11 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         			return false;
         		}
         	}
-        }else {
-        	if(columns.get(col).colWidget instanceof Label)
-        		return false;
         }
+       
+        if(columns.get(col).colWidget instanceof Label || columns.get(col).colWidget instanceof TableImage)
+        	return false;
+       
         return (isEnabled() && columns.get(col).isEnabled());
 	}
 

@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -64,11 +63,8 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	public WebWindow() {
 		vp = new VerticalPanel();
 		title = new AbsolutePanel();
-		//name = new Label();
-		//crumbLink = new Label();
 		
 		title.setStyleName("crumbline");
-		//name.setStyleName("webLabel");
 		grid = new Grid(1,2);
 		grid.setWidth("100%");
 		title.add(grid);

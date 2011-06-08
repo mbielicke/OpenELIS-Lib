@@ -2128,6 +2128,40 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.NotesPanel");
     		}
     	});
+    	
+    	factoryMap.put("percentBar", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			NodeList ranges;
+    			Node range;
+    			
+    			sw.println("PercentBar wid"+id+" = new PercentBar();");
+    			ranges = ((Element)node).getElementsByTagName("range");
+    			if(ranges.getLength() > 0) {
+    				sw.print("wid"+id+".setColors(");
+    				for(int i = 0; i < ranges.getLength(); i++){
+    					range = ranges.item(i);
+    					if(i > 0)
+    						sw.print(", ");
+    					sw.print("new PercentBar.ColorRange("+range.getAttributes().getNamedItem("threshHold").getNodeValue()+", \""+range.getAttributes().getNamedItem("color").getNodeValue()+"\")");
+    				}
+    				sw.println(");");
+    			}
+    		}
+    		
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.PercentBar");
+    		}
+    	});
+    	
+    	factoryMap.put("tableImg", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("TableImage wid"+id+" = new TableImage();");
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.table.TableImage");
+    		}
+    	});
+    	
     	factoryMap.put("String", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("StringField field"+id+" = new StringField();");
