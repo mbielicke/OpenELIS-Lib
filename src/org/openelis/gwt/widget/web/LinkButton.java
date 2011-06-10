@@ -54,7 +54,7 @@ public class LinkButton extends FocusPanel {
 
 	        pop = new PopupPanel();
 	        pop.setWidget(pdp);
-	        pop.setStyleName("");
+	        pop.setStyleName("LinkPop");
 	        
 			addMouseOverHandler(new MouseOverHandler() {
 				public void onMouseOver(MouseOverEvent event) {
