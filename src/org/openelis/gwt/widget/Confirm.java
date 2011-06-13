@@ -177,16 +177,20 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
 
-        keyHandler = Event.addNativePreviewHandler(this);
+        if(bp != null)
+        	keyHandler = Event.addNativePreviewHandler(this);
+        
         final Widget wid = this;
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
                size();
-               if(active > -1){
-               	((AppButton)bp.getWidget(active)).blur();
+               if(bp != null) {
+            	   if(active > -1){
+            		   ((AppButton)bp.getWidget(active)).blur();
+            	   }
+            	   ((AppButton)bp.getWidget(0)).setFocus();
+            	   active = 0;
                }
-               ((AppButton)bp.getWidget(0)).setFocus();
-               active = 0;
         	}
         });
         //if(dragController == null) {
@@ -199,7 +203,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     
     private void size() {
     	dp.setVisible(true);
-    	if(bp.getOffsetWidth() > width)
+    	if(bp != null && bp.getOffsetWidth() > width)
     		setWidth((bp.getOffsetWidth()+50)+"px");
     	modalPanel.setWidgetPosition(this, left > -1 ? left : Window.getClientWidth()/2 - this.getOffsetWidth()/2,
     									   top > -1 ? top :  Window.getClientHeight()/2 - this.getOffsetHeight()/2);
