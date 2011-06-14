@@ -148,7 +148,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	removeFromParent();
     	modalPanel.removeFromParent();
     	modalGlass.removeFromParent();
-    	keyHandler.removeHandler();
+    	if(bp != null)
+    		keyHandler.removeHandler();
     	dp.setVisible(false);
     }
     
