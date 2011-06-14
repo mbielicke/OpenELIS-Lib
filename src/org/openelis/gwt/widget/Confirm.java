@@ -182,8 +182,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
         	keyHandler = Event.addNativePreviewHandler(this);
         
         final Widget wid = this;
-        DeferredCommand.addCommand(new Command() {
-        	public void execute() {
+        //DeferredCommand.addCommand(new Command() {
+        	//public void execute() {
                size();
                if(bp != null) {
             	   if(active > -1){
@@ -192,8 +192,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
             	   ((AppButton)bp.getWidget(0)).setFocus();
             	   active = 0;
                }
-        	}
-        });
+        	//}
+        //});
         //if(dragController == null) {
         	dragController = new PickupDragController(modalPanel,true);
         	dropController = new AbsolutePositionDropController(modalPanel);
