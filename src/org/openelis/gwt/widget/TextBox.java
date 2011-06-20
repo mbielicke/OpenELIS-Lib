@@ -558,6 +558,9 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
          * @param mask
          */
         public MaskHandler(String mask) {
+        	masks.add("9");
+        	masks.add("Z");
+        	masks.add("X");
             this.mask = mask;
             for (int i = 0; i < mask.length(); i++ ) {
                 if ( !masks.contains(String.valueOf(mask.charAt(i))))
