@@ -111,13 +111,4 @@ public class StringField extends Field<String> {
 
         return obj;
     }
-    
-	@Override
-	public void setValue(String value) {
-		this.value = value;
-		if(queryMode){
-			queryString = value != null ? value : "";
-			validateQuery();
-		}
-	}
 }

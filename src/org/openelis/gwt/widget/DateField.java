@@ -355,14 +355,5 @@ public class DateField extends Field<Datetime> {
 			drawExceptions(wid);
 		}
 	}
-	
-	@Override
-	public void setValue(Datetime value) {
-		this.value = value;
-		if(queryMode){
-			queryString = value != null ? value.toString() : "";
-			validateQuery();
-		}
-	}
     
 }
