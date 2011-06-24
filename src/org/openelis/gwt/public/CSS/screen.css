@@ -1337,9 +1337,9 @@ font-weight:bold;
     height:19px;
 }
 
-.gwt-TabPanelBottom{
+.gwt-TabPanelBottom{/*
     background:#fbfbfb;
-    border:1px solid #8db2e3;
+    border:1px solid #8db2e3;*/
    /* padding:4px;*/
 }
 .gwt-TabBar .gwt-TabBarRest {
@@ -1859,8 +1859,9 @@ cursor:pointer;
 }
 
 .subform{
-    border:1px solid #8DB2E3;
+    /*border:1px solid #8DB2E3;*/
     margin:4px 4px ;
+    margin-left:53px;
 }
 
 .subformButtons{
