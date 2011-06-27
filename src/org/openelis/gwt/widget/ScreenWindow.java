@@ -224,95 +224,103 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
     public void init(Mode mode, boolean noBorder) {   
     	this.mode = mode;
         
-    	if(noBorder)
-    		setWidget(body);
-    	else
-    	    setWidget(outer);
+    	
+    	setWidget(outer);
         setVisible(false);
         
         if(browser != null)
             zIndex = browser.index;
-                
-        tlCorner.addStyleName("WindowTL");
-        trCorner.addStyleName("WindowTR");
-        blCorner.addStyleName("WindowBL");
-        brCorner.addStyleName("WindowBR");
-        leftSide.addStyleName("WindowLeft");
-        rightSide.addStyleName("WindowRight");
         
-        HorizontalPanel hp = new HorizontalPanel();
-        hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        titleButtonsContainer = new HorizontalPanel();
-        titleButtonsContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        
-        hp.setWidth("100%");
-        titleButtonsContainer.addStyleName("Caption");
-        titleButtonsContainer.setWidth("100%");
-        
-        cap.addMouseDownHandler(this);
-        winLabel.setStyleName("ScreenWindowLabel");
-        cap.add(winLabel);
-        cap.setWidth("100%");
-        close.addClickHandler(this);
-        close.setStyleName("CloseButton");
-        collapse.addClickHandler(this);
-        collapse.setStyleName("MinimizeButton");
-        hp.add(tlCorner);
-        titleButtonsContainer.add(cap);
-        titleButtonsContainer.setCellWidth(cap, "100%");
-        hp.add(titleButtonsContainer);        
-        hp.setCellWidth(titleButtonsContainer, "100%");
-        if(mode == Mode.SCREEN || mode == Mode.LOOK_UP){
-            HorizontalPanel hp2 = new HorizontalPanel();
-            hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-            hp2.add(collapse);
-            hp2.add(close);
-            titleButtonsContainer.add(hp2);
-            titleButtonsContainer.setCellHorizontalAlignment(hp2, HasAlignment.ALIGN_RIGHT);
-            hp.setCellWidth(hp2,"32px");
-            hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
-        }
-        hp.add(trCorner);
-        statusImg.addMouseOverHandler(this);
-        statusImg.addMouseOutHandler(this);
-        status.setStyleName("StatusBar");
-        status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        if(!noBorder) {
+        	tlCorner.addStyleName("WindowTL");
+        	trCorner.addStyleName("WindowTR");
+        	blCorner.addStyleName("WindowBL");
+        	brCorner.addStyleName("WindowBR");
+        	leftSide.addStyleName("WindowLeft");
+        	rightSide.addStyleName("WindowRight");
 
-        status.add(statusImg);
-        status.add(message);
-        status.add(progressBar);
-        progressBar.setVisible(false);
-        status.setWidth("100%");
+
+        	HorizontalPanel hp = new HorizontalPanel();
+        	hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        	titleButtonsContainer = new HorizontalPanel();
+        	titleButtonsContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        	hp.setWidth("100%");
+        	titleButtonsContainer.addStyleName("Caption");
+        	titleButtonsContainer.setWidth("100%");
+
+        	cap.addMouseDownHandler(this);
+        	winLabel.setStyleName("ScreenWindowLabel");
+        	cap.add(winLabel);
+        	cap.setWidth("100%");
+        	close.addClickHandler(this);
+        	close.setStyleName("CloseButton");
+        	collapse.addClickHandler(this);
+        	collapse.setStyleName("MinimizeButton");
+        	hp.add(tlCorner);
+        	titleButtonsContainer.add(cap);
+        	titleButtonsContainer.setCellWidth(cap, "100%");
+        	hp.add(titleButtonsContainer);        
+        	hp.setCellWidth(titleButtonsContainer, "100%");
+
+        	if(mode == Mode.SCREEN || mode == Mode.LOOK_UP){
+        		HorizontalPanel hp2 = new HorizontalPanel();
+        		hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        		hp2.add(collapse);
+        		hp2.add(close);
+        		titleButtonsContainer.add(hp2);
+        		titleButtonsContainer.setCellHorizontalAlignment(hp2, HasAlignment.ALIGN_RIGHT);
+        		hp.setCellWidth(hp2,"32px");
+        		hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
+        	}
+        	hp.add(trCorner);
+        	statusImg.addMouseOverHandler(this);
+        	statusImg.addMouseOutHandler(this);
+        	status.setStyleName("StatusBar");
+        	status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        	status.add(statusImg);
+        	status.add(message);
+        	status.add(progressBar);
+        	progressBar.setVisible(false);
+        	status.setWidth("100%");
+
+
+        	status.setCellWidth(message, "100%");
+        	message.setStyleName("ScreenWindowLabel");
+        	outer.add(hp);
+
+        	bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        	bottomRow.setWidth("100%");
+        	bottomRow.setSpacing(0);
+
+        	middleGrid.setCellPadding(0);
+        	middleGrid.setCellSpacing(0);
+        	middleGrid.getCellFormatter().addStyleName(0,0,"WindowLeft");
+        	middleGrid.setWidget(0, 1, body);
+        	middleGrid.getCellFormatter().addStyleName(0,2,"WindowRight");
+
+        	bottomRow.add(blCorner);
+        	bottomRow.add(status);
+        	bottomRow.add(brCorner);
+
+        	bottomRow.setCellWidth(status, "100%");
+
+        	body.addStyleName("WindowBody");
+
+        	outer.add(middleGrid);
+        	outer.add(bottomRow);
+        	outer.addStyleName("WindowPanel");
+        	outer.sinkEvents(Event.ONCLICK);
+        	outer.setWidth("auto");
+        }else{
+        	 outer.add(body);
+        	 outer.addStyleName("WindowPanel");
+             outer.sinkEvents(Event.ONCLICK);
+             outer.setWidth("auto");
+        }
         
-        
-        status.setCellWidth(message, "100%");
-        message.setStyleName("ScreenWindowLabel");
-        outer.add(hp);
-        
-        bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        
-        bottomRow.setWidth("100%");
-        bottomRow.setSpacing(0);
-              
-        middleGrid.setCellPadding(0);
-        middleGrid.setCellSpacing(0);
-        middleGrid.getCellFormatter().addStyleName(0,0,"WindowLeft");
-        middleGrid.setWidget(0, 1, body);
-        middleGrid.getCellFormatter().addStyleName(0,2,"WindowRight");
-        
-        bottomRow.add(blCorner);
-        bottomRow.add(status);
-        bottomRow.add(brCorner);
-        
-        bottomRow.setCellWidth(status, "100%");
-        
-        body.addStyleName("WindowBody");
-        
-        outer.add(middleGrid);
-        outer.add(bottomRow);
-        outer.addStyleName("WindowPanel");
-        outer.sinkEvents(Event.ONCLICK);
-        outer.setWidth("auto");
         Window.addResizeHandler(this);
         if(browser != null){
             browser.dragController.makeDraggable(this, cap);
