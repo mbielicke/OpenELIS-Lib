@@ -208,19 +208,26 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
     
     
     public ScreenWindow(Mode mode) {
-    	init(mode);
+    	init(mode,false);
+    }
+    
+    public ScreenWindow(Mode mode, boolean noBorder) {
+    	init(mode,noBorder);
     }
     
     public ScreenWindow(WindowBrowser brws, String key){
     	this.browser = brws;
     	this.key = key;
-    	init(Mode.SCREEN);
+    	init(Mode.SCREEN,false);
     }
     
-    public void init(Mode mode) {   
+    public void init(Mode mode, boolean noBorder) {   
     	this.mode = mode;
         
-    	setWidget(outer);
+    	if(noBorder)
+    		setWidget(body);
+    	else
+    	    setWidget(outer);
         setVisible(false);
         
         if(browser != null)
