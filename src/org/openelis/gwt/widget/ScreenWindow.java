@@ -391,8 +391,10 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
         
         DeferredCommand.addCommand(new Command() {
         	public void execute() {
-        		if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
-        			body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
+        		if(titleButtonsContainer != null) {
+        			if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
+        				body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
+        		}
         		setFocus(true);
         	}
         });
