@@ -2132,9 +2132,16 @@ public class UIGenerator extends Generator {
     	factoryMap.put("percentBar", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			NodeList ranges;
-    			Node range;
+    			Node range,attrib;
+    			String width;
+    			
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("PercentBar wid"+id+" = new PercentBar();");
+    			
+    			if(width != null)
+    				sw.println("wid"+id+".setWidth("+width+");");
+    			
     			ranges = ((Element)node).getElementsByTagName("range");
     			if(ranges.getLength() > 0) {
     				sw.print("wid"+id+".setColors(");
@@ -2142,7 +2149,7 @@ public class UIGenerator extends Generator {
     					range = ranges.item(i);
     					if(i > 0)
     						sw.print(", ");
-    					sw.print("new PercentBar.ColorRange("+range.getAttributes().getNamedItem("threshHold").getNodeValue()+", \""+range.getAttributes().getNamedItem("color").getNodeValue()+"\")");
+    					sw.print("new PercentBar.ColorRange("+range.getAttributes().getNamedItem("threshold").getNodeValue()+", \""+range.getAttributes().getNamedItem("color").getNodeValue()+"\")");
     				}
     				sw.println(");");
     			}
