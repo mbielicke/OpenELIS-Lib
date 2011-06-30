@@ -53,7 +53,7 @@ public class PercentBar extends Composite implements HasField<Double>{
 	 * @param width
 	 */
 	public void setWidth(int width) {
-		bar.setWidth(width-37+"px");
+		bar.setWidth(width-45+"px");
 		grid.setWidth(width+"px");
 	}
 	
@@ -64,6 +64,9 @@ public class PercentBar extends Composite implements HasField<Double>{
 	public void setPercent(Double percent) {
 		AbsolutePanel panel;
 		ColorRange color = null;
+		
+		if(percent == null) 
+			percent = 0.0;
 		
 		panel = new AbsolutePanel();
 		bar.clear();
