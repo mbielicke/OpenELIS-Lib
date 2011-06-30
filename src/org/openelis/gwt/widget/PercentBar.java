@@ -53,7 +53,7 @@ public class PercentBar extends Composite implements HasField<Double>{
 	 * @param width
 	 */
 	public void setWidth(int width) {
-		bar.setWidth(width-45+"px");
+		bar.setWidth(width-65+"px");
 		grid.setWidth(width+"px");
 	}
 	
