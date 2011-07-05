@@ -548,6 +548,7 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
                 column.applyFilter();
         }
         controller.refresh();
+        controller.fireFilterEvent();
     }
     
     public void query(TableColumn col, String query) {

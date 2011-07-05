@@ -65,12 +65,15 @@ import org.openelis.gwt.widget.table.event.BeforeSortEvent;
 import org.openelis.gwt.widget.table.event.BeforeSortHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
+import org.openelis.gwt.widget.table.event.FilterEvent;
+import org.openelis.gwt.widget.table.event.FilterHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowMovedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeSortHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasFilterHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowMovedHandlers;
@@ -154,6 +157,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 													   HasContextMenuHandlers,
 													   FocusHandler,
 													   HasFocusHandlers,
+													   HasFilterHandlers,
 													   NavigationWidget<TableDataRow>
 													   {
                             
@@ -1186,7 +1190,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public void removeExceptionStyle(String style) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	protected void fireFilterEvent() {
+		FilterEvent.fire(this);
 	}
 	
 	// Methods for registering Event Handlers to the table.
@@ -1262,6 +1269,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public HandlerRegistration addSortHandler(SortHandler handler) {
 		return addHandler(handler, SortEvent.getType());
+	}
+	
+	public HandlerRegistration addFilterHandler(FilterHandler handler) {
+		return addHandler(handler, FilterEvent.getType());
 	}
 	
     public void addTabHandler(TabHandler handler) {
