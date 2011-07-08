@@ -214,7 +214,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     		return -1;
     	else{
     		//we need to do a linear search backwards to find the first entry that matches our search
-    		while(index > -1 && compareValue((String)searchText.get(index).getCells().get(0),textValue,textValue.length()) == 0)
+    		while(index > 0 && compareValue((String)searchText.get(index).getCells().get(0),textValue,textValue.length()) == 0)
     			index--;
 
     		return (((Integer)searchText.get(index+1).key)).intValue();
