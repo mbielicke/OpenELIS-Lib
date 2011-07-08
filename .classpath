@@ -18,5 +18,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/webadminclientapp.jar"/>
 	<classpathentry kind="lib" path="lib/bsf.jar"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/gwt-ajaxloader.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gwt-visualization-noredist.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
