@@ -1108,7 +1108,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
         		BeforeCellEditedEvent bce = BeforeCellEditedEvent.fire(this, row, col, getRow(row).cells.get(col).value);
         		if(bce.isCancelled()){
         			return false;
-        		}
+        		}else
+        		    return (isEnabled() && columns.get(col).isEnabled());
         	}
         }
        
