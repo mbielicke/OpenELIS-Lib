@@ -44,17 +44,10 @@ public class PercentBar extends Composite implements HasField<Double>{
 		bar = new AbsolutePanel();
 		initWidget(grid);
 		grid.setWidget(0, 0, bar);
+		grid.getCellFormatter().setWidth(0,0, "100%");
 		bar.setHeight("12px");
 		DOM.setStyleAttribute(bar.getElement(), "border", "1px solid black");
-	}
-	
-	/**
-	 * Sets the overall width of the widget which is bar + text.
-	 * @param width
-	 */
-	public void setWidth(int width) {
-		bar.setWidth(width-65+"px");
-		grid.setWidth(width+"px");
+		setStyleName("PercentBar");
 	}
 	
 	/**
