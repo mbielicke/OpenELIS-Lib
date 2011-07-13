@@ -117,7 +117,7 @@
 }
 
 .DropdownPopup .Selected .TableCell,
-.Selected .TableCell {
+.Selected .TableCell, .Selected .TableCell .gwt-HTML td {
 	background: transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 	border-color: #FFFFFF #a9bfd3 #a9bfd3 #a9bfd3;
 }
