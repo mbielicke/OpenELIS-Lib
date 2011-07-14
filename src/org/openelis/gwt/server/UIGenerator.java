@@ -2133,14 +2133,19 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			NodeList ranges;
     			Node range,attrib;
-    			String width;
+    			String width,barWidth;
     			
     			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    			barWidth = (attrib = node.getAttributes().getNamedItem("barWidth")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("PercentBar wid"+id+" = new PercentBar();");
     			
     			if(width != null)
-    				sw.println("wid"+id+".setWidth("+width+");");
+    				sw.println("wid"+id+".setWidth(\""+width+"px\");");
+    			
+    			if(barWidth != null) {
+    				sw.println("wid"+id+".setBarWidth("+barWidth+");");
+    			}
     			
     			ranges = ((Element)node).getElementsByTagName("range");
     			if(ranges.getLength() > 0) {

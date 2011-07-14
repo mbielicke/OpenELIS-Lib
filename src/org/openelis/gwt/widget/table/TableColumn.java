@@ -125,8 +125,11 @@ public class TableColumn {
     		if(controller.queryMode)
     			return new Label("");
     		PercentBar newBar = (PercentBar)colWidget;
+    		newBar.setWidth(currentWidth+"px");
     		newBar.setPercent((Double)cell.getValue());
-    		return new HTML(DOM.getInnerHTML(newBar.getElement()));
+    		HTML html = new HTML(DOM.getInnerHTML(newBar.getElement()));
+    		html.setWidth(currentWidth+"px");
+    		return html;
     	}else if(colWidget instanceof TableImage) {
     		if(controller.queryMode)
     			return new Label("");
@@ -215,8 +218,10 @@ public class TableColumn {
     		if(controller.queryMode)
     			return;
     		PercentBar newBar = (PercentBar)colWidget;
+    		newBar.setWidth(currentWidth+"px");
     		newBar.setPercent((Double)cell.getValue());
     		((HTML)widget).setHTML((DOM.getInnerHTML(newBar.getElement())));
+    		((HTML)widget).setWidth(currentWidth+"px");
     	}else if(colWidget instanceof TableImage) {
     		if(controller.queryMode)
     			return;
@@ -287,8 +292,11 @@ public class TableColumn {
     		if(controller.queryMode)
     			return new Label("");
     		PercentBar newBar = (PercentBar)colWidget;
+    		newBar.setWidth(currentWidth+"px");
     		newBar.setPercent((Double)cell.getValue());
-    		return new HTML(DOM.getInnerHTML(newBar.getElement()));
+    		HTML html = new HTML(DOM.getInnerHTML(newBar.getElement()));
+    		html.setWidth(currentWidth+"px");
+    		return html;
     	}
     	if(colWidget instanceof TableImage) {
     		if(controller.queryMode)

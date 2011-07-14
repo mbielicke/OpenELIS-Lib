@@ -50,6 +50,10 @@ public class PercentBar extends Composite implements HasField<Double>{
 		setStyleName("PercentBar");
 	}
 	
+	public void setBarWidth(int width) {
+		bar.setWidth(width+"px");
+	}
+	
 	/**
 	 * This method will fill the box and set the text to the value passed in as percent.
 	 * @param percent
