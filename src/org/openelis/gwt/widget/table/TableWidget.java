@@ -754,6 +754,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
             searchKey.put(model.get(i).key,i);
         }
         
+        for(TableColumn col : columns)
+        	col.clearFilter();
+        
         //if(isAttached())
         renderer.dataChanged(false);        
     }

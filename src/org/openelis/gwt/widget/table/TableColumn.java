@@ -579,6 +579,11 @@ public class TableColumn {
     	}
     }
     
+    public void clearFilter() {
+    	filtersInForce = new HashSet<Object>();
+    	filtered = false;
+    }
+    
     public void applyQueryFilter() {
     	int col = controller.columns.indexOf(this);
         for(TableDataRow row : controller.getData()) {
