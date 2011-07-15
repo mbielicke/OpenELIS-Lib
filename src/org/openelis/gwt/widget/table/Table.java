@@ -49,11 +49,14 @@ import org.openelis.gwt.widget.table.event.CellClickedEvent;
 import org.openelis.gwt.widget.table.event.CellClickedHandler;
 import org.openelis.gwt.widget.table.event.CellEditedEvent;
 import org.openelis.gwt.widget.table.event.CellEditedHandler;
+import org.openelis.gwt.widget.table.event.FilterEvent;
+import org.openelis.gwt.widget.table.event.FilterHandler;
 import org.openelis.gwt.widget.table.event.HasBeforeCellEditedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasBeforeRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellClickedHandlers;
 import org.openelis.gwt.widget.table.event.HasCellEditedHandlers;
+import org.openelis.gwt.widget.table.event.HasFilterHandlers;
 import org.openelis.gwt.widget.table.event.HasRowAddedHandlers;
 import org.openelis.gwt.widget.table.event.HasRowDeletedHandlers;
 import org.openelis.gwt.widget.table.event.HasUnselectionHandlers;
@@ -99,7 +102,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
 		HasCellEditedHandlers, HasBeforeRowAddedHandlers, HasRowAddedHandlers,
 		HasBeforeRowDeletedHandlers, HasRowDeletedHandlers, HasCellClickedHandlers,
-		HasValue<ArrayList<? extends Row>>, HasExceptions, FocusHandler {
+		HasValue<ArrayList<? extends Row>>, HasExceptions, FocusHandler, HasFilterHandlers {
 
 	/**
 	 * Cell that is currently being edited.
@@ -414,6 +417,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		this.model = (ArrayList<Row>) model;
 		modelView = this.model;
 		rowIndex = null;
+		
+		// Clear any filter choices that may have been in force before model changed
+		for(Column col : columns) { 
+			if(col.getFilter() != null)
+				col.getFilter().unselectAll();
+		}
+		
 		// if ( !scrollToVisible(0))
 		renderView(-1, -1);
 
@@ -433,6 +443,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}
 
 		applyFilters(filters);
+		
+		fireFilterEvent();
 	}
 
 	/**
@@ -1386,6 +1398,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return event == null || !event.isCancelled();
 			
 	}
+	
+	/**
+	 * Fires a Filter event after this table has been filtered and the new model is displayed.
+	 */
+	protected void fireFilterEvent() {
+		FilterEvent.fire(this);
+	}
 
 	// ********* Edit Table Methods *******************
 	/**
@@ -2268,6 +2287,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 
 	/**
+	 * Register a FilterHandler to this Table
+	 */
+	public HandlerRegistration addFilterHandler(FilterHandler handler) {
+		return addHandler(handler, FilterEvent.getType());
+	}
+	
+	/**
 	 * This method will check the model to make sure that all required cells
 	 * have values
 	 */
@@ -2439,6 +2465,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 		public boolean include(Object value) {
 			return values.get(value).selected;
+		}
+		
+		public void unselectAll() {
+			for(FilterChoice choice : choices) 
+				choice.setSelected(false);
 		}
 	}
 

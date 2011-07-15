@@ -516,7 +516,7 @@ public class Header extends FocusPanel {
         column.isFiltered = false;
   
         /*
-         * Check if all fitlers were removed or if a new filter was applied
+         * Check if all filters were removed or if a new filter was applied
          */
         for(int i = 0; i < choices.size(); i++){
             if(choices.get(i).isSelected()) {

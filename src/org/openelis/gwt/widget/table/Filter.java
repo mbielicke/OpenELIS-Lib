@@ -59,4 +59,9 @@ public interface Filter {
      */
     public int getColumn();
     
+    /**
+     * Clear all set choices for the current filter.
+     */
+    public void unselectAll();
+    
 }
