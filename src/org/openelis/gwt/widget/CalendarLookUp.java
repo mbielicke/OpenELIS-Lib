@@ -536,8 +536,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	}
 
 	public void setFocus(boolean focused) {
-		textbox.setFocus(focused);
-		
+		textbox.setFocus(focused);	
+	}
+	
+	public void selectText() {
+		textbox.selectAll();
 	}
 	
 	/**
