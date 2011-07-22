@@ -284,12 +284,14 @@ public class DateField extends Field<Datetime> {
      * If a pattern is set then the date must be passed in the pattern format to be valid.
      */
     public void setStringValue(String val) {
+    	
         valid = true;
         if(queryMode) {
         	queryString = val;
         	validateQuery();
         }
         Date date = null;
+        
         /*
         if(pattern == null){
         	if (val == null || val.equals("")){ 
@@ -317,13 +319,16 @@ public class DateField extends Field<Datetime> {
         	}
         }else{
         */
+        if(val != null && !val.equals("")) {
         	try {
         		date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
         	}catch(Exception e) {
         		valid = false;
         		addException(new LocalizedException("invalidDateFormat"));
         	}
+        }
         //}
+        	
        
         if(valid){
         	setValue(Datetime.getInstance(begin, end, date));
