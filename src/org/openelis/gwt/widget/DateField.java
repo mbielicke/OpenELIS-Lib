@@ -253,17 +253,22 @@ public class DateField extends Field<Datetime> {
     public String format() {
         if(value == null)
             return "";
+        return DateTimeFormat.getFormat(getPattern()).format(value.getDate());
+    }
+    
+    private String getPattern() {
         if(pattern != null)	
-            return DateTimeFormat.getFormat(pattern).format(value.getDate());
+            return pattern;
         else if(begin == Datetime.YEAR && end == Datetime.DAY) 
-        	return DateTimeFormat.getFormat("yyyy-MM-dd").format(value.getDate());
+        	return "yyyy-MM-dd";
         else if(begin == Datetime.YEAR && end == Datetime.MINUTE)
-        	return DateTimeFormat.getFormat("yyyy-MM-dd HH:mm").format(value.getDate());
+        	return "yyyy-MM-dd HH:mm";
         else if(begin == Datetime.YEAR && end == Datetime.SECOND)
-        	return DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").format(value.getDate());
+        	return "yyyy-MM-dd HH:mm:ss";
         else if(begin == Datetime.HOUR && end == Datetime.MINUTE)
-        	return DateTimeFormat.getFormat("HH:mm").format(value.getDate());
-        return value.toString();
+        	return "HH:mm";
+        else
+        	return "yyyy-MM-dd";
     }
     
     /**
@@ -285,40 +290,41 @@ public class DateField extends Field<Datetime> {
         	validateQuery();
         }
         Date date = null;
-        //if(pattern == null){
-        if (val == null || val.equals("")){ 
-        	if(value != null){
-            	ValueChangeEvent.fire(this, null);
+        /*
+        if(pattern == null){
+        	if (val == null || val.equals("")){ 
+        		if(value != null){
+        			ValueChangeEvent.fire(this, null);
+        		}
+        		value = null;
+        		return;
         	}
-            value = null;
-            return;
-        }
-   	   try {
-   		   if(begin > 2){
-   			 String[] time = val.split(":");
-   			 if(time.length == 3)
-   				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
-   			 else
-   				 date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
-   		   }else{
-   			   val = val.replaceAll("-", "/");
-   			   date = new Date(val);
-   		   }
-   		   removeException("invalidDateFormat");
-   	   }catch(Exception e) {
-   		   valid = false;
-  		   addException(new LocalizedException("invalidDateFormat"));
-   	   }
-   	   /*
-        }else{
         	try {
-        		date = DateTimeFormat.getFormat(pattern).parse(val);
+        		if(begin > 2){
+        			String[] time = val.split(":");
+        			if(time.length == 3)
+        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+        			else
+        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+        		}else{
+        			val = val.replaceAll("-", "/");
+        			date = new Date(val);
+        		}
+        		removeException("invalidDateFormat");
         	}catch(Exception e) {
         		valid = false;
-        		addError("Invalid Date format entered");
+        		addException(new LocalizedException("invalidDateFormat"));
         	}
-        }
+        }else{
         */
+        	try {
+        		date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
+        	}catch(Exception e) {
+        		valid = false;
+        		addException(new LocalizedException("invalidDateFormat"));
+        	}
+        //}
+       
         if(valid){
         	setValue(Datetime.getInstance(begin, end, date));
         	ValueChangeEvent.fire(this, getValue());

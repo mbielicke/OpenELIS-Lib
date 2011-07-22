@@ -207,7 +207,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 
 		public void onValueChange(ValueChangeEvent<String> event) {
 				field.setStringValue(event.getValue());
-				textbox.setText(field.format());
+				if(field.valid)
+					textbox.setText(field.format());
 		}
     	
     }
