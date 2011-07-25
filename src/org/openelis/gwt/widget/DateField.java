@@ -331,6 +331,8 @@ public class DateField extends Field<Datetime> {
         	
        
         if(valid){
+        	if(getValue() == null && date == null)
+        		return;
         	setValue(Datetime.getInstance(begin, end, date));
         	ValueChangeEvent.fire(this, getValue());
         }
