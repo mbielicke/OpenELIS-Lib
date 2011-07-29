@@ -39,5 +39,5 @@ public interface ScreenWindowInt extends HasBeforeCloseHandlers<ScreenWindow> {
 	
 	public void setProgress(int percent);
 	
-
+	public WindowBrowser getBrowser();	
 }

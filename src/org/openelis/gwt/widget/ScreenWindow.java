@@ -664,6 +664,8 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
 		}else
 			progressBar.setVisible(false);
 	}
-	
 
+    public WindowBrowser getBrowser() {
+        return browser;
+    }
 }

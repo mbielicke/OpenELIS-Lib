@@ -19,7 +19,6 @@ import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
-import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.ScreenWindowInt;
 import org.openelis.gwt.widget.table.TableWidget;
 
@@ -253,6 +252,13 @@ public class Screen extends Composite implements
 	 */
 	protected void setFocus(Widget widget) {
 		def.getPanel().setFocusWidget(widget);
+		 //
+		 // sets focus back to the window to allow short-cuts to work
+		 //
+		if (widget == null && window != null) {
+		    if (window.getBrowser() != null)
+		        window.getBrowser().setFocusedWindow();
+		}
 	}
 
     /**

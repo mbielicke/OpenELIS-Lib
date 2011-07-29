@@ -33,6 +33,7 @@ import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.Confirm;
 import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.ScreenWindowInt;
+import org.openelis.gwt.widget.WindowBrowser;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -230,4 +231,8 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 		else
 			grid.setWidget(0, 0, widget);
 	}
+	
+    public WindowBrowser getBrowser() {
+        return null;
+    }
 }
