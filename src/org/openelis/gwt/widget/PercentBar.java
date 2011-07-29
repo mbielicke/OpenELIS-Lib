@@ -27,22 +27,26 @@ public class PercentBar extends Composite implements HasField<Double>{
 	/**
 	 * The Bar that will be filled in to show the pecentage
 	 */
-	private AbsolutePanel bar;
+	private AbsolutePanel bar, outer;
 	/**
 	 * This is an array of color thresholds for determining what color to fill the bar with 
 	 */
 	private ColorRange[] colors;
 	
+	private int barWidth;
+	
 	/**
 	 * No-Arg constructor
 	 */
 	public PercentBar() {
+	    outer = new AbsolutePanel();
 		grid = new Grid(1,2);
 		grid.setCellPadding(0);
 		grid.setCellSpacing(0);
 		DOM.setStyleAttribute(grid.getElement(),"background", "transparent");
 		bar = new AbsolutePanel();
-		initWidget(grid);
+		outer.add(grid);
+		initWidget(outer);
 		grid.setWidget(0, 0, bar);
 		grid.getCellFormatter().setWidth(0,0, "100%");
 		bar.setHeight("12px");
@@ -52,6 +56,11 @@ public class PercentBar extends Composite implements HasField<Double>{
 	
 	public void setBarWidth(int width) {
 		bar.setWidth(width+"px");
+		barWidth = width;
+	}
+	
+	public int getBarWidth() {	    
+	    return barWidth;
 	}
 	
 	/**

@@ -121,15 +121,13 @@ public class TableColumn {
     		((AbsolutePanel)wid).add(icon);
     		DOM.setStyleAttribute(wid.getElement(), "align", "center");
     		wid.setWidth((currentWidth)+ "px");
-    	}else if(colWidget instanceof PercentBar) {
-    		if(controller.queryMode)
-    			return new Label("");
-    		PercentBar newBar = (PercentBar)colWidget;
-    		newBar.setWidth(currentWidth+"px");
-    		newBar.setPercent((Double)cell.getValue());
-    		HTML html = new HTML(DOM.getInnerHTML(newBar.getElement()));
-    		html.setWidth(currentWidth+"px");
-    		return html;
+    	}else if(colWidget instanceof PercentBar) {    		
+    	    PercentBar newBar = new PercentBar();
+    	    newBar.setColors(((PercentBar)colWidget).getColors());
+    	    newBar.setWidth(currentWidth+"px");
+    	    newBar.setBarWidth(((PercentBar)colWidget).getBarWidth());
+    	    newBar.setPercent((Double)cell.getValue());
+    	    return newBar;
     	}else if(colWidget instanceof TableImage) {
     		if(controller.queryMode)
     			return new Label("");
@@ -217,11 +215,9 @@ public class TableColumn {
     	}else if(colWidget instanceof PercentBar){
     		if(controller.queryMode)
     			return;
-    		PercentBar newBar = (PercentBar)colWidget;
-    		newBar.setWidth(currentWidth+"px");
-    		newBar.setPercent((Double)cell.getValue());
-    		((HTML)widget).setHTML((DOM.getInnerHTML(newBar.getElement())));
-    		((HTML)widget).setWidth(currentWidth+"px");
+    		PercentBar newBar = (PercentBar)widget;
+            newBar.setWidth(currentWidth+"px");
+            newBar.setPercent((Double)cell.getValue());
     	}else if(colWidget instanceof TableImage) {
     		if(controller.queryMode)
     			return;
