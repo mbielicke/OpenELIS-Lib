@@ -116,6 +116,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	 * Datetime when; false otherwise.
 	 */
 	public boolean after(Datetime when) {
+	    if (when == null)
+	        return false;
 		return after(when.getDate());
 	}
 
@@ -131,6 +133,8 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	 * Datetime when; false otherwise.
 	 */
 	public boolean before(Datetime when) {
+	    if (when == null)
+	        return false;
 		return before(when.getDate());
 	}
 
