@@ -39,9 +39,12 @@ import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRenderer;
 import org.openelis.gwt.widget.table.TableView;
+import org.openelis.gwt.widget.table.TableView.VerticalScroll;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -60,6 +63,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 
 /**
@@ -77,9 +81,13 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     private AutoCompleteListener listener = new AutoCompleteListener(this);
     private Field<T> field;
     private boolean enabled;
+    IconContainer icon = new IconContainer();
+    public String dropwidth;
+    public int minWidth;
+    HorizontalPanel hp; 
     private int delay = 350;
     
-    private class AutoCompleteListener implements KeyUpHandler {
+    private class AutoCompleteListener implements KeyUpHandler, ClickHandler {
         
         private AutoComplete widget;
        
@@ -117,6 +125,19 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
                 }
             }
         }
+
+        /**
+         * Call getMatches with whatever is in the the textbox to show the model
+         * If empty then will return the top of the listed sorted alphabetically
+         */
+		public void onClick(ClickEvent event) {
+			try {
+				getMatches(textbox.getText());
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
 
     }
 
@@ -160,7 +181,11 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         view = new TableView(this,showScroll);
         view.setWidth(width);
         keyboardHandler = this;
-        setWidget(textbox);
+        hp = new HorizontalPanel();
+        hp.add(textbox);
+        hp.add(icon);
+        setWidget(hp);
+        hp.setWidth(width);
         setStyleName("AutoDropDown");
         textbox.setStyleName("TextboxUnselected");
         textbox.addFocusHandler(this);
@@ -172,6 +197,9 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         textbox.setReadOnly(!enabled);
         textbox.addMouseOutHandler(mouseHandler);
         textbox.addMouseOverHandler(mouseHandler);
+        icon.setStyleName("AutoDropDownButton");
+        icon.addClickHandler(listener);
+        icon.addFocusHandler(this);
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
     }
@@ -195,6 +223,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     public void enable(boolean enabled) {
         this.enabled = enabled;
         textbox.setReadOnly(!enabled);
+        icon.enable(enabled);
         //super.enable(enabled);
     }
     
@@ -249,6 +278,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     	load(data);
     	if(textbox.getStyleName().indexOf("Focus") > -1){
     		selectRow(0);
+    		view.setHeight(Math.min(maxRows, data.size())*cellHeight);
     		showTable();
     	}else if(data != null && data.size() > 0){
     		setValue((T)data.get(0).key,true);
