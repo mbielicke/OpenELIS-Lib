@@ -449,6 +449,24 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     		}
     	}
     }
+    
+	@Override
+	public void setWidth(String width) {
+		if(hp != null && width != null)
+			hp.setWidth(width);
+		int index = width.indexOf("px");
+		int wid = 0;
+		if(index > 0)
+			wid = Integer.parseInt(width.substring(0,index)) - 16;
+		else
+			wid = Integer.parseInt(width) - 16;
+		if(wid+16 > minWidth)
+			dropwidth = (wid+16)+"px";
+		else
+			dropwidth = minWidth+"px";
+		//view.setWidth(dropwidth);
+		super.setWidth(wid+"px");
+	}
 
     /**
      * Puts the field into Query Mode to be used to accept query strings instead of normal data.
