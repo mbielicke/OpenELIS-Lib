@@ -77,7 +77,10 @@ public class DropdownWidget extends PopupTable implements TableKeyboardHandlerIn
 
         public Delay(String text, int time) {
             this.text = text;
-            this.schedule(time);
+            if (time <= 0)
+                run();
+            else
+                schedule(time);
         }
 
         public void run() {

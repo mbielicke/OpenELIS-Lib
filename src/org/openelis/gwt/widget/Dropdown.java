@@ -65,8 +65,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public int minWidth;
     HorizontalPanel hp; 
     public ArrayList<TableDataRow> searchText;
-    private int delay = 1;
+    private static PartialCompare partialCompare;
+    private int delay = 0;
     
+    static {
+        partialCompare = new PartialCompare();
+    }
     
     private class DropDownListener implements ClickHandler, KeyUpHandler {
         
@@ -196,11 +200,14 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     private int getIndexByTextValue(String textValue) {
+        int index = -1, lindex;
+        ArrayList<TableDataRow> model;
+        
+    	if(textValue.length() < 1)
+    		return index;
+
     	textValue = textValue.toUpperCase();
-    	if(textValue.equals(""))
-    		return -1;
-    	ArrayList<TableDataRow> model = this.getData();
-    	int index = -1;
+    	model = this.getData();
 
     	if(searchText == null) {
     		searchText = new ArrayList<TableDataRow>();
@@ -208,30 +215,22 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     			searchText.add(new TableDataRow(i,((String)model.get(i).cells.get(0).getValue()).toUpperCase()));
     		Collections.sort(searchText, new ColumnComparator(0,SortEvent.SortDirection.ASCENDING));
     	}
-    	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue),new MatchComparator());
+    	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue), partialCompare);
 
-    	if(index < 0)
+    	if(index < 0) {
     		return -1;
-    	else{
+    	}else{
     		//we need to do a linear search backwards to find the first entry that matches our search
-    		while(index > 0 && compareValue((String)searchText.get(index).getCells().get(0),textValue,textValue.length()) == 0)
+    	    index--;
+            while(index > -1 && partialCompare.compare(searchText.get(index),textValue) == 0)
     			index--;
 
     		return (((Integer)searchText.get(index+1).key)).intValue();
     	}
-
-    }
-    
-    private int compareValue(String value, String textValue, int length) {
-        if(value.length() < length)
-            return value.compareTo(textValue.substring(0,value.length()));
-        return value.substring(0,length).compareTo(textValue);
     }
     
     public void setModel(ArrayList<TableDataRow> model){
         this.load((ArrayList<TableDataRow>)model);
-
-        
     }
     
     public void enable(boolean enabled) {
@@ -420,16 +419,27 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		return getValue();
 	}
 	
-	private class MatchComparator implements Comparator<TableDataRow> {
-		
-		public int compare(TableDataRow o1, TableDataRow o2) {
-			String value = (String)o1.cells.get(0).getValue();
-			String textValue = (String)o2.cells.get(0).getValue();
-			return compareValue(value,textValue,textValue.length());
-		}
-				
-	}
-	
+    private static class PartialCompare implements Comparator<TableDataRow> {
+        public int compare(TableDataRow o1, TableDataRow o2) {
+            String full, partial;
+            
+            full = (String)o1.cells.get(0).getValue();
+            partial = (String)o2.cells.get(0).getValue();
+            return compare(full, partial);
+        }
+        public int compare(TableDataRow o1, String partial) {
+            String full;
+            
+            full = (String)o1.cells.get(0).getValue();
+            return compare(full, partial);
+        }
+        public int compare(String full, String partial) {
+            if (full.startsWith(partial))
+                return 0;
+            return full.compareTo(partial);
+        }
+    }
+
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
@@ -452,6 +462,5 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		else
 			field.setValue(null);
 	}
-
 }
 
