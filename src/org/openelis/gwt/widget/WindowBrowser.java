@@ -68,7 +68,27 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     public HashMap<String,ScreenWindow> windows = new HashMap<String,ScreenWindow>();
     public int index;
     public int limit ;
-    public PickupDragController dragController = new PickupDragController(browser,true);
+    public PickupDragController dragController = new PickupDragController(browser,true) {
+    	public void dragMove() {
+    		
+    		int x = context.draggable.getAbsoluteLeft();
+    		int y = context.draggable.getAbsoluteTop();
+    		int width = context.draggable.getOffsetWidth();
+    		int height = context.draggable.getOffsetHeight();
+
+    		/**
+    		 * if the drag exceeds either boundary return and cancel the move update.
+    		 */
+    		if(x+width > browser.getAbsoluteLeft()+browser.getOffsetWidth())
+    			return;
+    		
+    		if(y+height > browser.getAbsoluteTop()+browser.getOffsetHeight())
+    			return;
+    		
+    		super.dragMove();
+    		
+    	};
+    };
     public AbsolutePositionDropController dropController = new AbsolutePositionDropController(browser) {
     	@Override
     	public void onDrop(DragContext context) {

@@ -37,6 +37,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -82,12 +83,17 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         
         DeferredCommand.addCommand(new Command(){
            public void execute(){
-               panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+               resize();
            }
         });
+        	
         
         if(open)
         	open();
+    }
+    
+    private void resize() {
+    	panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
     }
     
     public void setContent(Widget wid){
