@@ -752,8 +752,8 @@ public class UIGenerator extends Generator {
         	            	   count--;
         	            	   continue;
         	               }
-    		               sw.println("wid"+child+".setHeight(\"100%\");");
-    		               sw.println("wid"+child+".setWidth(\"auto\");");
+    		               //sw.println("wid"+child+".setHeight(\"100%\");");
+    		               //sw.println("wid"+child+".setWidth(\"auto\");");
     		               sw.println("wid"+id+".setContent(wid"+child+");");
     		           }
     		       }

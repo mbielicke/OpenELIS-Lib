@@ -116,7 +116,15 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                 }
                 String text = widget.textbox.getText();
                 if (text.length() > 0 && !text.endsWith("*")) {
-                    widget.setDelay(text, delay);
+                    if (textbox.getText().equals(text)) {
+                        currentCursorPos = textbox.getText().length();
+                        try {
+                        	getMatches(text);
+                        }catch(Exception e) {
+                        	e.printStackTrace();
+                        }
+                    }
+                    //widget.setDelay(text, delay);
                 } else if(text.length() == 0){
                     widget.selectedRow = 0;
                     widget.selectRow(0);
@@ -172,6 +180,27 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
        
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
         addDomHandler(keyboardHandler,KeyUpEvent.getType());
+        addBlurHandler(new BlurHandler() {
+			
+			public void onBlur(BlurEvent event) {
+				if(popup.isShowing()){
+					doBlur();
+				}
+			}
+		});        	
+    }
+    
+    private void doBlur() {
+        String textValue = getTextBoxDisplay();
+
+        textbox.setText(textValue.trim());
+        
+        hideTable();
+		field.setValue(getValue());
+		ValueChangeEvent.fire(this, getValue());
+		field.clearExceptions(this);
+		checkValue();
+		activeWidget = null;
     }
     
     public void addTabHandler(TabHandler handler) {

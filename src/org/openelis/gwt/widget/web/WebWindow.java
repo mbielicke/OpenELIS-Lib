@@ -40,7 +40,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,7 +54,6 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	protected Widget content;
 	private Confirm confirm;
 	private VerticalPanel vp;
-	//private Label name,crumbLink;
 	private Grid grid;
 	
 	/**
@@ -66,7 +64,7 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 		title = new AbsolutePanel();
 		
 		title.setStyleName("crumbline");
-		grid = new Grid(1,2);
+		grid = new Grid(1,1);
 		grid.setWidth("100%");
 		title.add(grid);
 		
@@ -117,10 +115,10 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	 * Sets the text in the name label of the screen
 	 */
 	public void setName(String nme) {
-		grid.setText(0,1,nme);
-		grid.getCellFormatter().setHorizontalAlignment(0, 1, HasAlignment.ALIGN_CENTER );
-		grid.getCellFormatter().setStyleName(0, 1, "webLabel");
-		grid.getCellFormatter().setWidth(0, 1, "100%");
+		grid.setText(0,0,nme);
+		//grid.getCellFormatter().setHorizontalAlignment(0, 1, HasAlignment.ALIGN_CENTER );
+		grid.getCellFormatter().setStyleName(0, 0, "webLabel");
+		grid.getCellFormatter().setWidth(0, 0, "100%");
 	}
 
 	/**
@@ -226,10 +224,12 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	}
 	
 	public void setCrumbLink(Widget widget) {
+		/*
 		if(widget == null)
 			grid.clearCell(0,0);
 		else
 			grid.setWidget(0, 0, widget);
+	    */
 	}
 	
     public WindowBrowser getBrowser() {
