@@ -27,6 +27,8 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
+
 public class QueryFieldUtil {
 
     private static final long serialVersionUID = 1L;
@@ -110,6 +112,21 @@ public class QueryFieldUtil {
                     value = value.substring(1);
             }
         }
+    }
+    
+    public static String parseAutocomplete(String value) {
+        ArrayList<String> list;
+        QueryFieldUtil parser;
+        
+        if (DataBaseUtil.isEmpty(value))
+            return "";
+        parser = new QueryFieldUtil();
+        parser.parse(value);
+        list = parser.getParameter();
+        if (list.size() > 0) 
+            return list.get(0);
+        
+        return "";
     }
 
     public ArrayList<String> getComparator() {
