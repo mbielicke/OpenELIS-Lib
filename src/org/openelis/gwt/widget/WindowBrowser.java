@@ -69,6 +69,26 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
     public int index;
     public int limit ;
     public PickupDragController dragController = new PickupDragController(browser,true) {
+    	@Override
+    	public void previewDragStart() throws VetoDragException {
+    		int x = context.draggable.getAbsoluteLeft();
+    		int y = context.draggable.getAbsoluteTop();
+    		int width = context.draggable.getOffsetWidth();
+    		int height = context.draggable.getOffsetHeight();
+
+    		/**
+    		 * if the drag exceeds either boundary return and cancel the move update.
+    		 */
+    		if(x+width > browser.getAbsoluteLeft()+browser.getOffsetWidth())
+    			throw new VetoDragException();
+    		
+    		if(y+height > browser.getAbsoluteTop()+browser.getOffsetHeight())
+    			throw new VetoDragException();
+    		
+    		super.previewDragStart();
+    		
+    	}
+    	
     	public void dragMove() {
     		
     		int x = context.draggable.getAbsoluteLeft();
