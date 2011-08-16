@@ -55,17 +55,14 @@ public class SessionManager implements HttpSessionListener {
     }
 
     public static void removeSession(String Id) {
-        Map.Entry entry;
-        Iterator thread;
+        Map.Entry entries[];
         
         try {
             if (sessions.remove(Id) != null) {
-                thread = threads.entrySet().iterator();
-                while (thread.hasNext()) {
-                    entry = (Map.Entry)thread.next();
-                    if (entry.getValue().equals(Id)) {
+                entries = (Map.Entry[])threads.entrySet().toArray();
+                for (Map.Entry entry : entries) {
+                    if (entry.getValue().equals(Id))
                         threads.remove(entry.getKey());
-                    }
                 }
             }
         } catch (Exception e) {
