@@ -71,6 +71,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -248,11 +249,14 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
         	hp.setWidth("100%");
         	titleButtonsContainer.addStyleName("Caption");
         	titleButtonsContainer.setWidth("100%");
+        	
 
         	cap.addMouseDownHandler(this);
         	winLabel.setStyleName("ScreenWindowLabel");
         	cap.add(winLabel);
         	cap.setWidth("100%");
+        	cap.setHeight("100%");
+        	cap.setCellVerticalAlignment(winLabel, HasAlignment.ALIGN_MIDDLE);
         	close.addClickHandler(this);
         	close.setStyleName("CloseButton");
         	collapse.addClickHandler(this);
