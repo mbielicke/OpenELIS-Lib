@@ -209,7 +209,7 @@ color:gray;
 
 .topMenuItemDesc{
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:9px;
+    font-size:10px;
     color:gray;
 }
 .topMenuIcon{
@@ -219,7 +219,9 @@ color:gray;
     width:200px;
     padding:1px;
 }
-
+.favoritesMenuContainer .TopMenuRowContainer{
+    margin:4px;
+}
 .Ascending{
 	background:url('../Images/go-up.png') no-repeat center center;
 	width:16;
@@ -256,7 +258,7 @@ color:gray;
 }
 
 .preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
-.EditSettings{background:url('../Images/editsettingsbuttonimage.png') no-repeat center;}
+.EditSettings{background:url('../Images/cog_edit.png') no-repeat center;}
 .favoritesMenuIcon{background:url('../Images/favoritesbuttonimage.gif') no-repeat center;}
 .logoutIcon{background:url('../Images/logoutbuttonimage.gif') no-repeat center;}
 .cutIcon{background:url('../Images/cutbuttonimage.gif') no-repeat center;}
@@ -654,6 +656,7 @@ background:white;
 }
 .FavHeader .Hover .ButtonContent{
     cursor:pointer;
+    background:none;
 }
 .FavHeader .disabled .ButtonContent{
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
@@ -1146,6 +1149,16 @@ font-size:11px;
 font-weight:bold;
 }
 /*ErrorWindow end*/
+.favorite .LeftMenuPanePanelClosed{
+    height:100%;
+    width:5px;
+    background: url("../Images/topmenubg.gif") repeat-x;
+}
+.favorite .LeftMenuPanePanelOpen{
+    height:100%;
+    background: url("../Images/topmenubg.gif") repeat-x #F0F0F0;
+    border-right: 1px solid black;
+}
 
 .LeftMenuPanePanelClosed {
     height:100%;
@@ -1158,7 +1171,6 @@ font-weight:bold;
     background:white;
     border-right: 1px solid #98c0f4;
 }
-
 .LeftMenuPanePanelDiv{
     width:6px;
     height:100%;
