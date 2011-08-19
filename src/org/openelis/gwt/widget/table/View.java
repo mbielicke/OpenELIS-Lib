@@ -153,6 +153,9 @@ public class View extends Composite {
         addDomHandler(new MouseWheelHandler() {
             public void onMouseWheel(MouseWheelEvent event) {
                 int pos, delta;
+                
+                if(vertScrollBar == null)
+                	return;
 
                 pos = vertScrollBar.getScrollPosition();
                 delta = event.getDeltaY();
@@ -382,7 +385,7 @@ public class View extends Composite {
     protected void renderView(int smr, int emr) {
         int rc, fvr, lvr, delta, i;
 
-        if ( !attached)
+        if ( !attached || firstAttach)
             return;
 
         table.finishEditing();

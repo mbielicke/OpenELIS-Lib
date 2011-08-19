@@ -253,20 +253,22 @@ public class UIGenerator extends Generator {
     }
     
     private void setDefaults(Node node, String wid) {
-    	String[] style;
+    	String style;
+    	String[] styles;
     	String width,height,tip,visible;
     	Node attrib;
     	
-    	style = getAttribute(node,"style").split(",");
+    	style = getAttribute(node,"style");
     	width = getAttribute(node,"width");
     	height = getAttribute(node,"height");
     	tip = getAttribute(node,"tip");
     	visible = getAttribute(node,"visible","true");
     	
         if (style != null){
-            sw.println(wid+".setStyleName(\""+style[0]+"\");");
-            for(int i = 1; i < style.length; i++){
-                sw.println(wid+".addStyleName(\""+style[i]+"\");");
+        	styles = style.split(",");
+            sw.println(wid+".setStyleName(\""+styles[0]+"\");");
+            for(int i = 1; i < styles.length; i++){
+                sw.println(wid+".addStyleName(\""+styles[i]+"\");");
             }
         }
         
@@ -335,7 +337,7 @@ public class UIGenerator extends Generator {
     	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
     	        
     	        if(overflow != null)
-    	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),\"overflow\","+overflow+");");
+    	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),"+overflow+");");
     	        
     	        widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
@@ -769,12 +771,12 @@ public class UIGenerator extends Generator {
      	            	    continue;
      	                }
     	                dir = getAttribute(widget,"dir","CENTER");
-    	                halign = getAttribute(widget,"align","LEFT");
-    	                valign = getAttribute(widget,"valign","TOP");
+    	                halign = getAttribute(widget,"align","LEFT").toUpperCase();
+    	                valign = getAttribute(widget,"valign","TOP").toUpperCase();
 
    	                    sw.println("wid"+id+".add(wid"+child+", DockPanel."+dir.toUpperCase()+");");
-                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_"+halign+");");
-                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_"+valign+");");    	               
+                        sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+",HasAlignment.ALIGN_"+halign.toUpperCase()+");");
+                        sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+",HasAlignment.ALIGN_"+valign.toUpperCase()+");");    	               
     	            }
     	        }
     	        setDefaults(node, "wid"+id);
@@ -1068,8 +1070,8 @@ public class UIGenerator extends Generator {
     				    valign = getAttribute(widget,"valign","TOP");
     				    
     					sw.println("wid"+id+".add(wid"+child+");");
-						sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_"+halign+");");
-						sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign+");");
+						sw.println("wid"+id+".setCellHorizontalAlignment(wid"+child+", HasAlignment.ALIGN_"+halign.toUpperCase()+");");
+						sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign.toUpperCase()+");");
     				}
     			}
     			sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
@@ -1743,6 +1745,7 @@ public class UIGenerator extends Generator {
     			Node attrib,widget;
     			String[] styles;
     			
+    			
     			spacing = getAttribute(node,"spacing");
     			padding = getAttribute(node,"padding");
     			
@@ -1763,7 +1766,7 @@ public class UIGenerator extends Generator {
     	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	                    w++;
     	                    if(widget.getNodeName().equals("text")) {
-    	                    	styles = getAttribute(widget,"style").split(",");
+    	                    	styles = getAttribute(widget,"style","").split(",");
     	                    	text = (attrib = widget.getFirstChild()) != null ? attrib.getNodeValue().trim() : null;
     	                    	
     	                    	 if (styles != null){
@@ -2282,13 +2285,13 @@ public class UIGenerator extends Generator {
     private String getAttribute(Node node, String key) {
     	Node attrib;
     	
-    	return (attrib = node.getAttributes().getNamedItem(key)) != null ? attrib.getNodeValue() : "";
+    	return (attrib = node.getAttributes().getNamedItem(key)) != null ? attrib.getNodeValue() : null;
     }
     
     private String getAttribute(Node node, String key, String def) {
-    	String ret;
+    	Node attrib;
     	
-    	return (ret = getAttribute(node,key)) == null ? def : ret;
+    	return (attrib = node.getAttributes().getNamedItem(key)) != null ? attrib.getNodeValue() : def;
     
     }
 }
