@@ -50,7 +50,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -148,28 +147,27 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
             Window.addResizeHandler(new ResizeHandler() {
 
 				public void onResize(ResizeEvent event) {
-					 setBrowserHeight();
+					 resize();
 					
 				}
 
             });
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
-                    setBrowserHeight();
+                    resize();
                 }
             });
         }
     } 
        
     public void addScreen(Screen screen) {
-    	addScreen(screen,null);
+        addScreen(screen, null);
     }
-    
-    
+
     public void addScreen(Screen screen, String key) {
-        if(key == null)
-           key = screen.getClass().getName();
-        if(windows.size() == limit){
+        if (key == null)
+            key = screen.getClass().getName();
+        if (windows.size() == limit) {
             Window.alert("Please close at least one window before opening another.");
             return;
         }
@@ -178,102 +176,93 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
             return;
         }
         RootPanel.get().addStyleName("ScreenLoad");
-        index++;
+        index++ ;
         ScreenWindow window = new ScreenWindow(this, key);
         window.setContent(screen);
         screen.setWindow(window);
-        browser.add(window,(windows.size()*25),(windows.size()*25));
-        windows.put(key,window);
+        browser.add(window, (windows.size() * 25), (windows.size() * 25));
+        windows.put(key, window);
         setFocusedWindow();
     }
-    
+
     public void addWindow(ScreenWindow window, String key) {
-    	index++;
-    	browser.add(window,(windows.size()*25),(windows.size()*25));
-    	windows.put(key, window);
-    	setFocusedWindow();
+        index++ ;
+        browser.add(window, (windows.size() * 25), (windows.size() * 25));
+        windows.put(key, window);
+        setFocusedWindow();
     }
-    
+
     public void addWindow(ScreenWindow window, String key, int x, int y) {
-    	index++;
-    	browser.add(window,x,y);
-    	windows.put(key, window);
-    	setFocusedWindow();
+        index++ ;
+        browser.add(window, x, y);
+        windows.put(key, window);
+        setFocusedWindow();
     }
-    
+
     public boolean selectScreen(String text) {
-    	if (windows.containsKey(text)) {
-    		ScreenWindow wid = windows.get(text);
-    		if(index != wid.zIndex){
-    			index++;
-    			wid.zIndex = index;
-    			int top = browser.getWidgetTop(wid);
-    			int left = browser.getWidgetLeft(wid);
-    			if(wid.content instanceof ReportFrame){
-    				//browser.setWidgetPosition(wid, left, top);
-    				DOM.setStyleAttribute(wid.getElement(), "zIndex", String.valueOf(index));
-    				DOM.setStyleAttribute(wid.content.getElement(), "zIndex", String.valueOf(index));
-    				
-    			}else
-    				browser.add(wid, left, top);
-    			setFocusedWindow();
-    		}
-    		return true;
-    	}
-    	return false;
+        if (windows.containsKey(text)) {
+            ScreenWindow wid = windows.get(text);
+            if (index != wid.zIndex) {
+                index++ ;
+                wid.zIndex = index;
+                int top = browser.getWidgetTop(wid);
+                int left = browser.getWidgetLeft(wid);
+                if (wid.content instanceof ReportFrame) {
+                    // browser.setWidgetPosition(wid, left, top);
+                    DOM.setStyleAttribute(wid.getElement(), "zIndex", String.valueOf(index));
+                    DOM.setStyleAttribute(wid.content.getElement(), "zIndex", String.valueOf(index));
+
+                } else
+                    browser.add(wid, left, top);
+                setFocusedWindow();
+            }
+            return true;
+        }
+        return false;
     }
-    
-    public void setBrowserHeight() {
+
+    public void resize() {
         if (browser.isVisible()) {
-            browser.setHeight((Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
-            browser.setWidth((Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
+            browser.setHeight( (Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
+            browser.setWidth( (Window.getClientWidth() - browser.getAbsoluteLeft()) + "px");
         }
     }
-    
+
     public void setFocusedWindow() {
-    	for(ScreenWindow wid : windows.values()) {
-    		if(wid.zIndex != index){
-    			if(wid.getStyleName().indexOf("unfocused") < 0){	
-    				wid.addStyleName("unfocused");
-    			}
-    		}else{
-    			wid.removeStyleName("unfocused");
-    			focusedWindow = wid;
-    		}
-    	}
+        for (ScreenWindow wid : windows.values()) {
+            if (wid.zIndex != index) {
+                if (wid.getStyleName().indexOf("unfocused") < 0) {
+                    wid.addStyleName("unfocused");
+                }
+            } else {
+                wid.removeStyleName("unfocused");
+                focusedWindow = wid;
+            }
+        }
     }
 
-	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
-		return addDomHandler(handler,KeyPressEvent.getType());
-	}
+    public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+        return addDomHandler(handler, KeyPressEvent.getType());
+    }
 
-	public void onKeyPress(KeyPressEvent event) {
-		KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
-		
-	}
+    public void onKeyPress(KeyPressEvent event) {
+        KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+    }
 
-	public void onDragEnd(DragEndEvent event) {
-		ScreenWindow wind = (ScreenWindow)event.getContext().draggable;
-		wind.positionGlass();
-		
-	}
+    public void onDragEnd(DragEndEvent event) {
+        ScreenWindow wind = (ScreenWindow)event.getContext().draggable;
+        wind.positionGlass();
+    }
 
-	public void onDragStart(DragStartEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void onDragStart(DragStartEvent event) {
+        // TODO Auto-generated method stub
+    }
 
-	public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
-		// TODO Auto-generated method stub
-		
-	}
+    public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+        // TODO Auto-generated method stub
+    }
 
-	public void onPreviewDragStart(DragStartEvent event)
-			throws VetoDragException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
- 
+    public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+        // TODO Auto-generated method stub
+    }
 }

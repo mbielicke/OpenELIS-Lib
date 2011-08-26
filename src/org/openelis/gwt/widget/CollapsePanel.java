@@ -1,28 +1,28 @@
-/** Exhibit A - UIRF Open-source Based Public Software License.
-* 
-* The contents of this file are subject to the UIRF Open-source Based
-* Public Software License(the "License"); you may not use this file except
-* in compliance with the License. You may obtain a copy of the License at
-* openelis.uhl.uiowa.edu
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-* 
-* The Original Code is OpenELIS code.
-* 
-* The Initial Developer of the Original Code is The University of Iowa.
-* Portions created by The University of Iowa are Copyright 2006-2008. All
-* Rights Reserved.
-* 
-* Contributor(s): ______________________________________.
-* 
-* Alternatively, the contents of this file marked
-* "Separately-Licensed" may be used under the terms of a UIRF Software
-* license ("UIRF Software License"), in which case the provisions of a
-* UIRF Software License are applicable instead of those above. 
-*/
+/**
+ * Exhibit A - UIRF Open-source Based Public Software License.
+ * 
+ * The contents of this file are subject to the UIRF Open-source Based Public
+ * Software License(the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * openelis.uhl.uiowa.edu
+ * 
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is OpenELIS code.
+ * 
+ * The Initial Developer of the Original Code is The University of Iowa.
+ * Portions created by The University of Iowa are Copyright 2006-2008. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): ______________________________________.
+ * 
+ * Alternatively, the contents of this file marked "Separately-Licensed" may be
+ * used under the terms of a UIRF Software license ("UIRF Software License"), in
+ * which case the provisions of a UIRF Software License are applicable instead
+ * of those above.
+ */
 package org.openelis.gwt.widget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,7 +37,6 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -46,113 +45,95 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CollapsePanel extends Composite implements ClickHandler, HasResizeHandlers {
-    
-    private Grid panel = new Grid(1,2);
+
+    private Grid            panel   = new Grid(1, 2);
     private HorizontalPanel content = new HorizontalPanel();
-    private FocusPanel middleBar = new FocusPanel();
-    private FocusPanel arrow = new FocusPanel();
-    public boolean isOpen;
-    
-    public CollapsePanel(boolean open){
+    private FocusPanel      arrow   = new FocusPanel();
+    public boolean          isOpen;
+
+    public CollapsePanel(boolean open) {
         initWidget(panel);
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
-      
+
         content.setVisible(false);
-        //middleBar.setHeight("100%");
-        //middleBar.setStyleName("LeftMenuPanePanelClosed");
-        panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
+        panel.getCellFormatter().setStyleName(0, 1, "LeftMenuPanePanelClosed");
         arrow.setStyleName("LeftMenuPanePanelDiv");
         arrow.addClickHandler(this);
         arrow.addMouseOverHandler(new MouseOverHandler() {
-        	public void onMouseOver(MouseOverEvent event) {
-        		arrow.addStyleName("Hover");
-                panel.getCellFormatter().addStyleName(0,1,"Hover");
-        	}
+            public void onMouseOver(MouseOverEvent event) {
+                arrow.addStyleName("Hover");
+                panel.getCellFormatter().addStyleName(0, 1, "Hover");
+            }
         });
         arrow.addMouseOutHandler(new MouseOutHandler() {
-        	public void onMouseOut(MouseOutEvent event) {
+            public void onMouseOut(MouseOutEvent event) {
                 arrow.removeStyleName("Hover");
-                panel.getCellFormatter().removeStyleName(0,1,"Hover");
-        	}
+                panel.getCellFormatter().removeStyleName(0, 1, "Hover");
+            }
         });
-        //middleBar.add(arrow);
+        // middleBar.add(arrow);
         panel.setWidget(0, 0, content);
-        panel.setWidget(0,1,arrow);
-        panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
-        
-        DeferredCommand.addCommand(new Command(){
-           public void execute(){
-               resize();
-           }
+        panel.setWidget(0, 1, arrow);
+        panel.getCellFormatter().setVerticalAlignment(0, 0, HasAlignment.ALIGN_TOP);
+
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                resize();
+            }
         });
-        	
-        
-        if(open)
-        	open();
+
+        if (open)
+            open();
     }
-    
+
     private void resize() {
-    	panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight() + "px");
     }
-    
-    public void setContent(Widget wid){
-        if(content.getWidgetCount() > 0)
+
+    public void setContent(Widget wid) {
+        if (content.getWidgetCount() > 0)
             content.remove(0);
         content.add(wid);
-        content.setCellVerticalAlignment(wid,HasAlignment.ALIGN_TOP);
+        content.setCellVerticalAlignment(wid, HasAlignment.ALIGN_TOP);
         content.setHeight("100%");
     }
-    
+
     public void open() {
-        if(!isOpen){
+        if ( !isOpen) {
             content.setVisible(true);
-            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelOpen");
+            panel.getCellFormatter().setStyleName(0, 1, "LeftMenuPanePanelOpen");
             arrow.setFocus(false);
             isOpen = true;
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
         }
     }
-    
-    public void close(){
-        if(isOpen){
+
+    public void close() {
+        if (isOpen) {
             content.setVisible(false);
-            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
+            panel.getCellFormatter().setStyleName(0, 1, "LeftMenuPanePanelClosed");
             arrow.setFocus(false);
-            isOpen = false;       
+            isOpen = false;
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
         }
     }
 
     public void onClick(ClickEvent event) {
-        if(content.isVisible()){
+        if (content.isVisible()) {
             close();
-        }else{
+        } else {
             open();
-        }   
-        
-    }
-/*
-    public void onMouseOver(MouseOverEvent event) {
-        arrow.addStyleDependentName("Hover");
-        panel.getCellFormatter().addStyleName(0,1,"Hover");
-        
+        }
     }
 
-    public void onMouseOut(MouseOutEvent event) {
-        arrow.removeStyleName("Hover");
-        panel.getCellFormatter().addStyleName(0,1,"Hover");
-    }
-*/  
     @Override
     protected void onAttach() {
-        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight() + "px");
         super.onAttach();
     }
 
-	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
-		return addHandler(handler,ResizeEvent.getType());
-	}
-    
-
+    public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+        return addHandler(handler, ResizeEvent.getType());
+    }
 }
