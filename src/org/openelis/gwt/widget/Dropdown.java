@@ -165,8 +165,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			minWidth = Integer.parseInt(dropwidth.substring(0,index));
 		else
 			minWidth = Integer.parseInt(dropwidth);
-        setStyleName("AutoDropDown");
-        icon.setStyleName("AutoDropDownButton");
+        setStyleName("AutoDropdown");
+        icon.setStyleName("AutoDropdownButton");
         textbox.setStyleName("TextboxUnselected");
         textbox.addFocusHandler(this);
         textbox.addBlurHandler(this);
