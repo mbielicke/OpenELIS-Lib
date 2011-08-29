@@ -69,8 +69,9 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 		title.add(grid);
 		
 		contentPanel = new AbsolutePanel();
-		contentPanel.setWidth("100%");
-		contentPanel.setHeight("100%");
+		//contentPanel.setWidth("100%");
+		//contentPanel.setHeight("100%");
+		//contentPanel.setStyleName("ContentPanel");
 		
 		vp.add(title);
 		vp.add(contentPanel);
