@@ -213,6 +213,7 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	 * Pops up an Error confirmation with the passed message
 	 */
 	public void setError(String message) {
+		clearStatus();
 		confirm = new Confirm(Confirm.Type.ERROR,"Error",message,"OK");
 		confirm.show(-1,80);
 	}
