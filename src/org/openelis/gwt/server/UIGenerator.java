@@ -1063,8 +1063,7 @@ public class UIGenerator extends Generator {
     	factoryMap.put("html", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("HTML wid"+id+" = new HTML();");
-    	        if(node.getFirstChild() != null)
-    	            sw.println("wid"+id+".setHTML(\""+node.getFirstChild().getNodeValue()+"\");");
+    	        sw.println("wid"+id+".setHTML(\""+node.getTextContent().replaceAll("\\n","")+"\");");
     	        sw.println("wid"+id+".setStyleName(\"ScreenHTML\");");
     	        setDefaults(node, "wid"+id);
     		}
