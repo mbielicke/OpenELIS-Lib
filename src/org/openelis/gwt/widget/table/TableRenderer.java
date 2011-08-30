@@ -150,9 +150,11 @@ public class TableRenderer  {
         	controller.columns.get(i).loadWidget(controller.view.table.getWidget(index, i),row,modelIndex);
         }
         rows.get(index).setStyleName("");
+        /*
         if(index % 2 == 1 && !controller.isDropdown){
             rows.get(index).addStyleName("AltTableRow");
         }
+        */
         if(controller.isSelected(modelIndex))
             rows.get(index).addStyleName(controller.view.selectedStyle);
         if(!controller.isEnabled(modelIndex)) 
