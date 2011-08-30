@@ -198,8 +198,10 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	 * Hides the confirmation dialog if showing
 	 */
 	public void clearStatus() {
-		if(confirm != null)
+		if(confirm != null && confirm.isAttached()) {
+			
 			confirm.hide();
+		}
 	}
 
 	/**

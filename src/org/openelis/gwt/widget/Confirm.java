@@ -141,8 +141,10 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     }
     
     public void hide() {
-    	dragController.unregisterDropController(dropController);
-    	dragController.makeNotDraggable(this);
+    	if(dragController != null) {
+    		dragController.unregisterDropController(dropController);
+    		dragController.makeNotDraggable(this);
+    	}
     	dragController = null;
     	dropController = null;
     	removeFromParent();
