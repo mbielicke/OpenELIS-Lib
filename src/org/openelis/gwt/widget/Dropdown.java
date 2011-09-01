@@ -309,7 +309,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-        //table.setVisibleRows(itemCount);
         table.setTableStyle("DropdownTable");
         table.setFixScrollbar(false);
         table.setRowHeight(16);
@@ -358,6 +357,10 @@ public class Dropdown<T> extends TextBox<T> {
     
     public void setVisibleItemCount(int itemCount) {
         this.itemCount = itemCount;
+        
+        if(table != null) 
+        	table.setVisibleRows(itemCount);
+        
     }
 
     /**

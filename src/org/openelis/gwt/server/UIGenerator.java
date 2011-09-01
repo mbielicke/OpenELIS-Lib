@@ -329,7 +329,7 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			String overflow,x,y,align;
     			NodeList widgets;
-    			Node attrib,widget;
+    			Node widget;
     			
     			overflow = getAttribute(node,"overflow");
     			
@@ -371,7 +371,6 @@ public class UIGenerator extends Generator {
             	String fcase,visibleItems,enabled,delay,required,tableWidth;
                 Element table,label,col; 
                 NodeList cols,list;
-                Node attrib;
                 
     		    visibleItems = getAttribute(node,"visibleItems","10");
     		    fcase = getAttribute(node,"case","MIXED");
@@ -454,7 +453,6 @@ public class UIGenerator extends Generator {
     	factoryMap.put("browser", new Factory(){
     		public void getNewInstance(Node node, int id) {
     			String sizeToWindow,limit;
-    			Node attrib;
     			
     			sizeToWindow = getAttribute(node,"sizeToWindow","false");
     			limit = getAttribute(node,"winLimit","10");
@@ -472,7 +470,7 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {    			
     			String toggle,action,enabled,wrap,icon,text;
     			NodeList widgets;
-    			Node attrib,widget;
+    			Node widget;
     			
     			toggle = getAttribute(node,"toggle","false");
     			action = getAttribute(node,"action");
@@ -525,7 +523,7 @@ public class UIGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			String enabled;
     			NodeList widgets;
-    			Node attrib,widget;
+    			Node widget;
     			
     			enabled = getAttribute(node,"enabled");
     			
@@ -558,7 +556,6 @@ public class UIGenerator extends Generator {
         factoryMap.put("calendar", new Factory() {
             public void getNewInstance(Node node, int id) {
             	String enabled;
-            	Node attrib;
             	
             	enabled = getAttribute(node,"enabled");
             	
@@ -591,7 +588,6 @@ public class UIGenerator extends Generator {
     	factoryMap.put("check", new Factory() {
     		public void getNewInstance(Node node, int id) {
             	String threeState;
-            	Node attrib;
             	
             	threeState = getAttribute(node,"threeState");
             	
@@ -638,8 +634,6 @@ public class UIGenerator extends Generator {
         	            	   count--;
         	            	   continue;
         	               }
-    		               //sw.println("wid"+child+".setHeight(\"100%\");");
-    		               //sw.println("wid"+child+".setWidth(\"auto\");");
     		               sw.println("wid"+id+".setContent(wid"+child+");");
     		           }
     		       }
@@ -1267,6 +1261,32 @@ public class UIGenerator extends Generator {
     		}
     	});
     	
+    	factoryMap.put("menuBar", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			NodeList menus;
+    			
+    			sw.println("MenuBar wid"+id+"= new MenuBar();");
+    			
+    			menus = node.getChildNodes();
+    			for(int i = 0; i < menus.getLength(); i++) {
+    				if(menus.item(i).getNodeType() == Node.ELEMENT_NODE) {
+    					int child = ++count;
+    					if(!loadWidget(menus.item(i),child)){
+    						count--;
+    						continue;
+    					}
+    					sw.println("wid"+id+".addMenu(wid"+child+");");
+    				}
+    			}
+
+    	        setDefaults(node,"wid"+id);
+    		}
+
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.MenuBar");
+    		}
+    	});
+    	
     	factoryMap.put("menuItem", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			String icon,display,description,enabled,shortcut,autoClose;
@@ -1293,32 +1313,6 @@ public class UIGenerator extends Generator {
     			composer.addImport("com.google.gwt.user.client.ui.Widget");
     		}
     	});    	
-    	
-    	factoryMap.put("menuBar", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			NodeList menus;
-    			
-    			sw.println("MenuBar wid"+id+"= new MenuBar();");
-    			
-    			menus = node.getChildNodes();
-    			for(int i = 0; i < menus.getLength(); i++) {
-    				if(menus.item(i).getNodeType() == Node.ELEMENT_NODE) {
-    					int child = ++count;
-    					if(!loadWidget(menus.item(i),child)){
-    						count--;
-    						continue;
-    					}
-    					sw.println("wid"+id+".addMenu(wid"+child+");");
-    				}
-    			}
-
-    	        setDefaults(node,"wid"+id);
-    		}
-
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.MenuBar");
-    		}
-    	});
     	
     	factoryMap.put("notes", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -2260,20 +2254,6 @@ public class UIGenerator extends Generator {
     		}
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.VerticalSplitPanel");
-    		}
-    	});
-
-    	factoryMap.put("webButton", new Factory() {    		
-    		public void getNewInstance(Node node, int id) {
-    			String icon,label;
-    			
-    			icon = getAttribute(node,"icon","");
-    			label = getAttribute(node,"label","");
-    			
-    			sw.println("org.openelis.gwt.widget.web.MenuButton wid"+id+" = new org.openelis.gwt.widget.web.MenuButton(\""+icon+"\",\""+label+"\");");
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.web.MenuButton");
     		}
     	});
     }

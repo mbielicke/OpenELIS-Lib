@@ -108,7 +108,7 @@ public class View extends Composite {
      * Computed Row Height used to calculate ScrollHeight and ScrollPosition
      * since all browsers don't seem to draw rows to the same height
      */
-    protected int             rowHeight, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1;
+    protected int             rowHeight, scrollBarHeight, layoutWidth, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1;
 
     /**
      * Timer used to determine if over cell should try and display errors
@@ -292,19 +292,9 @@ public class View extends Composite {
         } else if (table.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
             outer.remove(1);
             vertScrollBar = null;
-        }
+        } else if (table.getVerticalScroll() == Scrolling.ALWAYS) 
+        	vertScrollBar.setVisible(true);
 
-        scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
-
-        // *** Horizontal ScrollBar *****************
-        if (table.getHorizontalScroll() == Scrolling.NEVER)
-            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
-            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
-            else
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        }
         DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
         
         /*
@@ -313,36 +303,58 @@ public class View extends Composite {
         if (firstAttach) {
 
             firstAttach = false;
-
+           
+            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            
+            scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
+            
             flexTable.removeAllRows();
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 createRow(i);
 
-            // rowHeight = table.getRowHeight() + rowHeightAdj;
             rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
             
-            if (table.getFixScrollbar())
-                scrollView.setHeight(scrollView.getOffsetHeight() + "px");
-            else
-                scrollView.setHeight("100%");
-
-            if (vertScrollBar != null) {
-                vertScrollBar.setHeight(flexTable.getOffsetHeight() + "px");
-                if (table.hasHeader)
-                    DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
-                                          header.getOffsetHeight() + "px");
-                DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
-                adjustScrollBarHeight();
-            }
-
+            scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
+            
+            layoutWidth = scrollView.getOffsetWidth();
+            
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 flexTable.removeRow(0);
-
-            visibleChanged = true;
         }
-
-
-
+        
+        
+        visibleChanged = true;
+        
+        // *** Horizontal ScrollBar *****************
+        if (table.getHorizontalScroll() == Scrolling.NEVER)
+            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            else
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        }else if(table.getHorizontalScroll() == Scrolling.ALWAYS)
+        	DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+        
+        if (table.getFixScrollbar())
+        	scrollView.setHeight((table.getVisibleRows()*rowHeight)+
+        			             (table.hasHeader() ? header.getOffsetHeight() : 0) + 
+        		                 (table.getHorizontalScroll() == Scrolling.ALWAYS ||
+        		                  (table.getHorizontalScroll() == Scrolling.AS_NEEDED && 
+        		                   table.getTotalColumnWidth() > table.getWidthWithoutScrollbar()) ? scrollBarHeight : 0) + "px");	 
+        else
+            scrollView.setHeight("100%");
+        
+        if (vertScrollBar != null) {
+            vertScrollBar.setHeight(table.getVisibleRows()*rowHeight+"px");
+            if (table.hasHeader) {
+                DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
+                                      header.getOffsetHeight() + "px");
+            }
+            DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
+            adjustScrollBarHeight();
+        }
+        
         renderView( -1, -1);
 
         adjustScrollBarHeight();
@@ -357,6 +369,16 @@ public class View extends Composite {
         for (int c = 0; c < table.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
+        
+        /*
+         * Determine if Scrollbar needs to be added or removed
+         */
+        if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+            if (table.getTotalColumnWidth() > layoutWidth)
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            else
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        }
     }
 
     /**
@@ -746,7 +768,7 @@ public class View extends Composite {
     @Override
     protected void onAttach() {
 
-        if ( !isOrWasAttached() || firstAttach) {
+        if ( !isAttached()) {
             attached = true;
             firstAttach = true;
             layout();

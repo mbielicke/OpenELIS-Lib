@@ -152,14 +152,15 @@ public class Header extends FocusPanel {
                     bar.addMouseUpHandler(new MouseUpHandler() {
                         public void onMouseUp(MouseUpEvent event) {
                             Column column;
+                            int newColWidth;
 
                             column = table.getColumnAt(resizeColumn);
+                            newColWidth = column.getWidth() + (popResize.getAbsoluteLeft() - startX);
                             
                             /*
                              * Column will call table.resize() in the call to setWidth
                              */
-                            column.setWidth(column.getWidth() +
-                                            (popResize.getAbsoluteLeft() - startX));
+                            column.setWidth(newColWidth);
 
                             if (popResize != null)
                                 popResize.hide();

@@ -665,6 +665,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public void setVerticalScroll(Scrolling verticalScroll) {
 		this.verticalScroll = verticalScroll;
 		layout();
+		
 	}
 
 	/**

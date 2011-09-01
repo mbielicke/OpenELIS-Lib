@@ -53,11 +53,12 @@
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:sequence>
-			<xsd:attribute name="rows" type="xsd:integer" />
+			<xsd:attribute name="visibleItems" type="xsd:integer" />
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enabled" type="xsd:boolean"/>
 			<xsd:attribute name="delay" type="xsd:integer"/>
+			<xsd:attribute name="tableWidth" type="xsd:integer"/>
 			<xsd:attributeGroup ref="case" />
 			<xsd:attributeGroup ref="ScreenWidgetWidth" />
 			<xsd:attributeGroup ref="field" />
@@ -140,6 +141,7 @@
 					<xsd:element ref="widgets" minOccurs="1" maxOccurs="1" />
 				</xsd:choice>
 			</xsd:sequence>
+			<xsd:attribute name="open" type="xsd:boolean"/>
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
@@ -162,33 +164,16 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
-
-	<xsd:element name="DisclosurePanel" substitutionGroup="panels">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="header" minOccurs="1" maxOccurs="1">
-					<xsd:complexType>
-						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
-							<xsd:element ref="xsl:call-template" minOccurs="0"
-								maxOccurs="unbounded" />
-							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
-							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
-						</xsd:sequence>
-					</xsd:complexType>
-				</xsd:element>
-				<xsd:element name="content" minOccurs="1" maxOccurs="1">
-					<xsd:complexType>
-						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
-							<xsd:element ref="xsl:call-template" minOccurs="0"
-								maxOccurs="unbounded" />
-							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
-							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
-						</xsd:sequence>
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:sequence>
-			<xsd:attributeGroup ref="ScreenWidget" />
-		</xsd:complexType>
+	
+	<xsd:element name="DecoratorPanel" substitutionGroup="panels">
+	  <xsd:complexType>
+	    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+	      <xsd:element ref="xsl:call-template" minOccurs="0" maxOccurs="unbounded" />
+		  <xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
+		  <xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
+	    </xsd:sequence>
+	    <xsd:attributeGroup ref="ScreenWidget" />
+	  </xsd:complexType>
 	</xsd:element>
 
 	<xsd:element name="DockPanel" substitutionGroup="panels">
@@ -256,6 +241,7 @@
 				</xsd:element>
 				
 			</xsd:sequence>
+			<xsd:attribute name="visibleItems" type="xsd:integer"/>
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="shortcut" type="xsd:string" />
 			<xsd:attribute name="enabled" type="xsd:boolean"/>
@@ -278,7 +264,61 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
-
+	
+	<xsd:element name="FocusPanel" substitutionGroup="panels">
+	   <xsd:complexType>
+	     <xsd:sequence>
+		   <xsd:choice>
+			  <xsd:element ref="panels" minOccurs="0" maxOccurs="1" />
+			   <xsd:element ref="widgets" minOccurs="0" maxOccurs="1" />
+			</xsd:choice>
+		 </xsd:sequence>
+		<xsd:attributeGroup ref="ScreenWidget" />
+	   </xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="Grid" substitutionGroup="panels">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="row" maxOccurs="unbounded" minOccurs="1">
+					<xsd:complexType>
+						<xsd:sequence maxOccurs="unbounded" minOccurs="0">
+							<xsd:element ref="xsl:call-template" minOccurs="0"
+								maxOccurs="unbounded" />
+							<xsd:element ref="widgets" maxOccurs="unbounded"
+								minOccurs="0" />
+							<xsd:element ref="panels" maxOccurs="unbounded"
+								minOccurs="0" />
+							<xsd:element name="cell" maxOccurs="unbounded"
+								minOccurs="0">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:choice>
+											<xsd:element ref="widgets" minOccurs="0"
+												maxOccurs="1" />
+											<xsd:element ref="panels" minOccurs="0"
+												maxOccurs="1" />
+										</xsd:choice>
+									</xsd:sequence>
+									<xsd:attribute name="style" type="xsd:string" />
+									<xsd:attributeGroup ref="halign" />
+									<xsd:attributeGroup ref="valign" />
+									<xsd:attribute name="text" type="xsd:string"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="style" type="xsd:string" />
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="spacing" type="xsd:integer" />
+			<xsd:attribute name="padding" type="xsd:integer" />
+			<xsd:attribute name="rows" type="xsd:integer" />
+			<xsd:attribute name="cols" type="xsd:integer" />
+			<xsd:attributeGroup ref="ScreenWidget" />
+		</xsd:complexType>
+	</xsd:element>	
+		
 	<xsd:element name="HorizontalPanel" substitutionGroup="panels">
 		<xsd:complexType>
 			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
@@ -329,48 +369,7 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
-	
-	<xsd:element name="Grid" substitutionGroup="panels">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="row" maxOccurs="unbounded" minOccurs="1">
-					<xsd:complexType>
-						<xsd:sequence maxOccurs="unbounded" minOccurs="0">
-							<xsd:element ref="xsl:call-template" minOccurs="0"
-								maxOccurs="unbounded" />
-							<xsd:element ref="widgets" maxOccurs="unbounded"
-								minOccurs="0" />
-							<xsd:element ref="panels" maxOccurs="unbounded"
-								minOccurs="0" />
-							<xsd:element name="cell" maxOccurs="unbounded"
-								minOccurs="0">
-								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:choice>
-											<xsd:element ref="widgets" minOccurs="0"
-												maxOccurs="1" />
-											<xsd:element ref="panels" minOccurs="0"
-												maxOccurs="1" />
-										</xsd:choice>
-									</xsd:sequence>
-									<xsd:attribute name="style" type="xsd:string" />
-									<xsd:attributeGroup ref="halign" />
-									<xsd:attributeGroup ref="valign" />
-									<xsd:attribute name="text" type="xsd:string"/>
-								</xsd:complexType>
-							</xsd:element>
-						</xsd:sequence>
-						<xsd:attribute name="style" type="xsd:string" />
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:sequence>
-			<xsd:attribute name="spacing" type="xsd:integer" />
-			<xsd:attribute name="padding" type="xsd:integer" />
-			<xsd:attribute name="rows" type="xsd:integer" />
-			<xsd:attribute name="cols" type="xsd:integer" />
-			<xsd:attributeGroup ref="ScreenWidget" />
-		</xsd:complexType>
-	</xsd:element>	
+
 
 	<xsd:element name="label" substitutionGroup="widgets">
 		<xsd:complexType mixed="true">
@@ -445,6 +444,21 @@
 	</xsd:element>
 	
 	<xsd:element name="panels" abstract="true"/>
+	
+	<xsd:element name="percentBar" substitutionGroup="widgets">
+	  <xsd:complexType>
+	    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+	      <xsd:element name="range">
+	        <xsd:complexType>
+	          <xsd:attribute name="threshold" type="xsd:integer"/>
+	          <xsd:attribute name="color" type="xsd:string"/>
+	        </xsd:complexType>
+	      </xsd:element>
+	    </xsd:sequence>
+	    <xsd:attribute name="width" type="xsd:integer"/>
+	    <xsd:attribute name="barWidth" type="xsd:integer"/>
+	  </xsd:complexType>
+	</xsd:element>
 
 	<xsd:element name="richtext" substitutionGroup="widgets">
 		<xsd:complexType>
@@ -521,30 +535,8 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 		</xsd:complexType>
 	</xsd:element>
-
-	<xsd:element name="TabPanel" substitutionGroup="panels">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="tab" minOccurs="0" maxOccurs="unbounded">
-					<xsd:complexType>
-						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
-							<xsd:element ref="xsl:call-template" minOccurs="0"
-								maxOccurs="unbounded" />
-							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
-							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
-						</xsd:sequence>
-						<xsd:attribute name="text" type="xsd:string" />
-						<xsd:attribute name="tab" type="xsd:string"/>
-						<xsd:attribute name="visible" type="xsd:boolean"/>
-						<xsd:attribute name="key" type="xsd:string"/>
-				    </xsd:complexType>
-				</xsd:element>
-			</xsd:sequence>
-			<xsd:attributeGroup ref="ScreenWidget" />
-		</xsd:complexType>
-	</xsd:element>
-
-	<xsd:element name="table" substitutionGroup="widgets">
+	
+		<xsd:element name="table" substitutionGroup="widgets">
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element name="col" minOccurs="1" maxOccurs="unbounded">
@@ -586,8 +578,32 @@
 			<xsd:attributeGroup ref="ScreenWidget" />
 			<xsd:attribute name="tab" type="xsd:string" />
 			<xsd:attribute name="multiSelect" type="xsd:boolean" />
+			<xsd:attribute name="fixScroll" type="xsd:boolean" />
 		</xsd:complexType>
 	</xsd:element>
+
+	<xsd:element name="TabPanel" substitutionGroup="panels">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="tab" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+							<xsd:element ref="xsl:call-template" minOccurs="0"
+								maxOccurs="unbounded" />
+							<xsd:element ref="panels" minOccurs="0" maxOccurs="unbounded" />
+							<xsd:element ref="widgets" minOccurs="0" maxOccurs="unbounded" />
+						</xsd:sequence>
+						<xsd:attribute name="text" type="xsd:string" />
+						<xsd:attribute name="tab" type="xsd:string"/>
+						<xsd:attribute name="visible" type="xsd:boolean"/>
+						<xsd:attribute name="key" type="xsd:string"/>
+				    </xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="ScreenWidget" />
+		</xsd:complexType>
+	</xsd:element>
+
 	
 	<xsd:element name="TablePanel" substitutionGroup="panels">
 		<xsd:complexType>

@@ -233,8 +233,8 @@ public class Column {
         lastColumn = table.getColumnCount() - 1;
         if (lastColumn >= 0 && table.getColumnAt(lastColumn) == this) {
             totalWidth = table.getXForColumn(lastColumn);
-            if (totalWidth + width < table.getWidthWithoutScrollbar())
-                return table.getWidthWithoutScrollbar() - totalWidth;
+            if (totalWidth + width < table.view.layoutWidth)
+                return table.view.layoutWidth - totalWidth;
         }
      
         return width;
