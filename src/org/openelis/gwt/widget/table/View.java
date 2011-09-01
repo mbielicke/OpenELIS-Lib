@@ -47,7 +47,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -108,7 +107,7 @@ public class View extends Composite {
      * Computed Row Height used to calculate ScrollHeight and ScrollPosition
      * since all browsers don't seem to draw rows to the same height
      */
-    protected int             rowHeight, scrollBarHeight, layoutWidth, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1;
+    protected int             rowHeight, scrollBarHeight, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1;
 
     /**
      * Timer used to determine if over cell should try and display errors
@@ -169,15 +168,6 @@ public class View extends Composite {
         }, MouseWheelEvent.getType());
 
         flexTable = new FlexTable();
-        flexTable.addClickHandler(new ClickHandler() {
-            @SuppressWarnings({ "rawtypes" })
-            public void onClick(ClickEvent event) {
-                Cell cell = flexTable.getCellForEvent(event);
-                if(table.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
-                		table.startEditing(firstVisibleRow + cell.getRowIndex(),
-                				cell.getCellIndex(), (GwtEvent)event);
-            }
-        });
 
         /*
          * The FlexTable is placed in a FocusPanel to provide MouseMove events
@@ -185,6 +175,18 @@ public class View extends Composite {
          */
         fp = new FocusPanel();
         fp.setWidget(flexTable);
+        
+        fp.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+            	int r,c;
+            	
+                c = table.getColumnForX(event.getX());
+                r = firstVisibleRow + (event.getY() / rowHeight);
+                
+                if(table.fireCellClickedEvent(r, c))
+                		table.startEditing(r,c, (GwtEvent)event);
+            }
+        });
 
         fp.addMouseMoveHandler(new MouseMoveHandler() {
             public void onMouseMove(MouseMoveEvent event) {
@@ -223,16 +225,6 @@ public class View extends Composite {
         };
         
         container = new Container();
-        
-        /*
-        addVisibleHandler(new VisibleEvent.Handler() {
-			
-			@Override
-			public void onVisibleOrInvisible(VisibleEvent event) {
-				Logger.getLogger("OpenELISClient").info("Is Table now visible = "+event.isVisible());
-			}
-		});
-		*/
     }
 
     /**
@@ -267,6 +259,8 @@ public class View extends Composite {
         }
 
         flexTable.setStyleName(table.TABLE_STYLE);
+        for (int c = 0; c < table.getColumnCount(); c++ )
+            flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
@@ -306,7 +300,8 @@ public class View extends Composite {
            
             DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
             
-            scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
+            //scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
+            scrollView.setWidth("100%");
             
             flexTable.removeAllRows();
             for (int i = 0; i < table.getVisibleRows(); i++ )
@@ -316,12 +311,17 @@ public class View extends Composite {
             
             scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
             
-            layoutWidth = scrollView.getOffsetWidth();
+            
+            //scrollView.setWidth((table.viewWidth == -1 ? scrollView.getOffsetWidth() : table.viewWidth)+"px");
+            
+            if(table.viewWidth == -1)
+            	table.viewWidth = scrollView.getOffsetWidth();
             
             for (int i = 0; i < table.getVisibleRows(); i++ )
                 flexTable.removeRow(0);
         }
         
+        scrollView.setWidth(table.viewWidth+"px");
         
         visibleChanged = true;
         
@@ -374,7 +374,7 @@ public class View extends Composite {
          * Determine if Scrollbar needs to be added or removed
          */
         if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
-            if (table.getTotalColumnWidth() > layoutWidth)
+            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
                 DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
             else
                 DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");

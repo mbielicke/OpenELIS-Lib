@@ -742,8 +742,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	protected int getWidthWithoutScrollbar() {
-		if (verticalScroll != Scrolling.NEVER && fixScrollBar && viewWidth > -1)
-			return viewWidth - 18;
+		//if (verticalScroll != Scrolling.NEVER && fixScrollBar && viewWidth > -1)
+			//return viewWidth - 18;
 
 		return viewWidth == -1 ? totalColumnWidth : viewWidth;
 	}
