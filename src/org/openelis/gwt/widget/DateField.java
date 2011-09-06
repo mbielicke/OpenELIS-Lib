@@ -319,9 +319,17 @@ public class DateField extends Field<Datetime> {
         	}
         }else{
         */
+			
         if(val != null && !val.equals("")) {
         	try {
-        		date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
+        		if(begin > 2){
+        			String[] time = val.split(":");
+        			if(time.length == 3)
+        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
+        			else
+        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
+        		}else
+        			date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
         	}catch(Exception e) {
         		valid = false;
         		addException(new LocalizedException("invalidDateFormat"));
