@@ -154,6 +154,18 @@ width:100%;
     font-weight : bold;
     color:white;
 }
+
+.heading {
+    margin:3px 0 0 8px;
+    padding:4px;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:12px;
+    font-weight:bold;
+	color:#333;
+	text-align:left;
+	vertical-align:top;
+}
+
 .Hover .topMenuBarItem, .Selected .topMenuBarItem{
     color:black;
     cursor:pointer;
@@ -1930,6 +1942,14 @@ margin:0px;
   -moz-user-select:none;
    color:gray;
    vertical-align:top;
+}
+.LeftAlignPrompt {
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    -moz-user-select: none;
+	color:gray;
+	padding:2px 0 2px 2px;
+	vertical-align:top;
 }
 /********   End Input  Form ***********/
 fieldSet {
