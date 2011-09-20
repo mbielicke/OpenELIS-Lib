@@ -251,6 +251,11 @@ public class DateField extends Field<Datetime> {
      * Formats the string representation of this fields value using the set pattern
      */
     public String format() {
+    	if(queryMode){
+    		if(queryString == null)
+    			return "";
+    		return queryString;
+    	}
         if(value == null)
             return "";
         return DateTimeFormat.getFormat(getPattern()).format(value.getDate());
