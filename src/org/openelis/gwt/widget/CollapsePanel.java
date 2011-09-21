@@ -77,7 +77,8 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+				if(isAttached())
+					panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
 			}
 		});
         
@@ -125,6 +126,8 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     protected void onAttach() {
         boolean firstAttach = !isOrWasAttached();
         super.onAttach();
+        
+        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
         
         if(firstAttach) 
             content.setVisible(false);   
