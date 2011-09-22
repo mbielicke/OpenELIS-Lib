@@ -352,6 +352,13 @@ public class DateField extends Field<Datetime> {
         
     }
     
+    @Override
+    public void setValue(Datetime value) {
+    	value.startCode = begin;
+    	value.endCode = end;
+    	this.value = value;
+    }
+    
 	public void checkValue(HasField wid) {
 		clearExceptions(wid);
 		if(queryMode){
