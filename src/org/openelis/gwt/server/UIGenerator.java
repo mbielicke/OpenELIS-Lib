@@ -975,12 +975,12 @@ public class UIGenerator extends Generator {
     	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	                    w++;
     	                    if(widget.getNodeName().equals("cell")) {
-    	                    	styles = getAttribute(node,"style").split(",");
+    	                    	styles = getAttribute(node,"style","").split(",");
     	                    	text = getAttribute(node,"text");
     	                    	align   = getAttribute(node,"halign");
         	                    valign  = getAttribute(node,"valign");
     	                    	
-    	                    	 if (styles != null){
+    	                    	 if (styles.length > 0){
     	                             sw.println("wid"+id+".getCellFormatter().setStyleName("+k+","+w+","+"\""+styles[0]+"\");");
     	                             for(int i = 1; i < styles.length; i++){
     	                            	 sw.println("wid"+id+".getCellFormatter().addStyleName("+k+","+w+","+"\""+styles[i]+"\");");
