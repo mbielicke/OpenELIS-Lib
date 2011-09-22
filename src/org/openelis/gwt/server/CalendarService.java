@@ -141,7 +141,7 @@ public class CalendarService {
         }
     }
     
-    public Datetime getCurrentDatetime(byte begin, byte end) {
+    public Datetime getCurrentDatetime(int begin, int end) {
     	return Datetime.getInstance(begin,end);
     }
    
