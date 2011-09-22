@@ -50,7 +50,7 @@ public interface ScreenServiceIntAsync {
 
     public Request callBoolean(String method, AsyncCallback<Boolean> callback);
 
-    public Request callDatetime(String method, byte begin, byte end, AsyncCallback<Datetime> callback);
+    public Request callDatetime(String method, int begin, int end, AsyncCallback<Datetime> callback);
 
     public Request callDouble(String method, AsyncCallback<Double> callback);
 

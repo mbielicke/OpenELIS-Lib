@@ -69,7 +69,7 @@ import com.google.gwt.user.client.ui.Widget;
     protected ScreenDefInt calendarDef;
     protected ScreenDefInt monthYearDef;
     
-    public CalendarWidget(Datetime date,byte begin, byte end) throws Exception {
+    public CalendarWidget(Datetime date,int begin, int end) throws Exception {
     	super((ScreenDefInt)GWT.create(CalendarDef.class));
     	calendarDef = def;
     	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");

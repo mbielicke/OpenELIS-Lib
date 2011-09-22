@@ -667,8 +667,8 @@ public class UIGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 					
-    			sw.println("byte begin"+id+" = Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\");");
-    			sw.println("byte end"+id+" = Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\");");
+    			sw.println("int begin"+id+" = "+node.getAttributes().getNamedItem("begin").getNodeValue()+";");
+    			sw.println("int end"+id+" = "+node.getAttributes().getNamedItem("end").getNodeValue()+";");
     			if (node.getAttributes().getNamedItem("week") != null)
     				sw.println("wid"+id+".init(begin"+id+",end"+id+","+node.getAttributes().getNamedItem("week").getNodeValue()+");");
     			else
@@ -1063,6 +1063,7 @@ public class UIGenerator extends Generator {
     	factoryMap.put("html", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("HTML wid"+id+" = new HTML();");
+    			System.out.println("HTML = "+node.getTextContent());
     	        sw.println("wid"+id+".setHTML(\""+node.getTextContent().replaceAll("\\n","")+"\");");
     	        sw.println("wid"+id+".setStyleName(\"ScreenHTML\");");
     	        setDefaults(node, "wid"+id);
@@ -2193,9 +2194,9 @@ public class UIGenerator extends Generator {
     	        if (node.getAttributes().getNamedItem("required") != null)
     	            sw.println("field"+id+".required = "+node.getAttributes().getNamedItem("required").getNodeValue()+";");
     	        if (node.getAttributes().getNamedItem("begin") != null)
-    	            sw.println("field"+id+".setBegin(Byte.parseByte(\""+node.getAttributes().getNamedItem("begin").getNodeValue()+"\"));");
+    	            sw.println("field"+id+".setBegin("+node.getAttributes().getNamedItem("begin").getNodeValue()+");");
     	        if (node.getAttributes().getNamedItem("end") != null)
-    	            sw.println("field"+id+".setEnd(Byte.parseByte(\""+node.getAttributes().getNamedItem("end").getNodeValue()+"\"));");
+    	            sw.println("field"+id+".setEnd("+node.getAttributes().getNamedItem("end").getNodeValue()+");");
     	        if (node.getAttributes().getNamedItem("maxValue") != null)
     	            sw.println("field"+id+".setMax("+node.getAttributes().getNamedItem("maxValue").getNodeValue()+");");
     	        if (node.getAttributes().getNamedItem("minValue") != null)

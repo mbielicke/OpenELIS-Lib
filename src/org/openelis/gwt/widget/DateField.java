@@ -43,8 +43,8 @@ import com.google.gwt.i18n.client.DateTimeFormat;
  */
 public class DateField extends Field<Datetime> {
     
-    private byte begin;
-    private byte end;
+    private int begin;
+    private int end;
     
     /**
      * Number of days in the future from current date that this field is 
@@ -73,7 +73,7 @@ public class DateField extends Field<Datetime> {
      * @param end
      * @param val
      */
-    public DateField(byte begin, byte end, Date val){
+    public DateField(int begin, int end, Date val){
         setBegin(begin);
         setEnd(end);
         setValue(Datetime.getInstance(begin,end,val));
@@ -189,7 +189,7 @@ public class DateField extends Field<Datetime> {
      * Sets the begin precision of this date field
      * @param begin
      */
-    public void setBegin(byte begin) {
+    public void setBegin(int begin) {
         this.begin = begin;
     }
 
@@ -197,7 +197,7 @@ public class DateField extends Field<Datetime> {
      * Sets the end precision of this date field
      * @param end
      */
-    public void setEnd(byte end) {
+    public void setEnd(int end) {
        this.end = end;
     }
     
@@ -221,7 +221,7 @@ public class DateField extends Field<Datetime> {
      * Returns the begin precision value for this field.
      * @return
      */
-    public byte getBegin() {
+    public int getBegin() {
         return begin;
     }
 
@@ -229,7 +229,7 @@ public class DateField extends Field<Datetime> {
      * Returns the end precision value for this field.
      * @return
      */
-    public byte getEnd() {
+    public int getEnd() {
         return end;
     }
 

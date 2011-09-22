@@ -57,8 +57,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 														  HasBlurHandlers,
 														  HasFocusHandlers {
 
-    protected byte begin;
-    protected byte end;
+    protected int begin;
+    protected int end;
     protected boolean week;
     protected Date weekDate;
     protected PopupPanel pop;
@@ -206,9 +206,9 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	    }
 
 		public void onValueChange(ValueChangeEvent<String> event) {
-				field.setStringValue(event.getValue());
-				if(field.valid)
-					textbox.setText(field.format());
+			field.setStringValue(event.getValue());
+			if(field.valid)
+				textbox.setText(field.format());
 		}
     	
     }
@@ -289,7 +289,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
      * @param begin
      * @param end
      */
-    private void doCalendar(Widget sender, final byte begin, final byte end) {
+    private void doCalendar(Widget sender, final int begin, final int end) {
     	try  {
     		CalendarWidget cal = null;
     		if(field.queryMode)
