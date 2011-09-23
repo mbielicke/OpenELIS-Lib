@@ -10,7 +10,7 @@ public class CalendarRPC implements RPC {
     public int month = -1;
     public int year = -1;
     public String monthDisplay;
-    public int begin;
-    public int end;
+    public byte begin;
+    public byte end;
 
 }

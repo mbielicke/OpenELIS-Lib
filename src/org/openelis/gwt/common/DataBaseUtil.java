@@ -50,10 +50,8 @@ public class DataBaseUtil {
      * precision.
      */
     public static Datetime toYD(Datetime yearToDay) {
-        if (yearToDay != null) {
-            yearToDay.startCode = Datetime.YEAR;
-            yearToDay.endCode = Datetime.DAY;
-        }
+        if (yearToDay != null && (yearToDay.getStartCode() != Datetime.YEAR || yearToDay.getEndCode() != Datetime.DAY))
+            yearToDay = toYD(yearToDay.getDate());
         return yearToDay;
     }
 
@@ -68,10 +66,8 @@ public class DataBaseUtil {
     }
 
     public static Datetime toYM(Datetime yearToMinute) {
-        if (yearToMinute != null) {
-            yearToMinute.startCode = Datetime.YEAR;
-            yearToMinute.endCode = Datetime.MINUTE;
-        }
+        if (yearToMinute != null && (yearToMinute.getStartCode() != Datetime.YEAR || yearToMinute.getEndCode() != Datetime.MINUTE))
+            yearToMinute = toYM(yearToMinute.getDate());
         return yearToMinute;
     }
 
@@ -86,10 +82,8 @@ public class DataBaseUtil {
     }
 
     public static Datetime toYS(Datetime yearToSecond) {
-        if (yearToSecond != null) {
-            yearToSecond.startCode = Datetime.YEAR;
-            yearToSecond.endCode = Datetime.SECOND;
-        }
+        if (yearToSecond != null && (yearToSecond.getStartCode() != Datetime.YEAR || yearToSecond.getEndCode() != Datetime.SECOND))
+            yearToSecond = toYS(yearToSecond.getDate());
         return yearToSecond;
     }
 
@@ -104,10 +98,9 @@ public class DataBaseUtil {
     }
 
     public static Datetime toHM(Datetime hourToMinute) {
-        if (hourToMinute != null) {
-            hourToMinute.startCode = Datetime.HOUR;
-            hourToMinute.endCode = Datetime.MINUTE;
-        }
+        if (hourToMinute != null && (hourToMinute.getStartCode() != Datetime.HOUR || hourToMinute.getEndCode() != Datetime.MINUTE))
+            hourToMinute = toHM(hourToMinute.getDate());
+
         return hourToMinute;
     }
 

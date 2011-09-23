@@ -17,9 +17,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.ejb.EJBException;
+
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.NotFoundException;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.services.ScreenServiceInt;
+import org.openelis.util.SessionManager;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
@@ -112,10 +116,10 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
         return (Boolean)invoke(getThreadLocalRequest().getParameter("service"), method);
     }
 
-    public Datetime callDatetime(String method, int begin, int end) throws Exception {
+    public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
         return (Datetime)invoke(getThreadLocalRequest().getParameter("service"),
                                 method,
-                                new Class[] {int.class, int.class},
+                                new Class[] {byte.class, byte.class},
                                 new Object[] {begin, end});
     }
 

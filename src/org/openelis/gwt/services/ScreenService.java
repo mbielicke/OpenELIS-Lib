@@ -124,7 +124,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         return callback.getResult();
     }
 
-    public Datetime callDatetime(String method, int begin, int end) throws Exception {
+    public Datetime callDatetime(String method, byte begin, byte end) throws Exception {
         Callback<Datetime> callback;
 
         resetSessionScreenTimer();
@@ -184,7 +184,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         return service.callBoolean(method, callback);
     }
 
-    public Request callDatetime(String method, int begin, int end,
+    public Request callDatetime(String method, byte begin, byte end,
                                 AsyncCallback<Datetime> callback) {
         resetSessionScreenTimer();
         return service.callDatetime(method, begin, end, callback);

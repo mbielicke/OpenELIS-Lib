@@ -33,9 +33,9 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	/**
 	 * Field numbers indicating start and end codes for datetime field.
 	 */
-	public static final int YEAR = 0, MONTH = 1, DAY = 2, HOUR = 3,
+	public static final byte YEAR = 0, MONTH = 1, DAY = 2, HOUR = 3,
 			MINUTE = 4, SECOND = 5, FRACTION = 6;
-	public int startCode, endCode;
+	private byte startCode, endCode;
 
 	private Date timestamp;
 
@@ -47,11 +47,11 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	private Datetime() {
 	}
 
-	public Datetime(int startCode, int endCode, Date date) {
+	public Datetime(byte startCode, byte endCode, Date date) {
 		setDate(startCode, endCode, (Date) date.clone());
 	}
 
-	private void setDate(int startCode, int endCode, Date date) {
+	private void setDate(byte startCode, byte endCode, Date date) {
 		if (startCode < YEAR || startCode > FRACTION)
 			throw new IllegalArgumentException("Invalid value for startCode");
 		if (endCode < YEAR || endCode > FRACTION)
@@ -68,7 +68,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	/**
 	 * Constructs a Datetime with specified range (start to end) and object.
 	 */
-	public static Datetime getInstance(int startCode, int endCode, Date date) {
+	public static Datetime getInstance(byte startCode, byte endCode, Date date) {
 		if (date == null)
 			return null;
 		return new Datetime(startCode, endCode, (Date) date.clone());
@@ -84,7 +84,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	/**
 	 * Gets a datetime using specified range (start to end) and current date.
 	 */
-	public static Datetime getInstance(int startCode, int endCode) {
+	public static Datetime getInstance(byte startCode, byte endCode) {
 		return new Datetime(startCode, endCode, new Date());
 	}
 
@@ -100,14 +100,14 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	/**
 	 * Returns the starting field code of datetime.
 	 */
-	public int getStartCode() {
+	public byte getStartCode() {
 		return startCode;
 	}
 
 	/**
 	 * Returns the ending field code of datetime.
 	 */
-	public int getEndCode() {
+	public byte getEndCode() {
 		return endCode;
 	}
 
@@ -242,7 +242,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
 		return 0;
 	}
 
-	public int get(int precision) {
+	public int get(byte precision) {
 		switch (precision) {
 		case Datetime.YEAR:
 			if (endCode < HOUR)

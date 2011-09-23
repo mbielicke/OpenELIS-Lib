@@ -9,11 +9,11 @@ public class Calendar {
 	
 	private static ScreenService service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
 
-	public static Datetime getCurrentDatetime(int begin, int end) throws Exception {
+	public static Datetime getCurrentDatetime(byte begin, byte end) throws Exception {
 		return service.callDatetime("getCurrentDatetime", begin, end);
 	}
 	
-	public static void getCurrentDatetime(int begin, int end, AsyncCallback<Datetime> callback) {
+	public static void getCurrentDatetime(byte begin, byte end, AsyncCallback<Datetime> callback) {
 		service.callDatetime("getCurrentDatetime",begin,end,callback);
 	}
 }

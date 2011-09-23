@@ -50,7 +50,7 @@ public interface ScreenServiceInt extends RemoteService {
 
     public Boolean callBoolean(String method) throws Exception;
 
-    public Datetime callDatetime(String method, int begin, int end) throws Exception;
+    public Datetime callDatetime(String method, byte begin, byte end) throws Exception;
 
     public Double callDouble(String method) throws Exception;
 

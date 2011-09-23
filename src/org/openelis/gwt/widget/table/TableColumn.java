@@ -607,9 +607,9 @@ public class TableColumn {
         			if(parameter.length > 1)
         				parameter[1] = new Long((String)params[1]);
         		}else if(cellValue instanceof Datetime) {
-        			parameter[0] = Datetime.getInstance(((Datetime)cellValue).startCode,((Datetime)cellValue).endCode,new Date(((String)params[0]).replaceAll("-","/")));
+        			parameter[0] = Datetime.getInstance(((Datetime)cellValue).getStartCode(),((Datetime)cellValue).getEndCode(),new Date(((String)params[0]).replaceAll("-","/")));
         			if(parameter.length > 1)
-        				parameter[1] = Datetime.getInstance(((Datetime)cellValue).startCode,((Datetime)cellValue).endCode,new Date(((String)params[1]).replaceAll("-","/")));
+        				parameter[1] = Datetime.getInstance(((Datetime)cellValue).getStartCode(),((Datetime)cellValue).getEndCode(),new Date(((String)params[1]).replaceAll("-","/")));
         		}else{
         			parameter[0] = params[0];
         			if(parameter.length > 1)

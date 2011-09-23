@@ -228,8 +228,9 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 				queryString = null;
 		}else{
 			Object value = wid.getWidgetValue();
-			if(value != null && !value.equals(""))
-				setStringValue(value.toString());
+			if(value == null)
+				value = "";
+			setStringValue(value.toString());
 			
 			validate();
 		}
