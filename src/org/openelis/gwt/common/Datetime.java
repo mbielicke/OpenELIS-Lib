@@ -172,7 +172,9 @@ public class Datetime implements RPC, Comparable<Datetime> {
 	 * @see java.util.Calendar
 	 */
 	public Datetime add(int days) {
-    	Date cal = getDate();
+    	Date cal;
+    	
+    	cal = (Date) getDate().clone();
     	cal.setDate(cal.getDate()+days);
     	return Datetime.getInstance(startCode,endCode,cal);
     	/*
