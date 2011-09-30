@@ -11,11 +11,12 @@ public class Query implements RPC {
 
     private static final long      serialVersionUID = 1L;
 
-    protected int                  page;
+    protected int                  page, rowsPerPage;
     protected ArrayList<QueryData> fields;
 
     public Query() {
         page = 0;
+        rowsPerPage = 20;
     }
 
     /**
@@ -34,6 +35,17 @@ public class Query implements RPC {
 
     public void setFields(ArrayList<QueryData> fields) {
         this.fields = fields;
+    }
+
+    /**
+     * Gets/Sets the number of rows that we want to search for in a page
+     */
+    public int getRowsPerPage() {
+        return rowsPerPage;
+    }
+    
+    public void setRowsPerPage(int rows) {
+        rowsPerPage = rows;
     }
 
     /**
