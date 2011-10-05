@@ -37,6 +37,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -64,7 +66,7 @@ import com.google.gwt.user.client.ui.Widget;
  *   All buttons are defaulted to enabled true.  If a button needs to be ensured to be disabled on the initial state of the
  *   screen set enable="false" in the xsl.
  */
-public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler, Focusable, BlurHandler, HasField, KeyPressHandler{     
+public class AppButton extends Composite implements MouseOutHandler, MouseOverHandler, HasClickHandlers, ClickHandler, Focusable, BlurHandler, HasField, KeyPressHandler,HasMouseOutHandlers,HasMouseOverHandlers{     
     
     public enum ButtonState {UNPRESSED,PRESSED,DISABLED,LOCK_PRESSED}
     
@@ -94,8 +96,8 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
         left.addStyleName("ButtonLeftSide");
         right.addStyleName("ButtonRightSide");
         content.addStyleName("ButtonContent");
-        panel.addMouseOutHandler(this);
-        panel.addMouseOverHandler(this);
+        addMouseOutHandler(this);
+        addMouseOverHandler(this);
         addClickHandler(this);
         panel.addBlurHandler(this);
         panel.addKeyPressHandler(this);
@@ -423,6 +425,16 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 
 	public boolean isLocked() {
 		return locked;
+	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler, MouseOverEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler, MouseOutEvent.getType());
 	}
 
 }

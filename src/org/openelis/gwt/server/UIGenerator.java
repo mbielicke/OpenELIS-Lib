@@ -556,11 +556,26 @@ public class UIGenerator extends Generator {
     	});
     	factoryMap.put("fileUpload", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			sw.println("FileUploadWidget wid"+id+" = new FileUploadWidget(\""+node.getAttributes().getNamedItem("service").getNodeValue()+"\");");
+    			sw.println("FileLoad wid"+id+" = new FileLoad();");
+    			if(node.getAttributes().getNamedItem("service") != null)
+    				sw.println("wid"+id+".setService(\""+node.getAttributes().getNamedItem("service").getNodeValue()+"\");");
+    			if(node.getAttributes().getNamedItem("method") != null)
+    				sw.println("wid"+id+".setMethod(\""+node.getAttributes().getNamedItem("method").getNodeValue()+"\");");
+    	        NodeList widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	                if(!loadWidget(widgets.item(k),child)){
+    	                	count--;
+    	                	continue;
+    	                }
+    	                sw.println("wid"+id+".setWidget(wid"+child+");");
+    	            }
+    	        }
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.FileUploadWidget");
+    			composer.addImport("org.openelis.gwt.widget.FileLoad");
     		}
     	});
     	factoryMap.put("AbsolutePanel", new Factory() {
