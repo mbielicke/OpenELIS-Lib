@@ -174,6 +174,8 @@ public class TableColumn {
     		}
     		Label label = new Label("");
     		label.setStyleName("ScreenLabel");
+    		if(colWidget instanceof Label)
+    			label.setStyleName(colWidget.getStyleName());
     		if(val != null) {
     			if(colWidget instanceof CalendarLookUp) {
     				if(((HasField)colWidget).getField().queryMode)
