@@ -130,6 +130,8 @@ public class ReportServlet extends HttpServlet {
             return "application/msword";
         else if (filename.endsWith(".docx"))
             return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        else if (filename.endsWith(".xml"))
+            return "text/xml";
         else
             return "application/octet-stream";
 	}

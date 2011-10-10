@@ -825,7 +825,7 @@ background:url("../Images/screenbuttonls.gif") no-repeat;
 background:none;
     cursor:default;
 }
-.addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
+.addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage, .OpenButtonImage{
     width:20px;
     height:20px;
     background:url("../Images/note.gif") no-repeat;
@@ -890,6 +890,9 @@ background:none;
 
 .OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;}
 .disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
+
+.OpenButtonImage{background:url("../Images/door_open.gif") no-repeat center;}
+.disabled .OpenButtonImage{background:url("../Images/door_open.gif") no-repeat;}
 
 .duplicateRecordIcon{
     width:16px;
