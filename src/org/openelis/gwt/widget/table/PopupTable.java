@@ -42,7 +42,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> , HasCloseHandlers<PopupPanel> {
     
-    
+    protected boolean showingOptions;
+	
     public class DropPopup extends PopupPanel {
         
         public boolean showing;
@@ -100,6 +101,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
     }
  
     public void showTable() {
+    	showingOptions = true;
         popup.setPopupPosition(this.getAbsoluteLeft(), this
                                       .getAbsoluteTop()
                                       + this.getOffsetHeight() - 1);
@@ -116,6 +118,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
     }
     
     public void showTable(Widget wid) {
+    	showingOptions = true;
         popup.setPopupPosition(wid.getAbsoluteLeft(), wid
                                       .getAbsoluteTop()
                                       + wid.getOffsetHeight() - 1);
@@ -131,12 +134,12 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
     }
     
     public void hideTable() {
+    	showingOptions = false;
         popup.hide();
     }
 
 	public void onClose(CloseEvent<PopupPanel> event) {
-		
-		
+		showingOptions = false;
 	}
 
 	public HandlerRegistration addCloseHandler(CloseHandler<PopupPanel> handler) {
