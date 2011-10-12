@@ -272,6 +272,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public boolean isEnabled() {
         return enabled;
     }
+    
+    public void setText(String text) {
+    	textbox.setText(text);
+    }
 
     public T getValue() {
         if(getSelectedRow() > -1)
