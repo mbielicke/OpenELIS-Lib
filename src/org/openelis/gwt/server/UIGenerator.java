@@ -2298,18 +2298,25 @@ public class UIGenerator extends Generator {
     		}
     	});
     	
-    	factoryMap.put("webButton", new Factory() {    		
+    	factoryMap.put("linkButton", new Factory() {    		
     		public void getNewInstance(Node node, int id) {
-    			String icon,label;
+    			String icon,label,width,height,popup,style;
     			Node attrib;
     			
     			icon = (attrib = node.getAttributes().getNamedItem("icon")) != null ? attrib.getNodeValue() : "";
     			label = (attrib = node.getAttributes().getNamedItem("label")) != null ? attrib.getNodeValue() : "";
+    			width= (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    			height = (attrib = node.getAttributes().getNamedItem("height")) != null ? attrib.getNodeValue() : null;
+    			popup = (attrib = node.getAttributes().getNamedItem("popup")) != null ? attrib.getNodeValue() : "";
+    			style = (attrib = node.getAttributes().getNamedItem("style")) != null ? attrib.getNodeValue() : null;
     			
-    			sw.println("org.openelis.gwt.widget.web.MenuButton wid"+id+" = new org.openelis.gwt.widget.web.MenuButton(\""+icon+"\",\""+label+"\");");
+    			sw.println("org.openelis.gwt.widget.web.LinkButton wid"+id+" = new org.openelis.gwt.widget.web.LinkButton(\""+icon+"\",\""+label+"\",\""+popup+"\","+width+","+height+");");
+    			
+    			if(style != null)
+    				sw.println("wid"+id+".setStyleName(\""+style+"\");");
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.web.MenuButton");
+    			composer.addImport("org.openelis.gwt.widget.web.LinkButton");
     		}
     	});
     }

@@ -19,18 +19,20 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LinkButton extends FocusPanel {
 	DecoratorPanel dp,pdp;
+	AbsolutePanel ap;
 	PopupPanel pop;
 	Timer timer;
 	
 	public LinkButton(String icon, String label, String popup, int width, int height) {
 		VerticalPanel vp = new VerticalPanel();
-		dp = new DecoratorPanel();
-		dp.setStyleName("ConfirmWindow");
-		dp.setSize(width+"px",height+"px");
-		AbsolutePanel ap = new AbsolutePanel();
+		//dp = new DecoratorPanel();
+		//dp.setStyleName("ConfirmWindow");
+		//dp.setSize(width+"px",height+"px");
+		ap = new AbsolutePanel();
+		ap.setSize(width+"px", height+"px");
 		ap.setStyleName(icon);
-		dp.add(ap);
-		vp.add(dp);
+		//dp.add(ap);
+		vp.add(ap);
 		if(label != null) {
 			Label lb = new Label(label);
 			lb.setStyleName("menuLabel");
@@ -60,7 +62,8 @@ public class LinkButton extends FocusPanel {
 				public void onMouseOver(MouseOverEvent event) {
 					if(pop.isShowing())
 						return;
-					pop.showRelativeTo(dp);
+					pop.setPopupPosition(getAbsoluteLeft()+getOffsetWidth(), getAbsoluteTop()-10);
+					pop.show();
 			        timer.schedule(10000); 
 					
 				}
@@ -85,7 +88,7 @@ public class LinkButton extends FocusPanel {
 	
 	@Override
 	public void setSize(String width, String height) {
-		dp.setSize(width, height);
+		ap.setSize(width, height);
 		setWidth(width);
 	}
 
