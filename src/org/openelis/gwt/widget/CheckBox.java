@@ -237,9 +237,6 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		else
 			setType(CheckType.TWO_STATE);
 		field.setQueryMode(query);
-		
-			
-		
 	}
 
 	public void checkValue() {
@@ -249,7 +246,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	public void getQuery(ArrayList<QueryData> list, String key) {
 		if(!field.queryMode)
 			return;
-		if(field.queryString != null){
+		if(field.queryString != null && !field.queryString.equals("")){
 			QueryData qd = new QueryData();
 			qd.query = field.queryString;
 			qd.key = key;
