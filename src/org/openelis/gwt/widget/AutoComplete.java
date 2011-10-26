@@ -328,7 +328,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         T old = field.getValue();
         setSelection(value);
         field.setValue(value);
-        if(fireEvents)
+        if(fireEvents) 
            ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
@@ -424,7 +424,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
      */
     public void onBlur(BlurEvent event) {
     	textbox.removeStyleName("Focus");
-    	if(!showingOptions && isEnabled()){
+    	if(!showingOptions && isEnabled() && !field.queryMode){
 	    	if("".equals(textbox.getText()) && field.getValue() != null){
     			setSelection(null,"");
     			ValueChangeEvent.fire(this, null);
