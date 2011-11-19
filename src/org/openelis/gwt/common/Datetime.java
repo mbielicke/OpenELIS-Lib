@@ -42,7 +42,7 @@ public class Datetime implements RPC, Comparable<Datetime> {
      */
     public static final byte  YEAR = 0, MONTH = 1, DAY = 2, HOUR = 3, MINUTE = 4,
                               SECOND = 5, FRACTION = 6;
-    public byte               startCode, endCode;
+    private byte              startCode, endCode;
     private Date              timestamp;
     private int               year, month, date = -1;
 
@@ -165,7 +165,9 @@ public class Datetime implements RPC, Comparable<Datetime> {
      */
     @SuppressWarnings("deprecation")
 	public Datetime add(int days) {
-    	Date cal = getDate();
+    	Date cal;
+    	
+    	cal = (Date)getDate().clone();
     	cal.setDate(cal.getDate()+days);
     	return Datetime.getInstance(startCode,endCode,cal);
     }

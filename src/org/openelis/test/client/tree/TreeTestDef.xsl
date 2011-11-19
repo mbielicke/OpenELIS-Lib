@@ -96,12 +96,6 @@ UIRF Software License are applicable instead of those above.
                   <col header="Widget" width="100">
                     <dropdown width="100"/>
                   </col>
-                  <col header="Filterable" width="30">
-                    <check/>
-                  </col>
-                  <col header="Sortable" width="30">
-                    <check/>
-                  </col>
                   <col header="Resizable" width="30">
                     <check/>
                   </col>
@@ -123,18 +117,21 @@ UIRF Software License are applicable instead of those above.
                 </HorizontalPanel>
               </widget>
             </row>
-            <row>
-              <text style="Prompt">Log Level:</text>
-              <dropdown key="logLevel" width="100"/>
-            </row>
           </TablePanel>
         </VerticalPanel>
         <AbsolutePanel style="ContentPanel">
           <TablePanel>
             <row>
-              <table key="test" rows="10">
-                <col header="Col 1" width="100"/>
-              </table>
+              <tree key="test" rows="10">
+                <columns>
+                  <col header="Col 1" width="100"/>
+                </columns>
+                <node key="top">
+                  <col>
+                    <textbox/>
+                  </col>
+                </node>
+              </tree>
             </row>
             <row>
               <HorizontalPanel>
@@ -142,24 +139,10 @@ UIRF Software License are applicable instead of those above.
                 <button key="removeRow" style="Button" text="Remove Row"/>
               </HorizontalPanel>
             </row>
-            <row>
-              <widget colspan="2">
-                <AbsolutePanel width="1000px" height="400px" css="border:1px solid black;">
-                  <ScrollPanel width="1000px" height="400px" >
-                    <VerticalPanel key="logPanel"/>
-                </ScrollPanel>
-                </AbsolutePanel>
-              </widget>
-            </row>
-            <row>
-              <widget colspan="2">
-                <button style="Button" key="clearLog" text="Clear Log"/>
-              </widget>
-            </row>
           </TablePanel>
         </AbsolutePanel>
       </HorizontalPanel>
     </screen>
   </xsl:template>
  
-</xsl:stylesheet>          
+</xsl:stylesheet>

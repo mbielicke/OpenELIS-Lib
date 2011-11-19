@@ -259,8 +259,11 @@ public class View extends Composite {
         }
 
         flexTable.setStyleName(table.TABLE_STYLE);
-        for (int c = 0; c < table.getColumnCount(); c++ )
+        for (int c = 0; c < table.getColumnCount(); c++ ) {
             flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
+            if(table.getColumnAt(c).getStyle() != null)
+            	flexTable.getColumnFormatter().setStyleName(c, table.getColumnAt(c).getStyle());
+        }
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
@@ -300,7 +303,6 @@ public class View extends Composite {
            
             DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
             
-            //scrollView.setWidth(Math.max(table.getWidthWithoutScrollbar()+2, 0) + "px");
             scrollView.setWidth("100%");
             
             flexTable.removeAllRows();
@@ -310,10 +312,7 @@ public class View extends Composite {
             rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
             
             scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
-            
-            
-            //scrollView.setWidth((table.viewWidth == -1 ? scrollView.getOffsetWidth() : table.viewWidth)+"px");
-            
+                        
             if(table.viewWidth == -1)
             	table.viewWidth = scrollView.getOffsetWidth();
             

@@ -93,14 +93,32 @@ UIRF Software License are applicable instead of those above.
                 </HorizontalPanel>
               </widget>
             </row>
+            <row>
+              <text style="Prompt">Log Level:</text>
+              <dropdown key="logLevel" width="100"/>
+            </row>
           </TablePanel>
         </VerticalPanel>
-        <AbsolutePanel style="ContentPanel">
+        <AbsolutePanel>
           <TablePanel>
             <row>
               <text style="Prompt">Test:</text>
               <dropdown key="test" width="100"/>
             </row>
+            <row>
+              <widget colspan="2">
+                <AbsolutePanel width="1000px" height="400px" css="border:1px solid black;">
+                  <ScrollPanel width="1000px" height="400px" >
+                    <VerticalPanel key="logPanel"/>
+                </ScrollPanel>
+                </AbsolutePanel>
+              </widget>
+            </row>
+            <row>
+              <widget colspan="2">
+                <button style="Button" key="clearLog" text="Clear Log"/>
+              </widget>
+            </row>            
           </TablePanel>
         </AbsolutePanel>
       </HorizontalPanel>

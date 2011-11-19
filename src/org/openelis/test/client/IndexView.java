@@ -10,5 +10,6 @@ public interface IndexView extends IsWidget {
 		public void goToTextBoxTest();
 		public void goToDropdownTest();
 		public void goToTableTest();
+		public void goToTreeTest();
 	}
 }

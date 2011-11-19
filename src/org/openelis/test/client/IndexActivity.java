@@ -3,6 +3,7 @@ package org.openelis.test.client;
 import org.openelis.test.client.dropdown.DropdownTestPlace;
 import org.openelis.test.client.table.TableTestPlace;
 import org.openelis.test.client.textbox.TextBoxTestPlace;
+import org.openelis.test.client.tree.TreeTestPlace;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -42,4 +43,9 @@ public class IndexActivity extends AbstractActivity implements IndexView.Present
 		clientFactory.placeController().goTo(new TableTestPlace(""));
 	}
 
+	@Override
+	public void goToTreeTest() {
+		clientFactory.placeController().goTo(new TreeTestPlace(""));
+	}
+	
 }

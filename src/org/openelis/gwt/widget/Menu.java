@@ -99,6 +99,7 @@ public class Menu extends Composite {
 
         label = new Label<String>(display);
         label.setStyleName("ScreenLabel");
+        label.setWordWrap(false);
         initWidget(label);
         setEnabled(true);
     }
@@ -120,6 +121,7 @@ public class Menu extends Composite {
         grid.getCellFormatter().setStylePrimaryName(0, 0, "topMenuIcon");
         grid.setText(0, 0, "");
         grid.getCellFormatter().setStylePrimaryName(0, 1, "topMenuItemMiddle");
+        grid.getCellFormatter().setWordWrap(0, 1, false);
 
         if ( !"".equals(icon))
             grid.getCellFormatter().addStyleName(0, 0, icon);

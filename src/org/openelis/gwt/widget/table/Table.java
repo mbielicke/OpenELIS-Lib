@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
@@ -185,6 +186,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * Indicates direction for the Sort
 	 */
 	public static final int SORT_ASCENDING = 1, SORT_DESCENDING = -1;
+	
+    protected Logger logger = Logger.getLogger("Widget");
 
 	/**
 	 * Default no-arg constructor that initializes all needed fields so the
@@ -370,6 +373,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	public void setRowHeight(int rowHeight) {
 		this.rowHeight = rowHeight;
+		view.firstAttach = true;
 		layout();
 	}
 
@@ -2382,6 +2386,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public void removeExceptionStyle(String style) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void setLogger(Logger logger) {
+		logger.finest("Entering org.openelis.gwt.widget.TextBox.setLogger(Logger)");
+		this.logger = logger;
+		logger.finest("Exiting org.openelis.gwt.widget.TextBox.setLogger(Logger)");
 	}
 
 	/**

@@ -171,6 +171,9 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 				
 				if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB && focused != null){
 					tab = def.getTabs().get(focused);
+					
+					if(tab == null)
+						return;
 
 					while(true) {
 						if(shift){

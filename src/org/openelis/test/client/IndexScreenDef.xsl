@@ -45,6 +45,7 @@ UIRF Software License are applicable instead of those above.
         <label key="textbox" text="TextBox"/>
         <label key="dropdown" text="Dropdown"/>
         <label key="table" text="Table"/>
+        <label key="tree" text="Tree"/>
       </VerticalPanel>
     </screen>
  </xsl:template>

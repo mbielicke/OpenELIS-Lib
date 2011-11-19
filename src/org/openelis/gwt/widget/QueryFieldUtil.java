@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -205,6 +206,21 @@ public class QueryFieldUtil {
                 }
             }
         }
+    }
+    
+    public static String parseAutocomplete(String value) throws LocalizedException{
+        ArrayList<String> list;
+        QueryFieldUtil parser;
+        
+        if (DataBaseUtil.isEmpty(value))
+            return "";
+        parser = new QueryFieldUtil();
+        parser.parse(value);
+        list = parser.getParameter();
+        if (list.size() > 0) 
+            return list.get(0);
+        
+        return "";
     }
 
 }

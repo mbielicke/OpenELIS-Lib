@@ -114,7 +114,7 @@ public class View extends Composite {
      * Computed Row Height used to calculate ScrollHeight and ScrollPosition
      * since all browsers don't seem to draw rows to the same height
      */
-    protected int             rowHeight, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1,
+    protected int            scrollBarHeight, rowHeight, lastRow = -1, lastCol = -1, lastX = -1, lastY = -1,
                     indent = 18;
 
     /**
@@ -175,15 +175,6 @@ public class View extends Composite {
         }, MouseWheelEvent.getType());
 
         flexTable = new FlexTable();
-        flexTable.addClickHandler(new ClickHandler() {
-            @SuppressWarnings("rawtypes")
-			public void onClick(ClickEvent event) {
-                Cell cell = flexTable.getCellForEvent(event);
-                if(tree.fireCellClickedEvent(firstVisibleRow+cell.getRowIndex(), cell.getCellIndex()))
-                	tree.startEditing(firstVisibleRow + cell.getRowIndex(), cell.getCellIndex(),
-                			(GwtEvent)event);
-            }
-        });
 
         /*
          * The FlexTable is placed in a FocusPanel to provide MouseMove events
@@ -191,6 +182,19 @@ public class View extends Composite {
          */
         fp = new FocusPanel();
         fp.setWidget(flexTable);
+        
+        flexTable.addClickHandler(new ClickHandler() {
+            @SuppressWarnings("rawtypes")
+			public void onClick(ClickEvent event) {
+            	int r,c;
+            	
+                c = tree.getColumnForX(event.getX());
+                r = firstVisibleRow + (event.getY() / rowHeight);
+                
+                if(tree.fireCellClickedEvent(r, c))
+                	tree.startEditing(r, c, (GwtEvent)event);
+            }
+        });
 
         fp.addMouseMoveHandler(new MouseMoveHandler() {
             public void onMouseMove(MouseMoveEvent event) {
@@ -272,6 +276,8 @@ public class View extends Composite {
         }
         
         flexTable.setStyleName(tree.TREE_STYLE);
+        for (int c = 0; c < tree.getColumnCount(); c++ )
+            flexTable.getColumnFormatter().setWidth(c, tree.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(tree.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
@@ -297,9 +303,10 @@ public class View extends Composite {
         } else if (tree.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
             outer.remove(1);
             vertScrollBar = null;
-        }
-
-        scrollView.setWidth(Math.max(tree.getWidthWithoutScrollbar()+2, 0) + "px");
+        } else if (tree.getVerticalScroll() == Scrolling.ALWAYS)
+        	vertScrollBar.setVisible(true);
+        
+        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
 
         /*
          * This code is executed the first time the Table is attached
@@ -307,32 +314,29 @@ public class View extends Composite {
         if (firstAttach) {
 
             firstAttach = false;
+            
+            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            
+            scrollView.setWidth("100%");
 
+            flexTable.removeAllRows();
             for (int i = 0; i < tree.getVisibleRows(); i++ )
                 createRow(i);
 
-            // rowHeight = table.getRowHeight() + rowHeightAdj;
             rowHeight = flexTable.getOffsetHeight() / tree.getVisibleRows();
-
-            if (tree.getFixScrollbar())
-                scrollView.setHeight(scrollView.getOffsetHeight() + "px");
-            else
-                scrollView.setHeight("100%");
-
-            if (vertScrollBar != null) {
-                vertScrollBar.setHeight(flexTable.getOffsetHeight() + "px");
-                if (tree.hasHeader)
-                    DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
-                                          header.getOffsetHeight() + "px");
-                DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
-                adjustScrollBarHeight();
-            }
-
+            
+            scrollBarHeight = scrollView.getOffsetHeight() - ((tree.getVisibleRows()*rowHeight) +(tree.hasHeader() ? header.getOffsetHeight() : 0));
+            
+            if(tree.viewWidth == -1)
+            	tree.viewWidth = scrollView.getOffsetWidth();
+            
             for (int i = 0; i < tree.getVisibleRows(); i++ )
                 flexTable.removeRow(0);
-
-            visibleChanged = true;
         }
+        
+        scrollView.setWidth(tree.viewWidth+"px");
+
+        visibleChanged = true;
 
         // *** Horizontal ScrollBar *****************
         if (tree.getHorizontalScroll() == Scrolling.NEVER)
@@ -342,12 +346,31 @@ public class View extends Composite {
                 DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
             else
                 DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        }
-        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
+        }else if (tree.getHorizontalScroll() == Scrolling.ALWAYS)
+        	DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
 
-        renderView( -1, -1);
+        
+        if (tree.getFixScrollbar())
+        	scrollView.setHeight((tree.getVisibleRows()*rowHeight)+
+		             (tree.hasHeader() ? header.getOffsetHeight() : 0) + 
+	                 (tree.getHorizontalScroll() == Scrolling.ALWAYS ||
+	                  (tree.getHorizontalScroll() == Scrolling.AS_NEEDED && 
+	                   tree.getTotalColumnWidth() > tree.getWidthWithoutScrollbar()) ? scrollBarHeight : 0) + "px");	 
+        else
+            scrollView.setHeight("100%");
 
-        adjustScrollBarHeight();
+        if (vertScrollBar != null) {
+            vertScrollBar.setHeight(tree.getVisibleRows()*rowHeight+"px");
+            if (tree.hasHeader)
+                DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
+                                      header.getOffsetHeight() + "px");
+            DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
+            adjustScrollBarHeight();
+       }
+
+       renderView( -1, -1);
+
+       adjustScrollBarHeight();
 
     }
 
@@ -359,6 +382,16 @@ public class View extends Composite {
         for (int c = 0; c < tree.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, tree.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(tree.getTotalColumnWidth() + "px");
+        
+        /*
+         * Determine if Scrollbar needs to be added or removed
+         */
+        if (tree.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+            if (tree.getTotalColumnWidth() > tree.getWidthWithoutScrollbar())
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+            else
+                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        }
     }
 
     /**

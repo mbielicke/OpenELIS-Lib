@@ -6,6 +6,8 @@ import org.openelis.test.client.table.TableTestActivity;
 import org.openelis.test.client.table.TableTestPlace;
 import org.openelis.test.client.textbox.TextBoxTestActivity;
 import org.openelis.test.client.textbox.TextBoxTestPlace;
+import org.openelis.test.client.tree.TreeTestActivity;
+import org.openelis.test.client.tree.TreeTestPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -30,6 +32,8 @@ public class AppActivityMapper implements ActivityMapper {
 			return new DropdownTestActivity();
 		else if(place instanceof TableTestPlace)
 			return new TableTestActivity();
+		else if(place instanceof TreeTestPlace)
+			return new TreeTestActivity();
 		return null;
 	}
 

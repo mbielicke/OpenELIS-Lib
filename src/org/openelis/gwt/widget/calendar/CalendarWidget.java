@@ -171,8 +171,8 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
             public void onClick(ClickEvent event) {
                 try {
                     ValueChangeEvent.fire(source, service.callDatetime("getCurrentDatetime",
-                                                                       selected.startCode,
-                                                                       selected.endCode));
+                                                                       selected.getStartCode(),
+                                                                       selected.getEndCode()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     return;
@@ -183,7 +183,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         /*
          * Show or hide time component based on the widget precision.
          */
-        if (current.endCode > Datetime.DAY) {
+        if (current.getEndCode() > Datetime.DAY) {
             time = (TextBox<Datetime>)def.getWidget("time");
             addScreenHandler(time, new ScreenEventHandler<Datetime>() {
                 public void onDataChange(DataChangeEvent event) {

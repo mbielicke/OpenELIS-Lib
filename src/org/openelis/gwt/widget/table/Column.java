@@ -82,6 +82,7 @@ public class Column {
     protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, isFilterable, required;
 
 
+    protected String style;
     /**
      * Creates a default column that exist outside a table has a TextBox<String>
      * has the editor.
@@ -211,9 +212,21 @@ public class Column {
      */
     public Column setLabel(String label) {
         this.label = label;
+        if(table != null && table.view != null && table.view.header != null)
+        	table.view.header.layout();
         return this;
     }
 
+    public void setStyle(String style) {
+    	this.style = style;
+    	if(table != null)
+    		table.layout();
+    }
+    
+    public String getStyle() {
+    	return style;
+    }
+    
     /**
      * Returns the width being used by this Column.
      * 

@@ -253,7 +253,7 @@ public class UIGenerator extends Generator {
     }
     
     private void setDefaults(Node node, String wid) {
-    	String style;
+    	String style,css;
     	String[] styles;
     	String width,height,tip,visible;
     	Node attrib;
@@ -263,6 +263,7 @@ public class UIGenerator extends Generator {
     	height = getAttribute(node,"height");
     	tip = getAttribute(node,"tip");
     	visible = getAttribute(node,"visible","true");
+    	css = getAttribute(node,"css");
     	
         if (style != null){
         	styles = style.split(",");
@@ -272,6 +273,9 @@ public class UIGenerator extends Generator {
             }
         }
         
+        if (css != null) 
+        	sw.println("DOM.setElementAttribute("+wid+".getElement(), \"style\",\""+css+"\");");
+       
         if (width != null)
             sw.println(wid+".setWidth(\""+width+"\");");
         
@@ -1139,6 +1143,15 @@ public class UIGenerator extends Generator {
     		}
     	});
     	
+    	factoryMap.put("time", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			//do nothing for now 
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.table.TimeCell");
+    		}
+    	});
+    	
         factoryMap.put("Integer", new Factory(){
             public void getNewInstance(Node node, int id) {
             	String pattern;
@@ -1645,6 +1658,8 @@ public class UIGenerator extends Generator {
                             	sw.println("ImageCell cell"+child+" = new ImageCell();");
                             else if(name.equals("percentBar"))
                             	sw.println("PercentCell cell"+child+" = new PercentCell(wid"+child+");");
+                            else if(name.equals("time"))
+                            	sw.println("TimeCell cell"+child+" = new TimeCell();");
                             else
                                 sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
                             
@@ -1671,6 +1686,7 @@ public class UIGenerator extends Generator {
                composer.addImport("org.openelis.gwt.widget.table.CalendarCell");  
                composer.addImport("org.openelis.gwt.widget.table.ImageCell");
                composer.addImport("org.openelis.gwt.widget.table.PercentCell");
+               composer.addImport("org.openelis.gwt.widget.table.TimeCell");
       	   }
      	});    	
     	

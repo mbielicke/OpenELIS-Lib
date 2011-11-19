@@ -15,6 +15,7 @@ package org.openelis.gwt.server;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.RPC;
@@ -32,29 +33,27 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 
     @SuppressWarnings("rawtypes")
 	private Object invoke(String service, String method, Class[] paramTypes, Object[] params) throws Exception {
+        Throwable t;
         Object serviceInst;
-        //HashMap<String, Object> busyPool;
+        HashMap<String, Object> busyPool;
 
         try {
             serviceInst = Class.forName(service).newInstance();
             return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
         } catch (InvocationTargetException e) {
-            if (e.getCause() != null) {
-                try {
-                    sPolicy.validateSerialize(e.getCause().getClass());
-                    throw (Exception)e.getCause();
-                } catch (SerializationException se) {
-                    throw new Exception(e.getCause().toString());
-                }
-            } else {
-                try {
-                    sPolicy.validateSerialize(e.getTargetException().getClass());
-                    throw (Exception)e.getTargetException();
-                } catch (SerializationException se) {
-                    throw new Exception(e.getTargetException().toString());
-                }
+            t = e;
+            while (t.getCause() != null)
+                t = t.getCause();
+            try {
+                sPolicy.validateSerialize(t.getClass());
+                t.printStackTrace();
+                throw (Exception) t;
+            } catch (SerializationException se) {
+            	se.printStackTrace();
+                throw new Exception(t.toString());
             }
         } catch (NoSuchMethodException e) {
+        	e.printStackTrace();
             throw new Exception("NoSuchMethodException: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();

@@ -10,9 +10,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 public class IndexViewImpl extends Screen implements IndexView {
 	
-	Label<String> textbox;
-	Label<String> dropdown;
-	Label<String> table;
+	Label<String> textbox,dropdown,table,tree;
 	
 	IndexView.Presenter presenter;
 	
@@ -43,6 +41,15 @@ public class IndexViewImpl extends Screen implements IndexView {
 				presenter.goToTableTest();
 			}
 		});
+		
+		tree = (Label<String>)def.getWidget("tree");
+		tree.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.goToTreeTest();
+			}
+		});
+		
 	}
 	
 	public void setPresenter(IndexView.Presenter presenter) {
