@@ -585,8 +585,6 @@ public class Dropdown<T> extends TextBox<T> {
     @Override
     public Object getQuery() {
     	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getQuery()");
-    	if(!queryMode)
-    		return null;
     	
         QueryData qd;
         StringBuffer sb;
