@@ -2390,12 +2390,13 @@ background:#deecfd;
     padding:2px;
     background: #f8f8f9;
 }
-.noteBodyText{
+.noteBodyText pre{
 	color:black;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
     padding:4px;
     background:white;
+	white-space:pre-wrap;
 }
 
 .SlideOut .middle{
