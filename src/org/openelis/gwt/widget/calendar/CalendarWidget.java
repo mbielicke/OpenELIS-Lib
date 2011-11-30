@@ -142,6 +142,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
         monthSelect = (Button)def.getWidget("monthSelect");
         monthSelect.setEnabled(true);
 
+
         prevMonth = (Button)def.getWidget("prevMonth");
         prevMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {

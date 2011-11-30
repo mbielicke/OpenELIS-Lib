@@ -30,6 +30,7 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.WidgetHelper;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -182,7 +183,7 @@ public class Calendar extends TextBox<Datetime> {
                  */
                 calendar.addMonthSelectHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        if (monthYearWidget == null) {
+                        if (monthYearWidget == null) { 
                             monthYearWidget = new MonthYearWidget();
                             /*
                              * Set popup back to calendar with the selected month and year
@@ -206,7 +207,7 @@ public class Calendar extends TextBox<Datetime> {
                         monthYearWidget.setYear(calendar.getYear());
                         monthYearWidget.setMonth(calendar.getMonth());
                         popup.setWidget(monthYearWidget);
-                    }
+                }
                 });
             }
             /*
@@ -302,6 +303,27 @@ public class Calendar extends TextBox<Datetime> {
     @Override
     public void removeExceptionStyle(String style) {
         textbox.removeStyleName(style);
+    }
+    
+    @Override
+    public void setHelper(WidgetHelper<Datetime> helper) {
+    	DateHelper dh;
+    	
+    	super.setHelper(helper);
+    	
+    	/*
+    	 * Setting default mask based on precision of helper
+    	 * internationalized mask pictures should be set from 
+    	 * xsl, but defaults are provided if none set.
+    	 */
+    	dh = (DateHelper)helper;
+    	if(dh.getBegin() > Datetime.DAY)
+    		setMask("99:99");
+    	else if (dh.getEnd() < Datetime.HOUR)
+    		setMask("9999-99-99");
+    	else 
+    		setMask("9999-99-99 99:99");
+    	
     }
 
 }

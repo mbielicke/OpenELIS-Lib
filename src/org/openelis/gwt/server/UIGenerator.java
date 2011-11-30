@@ -559,9 +559,10 @@ public class UIGenerator extends Generator {
 
         factoryMap.put("calendar", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String enabled;
+            	String enabled,mask;
             	
             	enabled = getAttribute(node,"enabled");
+            	mask = getAttribute(node,"mask");
             	
                 sw.println("Calendar wid"+id+" = new Calendar();");
                 
@@ -582,6 +583,9 @@ public class UIGenerator extends Generator {
                 
                 if(enabled != null)
                 	sw.println("wid"+id+".setEnabled("+enabled+");");
+                
+                if(mask != null)
+                	sw.println("wid"+id+".setMask(\""+mask+"\");");
 
             }
             public void addImport() {
