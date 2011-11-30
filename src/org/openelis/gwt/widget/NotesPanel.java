@@ -41,6 +41,9 @@ public class NotesPanel extends Composite {
         HTML bodyText;
         VerticalPanel note;
         
+        if (subject == null && text == null)
+            return;
+        
         note = new VerticalPanel();
         note.setWidth(width);
         note.addStyleName("noteTableRow");
@@ -55,11 +58,11 @@ public class NotesPanel extends Composite {
             userDateText.setStyleName("noteAuthorText");
             note.add(userDateText);
         }
-
-        bodyText = new HTML("<pre>"+encode(text)+"</pre>");
-        bodyText.setStyleName("noteBodyText");
-        note.add(bodyText);
-
+        if (text != null) {
+            bodyText = new HTML("<pre>"+encode(text)+"</pre>");
+            bodyText.setStyleName("noteBodyText");
+            note.add(bodyText);
+        }
         notes.add(note);
     }
 
