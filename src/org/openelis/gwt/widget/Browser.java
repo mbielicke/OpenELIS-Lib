@@ -35,6 +35,7 @@ import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -136,7 +137,7 @@ public class Browser extends Composite {
          */
         addDomHandler(new KeyDownHandler() {
         	public void onKeyDown(KeyDownEvent event) {
-        		KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+   				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
         		
         	}
         },KeyDownEvent.getType());

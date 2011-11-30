@@ -65,7 +65,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     /*
      * Default styles used for the button
      */
-    protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "DISABLED";
+    protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "Disabled";
 
     /**
      * Default no-arg constructor

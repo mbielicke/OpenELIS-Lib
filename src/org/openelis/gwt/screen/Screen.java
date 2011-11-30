@@ -60,6 +60,8 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -112,8 +114,8 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * No arg constructor will initiate a blank panel and new FormRPC
      */
     public Screen() {
-		addDomHandler(new KeyDownHandler() {
-			public void onKeyDown(final KeyDownEvent event) {
+		addDomHandler(new KeyPressHandler() {
+			public void onKeyPress(final KeyPressEvent event) {
 				boolean ctrl,alt,shift;
 				char key;
 				
@@ -126,7 +128,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 				ctrl = event.isControlKeyDown();
 				alt = event.isAltKeyDown();
 				shift = event.isShiftKeyDown();
-				key = (char)event.getNativeKeyCode();
+				key = (char)event.getCharCode();
 				
 				for(Shortcut handler : def.getShortcuts()) {
 					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
@@ -147,7 +149,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 								event.stopPropagation();
 							}
 							event.preventDefault();
-							event.stopPropagation();		
+							event.stopPropagation();
 						}else if(((ScreenWidgetInt)handler.wid).isEnabled()){ 
 							((Focusable)handler.wid).setFocus(true);
 							event.preventDefault();
@@ -156,8 +158,34 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 					}
 				}
 			}
-		},KeyDownEvent.getType());
+		},KeyPressEvent.getType());
 		
+		/*
+		addDomHandler(new KeyPressHandler() {
+			public void onKeyPress(KeyPressEvent event) {
+				boolean ctrl,alt,shift;
+				char key;
+				
+				/*
+				 * If no modifier is pressed then return out
+		
+				if(!event.isAnyModifierKeyDown())
+					return;
+				
+				ctrl = event.isControlKeyDown();
+				alt = event.isAltKeyDown();
+				shift = event.isShiftKeyDown();
+				key = (char)event.getCharCode();
+				
+				for(Shortcut handler : def.getShortcuts()) {
+					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
+						event.preventDefault();
+						event.stopPropagation();
+					}
+				}
+			}
+		},KeyPressEvent.getType());
+	    */	
 		addDomHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
