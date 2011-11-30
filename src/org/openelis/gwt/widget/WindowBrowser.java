@@ -78,13 +78,13 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
 
     		/**
     		 * if the drag exceeds either boundary return and cancel the move update.
-    		*/ 
+    		 
     		if(x+width > browser.getAbsoluteLeft()+browser.getOffsetWidth())
     			throw new VetoDragException();
     		
     		if(y+height > browser.getAbsoluteTop()+browser.getOffsetHeight())
     			throw new VetoDragException();
-    		
+    		*/
     		
     		super.previewDragStart();
     		

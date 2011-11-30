@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 /**
  * This widget class displays a textbox and a button for entering dates into this system.  A date can be typed in or
@@ -64,7 +63,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
     protected PopupPanel pop;
     private DateField field;
     private boolean enabled;
-    protected TextBox textbox = new TextBox();
+    protected TextBox<String> textbox = new TextBox<String>();
     private IconContainer icon = new IconContainer();
     
     
@@ -242,6 +241,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
         textbox.addStyleName("TextboxUnselected");
         
         textbox.addValueChangeHandler(handler);
+        
     }
     
     /**
@@ -281,6 +281,12 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
         this.begin = begin;
         this.end = end;
         this.week = week;
+        if(begin > Datetime.DAY)
+        	setMask("99:99");
+        else if(end < Datetime.HOUR)
+        	setMask("9999-99-99");
+        else
+        	setMask("9999-99-99 99:99");
     }
     
     /**
@@ -562,7 +568,10 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 
 	public void removeExceptionStyle(String style) {
 		textbox.removeStyleName(style);
-		
+	}
+	
+	public void setMask(String mask) {
+		textbox.setMask(mask);
 	}
     
 }

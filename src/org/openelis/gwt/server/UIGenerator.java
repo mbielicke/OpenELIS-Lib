@@ -696,6 +696,10 @@ public class UIGenerator extends Generator {
     			factoryMap.get("Date").getNewInstance(node, id);
     			sw.println("wid"+id+".setField(field"+id+");");
     			
+    			if(node.getAttributes().getNamedItem("mask") != null) 
+    				sw.println("wid"+id+".setMask(\""+node.getAttributes().getNamedItem("mask").getNodeValue()+"\");");
+    			
+    			
     			//sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
     			//sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
