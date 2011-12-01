@@ -1394,11 +1394,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return true;
 	}
 	
-	protected boolean fireCellClickedEvent(int row, int col) {
+	protected boolean fireCellClickedEvent(int row, int col, boolean ctrlKey, boolean shiftKey) {
 		CellClickedEvent event = null;
 		
 		if(!queryMode)
-			event = CellClickedEvent.fire(this, row, col);
+			event = CellClickedEvent.fire(this, row, col, ctrlKey, shiftKey);
 		
 		return event == null || !event.isCancelled();
 			

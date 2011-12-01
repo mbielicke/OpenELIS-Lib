@@ -1420,7 +1420,7 @@ font-weight:bold;
     border-bottom: 1px solid #d8d8d8;
     background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
-.AutoDropdown .Hover{
+.AutoDropdown .Hover .AutoDropdownButton{
     cursor:pointer;
     border-bottom: 1px solid  #7eadd9;
     background: url(../Images/trigger.gif) -16px 0px no-repeat;

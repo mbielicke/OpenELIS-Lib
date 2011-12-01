@@ -37,6 +37,8 @@ import org.openelis.gwt.event.HasBeforeGetMatchesHandlers;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
+import org.openelis.gwt.widget.table.event.CellClickedEvent;
+import org.openelis.gwt.widget.table.event.CellClickedHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -81,7 +83,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     protected PopupPanel      popup;
     protected int             cellHeight = 21, delay = 350, itemCount = 10, width;
     protected Timer           timer;
-    protected boolean         keepPopup;
+    protected boolean         showingOptions;
     protected String          prevText;
 
     final AutoComplete        source;
@@ -160,11 +162,16 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 Item<Integer> item;
 
                 BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+                if(!showingOptions && isEnabled() && !queryMode) {
+                	if("".equals(textbox.getText()) && getValue() != null){
+                		setValue(null,"",true);
+                	}else {
+                		item = getSelectedItem();
 
-                item = getSelectedItem();
-
-                if (item != null)
-                    setValue(item.key, renderer.getDisplay(item));
+                		if (item != null)
+                			setValue(item.key, renderer.getDisplay(item),true);
+                	}
+                }
             }
         });
 
@@ -217,7 +224,6 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 
             }
         };
-
     }
 
     /**
@@ -227,7 +233,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      * is in the current table view.
      */
     protected void showPopup() {
-
+    	showingOptions = true;
         if (popup == null) {
             popup = new PopupPanel(true);
             popup.setStyleName("DropdownPopup");
@@ -235,21 +241,11 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
-                    Item<Integer> item;
-                    /*
-                     * Call set value if user arrowed down to select and clicked
-                     * to another widget to close the Popup.
-                     */
-                    item = getSelectedItem();
-                    if (event.isAutoClosed() && item != null) {
-                        setValue(item.key, renderer.getDisplay(item));
-                    }
+                	showingOptions = false;
+                	setFocus(true);
                 }
             });
         }
-
-        if (popup.isShowing())
-            return;
 
         popup.showRelativeTo(this);
 
@@ -284,10 +280,6 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          */
         
         textbox.setWidth((width - 16) + "px");
-        
-        //if(table != null) 
-        //    table.setWidth(width+"px");
-
     }
     
     public int getWidth() {
@@ -325,8 +317,10 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-        table.setVisibleRows(itemCount);
+        table.setTableStyle("DropdownTable");
         table.setFixScrollbar(false);
+        table.setRowHeight(16);
+        table.setEnabled(true);
         
         /*
          * This handler will will cancel the selection if the item has been
@@ -346,18 +340,19 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          */
         table.addSelectionHandler(new SelectionHandler<Integer>() {
             public void onSelection(SelectionEvent<Integer> event) {
-                if(!keepPopup)
-                    popup.hide();
-                
                 setDisplay();
-
-                /*
-                 * Set the focus back to the Textbox after closing or nothing
-                 * will be focused
-                 */
-                textbox.setFocus(true);
             }
         });
+        
+        /*
+         * We close the popup on CellClick instead of selectionso that the display
+         * can be set on selection of use of keyboard.
+         */
+        table.addCellClickedHandler(new CellClickedHandler() {
+			public void onCellClicked(CellClickedEvent event) {
+				popup.hide();
+			}
+		});
     }
     
     /**
@@ -379,6 +374,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         
         table.setVisibleRows(Math.min(model.size(),itemCount));        
         table.setModel(model);
+        table.selectRowAt(0);
         
     }
 
@@ -399,9 +395,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      * @param index
      */
     public void setSelectedIndex(int index) {
-        keepPopup = true;
         table.selectRowAt(index);
-        keepPopup = false;
         if(getSelectedIndex() > -1)
             textbox.setText(renderer.getDisplay(getSelectedItem()));
         else
@@ -457,8 +451,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     @Override
     public void setEnabled(boolean enabled) {
-        if (isEnabled() == enabled)
-            return;
+        //if (isEnabled() == enabled)
+        //    return;
         button.setEnabled(enabled);
         table.setEnabled(enabled);
         if (enabled)
@@ -488,6 +482,10 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     public void setValue(Integer value, String display) {
         setValue(new AutoCompleteValue(value,display),false);
+    }
+    
+    public void setValue(Integer value, String display, boolean fireEvents) {
+    	setValue(new AutoCompleteValue(value,display),fireEvents);
     }
     
     public void setValue(AutoCompleteValue av) {
@@ -608,18 +606,12 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
 
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_DOWN:
-                    if (popup != null && popup.isShowing()) {
-                        keepPopup = true;
+                    if (popup != null && popup.isShowing()) 
                         table.selectRowAt(findNextActive(table.getSelectedRow()));
-                        keepPopup = false;
-                    }
                     break;
                 case KeyCodes.KEY_UP:
-                    if (popup != null && popup.isShowing()) {
-                        keepPopup = true;
+                    if (popup != null && popup.isShowing()) 
                         table.selectRowAt(findPrevActive(table.getSelectedRow()));
-                        keepPopup = false;
-                    }
                     break;
                 case KeyCodes.KEY_ENTER:
                     if (popup == null || !popup.isShowing()) {

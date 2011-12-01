@@ -137,7 +137,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
                 }
             }
         });
-
+        
     }
     
     public void setDisplay(String icon,String label) {

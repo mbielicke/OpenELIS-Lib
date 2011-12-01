@@ -7,20 +7,22 @@ public class CellClickedEvent extends GwtEvent<CellClickedHandler> {
 	private static Type<CellClickedHandler> TYPE;
 	private int row;
 	private int col;
-	private boolean cancelled;
+	private boolean cancelled,ctrlKey,shiftKey;
 	
-	public static CellClickedEvent fire(HasCellEditedHandlers source, int row, int col) {
+	public static CellClickedEvent fire(HasCellEditedHandlers source, int row, int col, boolean ctrlKey, boolean shiftKey) {
 		if(TYPE != null) {
-			CellClickedEvent event = new CellClickedEvent(row, col);
+			CellClickedEvent event = new CellClickedEvent(row, col,ctrlKey,shiftKey);
 			source.fireEvent(event);
 			return event;
 		}
 		return null;
 	}
 	
-	protected CellClickedEvent(int row, int col) {
+	protected CellClickedEvent(int row, int col,boolean ctrlKey,boolean shiftKey) {
 		this.row = row;
 		this.col = col;
+		this.ctrlKey = ctrlKey;
+		this.shiftKey = shiftKey;
 	}
 
 	@Override
@@ -56,4 +58,13 @@ public class CellClickedEvent extends GwtEvent<CellClickedHandler> {
 	public boolean isCancelled() {
 		return cancelled;
 	}
+	
+	public boolean isCtrlKeyDown() {
+		return ctrlKey;
+	}
+	
+	public boolean isShiftKeyDown() {
+		return shiftKey;
+	}
+
 }

@@ -3,63 +3,74 @@ package org.openelis.gwt.widget;
 import org.openelis.gwt.common.Datetime;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class NotesPanel extends Composite {
-	
-	private ScrollPanel scroll = new ScrollPanel();
-	private VerticalPanel notes = new VerticalPanel();
-	private String width;
-	
-	public NotesPanel() {
-		initWidget(scroll);
-		scroll.setWidget(notes);
-	}
-	
-	public void setWidth(String width) {
-		this.width = width;
-		scroll.setWidth(width);
-	}
-	
-	public void setHeight(String height) {
-		scroll.setHeight(height);
-	}
-	
-	public void addNote(String subject, String userName, String text, Datetime time) {
-		VerticalPanel note = new VerticalPanel();
-		HorizontalPanel topRow = new HorizontalPanel();
-		DateHelper field = new DateHelper();
-		field.setBegin(Datetime.YEAR);
-		field.setEnd(Datetime.SECOND);
-		field.setPattern("yyyy-MM-dd HH:mm");
-		Label<String> titleText = new Label<String>(subject);
-		Label<String> userDateText = new Label<String>(" by "+userName + " on " + field.format(time));
-		Label<String> bodyText = new Label<String>(text);
-		bodyText.setWordWrap(true);
-		note.setWidth(width);
-		topRow.setWidth(width);
-		if(subject != null){
-		    note.add(titleText);
-		    note.add(userDateText);
-		}
-		note.add(bodyText);
-		titleText.setStyleName("noteSubjectText");
-		userDateText.setStyleName("noteAuthorText");
-		bodyText.setStyleName("noteBodyText");
-		
-		notes.add(note);
-		
-		if(notes.getWidgetCount() % 2 == 0)
-			note.addStyleName("noteAltTableRow");
-		else
-			note.addStyleName("noteTableRow");
-		
-	}
-	
-	public void clearNotes() {
-		notes.clear();
-	}
+
+    private ScrollPanel   scroll;
+    private VerticalPanel notes;
+    private String        width;
+    private DateHelper    headerDate;
+    
+    public NotesPanel() {
+        scroll = new ScrollPanel();
+        notes  = new VerticalPanel();
+
+        headerDate = new DateHelper();
+        headerDate.setBegin(Datetime.YEAR);
+        headerDate.setEnd(Datetime.SECOND);
+        headerDate.setPattern("yyyy-MM-dd HH:mm");
+        
+        initWidget(scroll);
+        scroll.setWidget(notes);
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+        scroll.setWidth(width);
+    }
+
+    public void setHeight(String height) {
+        scroll.setHeight(height);
+    }
+
+    public void addNote(String subject, String userName, String text, Datetime time) {
+        Label<String> subjectText, userDateText;
+        HTML bodyText;
+        VerticalPanel note;
+        
+        if (subject == null && text == null)
+            return;
+        
+        note = new VerticalPanel();
+        note.setWidth(width);
+        note.addStyleName("noteTableRow");
+
+        if (subject != null) {
+            subjectText = new Label<String>(subject);
+            subjectText.setStyleName("noteSubjectText");
+            note.add(subjectText);
+
+            userDateText = new Label<String>("by " + userName + " on " + headerDate.format(time));
+            userDateText.setStyleName("noteAuthorText");
+            note.add(userDateText);
+        }
+        if (text != null) {
+            bodyText = new HTML("<pre>"+encode(text)+"</pre>");
+            bodyText.setStyleName("noteBodyText");
+            note.add(bodyText);
+        }
+        notes.add(note);
+    }
+
+    public void clearNotes() {
+        notes.clear();
+    }
+    
+    private String encode(String text) {
+        return text.replaceAll("<", "&lt;");
+    }
 
 }

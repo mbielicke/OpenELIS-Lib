@@ -35,6 +35,8 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
+import org.openelis.gwt.widget.table.event.CellClickedEvent;
+import org.openelis.gwt.widget.table.event.CellClickedHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -77,7 +79,7 @@ public class Dropdown<T> extends TextBox<T> {
     protected Table                 table;
     protected PopupPanel            popup;
     protected int                   cellHeight = 19, itemCount = 10, width;
-    protected boolean               keepPopup;
+    protected boolean               showingOptions;
     /**
      * Sorted list of display values for search
      */
@@ -163,11 +165,12 @@ public class Dropdown<T> extends TextBox<T> {
                 Item<T> item;
 
                 BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+                if(!showingOptions && isEnabled() && !queryMode) {
+                	item = getSelectedItem();
 
-                item = getSelectedItem();
-
-                if (item != null)
-                    setValue(item.key, true);
+                	if (item != null)
+                		setValue(item.key, true);
+               	}
             }
         });
 
@@ -185,6 +188,7 @@ public class Dropdown<T> extends TextBox<T> {
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         addHandler(keyHandler, KeyUpEvent.getType());
+                
         logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.init()");
     }
 
@@ -196,6 +200,7 @@ public class Dropdown<T> extends TextBox<T> {
      */
     protected void showPopup() {
     	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.showPopup()");
+    	showingOptions = true;
         if (popup == null) {
             popup = new PopupPanel(true);
             popup.setStyleName("DropdownPopup");
@@ -203,15 +208,8 @@ public class Dropdown<T> extends TextBox<T> {
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
-                    Item<T> item;
-                    /*
-                     * Call set value if user arrowed down to select and clicked
-                     * to another widget to close the Popup.
-                     */
-                    item = getSelectedItem();
-                    if (event.isAutoClosed() && item != null) {
-                        setValue(item.key, true);
-                    }
+                	showingOptions = false;
+                	setFocus(true);
                 }
             });
         }
@@ -239,10 +237,12 @@ public class Dropdown<T> extends TextBox<T> {
 
         sb = new StringBuffer();
         items = getSelectedItems();
-        for (int i = 0; i < items.size(); i++ ) {
-            if (i > 0)
-                sb.append(" | ");
-            sb.append(renderer.getDisplay(items.get(i)));
+        if(items != null) {
+        	for (int i = 0; i < items.size(); i++ ) {
+        		if (i > 0)
+        			sb.append(" | ");
+        		sb.append(renderer.getDisplay(items.get(i)));
+        	}
         }
 
         textbox.setText(sb.toString());
@@ -347,24 +347,22 @@ public class Dropdown<T> extends TextBox<T> {
          */
         table.addSelectionHandler(new SelectionHandler<Integer>() {
             public void onSelection(SelectionEvent<Integer> event) {
-                /*
-                 * Close popup if not in multiSelect mode or if we are in
-                 * multiSelect but the ctrl or shift is not held
-                 */
-                if (!keepPopup && !table.isMultipleSelectionAllowed()) {
-                    if(popup != null)
-                        popup.hide();
-                }
-
                 setDisplay();
-
-                /*
-                 * Set the focus back to the Textbox after closing or nothing
-                 * will be focused
-                 */
-                textbox.setFocus(true);
             }
         });
+            
+       table.addCellClickedHandler(new CellClickedHandler() {
+         	public void onCellClicked(CellClickedEvent event) {
+         		/*
+         		 * Keep options up if multiple selection occurs 
+         		 */
+         		if(table.isMultipleSelectionAllowed() && (event.isCtrlKeyDown() || event.isShiftKeyDown()))
+         			return;
+         		
+         		popup.hide();
+           	}
+       });
+
         logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setPopupContext()");
     }
     
@@ -491,8 +489,8 @@ public class Dropdown<T> extends TextBox<T> {
     @Override
     public void setEnabled(boolean enabled) {
     	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setEnabled() : value = "+enabled);
-        if (isEnabled() == enabled)
-            return;
+       // if (isEnabled() == enabled)
+         //   return;
         button.setEnabled(enabled);
         table.setEnabled(enabled);
         
@@ -639,15 +637,17 @@ public class Dropdown<T> extends TextBox<T> {
         if(qd == null)
             return;
         
-        params = qd.getQuery().split(" \\| ");
-        for(int i = 0; i < params.length; i++) {
-            if(qd.getType() == QueryData.Type.INTEGER) 
-                key = (T)new Integer(params[i]);  
-            else
-                key = (T)params[i];
+        table.clearRowSelection();
+        if(qd.getQuery() != null && !qd.getQuery().equals("")) {
+        	params = qd.getQuery().split(" \\| ");
+        	for(int i = 0; i < params.length; i++) {
+        		if(qd.getType() == QueryData.Type.INTEGER) 
+        			key = (T)new Integer(params[i]);  
+        		else
+        			key = (T)params[i];
            
-            table.selectRowAt(keyHash.get(key),true);
-           
+        		table.selectRowAt(keyHash.get(key),true);
+        	}
         }
         setDisplay();
         logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setQuery(QueryData)");
@@ -802,20 +802,10 @@ public class Dropdown<T> extends TextBox<T> {
                     //table.shiftKey = false;
                     break;
                 case KeyCodes.KEY_DOWN:
-                    keepPopup = true;
                     table.selectRowAt(findNextActive(table.getSelectedRow()));
-                    keepPopup = false;
-                    //table.scrollToVisible(table.get);
-                    //setDisplay();
-                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_UP:
-                    keepPopup = true;
                     table.selectRowAt(findPrevActive(table.getSelectedRow()));
-                    keepPopup = false;
-                    //table.scrollToVisible();
-                    //setDisplay();
-                    //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_ENTER:
                     if (popup == null || !popup.isShowing())

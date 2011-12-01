@@ -183,7 +183,7 @@ public class View extends Composite {
                 c = table.getColumnForX(event.getX());
                 r = firstVisibleRow + (event.getY() / rowHeight);
                 
-                if(table.fireCellClickedEvent(r, c))
+                if(table.fireCellClickedEvent(r, c, event.isControlKeyDown(),event.isShiftKeyDown()))
                 		table.startEditing(r,c, (GwtEvent)event);
             }
         });
