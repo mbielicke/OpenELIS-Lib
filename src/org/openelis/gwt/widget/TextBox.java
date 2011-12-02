@@ -111,6 +111,10 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		field.setQueryMode(query);
 		enforceLength = !query;
 		enforceMask = !query;
+		if(query)
+			setMaxLength(255);
+		else
+			setMaxLength(length);
 		//if(query)
 			//changeReg.removeHandler();
 		//else

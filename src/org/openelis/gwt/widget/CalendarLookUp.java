@@ -459,6 +459,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 		field.setQueryMode(query);
 		textbox.enforceMask = !query;
 		textbox.enforceLength = !query;
+		if(query)
+			textbox.setLength(255);
+		else
+			textbox.setLength(textbox.length);
+	
 	}
 
 	/**
