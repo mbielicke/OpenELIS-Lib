@@ -453,8 +453,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	 * Puts this widget into or out of query mode based on the boolean passed.
 	 */
 	public void setQueryMode(boolean query) {
-		if(query != field.queryMode)
-			field.setQueryMode(query);
+		if(query == field.queryMode)
+			return;
+		
+		field.setQueryMode(query);
+		textbox.enforceMask = !query;
 	}
 
 	/**
