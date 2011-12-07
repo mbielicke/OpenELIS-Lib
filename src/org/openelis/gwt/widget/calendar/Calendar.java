@@ -123,7 +123,10 @@ public class Calendar extends TextBox<Datetime> {
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
                 BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-                validateValue(true);
+                if(queryMode)
+                	validateQuery();
+                else
+                	validateValue(true);
             }
         });
 

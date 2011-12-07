@@ -288,6 +288,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
                 maskHandler.resume();
             textbox.setMaxLength(maxLength);
             textbox.setAlignment(TextAlignment.LEFT);
+            textbox.setText("");
         }
         logger.finest("Exiting org.openelis.gwt.widget.TextBox.setQueryMode()");
     }
