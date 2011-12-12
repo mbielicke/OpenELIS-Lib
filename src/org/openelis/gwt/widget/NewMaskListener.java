@@ -9,13 +9,15 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 public class NewMaskListener {
 	
 	String mask;
-	TextBox<?> textbox;
+	final TextBox<?> textbox;
 	
-	public NewMaskListener(TextBox<?> textbox, String mask) {
+	public NewMaskListener(TextBox<?> box, String mask) {
 		this.mask = mask;
-		this.textbox = textbox;
+		this.textbox = box;
 		textbox.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent event) {
+				if(!textbox.enforceMask)
+		            return;
 				if(event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || event.getNativeKeyCode() == KeyCodes.KEY_DELETE)
 					return;	
 				
