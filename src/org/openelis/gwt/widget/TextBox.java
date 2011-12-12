@@ -70,7 +70,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     
     public void setMask(String mask) {
         this.mask = mask;
-        new MaskListener(this,mask);
+        new NewMaskListener(this,mask);
         setLength(mask.length()); 
     }
     
