@@ -80,9 +80,9 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     protected WidgetHelper<T>                       helper    = (WidgetHelper<T>)new StringHelper();
 
     /**
-     * Reference to an Implementation of the private class MaskHandler.
+     * Mask to be applied.
      */
-    protected MaskHandler                           maskHandler;
+    protected String                                mask;
 
     public enum Case {
         MIXED, UPPER, LOWER
@@ -113,6 +113,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
                 if (queryMode) {
                     validateQuery();
                 } else
+                	applyMask();
                     validateValue(true);
             }
 
@@ -206,15 +207,18 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      */
     public void setMask(String mask) {
     	logger.finest("Entering org.openelis.gwt.widget.TextBox.setMask() : value = "+mask);
-        // If a maskHandler is in force already, call suspend to remove the old
-        // handler from
-        // listening until it can be cleaned up by the browser garbage
-        // collection.
-        // May not be necessary
-        if (maskHandler != null)
-            maskHandler.suspend();
+    	if(this.mask == null) {
+    		textbox.addKeyUpHandler(new KeyUpHandler() {
+    			public void onKeyUp(KeyUpEvent event) {
+    				if(event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || event.getNativeKeyCode() == KeyCodes.KEY_DELETE)
+    					return;
+				
+    				applyMask();
+    			}
+    		});
+    	}
+    	this.mask = mask;
 
-        maskHandler = new MaskHandler(mask);
         logger.finest("Exiting org.openelis.gwt.widget.TextBox.setMask()");
     }
 
@@ -277,15 +281,11 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         } else if (query) {
         	logger.fine("org.openelis.gwt.widget.TextBox.setQueryMode() : Entering query mode");
             queryMode = true;
-            if (maskHandler != null)
-                maskHandler.suspend();
             textbox.setMaxLength(255);
             textbox.setAlignment(TextAlignment.LEFT);
         } else {
         	logger.fine("org.openelis.gwt.widget.TextBox.setQueryMode() : Exiting query mode");
             queryMode = false;
-            if (maskHandler != null)
-                maskHandler.resume();
             textbox.setMaxLength(maxLength);
             textbox.setAlignment(TextAlignment.LEFT);
             textbox.setText("");
@@ -317,7 +317,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * Sets a query string to this widget when loaded from a table model
      */
     public void setQuery(QueryData qd) {
-    	logger.finest("Entering org.openelis.gwt.widget.TextBox.setQuery() : value = "+qd.getQuery());
+    	logger.finest("Entering org.openelis.gwt.widget.TextBox.setQuery()");
         if(qd != null)
             textbox.setText(qd.getQuery());
         else
@@ -386,6 +386,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         } else {
             textbox.setText("");
         }
+        
+        applyMask();
 
         if (fireEvents) {
         	logger.fine("org.openelis.gwt.widget.TextBox.setValue(T,boolean) : Firing ValueChangeEvent");
@@ -622,199 +624,85 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 		logger.finest("Exiting org.openelis.gwt.widget.TextBox.setLogger(Logger)");
 	}
 
-    // *************** Class to manage Mask handling *********************
-
-    /**
-     * MaskHandler is a private class implementation of basically what was
-     * MaskListener. An instance of this class is only created if setMask is
-     * called on the Textbox
-     * 
-     * @author tschmidt
-     * 
-     */
-    private class MaskHandler implements KeyDownHandler, KeyUpHandler, BlurHandler {
-
-        protected HashSet<String>   literals = new HashSet<String>();
-        protected ArrayList<String> masks    = new ArrayList<String>();
-        protected String            mask;
-
-        /**
-         * References to the HandlerRegistrations so that the mask enforcement
-         * can be suspended for queryMode.
-         */
-        private HandlerRegistration keyUpHandler;
-        private HandlerRegistration keyDownHandler;
-        private HandlerRegistration blurHandler;
-
-        /**
-         * This method sets the mask format for the widget. The string uses the
-         * following chars for formatting:
-         * 
-         * Z - Zero suppression 9 - Character must be a number X - Character can
-         * be anything A - Character must be a letter
-         * 
-         * Any other Characters will be used as literals
-         * 
-         * @param mask
-         */
-        public MaskHandler(String mask) {
-        	masks.add("9");
-        	masks.add("Z");
-        	masks.add("X");
-            this.mask = mask;
-            for (int i = 0; i < mask.length(); i++ ) {
-                if ( !masks.contains(String.valueOf(mask.charAt(i))))
-                    literals.add(String.valueOf(mask.charAt(i)));
-            }
-            resume();
-        }
-
-        /**
-         * Call this method to format the text.
-         */
-        protected void format() {
-            if (textbox.getText().equals(""))
-                return;
-            char[] chars = textbox.getText().toCharArray();
-            String text = "";
-            int i = 0;
-            boolean end = false;
-            while (text.length() < mask.length()) {
-                if (i < chars.length) {
-                    if (literals.contains(String.valueOf(chars[i])) &&
-                        String.valueOf(chars[i])
-                              .equals(String.valueOf(text.charAt(text.length() - 1))))
-                        i++ ;
-                    text += String.valueOf(chars[i]);
-                } else
-                    end = true;
-                text = applyMask(text, end);
-                i++ ;
-            }
-            textbox.setText(text);
-        }
-
-        protected String applyMask(String text, boolean end) {
-            if ("".equals(text))
-                return "";
-            String retText = "";
-            String input = String.valueOf(text.charAt(text.length() - 1));
-            String maskChar = String.valueOf(mask.charAt(text.length() - 1));
-            while (text.length() == 1 && literals.contains(maskChar)) {
-                retText += maskChar;
-                maskChar = String.valueOf(mask.charAt(retText.length()));
-            }
-            retText += text;
-            if (literals.contains(String.valueOf(input)) || end) {
-                int li = text.length();
-                if ( !end) {
-                    while (li < mask.length() && !input.equals(String.valueOf(mask.charAt(li))))
-                        li++ ;
-                } else {
-                    while (li < mask.length() &&
-                           !literals.contains(String.valueOf(mask.charAt(li))))
-                        li++ ;
-                }
-                if (li == mask.length() && !end) {
-                    retText = (text.substring(0, text.length() - 1));
-                    return retText;
-                } else if (li < mask.length() && end) {
-                    text += String.valueOf(mask.charAt(li));
-                }
-                int ss = li - 1;
-                while (ss > 0 && !literals.contains(String.valueOf(mask.charAt(ss - 1))))
-                    ss-- ;
-                int inl = 0;
-                if (ss != text.length()) {
-                    int is = text.length() - 1;
-                    if (literals.contains(String.valueOf(text.charAt(is))))
-                        is-- ;
-                    int iL = 0;
-                    while (is >= 0 && !literals.contains(String.valueOf(text.charAt(is)))) {
-                        iL++ ;
-                        is-- ;
-                    }
-                    inl = (li - ss) - iL;
-                } else {
-                    inl = (li - ss);
-                }
-                for (int i = 0; i < inl; i++ ) {
-                    if (mask.charAt(i + ss) == '9')
-                        text = text.substring(0, ss) + "0" + text.substring(ss, text.length());
-                    else
-                        text = text.substring(0, ss) + '\ufeff' + text.substring(ss, text.length());
-                }
-                retText = text;
-                return retText;
-            }
-            if (checkMask(input, maskChar)) {
-                if (text.length() == mask.length())
-                    return text;
-                while (literals.contains(String.valueOf(mask.charAt(retText.length())))) {
-                    retText += String.valueOf(mask.charAt(retText.length()));
-                }
-                if (input.equals("0") && maskChar.equals("Z"))
-                    retText = text.substring(0, text.length() - 1) + " ";
-            } else {
-                retText = text.substring(0, text.length() - 1);
-            }
-            return retText;
-        }
-
-        protected boolean checkMask(String input, String maskChar) {
-            if (maskChar.equals("9") || maskChar.equals("A")) {
-                try {
-                    Integer.parseInt(input);
-                } catch (Exception e) {
-                    if (maskChar.equals("9"))
-                        return false;
-                }
-                if (mask.equals("A"))
-                    return false;
-            }
-            return true;
-        }
-
-        public void onKeyDown(KeyDownEvent event) {
-            if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE) {
-                if (literals.contains(String.valueOf(textbox.getText().charAt(
-                                                                              textbox.getText()
-                                                                                     .length() - 1))))
-                    textbox.setText(textbox.getText().substring(0, textbox.getText().length() - 1));
-            }
-        }
-
-        public void onKeyUp(KeyUpEvent event) {
-            if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE ||
-                event.getNativeKeyCode() == KeyCodes.KEY_SHIFT) {
-                return;
-            }
-            String text = textbox.getText();
-            if (text.length() > mask.length()) {
-                textbox.setText(text.substring(0, text.length() - 1));
-                return;
-            }
-            textbox.setText(applyMask(text, false));
-        }
-
-        public void onBlur(BlurEvent event) {
-            if (textbox.isReadOnly())
-                return;
-            format();
-        }
-
-        public void suspend() {
-            keyDownHandler.removeHandler();
-            keyUpHandler.removeHandler();
-            blurHandler.removeHandler();
-        }
-
-        public void resume() {
-            keyUpHandler = textbox.addKeyUpHandler(this);
-            keyDownHandler = textbox.addKeyDownHandler(this);
-            blurHandler = textbox.addBlurHandler(this);
-        }
-
-    }
+	private void applyMask() {
+		String input;
+		StringBuffer applied;
+		char mc;
+		int pos;
+		boolean loop;
+		
+		if(mask == null || mask.equals("") || queryMode)
+			return;
+		
+		applied = new StringBuffer();
+		input = textbox.getText();
+		pos = 0;
+		/*
+		 * Loop through input applying mask chars when needed
+		 */
+		for(char in : input.toCharArray()) {
+			if(pos >= mask.length())
+				break;
+			
+			mc = mask.charAt(pos);
+		   
+			do {
+		    	loop = false;
+		    	switch(mc) {
+		    		case '9' :					
+		    			if(Character.isDigit(in)) {  
+		    				applied.append(in);
+		    				pos++;
+		    			}else if(isNextLiteral(in,pos)) {
+		    				applied.insert(applied.length()-1,"0");
+		    				mc = mask.charAt(++pos);
+		    				loop = true;
+		    			}
+		    			break;
+		    		case 'X' :
+		    			if(Character.isLetterOrDigit(in)) {  
+		    				applied.append(in);
+		    				pos++;
+		    			}
+		    			break;
+		    		default :
+		    			applied.append(mc);
+		    			pos++;
+		    			if(mc != in) {
+		    				mc = mask.charAt(pos);
+		    				loop = true;
+		    			}
+		    	}
+			} while(loop && pos < mask.length());
+		}
+		
+		/*
+		 *	Check if Literal characters need to be added to the end of the string 
+		 */
+		if(pos < mask.length()) {
+			mc = mask.charAt(pos);
+			while(mc != 'X' && mc != '9') {
+				applied.append(mc);
+				mc = mask.charAt(++pos);
+			}
+		}
+		
+		
+		textbox.setText(applied.toString());
+	}
+	
+	private boolean isNextLiteral(char in, int pos) {
+		char mc;
+				
+		mc = mask.charAt(pos);
+		while(mc == 'X' || mc == '9') { 
+			pos++;
+			if(pos >= mask.length())
+				break;
+			mc = mask.charAt(pos);
+		}
+		
+		return pos < mask.length() && mc == in;
+	}
 
 }
