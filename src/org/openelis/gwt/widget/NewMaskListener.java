@@ -65,14 +65,17 @@ public class NewMaskListener {
 		    		default :
 		    			applied.append(mc);
 		    			pos++;
-		    			loop = true;
+		    			if(mc != in) {
+		    				mc = mask.charAt(pos);
+		    				loop = true;
+		    			}
 		    	}
-			} while(loop);
+			} while(loop && pos < mask.length());
 		}
 		
 		/*
 		 *	Check if Literal characters need to be added to the end of the string 
-		 */
+		 
 		if(pos < mask.length()) {
 			mc = mask.charAt(pos);
 			while(mc != 'X' && mc != '9') {
@@ -80,6 +83,7 @@ public class NewMaskListener {
 				mc = mask.charAt(++pos);
 			}
 		}
+		*/
 		
 		
 		textbox.setText(applied.toString());
