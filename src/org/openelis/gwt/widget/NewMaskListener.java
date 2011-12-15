@@ -21,12 +21,14 @@ public class NewMaskListener {
 				if(event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || event.getNativeKeyCode() == KeyCodes.KEY_DELETE)
 					return;	
 				
-				applyMask();
+				if(textbox.enforceMask)
+					applyMask();
 			}
 		});
 		textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				applyMask();
+				if(textbox.enforceMask)
+					applyMask();
 				
 			}
 		});
