@@ -3,6 +3,7 @@ package org.openelis.gwt.screen;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -10,7 +11,9 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -28,6 +31,7 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 		
 	public void addShortcutHandler(ShortcutHandler handler) {
 		addDomHandler(handler,KeyPressEvent.getType());
+		handler.panel = this;
 	}
 
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
@@ -56,6 +60,10 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 		FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), this);
 	}
 
+	public void fireChangeEvent() {
+		if(focused != null)
+			ChangeEvent.fireNativeEvent(Document.get().createChangeEvent(), focused);
+	}
 
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
 		return addHandler(handler,FocusEvent.getType());

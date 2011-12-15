@@ -23,6 +23,7 @@ public class ShortcutHandler implements KeyPressHandler {
 	boolean ctrl;
 	boolean shift;
 	boolean alt;
+	protected ScreenPanel panel;
 	
 	public ShortcutHandler(boolean ctrl,boolean shift,boolean alt,char key,Widget wid) {
 		this.ctrl = ctrl;
@@ -46,21 +47,27 @@ public class ShortcutHandler implements KeyPressHandler {
 	}
 	
 	public void onKeyPress(final KeyPressEvent event) {
-		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getNativeEvent().getKeyCode() == key){
+		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getCharCode() == key){
 			if(wid instanceof AppButton) {
 				if(((AppButton)wid).isEnabled() && !((AppButton)wid).isLocked()){
+					panel.fireChangeEvent();
 					((Focusable)wid).setFocus(true);
-					NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
-							wid.getAbsoluteLeft(), 
-							wid.getAbsoluteTop(), 
-							-1, 
-							-1, 
-							event.isControlKeyDown(), 
-							event.isAltKeyDown(), 
-							event.isShiftKeyDown(), 
-							event.isMetaKeyDown());
+					DeferredCommand.addCommand(new Command() {
+						public void execute() {
 					
-					ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+							NativeEvent clickEvent = com.google.gwt.dom.client.Document.get().createClickEvent(0, 
+									wid.getAbsoluteLeft(), 
+									wid.getAbsoluteTop(), 
+									-1, 
+									-1, 
+									false, 
+									false, 
+									false, 
+									false);
+							
+							ClickEvent.fireNativeEvent(clickEvent, (AppButton)wid);
+						}
+					});
 					event.stopPropagation();
 				}
 				event.preventDefault();
