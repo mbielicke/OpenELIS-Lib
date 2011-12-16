@@ -157,12 +157,14 @@ public class Screen extends Composite implements
 				((HasField) def.getWidget(key)).getQuery(list, key);
 			}
 		}
+		/*
 		for(QueryData qd : list) {
 			if(qd.query.startsWith("|")) {
 				qd.query = qd.query.substring(1);
 				qd.logical = QueryData.Logical.OR;
 			}
 		}
+		*/
 		return list;
 	}
 
