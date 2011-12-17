@@ -25,14 +25,23 @@
 */
 package org.openelis.gwt.screen;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.widget.Button;
+import org.openelis.gwt.widget.ScreenWidgetInt;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -48,12 +57,13 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 	 * The currently focused widget
 	 */
 	protected Widget focused;
+	public ArrayList<Shortcut> shortcuts = new ArrayList<Shortcut>();
 	
 	/**
 	 * No-Arg constructor
 	 */
 	public ScreenPanel() {
-
+		setKeyHandling();
 	}
 
 	/**
@@ -106,5 +116,68 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 		return addDomHandler(handler, ClickEvent.getType());
 	}
 
-}
+	public void fireChange() {
+		if(focused != null) 
+			ChangeEvent.fireNativeEvent(Document.get().createChangeEvent(), focused);
+	}
+	
+    public void setKeyHandling() {
+		addDomHandler(new KeyPressHandler() {
+			public void onKeyPress(final KeyPressEvent event) {
+				boolean ctrl,alt,shift;
+				char key;
+				
+				/*
+				 * If no modifier is pressed then return out
+				 */
+				if(!event.isAnyModifierKeyDown())
+					return;
+				
+				ctrl = event.isControlKeyDown();
+				alt = event.isAltKeyDown();
+				shift = event.isShiftKeyDown();
+				key = (char)event.getCharCode();
+				
+				for(final Shortcut handler : shortcuts) {
+					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
+						if(handler.wid instanceof Button) {
+							if(((Button)handler.wid).isEnabled() && !((Button)handler.wid).isLocked()){
+								fireChange();
+								((Focusable)handler.wid).setFocus(true);
+								Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+									
+									@Override
+									public void execute() {
+										NativeEvent clickEvent = Document.get().createClickEvent(0, 
+												handler.wid.getAbsoluteLeft(), 
+												handler.wid.getAbsoluteTop(), 
+												-1, 
+												-1, 
+												false, 
+												false, 
+												false, 
+												false);
+									    
+										ClickEvent.fireNativeEvent(clickEvent, (Button)handler.wid);
+									}
+								});
+
+								event.stopPropagation();
+							}
+							event.preventDefault();
+							event.stopPropagation();
+						}else if(((ScreenWidgetInt)handler.wid).isEnabled()){ 
+							((Focusable)handler.wid).setFocus(true);
+							event.preventDefault();
+							event.stopPropagation();
+						}
+					}
+				}
+			}
+		},KeyPressEvent.getType());
+		
+    }
+	
+
+} 
 

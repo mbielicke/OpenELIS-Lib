@@ -51,6 +51,9 @@ public interface ScreenDefInt {
 	
 	public ArrayList<Shortcut> getShortcuts();
 	
+	public void setShortcuts(ArrayList<Shortcut> shortcuts);
+	
+	
 	public HashMap<Widget,Tab> getTabs();
 
 }

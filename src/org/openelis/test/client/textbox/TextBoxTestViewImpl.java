@@ -57,7 +57,7 @@ public class TextBoxTestViewImpl extends Screen implements TextBoxTestView {
 		mask.setEnabled(true);
 		mask.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setMask(event.getValue());
+				test.getHelper().setMask(event.getValue());
 			}
 		});
 		

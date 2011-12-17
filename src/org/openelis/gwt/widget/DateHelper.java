@@ -20,7 +20,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
     /**
      * Widget value attributes
      */
-    protected String  pattern;
+    protected String  pattern,mask;
     protected byte    begin, end;
     
     /**
@@ -138,6 +138,76 @@ public class DateHelper implements WidgetHelper<Datetime> {
      */
     public byte getEnd() {
     	return end;
+    }
+
+    public void setMask(String mask) {
+    	this.mask = mask;
+    }
+    
+    public String applyMask(String input) {
+		StringBuffer applied;
+		char mc;
+		int pos;
+		boolean loop;
+		
+		if(mask == null || mask.equals(""))
+			return null;
+		
+		applied = new StringBuffer();
+		pos = 0;
+		/*
+		 * Loop through input applying mask chars when needed
+		 */
+		for(char in : input.toCharArray()) {
+			if(pos >= mask.length())
+				break;
+			
+			mc = mask.charAt(pos);
+		   
+			do {
+		    	loop = false;
+		    	switch(mc) {
+		    		case '9' :					
+		    			if(Character.isDigit(in)) {  
+		    				applied.append(in);
+		    				pos++;
+		    			}else if(isNextLiteral(in,pos)){
+		    				applied.insert(applied.length()-1,"0");
+		    				mc = mask.charAt(++pos);
+		    				loop = true;
+		    			}
+		    			break;
+		    		case 'X' :
+		    			if(Character.isLetterOrDigit(in)) {  
+		    				applied.append(in);
+		    				pos++;
+		    			}
+		    			break;
+		    		default :
+		    			applied.append(mc);
+		    			pos++;
+		    			if(mc != in) {
+		    				mc = mask.charAt(pos);
+		    				loop = true;
+		    			}
+		    	}
+			} while(loop && pos < mask.length());
+		}
+		
+		return applied.toString();
+    }
+    
+    private boolean isNextLiteral(char in, int pos) {
+    	char mc;
+    	
+    	mc = mask.charAt(pos);
+    	while(pos < mask.length() && (mc == '9' || mc == 'X')) {
+    		pos++;
+    		mc = mask.charAt(pos);
+    	}
+    	
+    	return pos < mask.length() && mc == in;
+    	
     }
 
 }

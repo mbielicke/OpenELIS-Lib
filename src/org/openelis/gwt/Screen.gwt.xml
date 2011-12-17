@@ -30,7 +30,24 @@ UIRF Software License are applicable instead of those above.
   
   <stylesheet src="CSS/screen.css"/>
  
-  	  <generate-with class="org.openelis.gwt.server.UIGenerator">
-        <when-type-assignable class="org.openelis.gwt.screen.ScreenDefInt"/>
-      </generate-with>
+  <generate-with class="org.openelis.gwt.server.UIGenerator">
+     <when-type-assignable class="org.openelis.gwt.screen.ScreenDefInt"/>
+  </generate-with>
+  
+  <replace-with class="org.openelis.gwt.widget.BrowserChromeImpl">
+     <when-type-is class="org.openelis.gwt.widget.Browser"/>
+     <when-property-is name="user.agent" value="safari"/>
+  </replace-with>
+  
+  <replace-with class="org.openelis.gwt.widget.WindowChromeImpl">
+     <when-type-is class="org.openelis.gwt.widget.Window"/>
+     <when-property-is name="user.agent" value="safari"/>
+  </replace-with>
+  
+  <replace-with class="org.openelis.gwt.screen.ScreenPanelChromeImpl">
+     <when-type-is class="org.openelis.gwt.screen.ScreenPanel"/>
+     <when-property-is name="user.agent" value="safari"/>
+  </replace-with>  
+  
+  
 </module>

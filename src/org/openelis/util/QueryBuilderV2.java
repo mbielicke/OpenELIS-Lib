@@ -14,10 +14,12 @@ import org.openelis.gwt.common.MetaMap;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.QueryFieldUtil;
 
+import sun.security.action.GetLongAction;
+
 public class QueryBuilderV2 {
 	private String selectStatement = "";
     private HashMap<String, Meta> fromTables = new HashMap<String, Meta>();
-	private ArrayList whereOperands = new ArrayList();
+	private ArrayList<WhereClause> whereOperands = new ArrayList<WhereClause>();
 	private String orderByStatement = "";
     private MetaMap meta;
 	
@@ -145,6 +147,7 @@ public class QueryBuilderV2 {
      * @throws Exception
      */
     public void constructWhere(ArrayList<QueryData> fields) throws Exception{
+    	WhereClause whereClause;
     	for (QueryData field : fields){
             boolean columnFound = meta.hasColumn(field.getKey());
 
@@ -153,8 +156,11 @@ public class QueryBuilderV2 {
             
             QueryFieldUtil qField = new QueryFieldUtil();
             qField.parse(field.getQuery());
-            String whereClause = getQueryNoOperand(qField, field.getKey());
-            if(!"".equals(whereClause)){
+            String where = getQueryNoOperand(qField, field.getKey());
+            if(!"".equals(where)){
+            	whereClause = new WhereClause();
+            	whereClause.clause = where;
+            	whereClause.logical = field.getLogical();
                 whereOperands.add(whereClause);		
             }
         }
@@ -165,7 +171,16 @@ public class QueryBuilderV2 {
      * @param whereStatement
      */
     public void addWhere(String whereStatement){
-    	whereOperands.add(whereStatement);
+    	addWhere(whereStatement,QueryData.Logical.AND);
+    }
+    
+    public void addWhere(String whereStatement,QueryData.Logical logical) {
+    	WhereClause whereClause;
+    	
+    	whereClause = new WhereClause();
+    	whereClause.clause = whereStatement;
+    	whereClause.logical = logical;
+    	whereOperands.add(whereClause);
     }
     
     /**
@@ -270,16 +285,28 @@ public class QueryBuilderV2 {
      * @return
      */
     public String getWhereClause(){
-        String returnString = "";
+        StringBuffer returnString = new StringBuffer();
         if(whereOperands.size() > 0){
-            returnString = " WHERE ";
-            for(int j=0; j < whereOperands.size(); j++)
+            returnString.append(" WHERE ");
+            for(int j = 0; j < whereOperands.size(); j++) {
+            	if(whereOperands.get(j).logical == QueryData.Logical.OR)
+            		continue;
                 if(j>0)
-                    returnString += " and ("+whereOperands.get(j)+") ";
+                    returnString.append(" and ("+whereOperands.get(j).clause+") ");
                 else
-                    returnString += "("+whereOperands.get(j)+") ";
+                    returnString.append("(("+whereOperands.get(j).clause+")");
+            }
+            returnString.append(")");
+            for(int j = 0; j < whereOperands.size(); j++) {
+            	if(whereOperands.get(j).logical == QueryData.Logical.AND)
+            		continue;
+            	if(returnString.length() > 7) 
+            		returnString.append(" or ("+whereOperands.get(j).clause+") ");
+            	else
+            		returnString.append("("+whereOperands.get(j).clause+")");
+            }
         }
-        return returnString;
+        return returnString.toString();
     }
     
     /**
@@ -490,5 +517,38 @@ public class QueryBuilderV2 {
     		}
     		i++;
     	}
+    }
+    
+    public static String securityParser(String clause) {
+    	StringBuffer qc;
+    	
+    	qc = new StringBuffer("(");
+    	for(char c : clause.toCharArray()){
+    		switch(c) {
+    			case ':' :
+    				qc.append(" in (");
+    				break;
+    			case ';' :
+    				qc.append(")");
+    				break;
+    			case '&' :
+    				qc.append(" and ");
+    				break;
+    			case '|' :
+    				qc.append(" or ");
+    			    break;
+    			default :
+    				qc.append(c);
+    		}
+    	}
+    	qc.append(")");
+    	
+    	return qc.toString();
+    		
+    }
+    
+    private class WhereClause {
+    	protected String clause;
+    	protected QueryData.Logical logical;
     }
 }

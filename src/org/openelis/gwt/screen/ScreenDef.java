@@ -47,6 +47,8 @@ public class ScreenDef implements ScreenDefInt {
 	 * Name of the screen to display in Window Caption
 	 */
 	protected String name;
+	
+	protected ArrayList<Shortcut> shortcuts;
 
 	/**
 	 * No-Arg constructor
@@ -54,6 +56,7 @@ public class ScreenDef implements ScreenDefInt {
 	public ScreenDef() {
 		widgets = new HashMap<String,Widget>();
 		panel = new ScreenPanel();
+		shortcuts = new ArrayList<Shortcut>();
 	}
 	
 	/**
@@ -108,12 +111,18 @@ public class ScreenDef implements ScreenDefInt {
 	@Override
 	public ArrayList<Shortcut> getShortcuts() {
 		// TODO Auto-generated method stub
-		return null;
+		return shortcuts;
 	}
 
 	@Override
 	public HashMap<Widget, Tab> getTabs() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setShortcuts(ArrayList<Shortcut> shortcuts) {
+		this.shortcuts = shortcuts;
+		
 	}
 }

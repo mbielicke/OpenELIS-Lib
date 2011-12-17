@@ -110,4 +110,16 @@ public class IntegerHelper implements WidgetHelper<Integer> {
 	    this.pattern = pattern;
 	}
 
+	@Override
+	public void setMask(String mask) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String applyMask(String input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

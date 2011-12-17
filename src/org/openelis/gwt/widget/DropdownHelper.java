@@ -57,4 +57,16 @@ public class DropdownHelper<T> implements WidgetHelper<T> {
         this.renderer = renderer;
     }
 
+	@Override
+	public void setMask(String mask) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String applyMask(String input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

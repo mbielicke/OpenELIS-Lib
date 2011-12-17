@@ -38,8 +38,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -281,17 +281,7 @@ public class Window extends FocusPanel implements WindowInt {
             setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus("Done","");
-            
-            /**
-             * This handler is added to forward the key press event if received by the window 
-             * down to the screen.
-             */
-            addDomHandler(new KeyDownHandler() {
-             	 public void onKeyDown(KeyDownEvent event) {
-            		 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), content);   
-            	 }
-            },KeyDownEvent.getType());
-            
+            setKeyHandling();
         }
         
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
@@ -301,6 +291,18 @@ public class Window extends FocusPanel implements WindowInt {
                 setFocus(true);
 			}
 		});
+    }
+    
+    public void setKeyHandling() {
+        /**
+         * This handler is added to forward the key press event if received by the window 
+         * down to the screen.
+         */
+        addDomHandler(new KeyPressHandler() {
+         	 public void onKeyPress(KeyPressEvent event) {
+        		 KeyPressEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());   
+        	 }
+        },KeyPressEvent.getType());
     }
     
     public void setName(String name) {

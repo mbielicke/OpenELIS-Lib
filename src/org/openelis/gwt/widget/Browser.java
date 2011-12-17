@@ -32,12 +32,12 @@ import org.openelis.gwt.screen.Screen;
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -86,6 +86,9 @@ public class Browser extends Composite {
      */
     protected FocusPanel focusedWindow;
     
+    public Browser() {
+    	
+    }
     
     /**
      * Constructor that takes an arguments if the browser should auto-size to the window,
@@ -94,6 +97,11 @@ public class Browser extends Composite {
      * @param limit
      */
     public Browser(boolean size, int limit) {
+    	init(size,limit);
+    }
+    
+    public void init(boolean size, int limit) {
+    	System.out.println(com.google.gwt.user.client.Window.Navigator.getUserAgent());
         browser = new AbsolutePanel();
         windows = new HashMap<Window, WindowValues>();
         windowsByKey = new HashMap<String,Window>();
@@ -132,15 +140,19 @@ public class Browser extends Composite {
 			});
         }
         
+        setKeyHandling();
+    }
+    
+    public void setKeyHandling() {
         /**
          * This handler is added to forward the key press event on to the focused window if received by the browser
          */
-        addDomHandler(new KeyDownHandler() {
-        	public void onKeyDown(KeyDownEvent event) {
-   				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+        addDomHandler(new KeyPressHandler() {
+        	public void onKeyPress(KeyPressEvent event) {
+   				KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
         		
         	}
-        },KeyDownEvent.getType());
+        },KeyPressEvent.getType());
     } 
     
     /**
@@ -185,7 +197,7 @@ public class Browser extends Composite {
          * Create a ScreenWindow and add the passed Screen to it to be added to the
          * browser.
          */
-        Window window = new Window();
+        Window window = (Window)GWT.create(Window.class);
         window.setContent(screen);
         screen.setWindow(window);
         addWindow(window,key);
@@ -220,6 +232,8 @@ public class Browser extends Composite {
     	});
     	window.makeDragable(dragController);
     	setFocusedWindow();
+    	focusedWindow = window;
+    	window.setFocus(true);
     }
     
     /**
@@ -271,6 +285,7 @@ public class Browser extends Composite {
     		}else{
     			wid.removeStyleName("unfocused");
     			focusedWindow = wid;
+    			wid.setFocus(true);
     		}
     	}
     }

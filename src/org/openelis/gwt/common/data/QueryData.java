@@ -39,23 +39,28 @@ public class QueryData implements RPC {
 	 * Enum declaring the data type for this query
 	 */
 	public enum Type {STRING,INTEGER,DOUBLE,DATE}
+	public enum Logical {AND,OR}
 	
 	protected Type type;
 	protected String query;
 	protected String key;
+	protected Logical logical;
+	
 	
 	public QueryData() {
-		
+		setLogical(Logical.AND);
 	}
 	
 	public QueryData(Type type, String query) {
-		this.type = type;
-		this.query = query;
+		this();
+		setType(type);
+		setQuery(query);
+		
 	}
 	
 	public QueryData(String key, Type type, String query) {
 		this(type,query);
-		this.key = key;
+		setKey(key);
 	}
 	
 	public void setType(Type type) {
@@ -66,8 +71,20 @@ public class QueryData implements RPC {
 		return type;
 	}
 	
+	public Logical getLogical() {
+		return logical;
+	}
+	
+	public void setLogical(Logical logical) {
+		this.logical = logical;
+	}
+	
 	public void setQuery(String query) {
-		this.query = query;
+		if(query.startsWith("|")) {
+			setLogical(Logical.OR);
+			this.query = query.substring(1);
+		}else
+			this.query = query;
 	}
 	
 	public String getQuery() {

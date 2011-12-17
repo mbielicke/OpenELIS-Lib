@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -55,6 +56,9 @@ public class UIGenerator extends Generator {
 	
 	private void generateClass(TreeLogger logger, GeneratorContext context) throws Exception {
 		PrintWriter printWriter = null;
+		InputStream  xsl;
+	
+		String props = null;
 		
 		printWriter = context.tryCreate(logger, packageName, className+"_"+lang);
 		
@@ -63,8 +67,12 @@ public class UIGenerator extends Generator {
 		
 		System.out.println("Generating "+className+".xsl");
 		
-		InputStream  xsl = context.getResourcesOracle().getResourceMap().get(packageName.replaceAll("\\.","/")+"/"+className+".xsl").openContents();
-		String props = context.getPropertyOracle().getSelectionProperty(logger,"props").getCurrentValue().replaceAll("_","\\.");
+		xsl = context.getResourcesOracle().getResourceMap().get(packageName.replaceAll("\\.","/")+"/"+className+".xsl").openContents();
+		try {
+			props = context.getPropertyOracle().getSelectionProperty(logger, "props").getCurrentValue().replaceAll("_","\\.");
+		}catch(BadPropertyValueException e) {
+			
+		}
     	doc = XMLUtil.parse(ServiceUtils.getGeneratorXML(xsl,props,lang));
 		
     	composer = new ClassSourceFileComposerFactory(packageName,className+"_"+lang);
@@ -84,6 +92,8 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.IntegerHelper");
         composer.addImport("org.openelis.gwt.widget.LongHelper");
         composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+        composer.addImport("com.google.gwt.user.client.Window");
+        composer.addImport("com.google.gwt.core.client.GWT");
         composer.addImport("org.openelis.gwt.common.Util");
 
         findImports(doc.getElementsByTagName("screen").item(0));
@@ -107,7 +117,7 @@ public class UIGenerator extends Generator {
 		sw.println("widgets = new HashMap<String,Widget>();");
 		sw.println("tabs = new HashMap<Widget,Tab>();");
 		sw.println("shortcuts = new ArrayList<Shortcut>();");
-		sw.println("panel = new ScreenPanel();");
+		sw.println("panel = (ScreenPanel)GWT.create(ScreenPanel.class);");
 		sw.println("createPanel();");
 		sw.println("}");
 		
@@ -134,6 +144,9 @@ public class UIGenerator extends Generator {
 		sw.println("}");
 		sw.println("public ArrayList<Shortcut> getShortcuts() {");
 		sw.println("return shortcuts;");
+		sw.println("}");
+		sw.println("public void setShortcuts(ArrayList<Shortcut> shortcuts) {");
+		sw.println("this.shortcuts = shortcuts;");
 		sw.println("}");
 		sw.println("public HashMap<Widget,Tab> getTabs() {");
 		sw.println("return tabs;");
@@ -308,9 +321,9 @@ public class UIGenerator extends Generator {
     	if(keys.contains("alt"))
     		alt = "true";
     	
-    	key = shortcut.charAt(shortcut.length()-1);
+    	key = keys.get(keys.size()-1).charAt(0);
     	
-    	sw.println("shortcuts.add(new Shortcut("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
+    	sw.println("panel.shortcuts.add(new Shortcut("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
     }	
     
     public void addTabHandler(Node node,String wid) {
@@ -352,9 +365,9 @@ public class UIGenerator extends Generator {
     	                	count--;
     	                	continue;
     	                }
-    	                x = getAttribute(node,"x","-1");
-    	                y = getAttribute(node,"y","-1");
-    	                align = getAttribute(node,"align");
+    	                x = getAttribute(widget,"x","-1");
+    	                y = getAttribute(widget,"y","-1");
+    	                align = getAttribute(widget,"align");
     	                
     	                if(align != null)
     	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+align+"\");");
@@ -461,7 +474,8 @@ public class UIGenerator extends Generator {
     			sizeToWindow = getAttribute(node,"sizeToWindow","false");
     			limit = getAttribute(node,"winLimit","10");
     			
-    			sw.println("Browser wid"+id+" = new Browser("+sizeToWindow+","+limit+");");
+    			sw.println("Browser wid"+id+" = (Browser)GWT.create(Browser.class);");
+    			sw.println("wid"+id+".init("+sizeToWindow+","+limit+");");
     	        sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
     	        setDefaults(node,"wid"+id);
     		}
@@ -656,16 +670,20 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Date", new Factory() {
             public void getNewInstance(Node node, int id){
-            	String begin,end,pattern;
+            	String begin,end,pattern,mask;
             	
             	begin = getAttribute(node,"begin","0");
             	end = getAttribute(node,"end","2");
             	pattern = getAttribute(node,"pattern","yyyy-MM-dd");
+            	mask = getAttribute(node,"mask",null);
             	
                 sw.println("DateHelper field"+id+" = new DateHelper();");
                 sw.println("field"+id+".setBegin((byte)"+begin+");");
                 sw.println("field"+id+".setEnd((byte)"+end+");");
                 sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+                if(mask != null) 
+                	sw.println("field"+id+".setMask(\""+mask+"\");");
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.DateHelper");
@@ -791,14 +809,18 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Double", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String pattern;
+            	String pattern,mask;
             	 
             	pattern = getAttribute(node,"pattern");
+            	mask = getAttribute(node,"mask");
 
                 sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
                 
                 if (pattern != null) 
                     sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+                if (mask != null)
+                	sw.println("field"+id+".setMask(\""+mask+"\");");
                 
             }
             public void addImport() {
@@ -1203,14 +1225,18 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Long", new Factory(){
             public void getNewInstance(Node node,int id) {
-            	String pattern;
+            	String pattern,mask;
             	
             	pattern = getAttribute(node,"pattern");
+            	mask = getAttribute(node,"mask");
             	
                 sw.println("LongHelper field"+id+" = new LongHelper();");
                 
                 if (pattern != null) 
                     sw.println("field"+id+".setPattern(\""+pattern+"\");");
+                
+                if (mask != null)
+                	sw.println("field"+id+".setMask(\""+mask+"\");");
                 
             }
             public void addImport() {
@@ -1524,7 +1550,14 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("String", new Factory() {
             public void getNewInstance(Node node, int id) {
+            	String mask;
+            	
+            	mask = getAttribute(node,"mask");
+            	
                 sw.println("StringHelper field"+id+" = new StringHelper();");
+                
+                if (mask != null)
+                	sw.println("field"+id+".setMask(\""+mask+"\");");
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
@@ -1907,13 +1940,12 @@ public class UIGenerator extends Generator {
 
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
-				String field,fcase,max,textAlign,mask,required,enabled,cField;
+				String field,fcase,max,textAlign,required,enabled,cField;
 				
 				cField = (field = getAttribute(node,"field","String")).equals("Date") ? "Datetime" : field;
 				fcase = getAttribute(node,"case","MIXED");
 				max = getAttribute(node,"max");
 				textAlign = getAttribute(node,"textAlign","LEFT");
-				mask = getAttribute(node,"mask");
 				required = getAttribute(node,"required");
 				enabled = getAttribute(node,"enabled");
 				
@@ -1941,10 +1973,7 @@ public class UIGenerator extends Generator {
 					}
 				}
 				*/
-				
-				if (mask != null) 
-					sw.println("wid"+id+".setMask(\""+mask+"\");");
-				
+								
 				if(required != null)
 					sw.println("wid"+id+".setRequired("+required+");");
 				

@@ -42,6 +42,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -82,6 +84,7 @@ public class Calendar extends TextBox<Datetime> {
      */
     @Override
     public void init() {
+    	
         /*
          * Final instance of this class used Anonymous handlers
          */
@@ -103,7 +106,7 @@ public class Calendar extends TextBox<Datetime> {
 
         hp.add(textbox);
         hp.add(button);
-
+        
         initWidget(hp);
 
         hp.setStyleName("Calendar");
@@ -143,6 +146,31 @@ public class Calendar extends TextBox<Datetime> {
          * Registers the keyboard handling this widget
          */
         addHandler(keyHandler, KeyDownEvent.getType());
+        
+        textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
+            /*
+             * This event calls validate(true) so that that the valueChangeEvent
+             * for the HasValue<T> interface will be fired. In Query mode it
+             * will validate the query string through the helper class
+             */
+            public void onValueChange(ValueChangeEvent<String> event) {
+                if (queryMode) {
+                    validateQuery();
+                } else
+                	helper.applyMask(event.getValue());
+                    validateValue(true);
+            }
+
+        });
+		textbox.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {
+				if(queryMode || event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || 
+						        event.getNativeKeyCode() == KeyCodes.KEY_DELETE)
+					return;
+			
+				textbox.setText(helper.applyMask(textbox.getText()));
+			}
+		});
 
     }
 
@@ -321,11 +349,11 @@ public class Calendar extends TextBox<Datetime> {
     	 */
     	dh = (DateHelper)helper;
     	if(dh.getBegin() > Datetime.DAY)
-    		setMask("99:99");
+    		dh.setMask("99:99");
     	else if (dh.getEnd() < Datetime.HOUR)
-    		setMask("9999-99-99");
+    		dh.setMask("9999-99-99");
     	else 
-    		setMask("9999-99-99 99:99");
+    		dh.setMask("9999-99-99 99:99");
     	
     }
 

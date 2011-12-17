@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This class sets up a listener for a combination of keys to use a shortcut to widgets on a screen
  *
  */
-public class Shortcut  {
+public class Shortcut {
 
 	/**
 	 * Flag if ctrl key is part of combination

@@ -53,6 +53,7 @@ import org.openelis.gwt.widget.TabPanel;
 import org.openelis.gwt.widget.WindowInt;
 import org.openelis.gwt.widget.table.Table;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -114,78 +115,8 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * No arg constructor will initiate a blank panel and new FormRPC
      */
     public Screen() {
-		addDomHandler(new KeyPressHandler() {
-			public void onKeyPress(final KeyPressEvent event) {
-				boolean ctrl,alt,shift;
-				char key;
-				
-				/*
-				 * If no modifier is pressed then return out
-				 */
-				if(!event.isAnyModifierKeyDown())
-					return;
-				
-				ctrl = event.isControlKeyDown();
-				alt = event.isAltKeyDown();
-				shift = event.isShiftKeyDown();
-				key = (char)event.getCharCode();
-				
-				for(Shortcut handler : def.getShortcuts()) {
-					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
-						if(handler.wid instanceof Button) {
-							if(((Button)handler.wid).isEnabled() && !((Button)handler.wid).isLocked()){
-								((Focusable)handler.wid).setFocus(true);
-								NativeEvent clickEvent = Document.get().createClickEvent(0, 
-										handler.wid.getAbsoluteLeft(), 
-										handler.wid.getAbsoluteTop(), 
-										-1, 
-										-1, 
-										ctrl, 
-										alt, 
-										shift, 
-										event.isMetaKeyDown());
-							    
-								ClickEvent.fireNativeEvent(clickEvent, (Button)handler.wid);
-								event.stopPropagation();
-							}
-							event.preventDefault();
-							event.stopPropagation();
-						}else if(((ScreenWidgetInt)handler.wid).isEnabled()){ 
-							((Focusable)handler.wid).setFocus(true);
-							event.preventDefault();
-							event.stopPropagation();
-						}
-					}
-				}
-			}
-		},KeyPressEvent.getType());
-		
-		/*
-		addDomHandler(new KeyPressHandler() {
-			public void onKeyPress(KeyPressEvent event) {
-				boolean ctrl,alt,shift;
-				char key;
-				
-				/*
-				 * If no modifier is pressed then return out
-		
-				if(!event.isAnyModifierKeyDown())
-					return;
-				
-				ctrl = event.isControlKeyDown();
-				alt = event.isAltKeyDown();
-				shift = event.isShiftKeyDown();
-				key = (char)event.getCharCode();
-				
-				for(Shortcut handler : def.getShortcuts()) {
-					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
-						event.preventDefault();
-						event.stopPropagation();
-					}
-				}
-			}
-		},KeyPressEvent.getType());
-	    */	
+    	//setKeyHandling();
+
 		addDomHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -237,6 +168,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
 			}
 		},KeyDownEvent.getType());
     }
+
 
     /**
      * Constructor that creates the Screen with the passed Defintion

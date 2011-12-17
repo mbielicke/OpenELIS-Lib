@@ -521,7 +521,7 @@ public class ReportScreen extends Screen {
 		t.setHelper(f);
 
 		if (p.getMask() != null)
-			t.setMask(p.getMask());
+			f.setMask(p.getMask());
 		if (p.getLength() != null)
 			t.setMaxLength(p.getLength());
 		if (p.getCase() == Prompt.Case.LOWER)
