@@ -121,7 +121,7 @@ public class DoubleHelper implements WidgetHelper<Double> {
 		boolean loop;
 		
 		if(mask == null || mask.equals(""))
-			return null;
+			return input;
 		
 		applied = new StringBuffer();
 		pos = 0;
