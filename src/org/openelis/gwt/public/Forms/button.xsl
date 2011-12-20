@@ -78,9 +78,24 @@ version="1.0">
     <button key="commit" icon="CommitButtonImage" text="{resource:getString($constants,'btn.commit')}" action="commit" style="ButtonPanelButton" shortcut="ctrl+m"/>
 </xsl:template>
 
+<!-- process button template -->
+<xsl:template name="processButton">
+    <button key="process" icon="ProcessButtonImage" text="{resource:getString($constants,'btn.process')}" action="add" style="ButtonPanelButton" shortcut="ctrl+a"/>
+</xsl:template>
+
 <!-- abort button template -->
 <xsl:template name="abortButton">
 	<button key="abort" icon="AbortButtonImage" text="{resource:getString($constants,'btn.abort')}" action="abort" style="ButtonPanelButton" shortcut="ctrl+o"/>
+</xsl:template>
+
+<!-- ok button template -->
+<xsl:template name="okButton">
+	<button key="ok" icon="CommitButtonImage" text="{resource:getString($constants,'btn.ok')}" action="ok" style="ButtonPanelButton"/>
+</xsl:template>
+
+<!-- cancel button template -->
+<xsl:template name="cancelButton">
+	<button key="cancel" icon="AbortButtonImage" text="{resource:getString($constants,'btn.cancel')}" action="cancel" style="ButtonPanelButton"/>
 </xsl:template>
 
 <!-- duplicate menu item-->
@@ -90,6 +105,30 @@ version="1.0">
 		<xsl:with-param name="label">btn.duplicateRecord</xsl:with-param>
 		<xsl:with-param name="enabled">false</xsl:with-param>
 	</xsl:call-template>
+</xsl:template>
+
+<!-- history menu item-->
+<xsl:template name="historyMenuItem">
+	<xsl:call-template name="menuItem">
+		<xsl:with-param name="key">history</xsl:with-param>
+		<xsl:with-param name="label">history</xsl:with-param>
+		<xsl:with-param name="enabled">false</xsl:with-param>
+	</xsl:call-template>
+</xsl:template>
+
+<!-- popup transfer button template -->
+<xsl:template name="popupTransferButton">
+   <button key="popupTransfer" icon="CommitButtonImage" text="{resource:getString($constants,'btn.transfer')}" action="commit" style="Button"/>
+</xsl:template>
+
+<!-- select button template -->
+<xsl:template name="selectButton">
+	<button key="select" icon="CommitButtonImage" text="{resource:getString($constants,'btn.select')}" action="select" style="ButtonPanelButton" />
+</xsl:template>
+
+<!-- print button template -->
+<xsl:template name="printButton">
+	<button key="print" icon="PrintButtonImage" text="{resource:getString($constants,'btn.print')}" action="print" style="ButtonPanelButton"/>
 </xsl:template>
 
 <!-- buttonpanel divider template -->
@@ -111,7 +150,7 @@ version="1.0">
     <xsl:param name="enabled"/>
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
   	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
-	          icon="{$key}Icon"
+	          icon="{$label}Icon"
 	   		  display="{resource:getString($constants,$label)}"
 	          description="{resource:getString($constants,$descrip)}"/>
   </xsl:template>
