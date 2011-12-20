@@ -349,12 +349,16 @@ public class UIGenerator extends Generator {
     			Node widget;
     			
     			overflow = getAttribute(node,"overflow");
+    			align = getAttribute(node,"align");
     			
     			sw.println("AbsolutePanel wid"+id+" = new AbsolutePanel();");
     	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
     	        
     	        if(overflow != null)
     	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),"+overflow+");");
+    	        
+                if(align != null)
+                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+align+"\");");
     	        
     	        widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
@@ -367,10 +371,6 @@ public class UIGenerator extends Generator {
     	                }
     	                x = getAttribute(widget,"x","-1");
     	                y = getAttribute(widget,"y","-1");
-    	                align = getAttribute(widget,"align");
-    	                
-    	                if(align != null)
-    	                    sw.println("DOM.setElementProperty(wid"+id+".getElement(),\"align\",\""+align+"\");");
     	                
     	                sw.println("wid"+id+".add(wid"+child+","+x+","+y+");");
     	            }
