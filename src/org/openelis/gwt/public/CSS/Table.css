@@ -5,7 +5,7 @@
 	font-size: 10px;
 	table-layout : fixed;	
 	spacing : 0px;
-	padding : 0;
+	padding : 0px;
 	border-collapse : collapse;
 	border : 0px solid white;
 }
@@ -75,17 +75,18 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 	white-space : nowrap;
 	border-color: #B5B8C8;
 	border-style: solid;
-	border-width: 0px 0px 0px 1px;
-	padding : 0px 2px 4px 2px;
+	border-width: 0px 0px 1px 1px;
+	padding : 0px 2px 2px 2px;
+	background-color : #f1f2f4;
 	color: grey;
-    background: transparent url("../Images/headersprite.gif") 0 1px repeat-x;
 	cursor: pointer;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 }
 
 .Header td.First {
-	border-width: 0px 0px 0px 0px;
+	border-width: 0px 0px 1px 0px;
+	border-color: #B5B8C8;
 }
 
 .Header td.Filtered {

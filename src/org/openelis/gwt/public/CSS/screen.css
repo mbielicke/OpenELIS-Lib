@@ -8,6 +8,10 @@ td {outline:0px;}
 
 div{outline:0px;}
 
+input {
+	box-sizing : border-box; 
+}
+
 .Disabled{
     cursor:default;
 }
@@ -838,67 +842,68 @@ background:none;
 }
 
 .addTestButtonImage{background:url("../Images/calculator_add.png") no-repeat;}
-.disabled .addTestButtonImage{background:url("../Images/calculator_adddisabled.png") no-repeat;}
+.Disabled .addTestButtonImage{background:url("../Images/calculator_adddisabled.png") no-repeat;}
 
 .cancelTestButtonImage{background:url("../Images/calculator_delete.png") no-repeat;}
-.disabled .cancelTestButtonImage{background:url("../Images/calculator_deletedisabled.png") no-repeat;}
+.Disabled .cancelTestButtonImage{background:url("../Images/calculator_deletedisabled.png") no-repeat;}
 
 .expandButtonImage{background:url("../Images/arrow_out.png") no-repeat;}
-.disabled .expandButtonImage{background:url("../Images/arrow_outdisabled.png") no-repeat;}
+.Disabled .expandButtonImage{background:url("../Images/arrow_outdisabled.png") no-repeat;}
 
 .collapseButtonImage{background:url("../Images/arrow_in.png") no-repeat;}
-.disabled .collapseButtonImage{background:url("../Images/arrow_indisabled.png") no-repeat;}
+.Disabled .collapseButtonImage{background:url("../Images/arrow_indisabled.png") no-repeat;}
 
 .similarButtonImage{background:url("../Images/find.png") no-repeat;}
-.disabled .similarButtonImage{background:url("../Images/finddisabled.png") no-repeat;}
+.Disabled .similarButtonImage{background:url("../Images/finddisabled.png") no-repeat;}
 
-
+/*
 .Disabled .QueryButtonImage, .Disabled .PreviousButtonImage, .Disabled .NextButtonImage, .Disabled .AddButtonImage, .Disabled .UpdateButtonImage, .Disabled .DeleteButtonImage, 
 .Disabled .CommitButtonImage, .Disabled .AbortButtonImage, .Disabled .OptionsButtonImage{
     background:none;
     cursor:default;
 }
+*/
 
 .privateWellWaterSampleLoginIcon{background:url("../Images/house.png") no-repeat;}
 
 .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
-.disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
+.Disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
 .pressed .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
 
 .PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
-.disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
+.Disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
 
 .NextButtonImage{background:url("../Images/nextbuttonimage.gif") no-repeat;}
-.disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
+.Disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
 
 .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
-.disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+.Disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
 .pressed .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
 
 .AddButtonIcon{background:url("../Images/addButtonIcon.png") no-repeat;}
-.disabled .AddButtonIcon{background:url("../Images/addButtonIcondisabled.png") no-repeat;}
+.Disabled .AddButtonIcon{background:url("../Images/addButtonIcondisabled.png") no-repeat;}
 
 .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
-.disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
+.Disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
 .pressed .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
 
 .DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
-.disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+.Disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
 
 .DeleteButtonIcon{background:url("../Images/deleteButtonIcon.png") no-repeat;}
-.disabled .DeleteButtonIcon{background:url("../Images/deleteButtonIcondisabled.png") no-repeat;}
+.Disabled .DeleteButtonIcon{background:url("../Images/deleteButtonIcondisabled.png") no-repeat;}
 
 .CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
-.disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
+.Disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
 
 .ProcessButtonImage{background:url("../Images/cart_go.png") no-repeat;}
-.disabled .ProcessButtonImage{background:url("../Images/cart_godisabled.png") no-repeat;}
+.Disabled .ProcessButtonImage{background:url("../Images/cart_godisabled.png") no-repeat;}
 
 .AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
-.disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
+.Disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
 
 .OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;width :20px;height : 20px;}
-.disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
+.Disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
 
 .duplicateRecordIcon{
     width:16px;

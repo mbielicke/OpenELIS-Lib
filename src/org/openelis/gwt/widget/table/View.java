@@ -266,15 +266,6 @@ public class View extends Composite {
         }
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
-        // ********** Create and attach Header **************
-        if (table.hasHeader() && header == null) {
-            header = new Header(table);
-            inner.insert(header, 0);
-        } else if ( !table.hasHeader() && header != null) {
-            inner.remove(0);
-            header = null;
-        } else if( table.hasHeader() && header != null)
-        	header.layout();
 
         // **** Vertical ScrollBar **************
         if (table.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {
@@ -310,6 +301,16 @@ public class View extends Composite {
                 createRow(i);
 
             rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
+            
+            // ********** Create and attach Header **************
+            if (table.hasHeader() && header == null) {
+                header = new Header(table);
+                inner.insert(header, 0);
+            } else if ( !table.hasHeader() && header != null) {
+                inner.remove(0);
+                header = null;
+            } else if( table.hasHeader() && header != null)
+            	header.layout();
             
             scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
                         

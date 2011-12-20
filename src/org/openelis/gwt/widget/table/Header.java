@@ -48,6 +48,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -230,7 +231,7 @@ public class Header extends FocusPanel {
         renderView(-1,-1);
         
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
-        flexTable.getCellFormatter().setHeight(0, 0, headerHeight + "px");
+        flexTable.getCellFormatter().setHeight(0, 0, table.getRowHeight()+"px");
         
         flexTable.getCellFormatter().addStyleName(0, 0, "First");
     }

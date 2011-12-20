@@ -1005,10 +1005,10 @@ public class UIGenerator extends Generator {
     	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
     	                    w++;
     	                    if(widget.getNodeName().equals("cell")) {
-    	                    	styles = getAttribute(node,"style","").split(",");
-    	                    	text = getAttribute(node,"text");
-    	                    	align   = getAttribute(node,"halign");
-        	                    valign  = getAttribute(node,"valign");
+    	                    	styles = getAttribute(widget,"style","").split(",");
+    	                    	text = getAttribute(widget,"text");
+    	                    	align   = getAttribute(widget,"halign");
+        	                    valign  = getAttribute(widget,"valign");
     	                    	
     	                    	 if (styles.length > 0){
     	                             sw.println("wid"+id+".getCellFormatter().setStyleName("+k+","+w+","+"\""+styles[0]+"\");");
