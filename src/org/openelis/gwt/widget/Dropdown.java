@@ -197,7 +197,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         
         hideTable();
 		field.setValue(getValue());
-		ValueChangeEvent.fire(this, getValue());
+		fireValueChange(getValue());
 		field.clearExceptions(this);
 		checkValue();
 		activeWidget = null;
@@ -294,9 +294,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     public void setValue(T value, boolean fireEvents) {
-        T old = getValue();
+        T old = field.getValue();
        	setSelection(value);
-        if(fireEvents)
+       	field.setValue(value);
+        if(fireEvents && !queryMode)
             ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
@@ -341,6 +342,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		if(queryMode == query)
 			return;
 		queryMode = query;
+		fireEvents = !queryMode;
 		if(query){
 			setMultiSelect(true);
 		}else
@@ -382,8 +384,15 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public void onBlur(BlurEvent event) {
 		textbox.removeStyleName("Focus");
-		if(!queryMode)
-			BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
+    	if(!showingOptions && isEnabled() && !queryMode){
+	    	if("".equals(textbox.getText()) && field.getValue() != null){
+    			setValue(null);
+    			ValueChangeEvent.fire(this, null);
+    		}else{
+    			setValue(getValue(),true);
+    		}
+    		checkValue();
+    	}
 	}
 	
 	public void onFocus(FocusEvent event) {
@@ -423,10 +432,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	@Override
 	public void complete() {
 		super.complete();
-		field.setValue(getValue());
-		ValueChangeEvent.fire(this, getValue());
-		field.clearExceptions(this);
-		checkValue();
+		//field.setValue(getValue());
+		//fireValueChange(getValue());
+		//field.clearExceptions(this);
+		//checkValue();
 		textbox.setFocus(true);
 		activeWidget = null;
 	}
@@ -496,6 +505,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			field.setValue((T)selections.get(0));
 		else
 			field.setValue(null);
+	}
+	
+	protected void fireValueChange(T value) {
+		if(fireEvents) 
+			ValueChangeEvent.fire(this, getValue());
+		
 	}
 }
 
