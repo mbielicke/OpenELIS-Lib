@@ -434,7 +434,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		super.complete();
 		//field.setValue(getValue());
 		//fireValueChange(getValue());
-		//field.clearExceptions(this);
+		field.clearExceptions(this);
 		//checkValue();
 		textbox.setFocus(true);
 		activeWidget = null;
