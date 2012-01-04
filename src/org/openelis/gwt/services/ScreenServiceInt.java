@@ -57,7 +57,7 @@ public interface ScreenServiceInt extends RemoteService {
     
     public <T extends RPC>  T call(String method) throws Exception;
     
-    public void callVoid(String method) throws Exception;
+    //public void callVoid(String method) throws Exception;
     
     public <T extends RPC> T call(String method, Integer param) throws Exception;
     

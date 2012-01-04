@@ -35,6 +35,7 @@
 			<xsd:attribute name="spacing" type="xsd:integer" />
 			<xsd:attributeGroup ref="align"/>
 			<xsd:attributeGroup ref="ScreenWidget" />
+			<xsd:attribute name="css" type="xsd:string" />
 		</xsd:complexType>
 	</xsd:element>
 			

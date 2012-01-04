@@ -218,7 +218,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 
 	/**
 	 * Synchronous call to the method passed that expects no parameter and returns void
-	 */
+	 
 	public void callVoid(String method) throws Exception {
         Callback<RPC> callback;
 
@@ -227,6 +227,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         service.callVoid(method, callback);
         callback.getResult();
 	}
+	*/
 	
 	/**
 	 * Synchronous call to the method passed that expects a Long parameter
@@ -387,11 +388,12 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
 
 	/**
 	 * Asynchronous call to the method passed that expects no parameter and returns void
-	 */
+	 
 	public void callVoid(String method, AsyncCallback<? extends RPC> callback) {
 		resetSessionScreenTimer();
 		service.callVoid(method,callback);
 	}
+	*/
 
 	/**
 	 * Asynchronous call to the method passed that expects a Long parameter 

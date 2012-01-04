@@ -2163,6 +2163,13 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     public void validateQuery() {
 
     }
+    
+    /**
+     * Method used to determine if widget is currently in Query mode
+     */
+    public boolean isQueryMode() {
+    	return queryMode;
+    }
 
     /**
      * Convenience method to check if a widget has exceptions so we do not need

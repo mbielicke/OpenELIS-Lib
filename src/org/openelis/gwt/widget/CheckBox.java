@@ -269,6 +269,13 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         else
             setValue(null);
     }
+    
+    /**
+     * Method used to determine if widget is currently in Query mode
+     */
+    public boolean isQueryMode() {
+    	return queryMode;
+    }
 
     // ******* Implementation of HasValue<String> ******
 

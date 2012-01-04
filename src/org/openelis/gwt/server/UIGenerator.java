@@ -329,12 +329,13 @@ public class UIGenerator extends Generator {
     public void addTabHandler(Node node,String wid) {
     	String[] tab;
     	String key;
-    	Node attrib;
+    	
     	
     	tab = getAttribute(node,"tab").split(",");
     	key = getAttribute(node,"key");
     	
-    	sw.println("tabs.put("+wid+",new Tab(\""+key+"\",\""+tab[0]+"\",\""+tab[1]+"\"));");
+    	if(tab != null && tab.length > 0)
+    		sw.println("tabs.put("+wid+",new Tab(\""+key+"\",\""+tab[0]+"\",\""+tab[1]+"\"));");
     	 
     }
     

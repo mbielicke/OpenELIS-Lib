@@ -26,7 +26,7 @@ UIRF Software License are applicable instead of those above.
 -->
 <module>
   <inherits name="com.google.gwt.resources.Resources" />
-  <inherits name="com.google.gwt.logging.Logging"/>
+
   <!-- Load dinamically predefined styles in the library when the application starts -->
   <source path="widget"/>
   

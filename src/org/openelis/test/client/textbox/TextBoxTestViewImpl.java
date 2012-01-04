@@ -165,7 +165,6 @@ public class TextBoxTestViewImpl extends Screen implements TextBoxTestView {
 		
 		logger = Logger.getLogger("TestTextBox");
 		logger.addHandler(new HasWidgetsLogHandler(log));
-		test.setLogger(logger);
 		
 		clearLog = (Button)def.getWidget("clearLog");
 		clearLog.setEnabled(true);

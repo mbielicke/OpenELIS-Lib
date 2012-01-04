@@ -54,7 +54,7 @@ public interface ScreenServiceIntAsync {
     
     public void call(String method, AsyncCallback<? extends RPC> callback);
     
-    public void callVoid(String method, AsyncCallback<? extends RPC> callback);
+    //public void callVoid(String method, AsyncCallback<? extends RPC> callback);
     
     public void call(String method, Integer param, AsyncCallback<? extends RPC> callback);
     

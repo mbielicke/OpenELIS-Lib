@@ -53,5 +53,7 @@ public interface Queryable {
     public void setQuery(QueryData qd);
     
     public void validateQuery();
+    
+    public boolean isQueryMode();
 
 }

@@ -318,4 +318,11 @@ public class DataBaseUtil {
             list.add(new DatabaseException(e.getMessage()));
         }
     }
+    
+    public static String toString(Object obj) {
+    	if(obj == null)
+    		return "";
+    	
+    	return obj.toString();
+    }
 }

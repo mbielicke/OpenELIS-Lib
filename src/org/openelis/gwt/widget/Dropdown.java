@@ -116,7 +116,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public void init() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.init()");
         /*
          * Final instance used in Anonymous handlers.
          */
@@ -188,8 +187,6 @@ public class Dropdown<T> extends TextBox<T> {
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         addHandler(keyHandler, KeyUpEvent.getType());
-                
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.init()");
     }
 
     /**
@@ -199,7 +196,6 @@ public class Dropdown<T> extends TextBox<T> {
      * is in the current table view.
      */
     protected void showPopup() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.showPopup()");
     	showingOptions = true;
         if (popup == null) {
             popup = new PopupPanel(true);
@@ -222,7 +218,6 @@ public class Dropdown<T> extends TextBox<T> {
         if (getSelectedIndex() > 0)
             table.scrollToVisible(getSelectedIndex());
         
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.showPopup()");
     }
 
     /**
@@ -231,7 +226,6 @@ public class Dropdown<T> extends TextBox<T> {
      * user.
      */
     protected void setDisplay() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setDisplay()");
         StringBuffer sb;
         ArrayList<Item<T>> items;
 
@@ -246,12 +240,10 @@ public class Dropdown<T> extends TextBox<T> {
         }
 
         textbox.setText(sb.toString());
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setDisplay()");
     }
 
     @Override
     public void setWidth(String w) {    
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setWidth() : value = "+w);
         width = Util.stripUnits(w);
 
         /*
@@ -269,21 +261,16 @@ public class Dropdown<T> extends TextBox<T> {
         if(table != null) 
             table.setWidth(width+"px");
 
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setWidth()");
     }
     
     public int getWidth() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getWidth()");
-    	logger.fine("org.openelis.gwt.widget.Dropdown.getwidth() : value = "+width);
         return width;
     }
     
     @Override
     public void setHeight(String height) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setHeight() : value = "+height);
         textbox.setHeight(height);
         button.setHeight(height);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setHeight()");
     }
 
     /**
@@ -293,12 +280,10 @@ public class Dropdown<T> extends TextBox<T> {
      * @param model
      */
     private void createKeyHash(ArrayList<Item<T>> model) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.createKeyHash()");
         keyHash = new HashMap<T, Integer>();
 
         for (int i = 0; i < model.size(); i++ )
             keyHash.put(model.get(i).key, i);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.createKeyHash()");
     }
     
 
@@ -310,9 +295,7 @@ public class Dropdown<T> extends TextBox<T> {
      * @param renderer
      */
     public void setRenderer(Renderer renderer) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setRenderer()");
         this.renderer = renderer;
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setRenderer()");
     }
 
     /**
@@ -323,7 +306,6 @@ public class Dropdown<T> extends TextBox<T> {
      * @param tree
      */
     public void setPopupContext(Table tableDef) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setPopupContext()");
         this.table = tableDef;
         table.setTableStyle("DropdownTable");
         table.setFixScrollbar(false);
@@ -362,22 +344,17 @@ public class Dropdown<T> extends TextBox<T> {
          		popup.hide();
            	}
        });
-
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setPopupContext()");
     }
     
     public Table getPopupContext() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getPopupContext()");
         return table;
     }
     
     public void setVisibleItemCount(int itemCount) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setVisibleItemCount() : value = "+itemCount);
         this.itemCount = itemCount;
         
         if(table != null) 
         	table.setVisibleRows(itemCount);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setVisibleItemCount()");
     }
 
     /**
@@ -386,7 +363,6 @@ public class Dropdown<T> extends TextBox<T> {
      * @param model
      */
     public void setModel(ArrayList<Item<T>> model) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setModel()");
         assert table != null;
 
         table.setModel(model);
@@ -398,7 +374,6 @@ public class Dropdown<T> extends TextBox<T> {
         
 
         createKeyHash(model);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setModel()");
 
     }
 
@@ -409,7 +384,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Item<T>> getModel() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getModel()");
         return (ArrayList<Item<T>>)table.getModel();
     }
 
@@ -420,10 +394,8 @@ public class Dropdown<T> extends TextBox<T> {
      * @param index
      */
     public void setSelectedIndex(int index) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setSelectedIndex() : value = "+index);
         table.selectRowAt(index);
         textbox.setText(renderer.getDisplay(getSelectedItem()));
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setSelectedIndex()");
     }
 
     /**
@@ -432,7 +404,6 @@ public class Dropdown<T> extends TextBox<T> {
      * @return
      */
     public int getSelectedIndex() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getSelectedIndex()");
         return table.getSelectedRow();
     }
 
@@ -443,7 +414,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public Item<T> getSelectedItem() {
-    	logger.finest("Entering - org.openels.gwt.widget.Dropdown.getSelectedItem()");
         if(table.isAnyRowSelected())
             return (Item<T>)table.getModel().get(table.getSelectedRow());
         return null;
@@ -456,7 +426,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Item<T>> getSelectedItems() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getSelectedItems()");
         ArrayList<Item<T>> items = null;
         
         if(!table.isAnyRowSelected())
@@ -476,7 +445,6 @@ public class Dropdown<T> extends TextBox<T> {
      * @return
      */
     public String getDisplay() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getDisplay()");
         return getText();
     }
 
@@ -488,7 +456,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public void setEnabled(boolean enabled) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setEnabled() : value = "+enabled);
        // if (isEnabled() == enabled)
          //   return;
         button.setEnabled(enabled);
@@ -500,7 +467,6 @@ public class Dropdown<T> extends TextBox<T> {
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         
         super.setEnabled(enabled);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setEnabled()");
     }
 
     //********* Implementation of HasValue *************************
@@ -511,13 +477,10 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public void setValue(T value, boolean fireEvents) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setValue(T,boolean) : values = "+value+","+fireEvents);
         boolean validKey;
 
-        if(!Util.isDifferent(this.value, value)) {
-        	logger.fine("org.openelis.gwt.widget.Dropdown.setValue(T,boolean) : Value not changed, returning");
+        if(!Util.isDifferent(this.value, value)) 
             return;
-        }
 
 
         if (value != null) {
@@ -535,11 +498,9 @@ public class Dropdown<T> extends TextBox<T> {
 
         this.value = value;
 
-        if (fireEvents) {
-        	logger.fine("org.openelis.gwt.widget.Dropdown.setValue(T,boolean) : firing ValueChangeEvent : value = "+value);
+        if (fireEvents) 
             ValueChangeEvent.fire(this, value);
-        }
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setValue()");
+
     };
 
     /**
@@ -547,7 +508,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     protected void validateValue(boolean fireEvents) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.validateValue()");
         Item<T> item;
         validateExceptions = null;
         
@@ -559,7 +519,6 @@ public class Dropdown<T> extends TextBox<T> {
             addValidateException(new LocalizedException("gen.fieldRequiredException"));
         }
         ExceptionHelper.checkExceptionHandlers(this);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.validateValue()");
     }
 
     //************  Implementation of Queryable ***********************
@@ -568,12 +527,10 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public void setQueryMode(boolean query) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setQueryMode(boolean) : value = "+query);
         if (query == queryMode)
             return;
         queryMode = query;
         table.setAllowMultipleSelection(query);
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setQueryMode(boolean)");
     }
 
     /**
@@ -582,8 +539,6 @@ public class Dropdown<T> extends TextBox<T> {
      */
     @Override
     public Object getQuery() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.getQuery()");
-    	
         QueryData qd;
         StringBuffer sb;
         ArrayList<Item<T>> items;
@@ -618,14 +573,12 @@ public class Dropdown<T> extends TextBox<T> {
 
         qd.setQuery(sb.toString());
         
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.getQuery()");
         return qd;
     }
     
     @SuppressWarnings("unchecked")
 	@Override
     public void setQuery(QueryData qd) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.setQuery(QueryData)");
         String[] params;
         T key;
         
@@ -650,7 +603,6 @@ public class Dropdown<T> extends TextBox<T> {
         	}
         }
         setDisplay();
-        logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.setQuery(QueryData)");
     }
 
     // *************** Search methods ******************
@@ -660,7 +612,6 @@ public class Dropdown<T> extends TextBox<T> {
      * Dropdown model
      */
     private int findIndexByTextValue(String textValue) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.findIndexByTextValue(String) : value = "+textValue);
         int index = -1;
         /*
          * Force to Upper case for matching
@@ -700,22 +651,16 @@ public class Dropdown<T> extends TextBox<T> {
     
     @Override
     public void addExceptionStyle(String style) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.addExceptionStyle()");
     	textbox.addStyleName(style);
-    	logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.addExceptionStyle()");
     }
     
     @Override
     public void removeExceptionStyle(String style) {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.removeExceptionStyle()");
     	textbox.removeStyleName(style);
-    	logger.finest("Exiting - org.oepenelis.gwt.widget.Dropdown.removeExceptionStyle()");
     }
 
     public void closePopup() {
-    	logger.finest("Entering - org.openelis.gwt.widget.Dropdown.closePopup()");
     	popup.hide();
-    	logger.finest("Exiting - org.openelis.gwt.widget.Dropdown.closePopup()");
     }
     
     /**
