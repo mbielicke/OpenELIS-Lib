@@ -25,6 +25,7 @@
  */
 package org.openelis.gwt.common;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -121,6 +122,23 @@ public class DataBaseUtil {
         return null;
     }
 
+    public static String toString(Datetime datetime, String pattern) {
+        if (datetime == null)
+            return "";
+
+        return toString(datetime.getDate(), pattern);
+    }
+    
+    public static String toString(Date date, String pattern) {
+        SimpleDateFormat format;
+        
+        if (date == null)
+            return "";
+            
+        format = new SimpleDateFormat(pattern);
+        return format.format(date);
+    }
+    
     /**
      * Compares the two parameters to see if they are different
      * 
