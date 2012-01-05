@@ -307,15 +307,17 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
         keys = def.getWidgets().keySet();
         for (String key : keys) {
             if (def.getWidget(key) instanceof Queryable) {
-                Object query = ((Queryable)def.getWidget(key)).getQuery();
-                if(query instanceof Object[]){
-                    QueryData[] qds = (QueryData[])query;
-                    for(int i = 0; i < qds.length; i++) 
-                        list.add(qds[i]);                    
-                }else if(query != null) {
-                    ((QueryData)query).setKey(key);
-                    list.add((QueryData)query);
-                }       
+            	if(((Queryable)def.getWidget(key)).isQueryMode()) {
+            		Object query = ((Queryable)def.getWidget(key)).getQuery();
+            		if(query instanceof Object[]){
+            			QueryData[] qds = (QueryData[])query;
+            			for(int i = 0; i < qds.length; i++) 
+            				list.add(qds[i]);                    
+            		}else if(query != null) {
+            			((QueryData)query).setKey(key);
+            			list.add((QueryData)query);
+            		}
+            	}
             }
         }
         return list;
