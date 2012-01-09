@@ -197,7 +197,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
         
         hideTable();
 		field.setValue(getValue());
-		fireValueChange(getValue());
+		ValueChangeEvent.fire(this, getValue());
 		field.clearExceptions(this);
 		checkValue();
 		activeWidget = null;
@@ -294,10 +294,9 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     public void setValue(T value, boolean fireEvents) {
-        T old = field.getValue();
+        T old = getValue();
        	setSelection(value);
-       	field.setValue(value);
-        if(fireEvents && !queryMode)
+        if(fireEvents)
             ValueChangeEvent.fireIfNotEqual(this, old, value);
     }
 
@@ -342,7 +341,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		if(queryMode == query)
 			return;
 		queryMode = query;
-		fireEvents = !queryMode;
 		if(query){
 			setMultiSelect(true);
 		}else
@@ -384,15 +382,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	
 	public void onBlur(BlurEvent event) {
 		textbox.removeStyleName("Focus");
-    	if(!showingOptions && isEnabled() && !queryMode){
-	    	if("".equals(textbox.getText()) && field.getValue() != null){
-    			setValue(null);
-    			ValueChangeEvent.fire(this, null);
-    		}else{
-    			setValue(getValue(),true);
-    		}
-    		checkValue();
-    	}
+		if(!queryMode)
+			BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
 	}
 	
 	public void onFocus(FocusEvent event) {
@@ -432,10 +423,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	@Override
 	public void complete() {
 		super.complete();
-		//field.setValue(getValue());
-		//fireValueChange(getValue());
+		field.setValue(getValue());
+		ValueChangeEvent.fire(this, getValue());
 		field.clearExceptions(this);
-		//checkValue();
+		checkValue();
 		textbox.setFocus(true);
 		activeWidget = null;
 	}
@@ -505,12 +496,6 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			field.setValue((T)selections.get(0));
 		else
 			field.setValue(null);
-	}
-	
-	protected void fireValueChange(T value) {
-		if(fireEvents) 
-			ValueChangeEvent.fire(this, getValue());
-		
 	}
 }
 
