@@ -1,5 +1,8 @@
 package org.openelis.gwt.common;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class PermissionException extends LocalizedException {
 
     private static final long serialVersionUID = 1L;

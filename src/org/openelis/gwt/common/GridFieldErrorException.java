@@ -25,7 +25,9 @@
 */
 package org.openelis.gwt.common;
 
+import javax.ejb.ApplicationException;
 
+@ApplicationException
 public class GridFieldErrorException extends TableFieldErrorException{
 
 	private static final long serialVersionUID = 1L;

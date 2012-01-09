@@ -27,6 +27,9 @@ package org.openelis.gwt.common;
 
 import java.util.ArrayList;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class TableFieldErrorException extends FieldErrorException{
 
 	private static final long serialVersionUID = 1L;

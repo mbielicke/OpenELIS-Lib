@@ -1,8 +1,11 @@
 package org.openelis.gwt.common;
 
+import javax.ejb.ApplicationException;
+
 /**
  * DatabaseException denotes a generic runtime data access (SQL) exception.
  */
+@ApplicationException(rollback=true)
 public class DatabaseException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;

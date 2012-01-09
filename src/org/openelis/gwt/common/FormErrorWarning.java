@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.common;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class FormErrorWarning extends FormErrorException implements Warning {
     private static final long serialVersionUID = 1L;
 

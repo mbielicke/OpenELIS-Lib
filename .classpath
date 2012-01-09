@@ -11,7 +11,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-vfs-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
-	<classpathentry kind="lib" path="/usr/local/java/jboss/common/lib/jboss-javaee.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gwt-incubator-july-14-2009.jar"/>
@@ -21,5 +20,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/gwt-visualization-noredist.jar"/>
 	<classpathentry kind="lib" path="lib/bsf.jar"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/usr/local/java/jboss-6.1.0.Final/client/jbossall-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
