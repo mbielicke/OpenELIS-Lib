@@ -183,7 +183,7 @@ public class Browser extends Composite {
         /*
          * If Screen is already being shown bring the Screen to focus and exit.
          */
-        if (windowsByKey.containsKey(key)) {
+        if (isScreenOpen(key)) {
             selectScreen(key);
             return;
         }
@@ -245,8 +245,8 @@ public class Browser extends Composite {
         Window wid;
         WindowValues wv;
         
-    	if (windowsByKey.containsKey(key)) {
-    	    wid = windowsByKey.get(key);
+    	if (isScreenOpen(key)) {
+    		wid = windowsByKey.get(key);
     		wv = windows.get(wid);
     		
     		if(index != wv.zIndex){
@@ -288,6 +288,15 @@ public class Browser extends Composite {
     			wid.setFocus(true);
     		}
     	}
+    }
+    /**
+     * This method will return true if their is a window currently in the browser
+     * using the key passed.
+     * @param key
+     * @return
+     */
+    public boolean isScreenOpen(String key) {
+    	return windowsByKey.containsKey(key);
     }
     
     private class WindowValues {
