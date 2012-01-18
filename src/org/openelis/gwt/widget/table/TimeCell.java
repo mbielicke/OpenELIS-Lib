@@ -77,10 +77,19 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
     		return null;
     	
         tm = time.split(":");
-        hours = Double.parseDouble(tm[0]);
+        try {
+        	hours = Double.parseDouble(tm[0]);
+        }catch(Exception e) {
+        	hours = 0.0;
+        }
         
-        if(tm.length > 1) 
-            mins = Double.parseDouble(tm[1]) / 60.0;
+        if(tm.length > 1) {
+        	try {
+        		mins = Double.parseDouble(tm[1]) / 60.0;
+        	}catch(Exception e) {
+        		mins = 0.0;
+        	}
+        }
         
         return new Double(hours += mins);
     }
