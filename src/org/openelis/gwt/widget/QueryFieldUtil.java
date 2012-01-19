@@ -46,7 +46,6 @@ public class QueryFieldUtil {
         operators.add("!");
         operators.add("~");
         operators.add("=");
-        operators.add("(");
         operators.add(">");
         operators.add("<");
         operators.add("&");
@@ -75,8 +74,7 @@ public class QueryFieldUtil {
             comparator.add(comp);
             String param = "";
             while (!operators.contains(pos) && value.length() > 0) {
-                if (!pos.equals(")"))
-                    param += pos;
+                param += pos;
                 value = value.substring(1);
                 if (value.length() > 0)
                     pos = value.substring(0, 1);

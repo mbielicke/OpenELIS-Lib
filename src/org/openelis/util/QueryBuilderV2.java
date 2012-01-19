@@ -80,6 +80,7 @@ public class QueryBuilderV2 {
             	if (comp.equals("~"))
             		comp = "like ";
 
+            	/*
             	if (comp.endsWith("(")) {
             		String[] list = param.split(",");
             		sb.append("in (");
@@ -89,7 +90,9 @@ public class QueryBuilderV2 {
             			sb.append(":" + paramName + i + j);
             		}
             		sb.append(") ");
-            	} else if (comp.startsWith("between")) {
+            	} else 
+            	*/
+            	if (comp.startsWith("between")) {
             		sb.append("between :" + paramName
             				+ i
             				+ "0 and :"
