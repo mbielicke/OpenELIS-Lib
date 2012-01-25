@@ -241,8 +241,8 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
         }
     }
     
-    public boolean isScreenOpen(String name) {
-    	return windows.containsKey(name);
+    public ScreenWindow getScreenByKey(String name) {
+    	return windows.get(name);
     }
 
     public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
