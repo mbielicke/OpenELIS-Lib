@@ -45,7 +45,7 @@ public class ReportServlet extends HttpServlet {
                 return;
             }
 
-            status = (ReportStatus) SessionManager.getSession().getAttribute(filename);
+            status = (ReportStatus) req.getSession().getAttribute(filename);
             if (status == null || status.getStatus() != ReportStatus.Status.SAVED) {
                 error(resp, "Specified file key is not valid; please report this error to your sysadmin");
                 return;
@@ -85,7 +85,7 @@ public class ReportServlet extends HttpServlet {
             if (out != null)
                 out.close();
             if (filename != null)
-                SessionManager.getSession().removeAttribute(filename);
+                req.getSession().removeAttribute(filename);
         }
     }
 	

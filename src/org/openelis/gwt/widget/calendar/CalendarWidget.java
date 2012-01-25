@@ -25,6 +25,8 @@
  */
 package org.openelis.gwt.widget.calendar;
 
+import java.util.Date;
+
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.screen.Calendar;
@@ -72,8 +74,7 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
     /*
      * Currently displayed year and month in the calendar
      */
-    private int                 year;
-    private int                 month;
+    private int                 year,month;
 
     /*
      * Buttons from xsl
@@ -84,6 +85,8 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
     protected Label             monthDisplay;
 
     protected CalendarTable     table;
+    
+    private byte                begin,end;
 
     /*
      * Constructor that takes the precision of the date to be used.
@@ -93,6 +96,9 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
 
         service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
 
+        this.begin = begin;
+        this.end = end;
+        
         current = Calendar.getCurrentDatetime(begin, end);
 
         year = current.get(Datetime.YEAR);
@@ -127,7 +133,15 @@ public class CalendarWidget extends Screen implements HasValueChangeHandlers<Dat
 
         table.addSelectionHandler(new SelectionHandler<Datetime>() {
             public void onSelection(SelectionEvent<Datetime> event) {
-                ValueChangeEvent.fire(source, event.getSelectedItem());
+            	Datetime value;
+            	Date date;
+            	
+            	value = event.getSelectedItem();
+            	if(end > Datetime.DAY){
+            		date = new Date(value.getDate().getYear(),value.getDate().getMonth(),value.getDate().getDate(),time.getValue().getDate().getHours(),time.getValue().getDate().getMinutes());
+            		value = Datetime.getInstance(begin,end,date);
+            	}
+                ValueChangeEvent.fire(source, value);
             }
         });
 

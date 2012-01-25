@@ -34,21 +34,16 @@ UIRF Software License are applicable instead of those above.
     <inherits name="org.openelis.gwt.Widget"/>
     <inherits name="org.openelis.gwt.Common"/>
     <inherits name="org.openelis.gwt.Screen"/>
+    <inherits name="com.allen_sauer.gwt.dnd.gwt-dnd"/> 
+    
     <source path="test"/>
     
     <stylesheet src="CSS/lib.css"/>
     
-    <entry-point class='org.openelis.test.client.TestWidgetsEntry'/>
+    <entry-point class='org.openelis.test.client.main.TestWidgetsEntry'/>
     
     <define-property name="props" values="org_openelis_constants_OpenELISConstants"/>
     <set-property name="props" value="org_openelis_constants_OpenELISConstants"/>
-  
-    <set-property name="gwt.logging.logLevel" value="INFO"/>
-    <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
-    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
-    <set-property name="gwt.logging.popupHandler" value="DISABLED"/>
-    <set-property name="gwt.logging.systemHandler" value="DISABLED"/>
-  	<set-property name="gwt.logging.firebugHandler" value="DISABLED"/>
     
     
 </module>

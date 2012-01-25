@@ -1,14 +1,13 @@
 package org.openelis.test.client.table;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.Label;
@@ -17,6 +16,7 @@ import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.table.AutoCompleteCell;
 import org.openelis.gwt.widget.table.CalendarCell;
+import org.openelis.gwt.widget.table.CheckBoxCell;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.DropdownCell;
 import org.openelis.gwt.widget.table.ImageCell;
@@ -25,35 +25,42 @@ import org.openelis.gwt.widget.table.PercentCell;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.TextBoxCell;
-import org.openelis.gwt.widget.table.CheckBoxCell;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.logging.client.HasWidgetsLogHandler;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TableTestViewImpl extends Screen implements TableTestView {
+public class TableScreen extends Screen {
 	
 	protected Table test;
 	protected TextBox<Integer> rows,rowHeight,width;
 	protected CheckBox enabled,multiSelect,query,hasHeader,fixScroll;
 	protected Dropdown<String> vscroll,hscroll,logLevel;
 	protected Table columns;
-	protected Button set,add,remove,addRow,removeRow,clearLog;
-	VerticalPanel     log;
-	Logger            logger;
+	protected Button set,add,remove,addRow,removeRow;
 	
-	public TableTestViewImpl() {
-		super((ScreenDefInt)GWT.create(TableTestDef.class));
+	public TableScreen() {
+		super((ScreenDefInt)GWT.create(TableDef.class));
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				postConstructor();
+			}
+		});
+
+	}
+	
+	private void postConstructor() {
 		initialize();
 		initializeDropdowns();
 	}
 	
 	private void initialize() {
 		ArrayList<Row> colModel;
+		ArrayList<Item<String>> model;
 		Row row;
 
 		test = (Table)def.getWidget("test");
@@ -205,6 +212,19 @@ public class TableTestViewImpl extends Screen implements TableTestView {
 					test.removeRowAt(test.getSelectedRow());
 			}
 		});
+		
+		
+		model = new ArrayList<Item<String>>();
+		model.add(new Item<String>("textbox","TextBox"));
+		model.add(new Item<String>("label","Label"));
+		model.add(new Item<String>("dropdown","Dropdown"));
+		model.add(new Item<String>("check","CheckBox"));
+		model.add(new Item<String>("auto","AutoComplete"));
+		model.add(new Item<String>("calendar","Calendar"));
+		model.add(new Item<String>("image","Image"));
+		model.add(new Item<String>("percent","PercentBar"));
+		
+		((Dropdown)columns.getColumnWidget(2)).setModel(model);
 
 		colModel = new ArrayList<Row>();
 		colModel.add(new Row("Col 1",75,"textbox","N","N","Y","N","Y"));
@@ -217,37 +237,10 @@ public class TableTestViewImpl extends Screen implements TableTestView {
 		columns.setModel(colModel);
 
 		setColumns(colModel);
-
-		logLevel = (Dropdown<String>)def.getWidget("logLevel");
-		logLevel.setEnabled(true);
-		ArrayList<Item<String>>logmodel = new ArrayList<Item<String>>();
-		logmodel.add(new Item<String>("SEVERE","Severe"));
-		logmodel.add(new Item<String>("WARNING","Warning"));
-		logmodel.add(new Item<String>("INFO","Info"));
-		logmodel.add(new Item<String>("FINE","Fine"));
-		logmodel.add(new Item<String>("FINER","Finer"));
-		logmodel.add(new Item<String>("FINEST","Finest"));
-		logLevel.setModel(logmodel);
-
-		logLevel.addValueChangeHandler(new ValueChangeHandler<String>() {
-			@Override
-			public void onValueChange(ValueChangeEvent<String> event) {
-				logger.setLevel(Level.parse(event.getValue()));
-			}
-		});
-
-		log = (VerticalPanel)def.getWidget("logPanel");
-
-		logger = Logger.getLogger("TestTextBox");
-		logger.addHandler(new HasWidgetsLogHandler(log));
-		test.setLogger(logger);
-
-		clearLog = (Button)def.getWidget("clearLog");
-		clearLog.setEnabled(true);
-		clearLog.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				log.clear();
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				((CollapsePanel)def.getWidget("collapsePanel")).open();
 			}
 		});
 
@@ -265,29 +258,19 @@ public class TableTestViewImpl extends Screen implements TableTestView {
 		
 		vscroll.setValue("AS_NEEDED");
 		hscroll.setValue("AS_NEEDED");
-		
-		model = new ArrayList<Item<String>>();
-		model.add(new Item<String>("textbox","TextBox"));
-		model.add(new Item<String>("label","Label"));
-		model.add(new Item<String>("dropdown","Dropdown"));
-		model.add(new Item<String>("check","CheckBox"));
-		model.add(new Item<String>("auto","AutoComplete"));
-		model.add(new Item<String>("calendar","Calendar"));
-		model.add(new Item<String>("image","Image"));
-		model.add(new Item<String>("percent","PercentBar"));
-		
-		((Dropdown)columns.getColumnWidget(2)).setModel(model);
 	}
 	
 	protected void setColumns(ArrayList<Row> colModel) {
 		ArrayList<Column> columns;
 		Column column;
+		int width = 0;
 		
 		columns = new ArrayList<Column>();
 		
 		for(Row row : colModel) {
 			column = test.addColumn(null, (String)row.getCell(0));
 			column.setWidth((Integer)row.getCell(1));
+			width += (Integer)row.getCell(1);
 			String editor = (String)row.getCell(2);
 			if("textbox".equals(editor)) {
 				TextBox<String> textbox = new TextBox<String>();
@@ -322,6 +305,9 @@ public class TableTestViewImpl extends Screen implements TableTestView {
 		}
 		
 		test.setColumns(columns);
+		
+		if(this.width.getValue() == null)
+			test.setWidth(width);
 	}
 
 }

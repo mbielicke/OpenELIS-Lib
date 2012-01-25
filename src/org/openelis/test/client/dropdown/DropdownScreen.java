@@ -1,13 +1,12 @@
 package org.openelis.test.client.dropdown;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.TextBox;
@@ -15,14 +14,13 @@ import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.logging.client.HasWidgetsLogHandler;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class DropdownTestViewImpl extends Screen implements DropdownTestView {
+public class DropdownScreen extends Screen {
 
 	Dropdown         test;
 	Dropdown<String> field, tCase,logLevel;
@@ -30,19 +28,26 @@ public class DropdownTestViewImpl extends Screen implements DropdownTestView {
 	TextBox<Integer> visibleItems;
 	CheckBox         enabled, required, query;
 	Table            testModel;
-	Button           setModel,addRow,removeRow,clearLog;
-	VerticalPanel     log;
-	Logger            logger;
+	Button           setModel,addRow,removeRow;
 	
 
-	public DropdownTestViewImpl() {
-		super((ScreenDefInt)GWT.create(DropdownTestDef.class));
-		initialize();
+	public DropdownScreen() {
+		super((ScreenDefInt)GWT.create(DropdownDef.class));
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				postConstructor();
+			}
+		});
+	}
+	
+	private void postConstructor() {
+		initialize();	
+		initializeDropdowns();
 	}
 	
 	public void initialize() {
 		ArrayList<Row> model;
-		ArrayList<Item<String>> items;
 		
 		test = (Dropdown)def.getWidget("test");
 		test.setEnabled(true);
@@ -92,22 +97,11 @@ public class DropdownTestViewImpl extends Screen implements DropdownTestView {
 		
 		field = (Dropdown<String>)def.getWidget("field");
 		field.setEnabled(true);
-		items = new ArrayList<Item<String>>();
-		items.add(new Item<String>("String","String"));
-		items.add(new Item<String>("Integer","Integer"));
-		items.add(new Item<String>("Double","Double"));
-		items.add(new Item<String>("Date","Date"));
-		field.setModel(items);
-		field.setValue("String");
+
 		
 		tCase = (Dropdown<String>)def.getWidget("case");
 		tCase.setEnabled(true);
-		items = new ArrayList<Item<String>>();
-		items.add(new Item<String>("mixed","Mixed"));
-		items.add(new Item<String>("upper","UPPER"));
-		items.add(new Item<String>("lower","lower"));
-		tCase.setModel(items);
-		tCase.setValue("mixed");
+
 		tCase.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				test.setCase(TextBox.Case.valueOf(event.getValue().toUpperCase()));
@@ -162,38 +156,12 @@ public class DropdownTestViewImpl extends Screen implements DropdownTestView {
 			}
 		});
 		
-		logLevel = (Dropdown<String>)def.getWidget("logLevel");
-		logLevel.setEnabled(true);
-		ArrayList<Item<String>>logmodel = new ArrayList<Item<String>>();
-		logmodel.add(new Item<String>("SEVERE","Severe"));
-		logmodel.add(new Item<String>("WARNING","Warning"));
-		logmodel.add(new Item<String>("INFO","Info"));
-		logmodel.add(new Item<String>("FINE","Fine"));
-		logmodel.add(new Item<String>("FINER","Finer"));
-		logmodel.add(new Item<String>("FINEST","Finest"));
-		logLevel.setModel(logmodel);
-		
-		logLevel.addValueChangeHandler(new ValueChangeHandler<String>() {
-		    @Override
-			public void onValueChange(ValueChangeEvent<String> event) {
-		    	logger.setLevel(Level.parse(event.getValue()));
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				((CollapsePanel)def.getWidget("collapsePanel")).open();
 			}
 		});
-		
-		log = (VerticalPanel)def.getWidget("logPanel");
-		
-		logger = Logger.getLogger("TestTextBox");
-		logger.addHandler(new HasWidgetsLogHandler(log));
-		
-		clearLog = (Button)def.getWidget("clearLog");
-		clearLog.setEnabled(true);
-		clearLog.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				log.clear();
-			}
-		});
-		
+				
 	}
 	
 	private void setTestItems() {
@@ -210,6 +178,25 @@ public class DropdownTestViewImpl extends Screen implements DropdownTestView {
 			model.add(new Item(testModel.getRowAt(i).getCell(0),testModel.getRowAt(i).getCell(1)));
 		
 		test.setModel(model);	
+	}
+	
+	private void initializeDropdowns() {
+		ArrayList<Item<String>> items;
+		
+		items = new ArrayList<Item<String>>();
+		items.add(new Item<String>("String","String"));
+		items.add(new Item<String>("Integer","Integer"));
+		items.add(new Item<String>("Double","Double"));
+		items.add(new Item<String>("Date","Date"));
+		field.setModel(items);
+		field.setValue("String");
+		
+		items = new ArrayList<Item<String>>();
+		items.add(new Item<String>("mixed","Mixed"));
+		items.add(new Item<String>("upper","UPPER"));
+		items.add(new Item<String>("lower","lower"));
+		tCase.setModel(items);
+		tCase.setValue("mixed");
 	}
 	
 	

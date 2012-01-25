@@ -7,6 +7,7 @@ import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.Label;
@@ -27,12 +28,13 @@ import org.openelis.gwt.widget.tree.Column;
 import org.openelis.gwt.widget.tree.Tree;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-public class TreeTestViewImpl extends Screen implements TreeTestView {
+public class TreeScreen extends Screen {
 	
 	protected Tree test;
 	protected TextBox<Integer> rows,rowHeight,width;
@@ -41,8 +43,18 @@ public class TreeTestViewImpl extends Screen implements TreeTestView {
 	protected Table columns;
 	protected Button set,add,remove,addRow,removeRow;
 	
-	public TreeTestViewImpl() {
-		super((ScreenDefInt)GWT.create(TreeTestDef.class));
+	public TreeScreen() {
+		super((ScreenDefInt)GWT.create(TreeDef.class));
+		
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				postConstructor();
+			}
+		});
+
+	}
+	
+	private void postConstructor() {
 		initialize();
 		initializeDropdowns();
 	}
@@ -192,6 +204,18 @@ public class TreeTestViewImpl extends Screen implements TreeTestView {
 			}
 		});
 		
+		ArrayList<Item<String>> model = new ArrayList<Item<String>>();
+		model.add(new Item<String>("textbox","TextBox"));
+		model.add(new Item<String>("label","Label"));
+		model.add(new Item<String>("dropdown","Dropdown"));
+		model.add(new Item<String>("check","CheckBox"));
+		model.add(new Item<String>("auto","AutoComplete"));
+		model.add(new Item<String>("calendar","Calendar"));
+		model.add(new Item<String>("image","Image"));
+		model.add(new Item<String>("percent","PercentBar"));
+		
+		((Dropdown)columns.getColumnWidget(2)).setModel(model);
+		
 		 colModel = new ArrayList<Row>();
 		 colModel.add(new Row("Col 1",75,"textbox","Y","N","Y"));
 		 colModel.add(new Row("Col 2",75,"textbox","Y","N","Y"));
@@ -203,8 +227,12 @@ public class TreeTestViewImpl extends Screen implements TreeTestView {
 		 columns.setModel(colModel);
 		 
 		 setColumns(colModel);
-		
-		
+		 
+		 Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				((CollapsePanel)def.getWidget("collapsePanel")).open();
+			}
+		});
 		
 	}
 	
@@ -220,29 +248,19 @@ public class TreeTestViewImpl extends Screen implements TreeTestView {
 		
 		vscroll.setValue("AS_NEEDED");
 		hscroll.setValue("AS_NEEDED");
-		
-		model = new ArrayList<Item<String>>();
-		model.add(new Item<String>("textbox","TextBox"));
-		model.add(new Item<String>("label","Label"));
-		model.add(new Item<String>("dropdown","Dropdown"));
-		model.add(new Item<String>("check","CheckBox"));
-		model.add(new Item<String>("auto","AutoComplete"));
-		model.add(new Item<String>("calendar","Calendar"));
-		model.add(new Item<String>("image","Image"));
-		model.add(new Item<String>("percent","PercentBar"));
-		
-		((Dropdown)columns.getColumnWidget(2)).setModel(model);
 	}
 	
 	protected void setColumns(ArrayList<Row> colModel) {
 		ArrayList<Column> columns;
 		Column column;
+		int width = 0;
 		
 		columns = new ArrayList<Column>();
 		
 		for(Row row : colModel) {
 			column = test.addColumn(null, (String)row.getCell(0));
 			column.setWidth((Integer)row.getCell(1));
+			width += (Integer)row.getCell(1);
 			String editor = (String)row.getCell(2);
 			if("textbox".equals(editor)) {
 				TextBox<String> textbox = new TextBox<String>();
@@ -275,6 +293,9 @@ public class TreeTestViewImpl extends Screen implements TreeTestView {
 		}
 		
 		test.setColumns(columns);
+		
+		if(this.width.getValue() == null) 
+			test.setWidth(width);
 	}
 
 

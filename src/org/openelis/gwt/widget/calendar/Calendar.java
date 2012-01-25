@@ -342,19 +342,40 @@ public class Calendar extends TextBox<Datetime> {
     	
     	super.setHelper(helper);
     	
+    	setDefaultMask();
+    }
+    
+    public void setBegin(byte begin) {
+    	((DateHelper)getHelper()).setBegin(begin);
+    	calendar = null;
+    	setDefaultMask();
+    }
+    
+    public void setEnd(byte end) {
+    	((DateHelper)getHelper()).setEnd(end);
+    	calendar = null;
+    	setDefaultMask();
+    }
+    
+    private void setDefaultMask() {
+    	DateHelper dh;
+    	
+    	dh = (DateHelper)getHelper();
     	/*
     	 * Setting default mask based on precision of helper
     	 * internationalized mask pictures should be set from 
     	 * xsl, but defaults are provided if none set.
     	 */
-    	dh = (DateHelper)helper;
-    	if(dh.getBegin() > Datetime.DAY)
+    	if(dh.getBegin() > Datetime.DAY) {
     		dh.setMask("99:99");
-    	else if (dh.getEnd() < Datetime.HOUR)
+    		dh.setPattern("HH:mm");
+    	} else if (dh.getEnd() < Datetime.HOUR){
     		dh.setMask("9999-99-99");
-    	else 
+    		dh.setPattern("yyyy-MM-dd");
+    	} else {
     		dh.setMask("9999-99-99 99:99");
-    	
+    		dh.setPattern("yyyy-MM-dd HH:mm");
+    	}
     }
 
 }
