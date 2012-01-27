@@ -360,6 +360,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
     	model.add(row);
     	setModel(model);
     	setSelection(row.key);
+    	field.setValue((T)row.key);
     }
     
     /**
