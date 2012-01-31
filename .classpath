@@ -8,11 +8,9 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-vfs-1.0.jar"/>
 	<classpathentry kind="lib" path="/usr/local/java/jboss/client/jbossall-client.jar"/>
-	<classpathentry kind="lib" path="lib/js.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/gwt-incubator-july-14-2009.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/gwtupload-0.6-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gwt-ajaxloader.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gwt-visualization-noredist.jar"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/gwtupload-0.6-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

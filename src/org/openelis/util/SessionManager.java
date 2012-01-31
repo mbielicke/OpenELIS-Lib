@@ -26,7 +26,6 @@
 package org.openelis.util;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
