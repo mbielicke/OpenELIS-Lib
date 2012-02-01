@@ -2,6 +2,7 @@ package org.openelis.test.client.calendar;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.CheckBox;
@@ -109,6 +110,16 @@ public class CalendarScreen extends Screen {
 		begin.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
 				test.setBegin(event.getValue().byteValue());
+		    	if(event.getValue() > Datetime.DAY) {
+		    		mask.setValue("99:99");
+		    		pattern.setValue("HH:mm");
+		    	} else if (end.getValue() < Datetime.HOUR){
+		    		mask.setValue("9999-99-99");
+		    		pattern.setValue("yyyy-MM-dd");
+		    	} else {
+		    		mask.setValue("9999-99-99 99:99");
+		    		pattern.setValue("yyyy-MM-dd HH:mm");
+		    	}
 			}
 		});
 		
@@ -117,6 +128,16 @@ public class CalendarScreen extends Screen {
 		end.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
 				test.setEnd(event.getValue().byteValue());
+		    	if(begin.getValue() > Datetime.DAY) {
+		    		mask.setValue("99:99");
+		    		pattern.setValue("HH:mm");
+		    	} else if (event.getValue() < Datetime.HOUR){
+		    		mask.setValue("9999-99-99");
+		    		pattern.setValue("yyyy-MM-dd");
+		    	} else {
+		    		mask.setValue("9999-99-99 99:99");
+		    		pattern.setValue("yyyy-MM-dd HH:mm");
+		    	}
 			}
 		});
 		
@@ -147,7 +168,6 @@ public class CalendarScreen extends Screen {
 		imodel.add(new Item<Integer>(2,"Day"));
 		imodel.add(new Item<Integer>(3,"Hour"));
 		imodel.add(new Item<Integer>(4,"Minute"));
-		imodel.add(new Item<Integer>(5,"Second"));
 		
 		begin.setModel(imodel);
 		begin.setValue(0);

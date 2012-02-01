@@ -302,6 +302,9 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         if(!Util.isDifferent(this.value, value))
             return;
         
+        if(value == null && mode == Mode.TWO_STATE)
+        	value = "N";
+        
         this.value = Value.getValue(value);
         setStylePrimaryName(this.value.getStyle());
 
