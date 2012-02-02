@@ -170,6 +170,8 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		setState(value);
 		if(fireEvents)
 			ValueChangeEvent.fireIfNotEqual(this, old, value);
+		else
+			field.setValue(value);
 	}
 
 	public HandlerRegistration addValueChangeHandler(
