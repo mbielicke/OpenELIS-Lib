@@ -49,46 +49,62 @@ public class NewMaskListener {
 		 */
 		for(char in : input.toCharArray()) {
 		    do {
+		    	System.out.println(applied.toString());
 		    	loop = false;
 		    	mc = mask.charAt(pos); 
 		    	switch(mc) {
-		    		case '9' :					
+		    		case '9' :			
+		    			// If input is digit, apply and move on
 		    			if(Character.isDigit(in)) {  
 		    				applied.append(in);
 		    				pos++;
+		    			//If the input is the next expected literal in mask
+		    			//increment up the mask and loop again
+		    			}else if(isNextLiteral(in,pos)){
+		    				mc = mask.charAt(++pos);
+		    				loop = true;
 		    			}
 		    			break;
 		    		case 'X' :
+		    			// input is ok, apply and move on
 		    			if(Character.isLetterOrDigit(in)) {  
 		    				applied.append(in);
 		    				pos++;
+			    		//If the input is the next expected literal in mask
+			    		//increment up the mask and loop again
+		    			}else if(isNextLiteral(in,pos)){
+		    				mc = mask.charAt(++pos);
+		    				loop = true;
 		    			}
 		    			break;
 		    		default :
 		    			applied.append(mc);
 		    			pos++;
+		    			
+		    			// if true means that a literal was jut added for the user and we want to 
+		    			// go up a position in the mask before applying in.
 		    			if(mc != in) {
-		    				mc = mask.charAt(pos);
-		    				loop = true;
+	    					mc = mask.charAt(pos);
+	    					loop = true;
 		    			}
 		    	}
 			} while(loop && pos < mask.length());
 		}
 		
-		/*
-		 *	Check if Literal characters need to be added to the end of the string 
-		 
-		if(pos < mask.length()) {
-			mc = mask.charAt(pos);
-			while(mc != 'X' && mc != '9') {
-				applied.append(mc);
-				mc = mask.charAt(++pos);
-			}
-		}
-		*/
-		
-		
 		textbox.setText(applied.toString());
 	}
+	
+    private boolean isNextLiteral(char in, int pos) {
+    	char mc;
+    	
+    	mc = mask.charAt(pos);
+    	while(pos < mask.length() && (mc == '9' || mc == 'X')) {
+    		pos++;
+    		mc = mask.charAt(pos);
+    	}
+    	
+    	return pos < mask.length() && mc == in;
+    	
+    }
 
 }
