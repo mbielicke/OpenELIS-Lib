@@ -630,6 +630,7 @@ public class Dropdown<T> extends TextBox<T> {
             }
             Collections.sort(searchText);
         }
+        
         index = Collections.binarySearch(searchText, new SearchPair( -1, textValue),
                                          new MatchComparator());
 
@@ -719,7 +720,7 @@ public class Dropdown<T> extends TextBox<T> {
                     //event.stopPropagation();
                     break;
                 case KeyCodes.KEY_BACKSPACE:
-                    int selectLength;
+                    int selectLength,start,end;
                     /*
                      * If text is selected we want to select one more position back so the correct 
                      * text will be received in the key up event.
@@ -727,7 +728,16 @@ public class Dropdown<T> extends TextBox<T> {
                     selectLength = textbox.getSelectionLength();
                     if(selectLength > 0){
                         selectLength++;
-                        textbox.setSelectionRange(getText().length() - selectLength, selectLength);
+                        
+                        start = getText().length() - selectLength;
+                        if(start < 0)
+                        	start = 0;
+                        
+                        end = selectLength;
+                        if(end > getText().length())
+                        	end = getText().length();
+                        	
+                        textbox.setSelectionRange(start,end);
                     }
             }
 
@@ -776,7 +786,7 @@ public class Dropdown<T> extends TextBox<T> {
 
                     cursorPos = text.length();
                     index = findIndexByTextValue(text);
-
+                    
                     if (index > -1)
                         setSelectedIndex(index);
                     else
@@ -786,7 +796,8 @@ public class Dropdown<T> extends TextBox<T> {
                      * Call getText() here instead of text because it was changed
                      * by setSelectedIndex(0);
                      */
-                    textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
+                    if(getText().length() > cursorPos)
+                    	textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
 
             }
         }

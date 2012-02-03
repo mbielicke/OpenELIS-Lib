@@ -165,6 +165,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
 			mc = mask.charAt(pos);
 		   
 			do {
+				System.out.println(applied.toString());
 		    	loop = false;
 		    	switch(mc) {
 		    		case '9' :					
@@ -172,7 +173,8 @@ public class DateHelper implements WidgetHelper<Datetime> {
 		    				applied.append(in);
 		    				pos++;
 		    			}else if(isNextLiteral(in,pos)){
-		    				applied.insert(applied.length()-1,"0");
+		    				if(pos == input.length()-1)
+		    					applied.insert(applied.length()-1,"0");
 		    				mc = mask.charAt(++pos);
 		    				loop = true;
 		    			}
@@ -184,12 +186,18 @@ public class DateHelper implements WidgetHelper<Datetime> {
 		    			}
 		    			break;
 		    		default :
-		    			applied.append(mc);
-		    			pos++;
+		    			if(applied.charAt(applied.length()-1) != mc)
+		    				applied.append(mc);
+		    			
 		    			if(mc != in) {
-		    				mc = mask.charAt(pos);
-		    				loop = true;
-		    			}
+		    				if(input.length() <= mask.length()) {
+		    					pos++;
+		    					mc = mask.charAt(pos);
+		    					loop = true;
+		    				}
+		    			}else
+		    				pos++;
+		    			
 		    	}
 			} while(loop && pos < mask.length());
 		}

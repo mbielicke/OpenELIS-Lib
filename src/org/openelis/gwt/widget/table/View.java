@@ -180,6 +180,11 @@ public class View extends Composite {
             public void onClick(ClickEvent event) {
             	int r,c;
             	
+            	// if x < 0 the user moused out of table before letting up button
+            	// ignore event in this case
+            	if(event.getX() < 0)
+            		return;
+            	
                 c = table.getColumnForX(event.getX());
                 r = firstVisibleRow + (event.getY() / rowHeight);
                 
