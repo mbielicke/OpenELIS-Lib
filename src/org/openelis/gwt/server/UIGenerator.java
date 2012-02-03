@@ -1706,8 +1706,15 @@ public class UIGenerator extends Generator {
                         }
                     }
                 }
-                sw.println("panel.addFocusHandler(wid"+id+");");
-				sw.println("wid"+id+".addFocusHandler(panel);");
+                
+                // if parentNode is null or is dropdown or autocomplete we don't want to add this table to the panel 
+                // focus handler since it is part of another widget and not a stand alone table.
+                if(node.getParentNode() != null && !node.getParentNode().getNodeName().equals("dropdown") 
+                		                        && !node.getParentNode().getNodeName().equals("autoComplete")) {
+                	sw.println("panel.addFocusHandler(wid"+id+");");
+                	sw.println("wid"+id+".addFocusHandler(panel);");
+                }
+                
 				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 setDefaults(node,"wid"+id);
