@@ -243,7 +243,16 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * Puts Checkbox into and out of Query Mode
      */
     public void setQueryMode(boolean query) {
+        if(queryMode == query)
+        	return;
+        
         queryMode = query;
+        
+        if(query)
+        	setMode(Mode.THREE_STATE);
+        else
+        	setMode(Mode.TWO_STATE);
+        	
     }
 
     /**
