@@ -26,6 +26,12 @@ public class NewMaskListener {
 				int cursor,selectStart,selectEnd;
 				StringBuffer applied;
 				
+				/*
+				 * If return if mask is not be enforced such as when in Query Mode;
+				 */
+				if(!textbox.enforceMask)
+		            return;
+				
 				input = textbox.getText();  // Current state of the Textbox including selection.
 				
 				cursor = textbox.getCursorPos(); //Current position of cursor when key was pressed.
