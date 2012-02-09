@@ -63,7 +63,7 @@ public class CalendarScreen extends Screen {
 		mask.setValue("9999-99-99");
 		mask.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.getHelper().setMask(event.getValue());
+				test.setMask(event.getValue());
 			}
 		});
 		

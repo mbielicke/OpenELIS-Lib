@@ -671,20 +671,16 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Date", new Factory() {
             public void getNewInstance(Node node, int id){
-            	String begin,end,pattern,mask;
+            	String begin,end,pattern;
             	
             	begin = getAttribute(node,"begin","0");
             	end = getAttribute(node,"end","2");
             	pattern = getAttribute(node,"pattern","yyyy-MM-dd");
-            	mask = getAttribute(node,"mask",null);
             	
                 sw.println("DateHelper field"+id+" = new DateHelper();");
                 sw.println("field"+id+".setBegin((byte)"+begin+");");
                 sw.println("field"+id+".setEnd((byte)"+end+");");
                 sw.println("field"+id+".setPattern(\""+pattern+"\");");
-                
-                if(mask != null) 
-                	sw.println("field"+id+".setMask(\""+mask+"\");");
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.DateHelper");
@@ -810,19 +806,15 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Double", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String pattern,mask;
+            	String pattern;
             	 
             	pattern = getAttribute(node,"pattern");
-            	mask = getAttribute(node,"mask");
 
                 sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
                 
                 if (pattern != null) 
                     sw.println("field"+id+".setPattern(\""+pattern+"\");");
-                
-                if (mask != null)
-                	sw.println("field"+id+".setMask(\""+mask+"\");");
-                
+                                
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.DoubleHelper");
@@ -1226,18 +1218,14 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("Long", new Factory(){
             public void getNewInstance(Node node,int id) {
-            	String pattern,mask;
+            	String pattern;
             	
             	pattern = getAttribute(node,"pattern");
-            	mask = getAttribute(node,"mask");
             	
                 sw.println("LongHelper field"+id+" = new LongHelper();");
                 
                 if (pattern != null) 
                     sw.println("field"+id+".setPattern(\""+pattern+"\");");
-                
-                if (mask != null)
-                	sw.println("field"+id+".setMask(\""+mask+"\");");
                 
             }
             public void addImport() {
@@ -1551,14 +1539,9 @@ public class UIGenerator extends Generator {
     	
         factoryMap.put("String", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String mask;
-            	
-            	mask = getAttribute(node,"mask");
             	
                 sw.println("StringHelper field"+id+" = new StringHelper();");
                 
-                if (mask != null)
-                	sw.println("field"+id+".setMask(\""+mask+"\");");
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
@@ -1948,7 +1931,7 @@ public class UIGenerator extends Generator {
 
     	factoryMap.put("textbox",new Factory() {
 			public void getNewInstance(Node node, int id) {
-				String field,fcase,max,textAlign,required,enabled,cField;
+				String field,fcase,max,textAlign,required,enabled,cField,mask;
 				
 				cField = (field = getAttribute(node,"field","String")).equals("Date") ? "Datetime" : field;
 				fcase = getAttribute(node,"case","MIXED");
@@ -1956,6 +1939,7 @@ public class UIGenerator extends Generator {
 				textAlign = getAttribute(node,"textAlign","LEFT");
 				required = getAttribute(node,"required");
 				enabled = getAttribute(node,"enabled");
+				mask = getAttribute(node,"mask");
 				
 				sw.println("TextBox<"+cField+"> wid"+id+" = new TextBox<"+cField+">();");
 				
@@ -1971,6 +1955,9 @@ public class UIGenerator extends Generator {
 
 				if (max != null) 
 					sw.println("wid"+id+".setMaxLength("+max+");");
+				
+				if (mask != null)
+					sw.println("wid"+id+".setMask(\""+mask+"\");");
 
 				sw.println("wid"+id+".setTextAlignment(ValueBoxBase.TextAlignment."+textAlign.toUpperCase()+");");
 	        

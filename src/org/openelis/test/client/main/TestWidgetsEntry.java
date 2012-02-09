@@ -1,5 +1,8 @@
 package org.openelis.test.client.main;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -16,6 +19,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 	  	 
+	  protected Logger logger = Logger.getLogger("TestWidgets");
 	  
 	  /**
 	   * This is the entry point method.
@@ -26,7 +30,7 @@ public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 		  GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			public void onUncaughtException(Throwable e) {
 				Window.alert("Sorry, but an unexpected error has occurred.  Please contact IT support");
-				e.printStackTrace();
+				logger.log(Level.SEVERE,e.getMessage(),e);
 			}
 		  });
 		  
@@ -41,12 +45,13 @@ public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 							  RootPanel.get().add(new org.openelis.test.client.main.TestWidgetsScreen());
 						  }catch(Throwable e){
 							  Window.alert("Unable to start app : "+e.getMessage());
-							  e.printStackTrace();
+							  logger.log(Level.SEVERE,e.getMessage(),e);
 						  }
 					  }
 
 					  public void onFailure(Throwable caught) {
 						  Window.alert(caught.getMessage());
+						  logger.log(Level.SEVERE,caught.getMessage(),caught);
 					  }
 				  });
 			  }

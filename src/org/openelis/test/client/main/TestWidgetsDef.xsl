@@ -36,7 +36,7 @@
               <menuItem description="Screen to test Calendar functionality" display="Calendar" enabled="false" icon="nothing" key="calendar" />
             </menu>
             <menu display="Help">
-              <menuItem description="" display="Logs" enabled="false" icon="nothing" key="logging"/>
+              <menuItem description="" display="Logs" enabled="false" icon="nothing" key="logs"/>
             </menu>
           </menuBar>
         </AbsolutePanel>

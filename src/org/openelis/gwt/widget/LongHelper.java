@@ -17,7 +17,7 @@ public class LongHelper implements WidgetHelper<Long> {
     /**
      * Widget value attributes
      */
-    protected String  pattern,mask;
+    protected String  pattern;
     
 	/**
 	 * Public no arg constructor
@@ -108,59 +108,6 @@ public class LongHelper implements WidgetHelper<Long> {
      */
     public void setPattern(String pattern) {
         this.pattern = pattern;
-    }
-    
-    public void setMask(String mask) {
-    	this.mask = mask;
-    }
-    
-    public String applyMask(String input) {
-		StringBuffer applied;
-		char mc;
-		int pos;
-		boolean loop;
-		
-		if(mask == null || mask.equals(""))
-			return input;
-		
-		applied = new StringBuffer();
-		pos = 0;
-		/*
-		 * Loop through input applying mask chars when needed
-		 */
-		for(char in : input.toCharArray()) {
-			if(pos >= mask.length())
-				break;
-			
-			mc = mask.charAt(pos);
-		   
-			do {
-		    	loop = false;
-		    	switch(mc) {
-		    		case '9' :					
-		    			if(Character.isDigit(in)) {  
-		    				applied.append(in);
-		    				pos++;
-		    			}
-		    			break;
-		    		case 'X' :
-		    			if(Character.isLetterOrDigit(in)) {  
-		    				applied.append(in);
-		    				pos++;
-		    			}
-		    			break;
-		    		default :
-		    			applied.append(mc);
-		    			pos++;
-		    			if(mc != in) {
-		    				mc = mask.charAt(pos);
-		    				loop = true;
-		    			}
-		    	}
-			} while(loop && pos < mask.length());
-		}
-		
-		return applied.toString();
     }
 
 }

@@ -40,7 +40,7 @@ UIRF Software License are applicable instead of those above.
   xmlns:so="xalan://org.openelis.gwt.common.ModulePermission">
 
   <xsl:template match="doc">
-    <screen name="Textbox">
+    <screen name="Calendar">
       <HorizontalPanel style="WhiteContentPanel">
         <CollapsePanel key="collapsePanel" style="noButtons">
           <VerticalPanel>

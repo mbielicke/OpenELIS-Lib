@@ -60,7 +60,7 @@ public class TextboxScreen extends Screen {
 		mask.setEnabled(true);
 		mask.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.getHelper().setMask(event.getValue());
+				test.setMask(event.getValue());
 			}
 		});
 		

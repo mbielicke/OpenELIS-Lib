@@ -1,12 +1,15 @@
 package org.openelis.test.client.main;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
-import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.Browser;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.test.client.calendar.CalendarScreen;
 import org.openelis.test.client.dropdown.DropdownScreen;
+import org.openelis.test.client.logging.LoggingScreen;
 import org.openelis.test.client.table.TableScreen;
 import org.openelis.test.client.textbox.TextboxScreen;
 import org.openelis.test.client.tree.TreeScreen;
@@ -20,7 +23,9 @@ import com.google.gwt.user.client.Window;
 public class TestWidgetsScreen extends Screen {
 
     public static Browser          browser;
-        
+     
+    protected Logger               logger = Logger.getLogger("TestWidgets");
+    
     public TestWidgetsScreen() throws Exception {
         
         super((ScreenDefInt)GWT.create(TestWidgetsDef.class));
@@ -43,6 +48,7 @@ public class TestWidgetsScreen extends Screen {
 					browser.addScreen(new TextboxScreen());
 				}catch(Exception e) {
                     Window.alert(e.getMessage());
+                    logger.log(Level.SEVERE,e.getMessage(),e);
 				}
 			}
 		});
@@ -53,6 +59,7 @@ public class TestWidgetsScreen extends Screen {
 					browser.addScreen(new DropdownScreen());
 				}catch(Exception e) {
                     Window.alert(e.getMessage());
+                    logger.log(Level.SEVERE,e.getMessage(),e);
 				}
 			}
 		});
@@ -63,6 +70,7 @@ public class TestWidgetsScreen extends Screen {
 					browser.addScreen(new TableScreen());
 				}catch(Exception e) {
                     Window.alert(e.getMessage());
+                    logger.log(Level.SEVERE,e.getMessage(),e);
 				}
 			}
 		});
@@ -73,6 +81,7 @@ public class TestWidgetsScreen extends Screen {
 					browser.addScreen(new TreeScreen());
 				}catch(Exception e) {
                     Window.alert(e.getMessage());
+                    logger.log(Level.SEVERE,e.getMessage(),e);
 				}
 			}
 		});
@@ -83,6 +92,18 @@ public class TestWidgetsScreen extends Screen {
     				browser.addScreen(new CalendarScreen());
     			}catch(Exception e) {
     				Window.alert(e.getMessage());
+    				logger.log(Level.SEVERE,e.getMessage(),e);
+    			}
+    		}
+    	});
+    	
+    	addCommand("logs",new Command() {
+    		public void execute() {
+    			try {
+    				browser.addScreen(new LoggingScreen());
+    			}catch(Exception e) {
+    				Window.alert(e.getMessage());
+    				logger.log(Level.SEVERE,e.getMessage(),e);
     			}
     		}
     	});

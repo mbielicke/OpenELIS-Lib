@@ -49,7 +49,4 @@ public interface WidgetHelper<T> {
      */
     public String format(T value);
 
-    public void setMask(String mask);
-    
-    public String applyMask(String input);
 }

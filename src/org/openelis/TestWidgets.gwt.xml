@@ -34,6 +34,7 @@ UIRF Software License are applicable instead of those above.
     <inherits name="org.openelis.gwt.Widget"/>
     <inherits name="org.openelis.gwt.Common"/>
     <inherits name="org.openelis.gwt.Screen"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
     <inherits name="com.allen_sauer.gwt.dnd.gwt-dnd"/> 
     
     <source path="test"/>
@@ -44,6 +45,13 @@ UIRF Software License are applicable instead of those above.
     
     <define-property name="props" values="org_openelis_constants_OpenELISConstants"/>
     <set-property name="props" value="org_openelis_constants_OpenELISConstants"/>
+    
+    <set-property name="gwt.logging.logLevel" value="FINE"/>
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.popupHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.systemHandler" value="ENABLED"/>
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED"/>
     
     
 </module>

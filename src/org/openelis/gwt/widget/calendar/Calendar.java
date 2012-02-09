@@ -157,21 +157,10 @@ public class Calendar extends TextBox<Datetime> {
                 if (queryMode) {
                     validateQuery();
                 } else
-                	helper.applyMask(event.getValue());
                     validateValue(true);
             }
 
         });
-		textbox.addKeyUpHandler(new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent event) {
-				if(queryMode || event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE || 
-						        event.getNativeKeyCode() == KeyCodes.KEY_DELETE)
-					return;
-			
-				textbox.setText(helper.applyMask(textbox.getText()));
-			}
-		});
-
     }
 
     /**
@@ -367,13 +356,13 @@ public class Calendar extends TextBox<Datetime> {
     	 * xsl, but defaults are provided if none set.
     	 */
     	if(dh.getBegin() > Datetime.DAY) {
-    		dh.setMask("99:99");
+    		setMask("99:99");
     		dh.setPattern("HH:mm");
     	} else if (dh.getEnd() < Datetime.HOUR){
-    		dh.setMask("9999-99-99");
+    		setMask("9999-99-99");
     		dh.setPattern("yyyy-MM-dd");
     	} else {
-    		dh.setMask("9999-99-99 99:99");
+    		setMask("9999-99-99 99:99");
     		dh.setPattern("yyyy-MM-dd HH:mm");
     	}
     }

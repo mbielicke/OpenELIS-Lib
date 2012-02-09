@@ -47,7 +47,4 @@ UIRF Software License are applicable instead of those above.
     <stylesheet src="CSS/calendar.css"/>    
     <stylesheet src="CSS/popwindow.css"/>
     <stylesheet src="CSS/menu.css"/>
-    <stylesheet src="CSS/DropDown.css"/>
-    <!--<stylesheet src="CSS/Canvas.css"/>-->
-   <!-- <stylesheet src="CSS/Common.css"/> -->
 </module>
