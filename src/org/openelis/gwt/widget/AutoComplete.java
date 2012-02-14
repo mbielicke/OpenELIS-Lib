@@ -219,8 +219,9 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 cursorPos = text.length();
 
                 setSelectedIndex(0);
-
-                textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
+                
+                if(getText().length() > cursorPos)
+                	textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
                 
             }
         };
@@ -550,8 +551,10 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * user has moved on from the widget so the first entry in the results
          * will be selected and displayed
          */
-        if (textbox.getStyleName().indexOf("Focus") > -1)
+        if (textbox.getStyleName().indexOf("Focus") > -1 && model != null && model.size() > 0)
             showPopup();
+        else  if(popup != null) 
+        	popup.hide();
     }
     
 	/**

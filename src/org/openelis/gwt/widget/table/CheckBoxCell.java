@@ -113,6 +113,8 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         
         query = false;
         editor.setQueryMode(false);
+        if(editor.getMode() == CheckBox.Mode.TWO_STATE && value == null)
+        	value = "N";
         style = CheckBox.Value.getValue(value).getStyle();
         div = new AbsolutePanel();
         div.setStyleName(style);

@@ -374,6 +374,8 @@ public class Dropdown<T> extends TextBox<T> {
         
 
         createKeyHash(model);
+        
+        searchText = null;
 
     }
 
@@ -640,7 +642,7 @@ public class Dropdown<T> extends TextBox<T> {
             // we need to do a linear search backwards to find the first entry
             // that matches our search
             index-- ;
-            while (index > 0 &&
+            while (index >= 0 &&
                    compareValue((String)searchText.get(index).display, textValue,
                                 textValue.length()) == 0)
                 index-- ;

@@ -61,6 +61,13 @@ public class Item<T> extends Row {
         this.enabled =  enabled;
     }
     
+    public String getStyle(int index) {
+    	if(enabled)
+    		return null;
+    	else
+    		return "Disabled";
+    }
+    
     @SuppressWarnings("unchecked")
 	public Object clone() {
     	Item<T> clone = (Item<T>)super.clone();

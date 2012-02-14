@@ -75,10 +75,13 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     }
     
     public Button(String icon,String label) {
-    	init();
-    	setDisplay(icon,label);
+    	this(icon,label,true);
     }
 
+    public Button(String icon,String label,boolean wrap) {
+    	init();
+    	setDisplay(icon,label,wrap);
+    }
     /**
      * Sets up event handling for the button.
      */
@@ -140,7 +143,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         
     }
     
-    public void setDisplay(String icon,String label) {
+    public void setDisplay(String icon,String label,boolean wrap) {
     	Grid grid;
     	
    		grid = new Grid(1,2);
@@ -151,7 +154,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     	grid.setText(0, 1, label); 
     	grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel");
     	DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,1),"paddingBottom","3px");
-    	setDisplay(grid,true);
+    	setDisplay(grid,wrap);
     }
 
     /**

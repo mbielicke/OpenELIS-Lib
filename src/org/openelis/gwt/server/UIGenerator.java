@@ -1346,6 +1346,87 @@ public class UIGenerator extends Generator {
     		}
     	});    	
     	
+    	factoryMap.put("multiSelect", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String fcase,visibleItems,field,width,enabled,required;
+    			NodeList list,cols;
+    		    Element table,label,col;
+    		    
+    		    field = getAttribute(node,"field","Integer");
+    		    visibleItems = getAttribute(node,"visibleItems","10");
+    		    fcase = getAttribute(node,"case","MIXED");
+    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
+    		    width = getAttribute(node,"width","-1");
+    		    enabled = getAttribute(node,"enabled");
+    		    required = getAttribute(node,"required");
+    		    
+    		    if(field.equals("Integer")) 
+    		        sw.println("MultiSelection<Integer> wid"+id+" = new MultiSelection<Integer>();");
+    		    else
+    		        sw.println("MultiSelection<String> wid"+id+" = new MultiSelection<String>();");
+    		    
+				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+				
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
+				
+				if(node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node, "wid"+id);
+				
+				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
+                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+
+				if(table == null) {
+				    table = doc.createElement("table");
+				    table.setAttribute("rows", visibleItems);
+				    table.setAttribute("width",width);
+				    cols = ((Element)node).getElementsByTagName("col");
+				    int length = cols.getLength();
+				    if(length > 0){
+				        for(int i = 0; i < length; i++){
+				        	col = (Element)cols.item(0);
+				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                                continue;
+				        	/*
+				            if(!col.hasChildNodes()) {
+				                label = doc.createElement("label");
+				                label.setAttribute("field", "String");
+				                cols.item(0).appendChild(label);
+				            }
+				            */
+				            table.appendChild(col);  
+				        }
+				    }else{
+				        col = doc.createElement("col");
+				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
+				        label = doc.createElement("label");
+				        label.setAttribute("field", "String");
+				        col.appendChild(label);
+				        table.appendChild(col);
+				    }
+				}
+				factoryMap.get("table").getNewInstance(table,1000+id);
+				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
+				
+				if(enabled != null)
+					sw.println("wid"+id+".setEnabled("+enabled+");");
+				
+				if(required != null)
+					sw.println("wid"+id+".setRequired("+required+");");
+				
+				setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.MultiSelection");
+                composer.addImport("org.openelis.gwt.widget.table.Table");
+                composer.addImport("org.openelis.gwt.widget.table.Column");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+    		}
+    	});    	
+    	
     	factoryMap.put("notes", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("NotesPanel wid"+id+" = new NotesPanel();");
@@ -1462,6 +1543,87 @@ public class UIGenerator extends Generator {
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.richtext.RichTextWidget");
+    		}
+    	});
+    	
+    	factoryMap.put("select", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			String fcase,visibleItems,field,width,enabled,required;
+    			NodeList list,cols;
+    		    Element table,label,col;
+    		    
+    		    field = getAttribute(node,"field","Integer");
+    		    visibleItems = getAttribute(node,"visibleItems","10");
+    		    fcase = getAttribute(node,"case","MIXED");
+    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
+    		    width = getAttribute(node,"width","-1");
+    		    enabled = getAttribute(node,"enabled");
+    		    required = getAttribute(node,"required");
+    		    
+    		    if(field.equals("Integer")) 
+    		        sw.println("Selection<Integer> wid"+id+" = new Selection<Integer>();");
+    		    else
+    		        sw.println("Selection<String> wid"+id+" = new Selection<String>();");
+    		    
+				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+				sw.println("wid"+id+".addFocusHandler(panel);");
+				
+				if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
+				
+				if(node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node, "wid"+id);
+				
+				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
+                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+
+				if(table == null) {
+				    table = doc.createElement("table");
+				    table.setAttribute("rows", visibleItems);
+				    table.setAttribute("width",width);
+				    cols = ((Element)node).getElementsByTagName("col");
+				    int length = cols.getLength();
+				    if(length > 0){
+				        for(int i = 0; i < length; i++){
+				        	col = (Element)cols.item(0);
+				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
+                                continue;
+				        	/*
+				            if(!col.hasChildNodes()) {
+				                label = doc.createElement("label");
+				                label.setAttribute("field", "String");
+				                cols.item(0).appendChild(label);
+				            }
+				            */
+				            table.appendChild(col);  
+				        }
+				    }else{
+				        col = doc.createElement("col");
+				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
+				        label = doc.createElement("label");
+				        label.setAttribute("field", "String");
+				        col.appendChild(label);
+				        table.appendChild(col);
+				    }
+				}
+				factoryMap.get("table").getNewInstance(table,1000+id);
+				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
+				
+				if(enabled != null)
+					sw.println("wid"+id+".setEnabled("+enabled+");");
+				
+				if(required != null)
+					sw.println("wid"+id+".setRequired("+required+");");
+				
+				setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.Selection");
+                composer.addImport("org.openelis.gwt.widget.table.Table");
+                composer.addImport("org.openelis.gwt.widget.table.Column");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
     		}
     	});
     	

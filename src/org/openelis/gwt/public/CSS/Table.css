@@ -116,6 +116,11 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 	background: white;
 }
 
+.DropdownTable tr.Disabled td {
+	color : grey;
+}
+
+
 .DropdownTable tr.Selection {
     background:#f0f0f0;
 }
