@@ -16,11 +16,11 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	public enum Case {MIXED,UPPER,LOWER};
     public Case textCase = Case.MIXED;
     
-    public boolean enforceMask = true;
+    public boolean enforceMask = false;
     public boolean enforceLength = true;
     public boolean autoNext = false;
     public int length = 255;
-    public String mask;
+    public String mask,picture;
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     private Field<T> field;
     private boolean enabled;
@@ -69,9 +69,26 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     }
     
     public void setMask(String mask) {
+    	StringBuffer pic;
+    	
         this.mask = mask;
-        new NewMaskListener(this,mask);
+    	pic = new StringBuffer();
+    	
+    	for(char mc : mask.toCharArray()) {
+    		switch (mc) {
+    			case '9' :
+    			case 'X' :
+    				pic.append(" ");
+    				break;
+    			default :
+    				pic.append(mc);
+    		}
+    	}
+    	picture = pic.toString();
+        
+    	new NewMaskListener(this,mask);
         setLength(mask.length()); 
+        enforceMask = true;
     }
     
     public void setTextAlignment(TextAlignConstant alignment){
@@ -169,6 +186,11 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 	
 	public void setFieldValue(T value) {
+		if(enforceMask && picture.equals(value)) {
+			value = null;
+			setText("");
+		}
+		
 		field.setValue(value);
 		if(value != null)
 			setText(field.format());

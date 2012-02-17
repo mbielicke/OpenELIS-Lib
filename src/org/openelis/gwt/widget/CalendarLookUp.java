@@ -168,7 +168,8 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 //	                textbox.addStyleName("TextboxUnselected");
 	                textbox.removeStyleName("Focus");
 	                icon.removeStyleName("Selected");
-	            	if("".equals(textbox.getValue())){
+	            	if("".equals(textbox.getValue()) || (textbox.enforceMask && textbox.picture.equals(textbox.getValue()))){
+	            		textbox.setText("");
 	        	    	if(field.getValue() != null){
 	            			setValue(null,true);
 	        	    	}
@@ -205,7 +206,14 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	    }
 
 		public void onValueChange(ValueChangeEvent<String> event) {
-				field.setStringValue(event.getValue());
+				String value;
+				
+				if(textbox.enforceMask && textbox.picture.equals(event.getValue()))
+					value = "";
+				else
+					value = event.getValue();
+				
+				field.setStringValue(value);
 				if(field.valid)
 					textbox.setText(field.format());
 		}
