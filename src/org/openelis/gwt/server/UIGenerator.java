@@ -1453,7 +1453,6 @@ public class UIGenerator extends Generator {
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 			    
-    	        sw.println("wid"+id+".setStyleName(\"ScreenPassword\");");
     	        setDefaults(node, "wid"+id);
     	        
     	        if(enabled != null)
@@ -1548,13 +1547,12 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("select", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String fcase,visibleItems,field,width,enabled,required;
+    			String visibleItems,field,width,enabled,required;
     			NodeList list,cols;
     		    Element table,label,col;
     		    
     		    field = getAttribute(node,"field","Integer");
     		    visibleItems = getAttribute(node,"visibleItems","10");
-    		    fcase = getAttribute(node,"case","MIXED");
     		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
     		    width = getAttribute(node,"width","-1");
     		    enabled = getAttribute(node,"enabled");
@@ -1575,13 +1573,13 @@ public class UIGenerator extends Generator {
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node, "wid"+id);
 				
-				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
                 sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
 
 				if(table == null) {
 				    table = doc.createElement("table");
 				    table.setAttribute("rows", visibleItems);
 				    table.setAttribute("width",width);
+				    table.setAttribute("hscroll", "NEVER");
 				    cols = ((Element)node).getElementsByTagName("col");
 				    int length = cols.getLength();
 				    if(length > 0){
@@ -1623,7 +1621,6 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
                 composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
     		}
     	});
     	
@@ -1822,7 +1819,7 @@ public class UIGenerator extends Generator {
                             }
                             
                             name = editor.item(j).getNodeName();
-                            field = getAttribute(editor.item(j),"field",name.equals("dropdown") ? "Integer" : "String");
+                            field = getAttribute(editor.item(j),"field",name.equals("select") || name.equals("dropdown") ? "Integer" : "String");
                             
                             if(field.equals("Date"))
                                 field = "Datetime";
@@ -1843,6 +1840,8 @@ public class UIGenerator extends Generator {
                             	sw.println("PercentCell cell"+child+" = new PercentCell(wid"+child+");");
                             else if(name.equals("time"))
                             	sw.println("TimeCell cell"+child+" = new TimeCell();");
+                            else if(name.equals("select"))
+                            	sw.println("SelectionCell cell"+child+" = new SelectionCell<"+field+">(wid"+child+");");
                             else
                                 sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
                             
@@ -1877,6 +1876,7 @@ public class UIGenerator extends Generator {
                composer.addImport("org.openelis.gwt.widget.table.ImageCell");
                composer.addImport("org.openelis.gwt.widget.table.PercentCell");
                composer.addImport("org.openelis.gwt.widget.table.TimeCell");
+               composer.addImport("org.openelis.gwt.widget.table.SelectionCell");
       	   }
      	});    	
     	

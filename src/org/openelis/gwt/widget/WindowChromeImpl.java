@@ -8,7 +8,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 public class WindowChromeImpl extends Window {
 	
 	public WindowChromeImpl() {
-		System.out.println("Using Window Chrome");
 	}
 
 	public void setKeyHandling() {
@@ -19,7 +18,6 @@ public class WindowChromeImpl extends Window {
          */
         addDomHandler(new KeyDownHandler() {
          	 public void onKeyDown(KeyDownEvent event) {
-         		System.out.println("Window Key down");
         		 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());   
         	 }
         },KeyDownEvent.getType());

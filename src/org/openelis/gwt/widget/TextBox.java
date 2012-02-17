@@ -85,6 +85,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         MIXED, UPPER, LOWER
     };
     
+    protected String                                picture;
+    
     /**
      * The Constructor now sets the wrapped GWT TextBox as the element widget of
      * this composite and adds an anonymous ValueCahngeHandler to handle input
@@ -312,6 +314,12 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * the value is different than what is currently stored.
      */
     public void setValue(T value, boolean fireEvents) {
+    	
+    	if(enforceMask && picture.equals(value)) {
+    		value = null;
+    		textbox.setText("");
+    	}
+    	
         if(!Util.isDifferent(this.value, value)) {
         	if(value != null)
         		textbox.setText(helper.format(value));
@@ -348,9 +356,19 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * @param fireEvents
      */
     protected void validateValue(boolean fireEvents) {
-        validateExceptions = null;
-        try {
-            setValue(helper.getValue(getText()), fireEvents);
+    	String text;
+    	
+    	text = getText();
+    	
+    	if(enforceMask && picture.equals(text)) {
+    		text = "";
+    		textbox.setText("");
+    	}
+    		
+    	validateExceptions = null;
+        
+    	try {
+            setValue(helper.getValue(text), fireEvents);
             if (required && value == null) 
                 addValidateException(new LocalizedException("gen.fieldRequiredException"));
         } catch (LocalizedException e) {
@@ -471,9 +489,23 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     }
     
     public void setMask(final String mask) {
+    	StringBuffer pic;
     	setMaxLength(mask.length());
     	enforceMask = true;
     	
+    	pic = new StringBuffer();
+    	for(char mc : mask.toCharArray()) {
+    		switch (mc) {
+    			case '9' :
+    			case 'X' :
+    				pic.append(" ");
+    				break;
+    			default :
+    				pic.append(mc);
+    		}
+    	}
+    	
+    	picture = pic.toString();
 		/*
 		 * Delete and BackSpace keys are handled in KeyDown because Chrome and IE do not 
 		 * pass these keys to the KeyPressEvent.  
@@ -540,6 +572,9 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 					 */
 					if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_BACKSPACE)
 						cursor--;
+					
+					if(cursor < 0)
+						return;
 					
 					mc = mask.charAt(cursor);  // get current mask char based on cursor
 
@@ -642,6 +677,9 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 
 				applied.append(input.substring(0,cursor));  // Copy the portion of input up to the cursor to the buffer
 
+				if(applied.length() >= mask.length())
+					return;
+				
 				mc = mask.charAt(applied.length());  // Get the Mask char for the position typed
 
 				/*

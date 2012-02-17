@@ -101,7 +101,6 @@ public class Browser extends Composite {
     }
     
     public void init(boolean size, int limit) {
-    	System.out.println(com.google.gwt.user.client.Window.Navigator.getUserAgent());
         browser = new AbsolutePanel();
         windows = new HashMap<Window, WindowValues>();
         windowsByKey = new HashMap<String,Window>();

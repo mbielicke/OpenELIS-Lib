@@ -54,7 +54,6 @@ public class ReportServlet extends HttpServlet {
             file = new File(status.getPath(), status.getMessage());
             if (! file.exists()) {
                 error(resp, "Specified file is not valid; please report this error to your sysadmin");
-                System.out.println("File "+file.getAbsolutePath()+" not found");
                 return;
             }
                         

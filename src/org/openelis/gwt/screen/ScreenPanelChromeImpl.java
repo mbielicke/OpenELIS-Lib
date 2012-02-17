@@ -15,11 +15,9 @@ public class ScreenPanelChromeImpl extends ScreenPanel {
 	
 	public ScreenPanelChromeImpl() {
 		super();
-		System.out.println("Using Screen Chrome");
 	}
 	
 	public ScreenPanelChromeImpl(ScreenDefInt def) {
-		System.out.println("Using Screen Chrome");
 	}
 	
 	public void setKeyHandling() {
@@ -38,8 +36,6 @@ public class ScreenPanelChromeImpl extends ScreenPanel {
 				alt = event.isAltKeyDown();
 				shift = event.isShiftKeyDown();
 				key = (char)event.getNativeKeyCode();
-				System.out.println("In PanelChrome KeyDown handler");
-				System.out.println(ctrl +","+alt+","+shift+","+key+" shortcuts = "+shortcuts);
 				for(final Shortcut handler : shortcuts) {
 					if(handler.ctrl == ctrl && handler.alt == alt && handler.shift == shift && String.valueOf(handler.key).toUpperCase().equals(String.valueOf(key).toUpperCase())){
 						if(handler.wid instanceof Button) {

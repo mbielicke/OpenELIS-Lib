@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 public class BrowserChromeImpl extends Browser {
 	
 	public BrowserChromeImpl() {
-		System.out.println("Using Browser Chrome version");
 	}
 	
 	public BrowserChromeImpl(boolean size, int windows) {
@@ -20,7 +19,6 @@ public class BrowserChromeImpl extends Browser {
          */
         addDomHandler(new KeyDownHandler() {
         	public void onKeyDown(KeyDownEvent event) {
-        		System.out.println("Browser KeyDown");
    				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
         		
         	}

@@ -17,6 +17,7 @@
 
 .Table td {
 	overflow : hidden;
+	text-overflow : ellipsis;
 	white-space : nowrap;
 	border-color: #FFFFFF #EDEDED #EDEDED;
 	border-style: solid;
@@ -45,6 +46,9 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 	border-width: 0px 1px 1px 0px;
 }
 
+.Table tr.Selection .SelectBox td {
+	border-width : 0 0 0 0;
+}
 
 .Table tr.SubHeader td{
 	border: 1px solid #B5B8C8;
@@ -72,6 +76,7 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 
 .Header td {
 	overflow : hidden;
+	text-overflow : ellipsis;
 	white-space : nowrap;
 	border-color: #B5B8C8;
 	border-style: solid;
@@ -127,6 +132,7 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 
 .DropdownTable td {
 	overflow : hidden;
+	text-overflow : ellipsis;
 	white-space : nowrap;
 	color: black;
 	cursor: pointer;
@@ -267,6 +273,7 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 
 .Tree td {
 	overflow : hidden;
+	text-overfow : ellipsis;
 	white-space : nowrap;
 	border : none;
 	color: black;
