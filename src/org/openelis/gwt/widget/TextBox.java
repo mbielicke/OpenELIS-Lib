@@ -186,7 +186,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 	
 	public void setFieldValue(T value) {
-		if(enforceMask && picture.equals(value)) {
+		if(enforceMask && picture != null && picture.equals(value)) {
 			value = null;
 			setText("");
 		}
