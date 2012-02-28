@@ -32,6 +32,10 @@ public class NewMaskListener {
 				if(!textbox.enforceMask)
 		            return;
 				
+				if((event.isAnyModifierKeyDown() && !event.isShiftKeyDown()) || 
+				    event.getNativeKeyCode() >= 112 && event.getNativeKeyCode() <= 124)
+					return;
+				
 				input = textbox.getText();  // Current state of the Textbox including selection.
 				
 				cursor = textbox.getCursorPos(); //Current position of cursor when key was pressed.
@@ -132,6 +136,10 @@ public class NewMaskListener {
 				 */
 				if(!textbox.enforceMask)
 		            return;
+				
+				if((event.isAnyModifierKeyDown() && !event.isShiftKeyDown()) || 
+					event.getNativeEvent().getKeyCode() >= 112 && event.getNativeEvent().getKeyCode() <= 124)
+						return;
 				
 				input = textbox.getText();  // Current state of the Textbox including selection.
 				
