@@ -40,13 +40,50 @@ UIRF Software License are applicable instead of those above.
   xmlns:so="xalan://org.openelis.gwt.common.ModulePermission">
 
   <xsl:template match="doc">
-    <screen>
-      <VerticalPanel>
-        <label key="textbox" text="TextBox"/>
-        <label key="dropdown" text="Dropdown"/>
-        <label key="table" text="Table"/>
-        <label key="tree" text="Tree"/>
-      </VerticalPanel>
+    <screen name="Text Area">
+      <HorizontalPanel style="WhiteContentPanel">
+        <CollapsePanel key="collapsePanel" style="noButtons">
+          <VerticalPanel>
+            <TablePanel style="Form">
+              <row>
+                <text style="Prompt">Enabled:</text>
+                <check key="enabled"/>
+              </row>
+              <row>
+                <text style="Prompt">Required:</text>
+                <check key="required"/>
+              </row>
+              <row>
+                <text style="Prompt">CSS Class:</text>
+                <textbox key="css"/>
+              </row>
+              <row>
+                <text style="Prompt">Value:</text>
+                <textbox key="value"/>
+                <button icon="nothing" text="Set" key="setValue"/>
+              </row>
+            </TablePanel>
+          </VerticalPanel>
+        </CollapsePanel>
+        <AbsolutePanel>
+          <TablePanel style="Form">
+            <row>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy1" tab="test,dummy2" enabled="true"/>
+            </row>
+            <row>
+              <text style="Prompt">Test:</text>
+              <textarea key="test" tab="dummy2,dummy1"/>
+            </row>
+            <row>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy2" tab="dummy1,test" enabled="true"/>
+            </row>
+          </TablePanel>
+        </AbsolutePanel>
+       </HorizontalPanel>
     </screen>
- </xsl:template>
+  </xsl:template>
+ 
 </xsl:stylesheet>
+  

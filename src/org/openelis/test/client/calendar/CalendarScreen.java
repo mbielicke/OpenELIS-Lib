@@ -1,32 +1,39 @@
 package org.openelis.test.client.calendar;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.DateHelper;
-import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
+import org.openelis.gwt.widget.Selection;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.calendar.Calendar;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 
 public class CalendarScreen extends Screen {
 	
-	Calendar          test;
-	TextBox<String>   mask,pattern,value;
-	CheckBox          enabled,required,query;
-	Dropdown<Integer> begin,end;
-	Dropdown<String>  alignment,logLevel;
+	Calendar           test;
+	TextBox<String>    mask,pattern,value,css;
+	CheckBox           enabled,required,query;
+	Selection<Integer> begin,end;
+	Selection<String>  alignment,logLevel;
+	Button			   setValue,getQuery;	
 	
 	public CalendarScreen() {
 		super((ScreenDefInt)GWT.create(CalendarDef.class));
@@ -78,7 +85,15 @@ public class CalendarScreen extends Screen {
 		});
 		
 		value = (TextBox)def.getWidget("value");
-		value.setEnabled(false);
+		value.setEnabled(true);
+		
+		setValue = (Button)def.getWidget("setValue");
+		setValue.setEnabled(true);
+		setValue.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				test.setValue(new Datetime(begin.getValue().byteValue(),end.getValue().byteValue(),new Date(value.getValue())));
+			}
+		});
 		
 		enabled = (CheckBox)def.getWidget("enabled");
 		enabled.setEnabled(true);
@@ -102,10 +117,22 @@ public class CalendarScreen extends Screen {
 		query.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				test.setQueryMode("Y".equals(event.getValue()));
+				getQuery.setEnabled("Y".equals(event.getValue()));
 			}
 		});
 		
-		begin = (Dropdown<Integer>)def.getWidget("begin");
+		getQuery = (Button)def.getWidget("getQuery");
+		getQuery.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				QueryData qd;
+				
+				qd = (QueryData)test.getQuery();
+				
+				Window.alert(qd != null ? qd.getQuery() : "null");
+			}
+		});
+		
+		begin = (Selection<Integer>)def.getWidget("begin");
 		begin.setEnabled(true);
 		begin.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -123,7 +150,7 @@ public class CalendarScreen extends Screen {
 			}
 		});
 		
-		end = (Dropdown<Integer>)def.getWidget("end");
+		end = (Selection<Integer>)def.getWidget("end");
 		end.setEnabled(true);
 		end.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -141,12 +168,21 @@ public class CalendarScreen extends Screen {
 			}
 		});
 		
-		alignment = (Dropdown<String>)def.getWidget("alignment");
+		alignment = (Selection<String>)def.getWidget("alignment");
 		alignment.setEnabled(true);
 
 		alignment.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				test.setTextAlignment(TextAlignment.valueOf(event.getValue().toUpperCase()));
+			}
+		});
+		
+		css = (TextBox<String>)def.getWidget("css");
+		css.setEnabled(true);
+		css.setValue(test.getStyleName());
+		css.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				test.setStyleName(event.getValue());
 			}
 		});
 		

@@ -51,11 +51,11 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">Field:</text>
-                <dropdown key="field" width="75"/>
+                <select key="field" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Case:</text>
-                <dropdown key="case" width="75"/>
+                <select key="case" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>
@@ -68,6 +68,10 @@ UIRF Software License are applicable instead of those above.
               <row>
                 <text style="Prompt">Required:</text>
                 <check key="required"/>
+              </row>
+              <row>
+                <text style="Prompt">CSS Class:</text>
+                <textbox key="css"/>
               </row>
               <row>
                 <text style="Prompt">Value:</text>

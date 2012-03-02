@@ -1,16 +1,17 @@
 package org.openelis.test.client.logging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
-import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
+import org.openelis.gwt.widget.Selection;
+import org.openelis.test.client.Application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -18,12 +19,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.logging.client.HasWidgetsLogHandler;
-import com.google.gwt.logging.client.HtmlLogFormatter;
+import com.google.gwt.logging.client.SimpleRemoteLogHandler;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * This screen will give the users a chance to view the logs output by the Application in
@@ -32,12 +31,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class LoggingScreen extends Screen {
 	
-	protected Dropdown<String> logLevel;
+	protected Selection<String> logLevel;
 	protected Button           clearLog;
 	protected CheckBox         remoteSwitch;
 	protected HasWidgets	   logPanel;
 	
-	protected Logger           logger = Logger.getLogger("TestWidgets");
+	protected static SimpleRemoteLogHandler remoteLogger;
 		
 	/**
 	 * No arg-constructor
@@ -59,20 +58,7 @@ public class LoggingScreen extends Screen {
 		initialize();
 		initializeDropdowns();
 		
-		logPanel = new VerticalPanel();
-		
-		HasWidgetsLogHandler handler = new HasWidgetsLogHandler(logPanel);
-		HtmlLogFormatter formatter = new HtmlLogFormatter(true) {
-			@Override
-			protected String getHtmlPrefix(LogRecord event) {
-			    StringBuilder prefix = new StringBuilder();
-			    prefix.append("<span>");
-			    prefix.append("<code>");
-			    return prefix.toString();
-			}
-		};
-		
-		logger.addHandler(handler);
+		logPanel = Application.getLogPanel();
 				
 		((ScrollPanel)def.getWidget("logContainer")).setWidget((IsWidget)logPanel);
 	}
@@ -81,12 +67,12 @@ public class LoggingScreen extends Screen {
 	 * Method to initialize widgets used in the screen.
 	 */
 	private void initialize() {
-		logLevel = (Dropdown<String>)def.getWidget("logLevel");
+		logLevel = (Selection<String>)def.getWidget("logLevel");
 		logLevel.setEnabled(true);
 		
 		logLevel.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				logger.setLevel(Level.parse((event.getValue())));
+				Application.logger().setLevel(Level.parse((event.getValue())));
 			}
 		});
 		
@@ -100,6 +86,25 @@ public class LoggingScreen extends Screen {
 				logPanel.clear();
 			}
 		});
+		
+		remoteSwitch = (CheckBox)def.getWidget("remoteAll");
+		remoteSwitch.setEnabled(true);
+		
+		remoteSwitch.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				if("Y".equals(event.getValue())) {
+					if(remoteLogger == null)
+						remoteLogger = new SimpleRemoteLogHandler();
+					
+					Application.logger().addHandler(remoteLogger);
+				} else {
+					Application.logger().removeHandler(remoteLogger);
+				}
+			}
+		});
+		
+		if(remoteLogger != null && Arrays.asList(Application.logger().getHandlers()).contains(remoteLogger))
+			remoteSwitch.setValue("Y");
 	}
 	
 	/**
@@ -108,6 +113,7 @@ public class LoggingScreen extends Screen {
 	 */
 	private void initializeDropdowns() {
 		ArrayList<Item<String>> model;
+		Logger logger;
 		
 		model = new ArrayList<Item<String>>();
 		
@@ -122,7 +128,8 @@ public class LoggingScreen extends Screen {
 		
 		logLevel.setModel(model);
 		
-		while(logger.getLevel() == null) 
+		logger = Application.logger();
+		while(Application.logger().getLevel() == null) 
 			logger = logger.getParent();
 		
 		logLevel.setValue(logger.getLevel().toString());

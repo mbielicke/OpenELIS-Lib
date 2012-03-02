@@ -34,6 +34,11 @@
               <menuItem description="Screen to test Table functionality" display="Table" enabled="true" icon="nothing" key="table" />
               <menuItem description="Screen to test Tree functionality" display="Tree" enabled="false" icon="nothing" key="tree" />
               <menuItem description="Screen to test Calendar functionality" display="Calendar" enabled="false" icon="nothing" key="calendar" />
+              <menuItem description="Screen to test Selection functionality" display="Selection" enabled="false" icon="nothing" key="selection" />
+              <menuItem description="Screen to test Button functionality" display="Button" enabled="false" icon="nothing" key="button"/>  
+              <menuItem description="Screen to test AutoComplete functionality" display="AutoComplete" enabled="false" icon="nothing" key="autoComplete"/>
+              <menuItem description="Screen to test Text Area functionality" display="Text Area" enabled="false" icon="nothing" key="textarea"/>
+              <menuItem description="Screen to text CheckBox functionality" display="CheckBox" enabled="false" icon="nothing" key="checkbox"/>
             </menu>
             <menu display="Help">
               <menuItem description="" display="Logs" enabled="false" icon="nothing" key="logs"/>

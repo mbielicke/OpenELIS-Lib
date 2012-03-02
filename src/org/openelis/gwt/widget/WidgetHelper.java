@@ -48,5 +48,7 @@ public interface WidgetHelper<T> {
      * @return
      */
     public String format(T value);
+    
+    public void setPattern(String pattern);
 
 }

@@ -47,11 +47,19 @@ UIRF Software License are applicable instead of those above.
             <TablePanel style="Form">
               <row>
                 <text style="Prompt">Field:</text>
-                <dropdown key="field" width="75"/>
+                <select key="field" width="75"/>
+              </row>
+              <row>
+                <text style="Prompt">Begin:</text>
+                <select key="begin" field="Integer" width="100"/>
+              </row>
+              <row>
+                <text style="Prompt">End:</text>
+                <select key="end" field="Integer" width="100"/>
               </row>
               <row>
                 <text style="Prompt">Case:</text>
-                <dropdown key="case" width="75"/>
+                <select key="case" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>
@@ -59,11 +67,14 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">Alignment:</text>
-                <dropdown key="alignment" width="75"/>
+                <select key="alignment" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Query Mode:</text>
-                <check key="query"/>
+                <HorizontalPanel>
+                	<check key="query"/>
+                	<button icon="nothing" text="Query" key="getQuery"/>
+                </HorizontalPanel>
               </row>
               <row>
                 <text style="Prompt">Mask:</text>
@@ -82,17 +93,30 @@ UIRF Software License are applicable instead of those above.
                 <textbox key="maxlength" field="Integer"/>
               </row>
               <row>
+                <text style="Prompt">CSS Class:</text>
+                <textbox key="css"/>
+              </row>
+              <row>
                 <text style="Prompt">Value:</text>
                 <textbox key="value"/>
+                <button icon="nothing" text="Set" key="setValue"/>
               </row>
             </TablePanel>
           </VerticalPanel>
         </CollapsePanel>
         <AbsolutePanel>
-          <TablePanel style="Form">
+          <TablePanel style="Form" key="displayTable">
+            <row>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy1" tab="test,dummy2" enabled="true"/>
+            </row>
             <row>
               <text style="Prompt">Test:</text>
-              <textbox key="test"/>
+              <textbox key="test" tab="dummy2,dummy1"/>
+            </row>
+            <row>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy2" tab="dummy1,test" enabled="true"/>
             </row>
           </TablePanel>
         </AbsolutePanel>

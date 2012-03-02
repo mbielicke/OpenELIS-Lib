@@ -59,13 +59,14 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     /*
      * State variables for the button.
      */
-    private boolean toggles, enabled, pressed, locked;
-    private String  action;
+    private boolean toggles, enabled, pressed, locked,wrapped;
+    private String  action,text,icon;
     
     /*
      * Default styles used for the button
      */
     protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "Disabled";
+    
 
     /**
      * Default no-arg constructor
@@ -143,8 +144,12 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         
     }
     
-    public void setDisplay(String icon,String label,boolean wrap) {
+    public void setDisplay(String icon,String label,boolean wrap) {   
     	Grid grid;
+    	
+    	this.icon    = icon;
+    	this.text    = label;
+    	this.wrapped = wrap;
     	
    		grid = new Grid(1,2);
     	grid.setCellPadding(0);
@@ -340,6 +345,18 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      */
     public String getAction() {
         return action;
+    }
+    
+    public void setText(String text) {
+    	setDisplay(icon,text,wrapped);
+    }
+    
+    public void setIcon(String icon) {
+    	setDisplay(icon,text,wrapped);
+    }
+    
+    public void setWrap(boolean wrap) {
+    	setDisplay(icon,text,wrap);
     }
     
     

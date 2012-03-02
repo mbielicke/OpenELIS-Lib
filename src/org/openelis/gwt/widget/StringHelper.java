@@ -74,4 +74,8 @@ public class StringHelper implements WidgetHelper<String> {
         return value;
     }
     
+    public void setPattern(String pattern) {
+    	
+    }
+    
 }

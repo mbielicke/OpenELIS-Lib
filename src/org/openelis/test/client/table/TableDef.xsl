@@ -79,11 +79,15 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">VScroll:</text>
-                <dropdown key="vscroll" width="100"/>
+                <select key="vscroll" width="100"/>
               </row>
               <row>
                 <text style="Prompt">HScroll:</text>
-                <dropdown key="hscroll" width="100"/>
+                <select key="hscroll" width="100"/>
+              </row>
+              <row>
+                <text style="Prompt">CSS Class:</text>
+                <textbox key="css"/>
               </row>
               <row>
                 <widget colspan="2">
@@ -116,13 +120,11 @@ UIRF Software License are applicable instead of those above.
                 </widget>
               </row>
               <row>
-                <widget colspan="2">
                   <HorizontalPanel>
                     <button style="Button" key="set" text="Set"/>
                     <button style="Button" key="add" text="Add"/>
                     <button style="Button" key="remove" text="Remove"/>
                   </HorizontalPanel>
-                </widget>
               </row>
             </TablePanel>
           </VerticalPanel>
@@ -130,15 +132,27 @@ UIRF Software License are applicable instead of those above.
         <AbsolutePanel>
           <TablePanel style="Form">
             <row>
-              <table key="test" rows="10" style="ScreenTableWithSides">
-                <col header="Col 1" width="100"/>
-              </table>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy1" tab="test,dummy2" enabled="true"/>
             </row>
             <row>
+              <widget colspan="2">
+              <table key="test" rows="10" style="ScreenTableWithSides" tab="dummy2,dummy1">
+                <col header="Col 1" width="100"/>
+              </table>
+              </widget>
+            </row>
+            <row>
+              <widget colspan="2">
               <HorizontalPanel>
                 <button key="addRow" style="Button" text="Add Row"/>
                 <button key="removeRow" style="Button" text="Remove Row"/>
               </HorizontalPanel>
+              </widget>
+            </row>
+            <row>
+              <text style="Prompt">Dummy</text>
+              <textbox key="dummy2" tab="dummy1,test" enabled="true"/>
             </row>
           </TablePanel>
         </AbsolutePanel>

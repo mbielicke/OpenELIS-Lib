@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="TestWidgets" default="gwtc" basedir=".">
+	<!-- Configure path to GWT SDK -->
+	<property name="gwt.sdk" location="../OpenELIS-Lib-tools/gwt-2.4.0" />
+
+	<path id="project.class.path">
+		<pathelement location="war/WEB-INF/classes" />
+		<pathelement location="${gwt.sdk}/gwt-user.jar" />
+		<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
+		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
+		<pathelement location="${gwt.sdk}/gwt-servlet-deps.jar"/>
+		<pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar"/>
+	</path>
+
+	<target name="libs" description="Copy libs to WEB-INF/lib">
+		<delete file="war/WEB-INF/lib/gwt-servlet.jar" />
+		<mkdir dir="war/WEB-INF/lib" />
+		<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
+	</target>
+
+	<target name="javac" depends="libs" description="Compile java source">
+		<mkdir dir="war/WEB-INF/classes" />
+		<javac srcdir="src" includes="**" encoding="utf-8" destdir="war/WEB-INF/classes" source="1.5" target="1.5" nowarn="true" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path" />
+		</javac>
+		<copy todir="war/WEB-INF/classes">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="gwtc" depends="libs" description="GWT compile to JavaScript">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<pathelement location="src" />
+				<pathelement location="lib/gwt-dnd-3.0.0.jar" />
+				<pathelement location="/usr/local/java/jboss/client/jbossall-client.jar"/>
+				<path refid="project.class.path" />
+			</classpath>
+			<!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+			<jvmarg value="-Xmx2048M" />
+			<!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+			<arg value="org.openelis.test.TestWidgets" />
+			<arg value="-draftCompile" />
+		</java>
+	</target>
+
+	<target name="war" depends="gwtc" description="Create a war file">
+		<mkdir dir="build" />
+
+		<delete file="build/testwidgets.war" />
+		<delete file="war/WEB-INF/classes/logging.properties"/>
+        <copy todir="war/WEB-INF/classes" file="Meta-Data/logging.properties"/> 		
+		<war destfile="build/testwidgets.war" webxml="Meta-Data/testwidgets-web.xml">
+			<metainf dir="Meta-Data" includes="context.xml" />
+			<fileset dir="war/testwidgets">
+			</fileset>
+			<fileset dir="war/WEB-INF/deploy/testwidgets">
+				<include name="symbolMaps/*"/>
+		    </fileset>
+			<classes dir="war/WEB-INF/classes" includes="org/openelis/test/**/*, logging.properties" />					
+			<lib dir="war/WEB-INF/lib" includes="gwt-servlet.jar" />
+			<!--<lib dir="build" includes="openelis-lib.jar,security-common.jar,timetracker-common.jar" />-->
+		</war>
+	</target>
+
+	<target name="deploy-testwidgets" depends="war">
+		<copy file="build/testwidgets.war" todir="/usr/pub/http/Application" />
+	</target>
+
+	<target name="clean" description="Cleans this project">
+		<delete dir="war/WEB-INF/classes" failonerror="false" />
+		<delete dir="war/testwidgets" failonerror="false" />
+	</target>
+
+</project>

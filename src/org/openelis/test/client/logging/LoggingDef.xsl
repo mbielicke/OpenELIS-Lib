@@ -20,8 +20,10 @@
           <TablePanel style="Form">
             <row>
               <text style="Prompt">Log Level:</text>
-              <dropdown key="logLevel" width="100"/>
+              <select key="logLevel" width="100"/>
               <button style="Button" text="Clear Log" key="clearLog"/>
+              <text style="Prompt">Send all logs to Remote Server</text>
+              <check key="remoteAll"></check>
             </row>
           </TablePanel>
         </VerticalPanel>

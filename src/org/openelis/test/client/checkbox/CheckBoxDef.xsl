@@ -40,45 +40,21 @@ UIRF Software License are applicable instead of those above.
   xmlns:so="xalan://org.openelis.gwt.common.ModulePermission">
 
   <xsl:template match="doc">
-    <screen name="Calendar">
+    <screen name="CheckBox">
       <HorizontalPanel style="WhiteContentPanel">
         <CollapsePanel key="collapsePanel" style="noButtons">
           <VerticalPanel>
             <TablePanel style="Form">
               <row>
-                <text style="Prompt">Begin:</text>
-                <select key="begin" field="Integer" width="100"/>
-              </row>
-              <row>
-                <text style="Prompt">End:</text>
-                <select key="end" field="Integer" width="100"/>
-              </row>
-              <row>
                 <text style="Prompt">Enabled:</text>
                 <check key="enabled"/>
               </row>
               <row>
-                <text style="Prompt">Alignment:</text>
-                <select key="alignment" width="75"/>
-              </row>
-              <row>
                 <text style="Prompt">Query Mode:</text>
                 <HorizontalPanel>
-                  <check key="query"/>
-                  <button key="getQuery" icon="nothing" text="Query"/>
+                	<check key="query"/>
+                	<button icon="nothing" text="Query" key="getQuery"/>
                 </HorizontalPanel>
-              </row>
-              <row>
-                <text style="Prompt">Mask:</text>
-                <textbox key="mask"/>
-              </row>
-              <row>
-                <text style="Prompt">Pattern:</text>
-                <textbox key="pattern"/>
-              </row>
-              <row>
-                <text style="Prompt">Required:</text>
-                <check key="required"/>
               </row>
               <row>
                 <text style="Prompt">CSS Class:</text>
@@ -86,23 +62,21 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">Value:</text>
-                <HorizontalPanel>
-                  <textbox key="value"/>
-                  <button key="setValue" icon="nothing" text="Set"/>
-                </HorizontalPanel>
+                <textbox key="value"/>
+                <button icon="nothing" text="Set" key="setValue"/>
               </row>
             </TablePanel>
           </VerticalPanel>
         </CollapsePanel>
         <AbsolutePanel>
-          <TablePanel style="Form">
+          <TablePanel style="Form" key="displayTable">
             <row>
               <text style="Prompt">Dummy</text>
               <textbox key="dummy1" tab="test,dummy2" enabled="true"/>
             </row>
             <row>
               <text style="Prompt">Test:</text>
-              <calendar begin="0" end="2" key="test" tab="dummy2,dummy1"/>
+              <check key="test" tab="dummy2,dummy1"/>
             </row>
             <row>
               <text style="Prompt">Dummy</text>

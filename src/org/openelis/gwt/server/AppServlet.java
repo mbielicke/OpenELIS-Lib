@@ -28,10 +28,12 @@ package org.openelis.gwt.server;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.openelis.gwt.common.Datetime;
 import org.openelis.util.SessionManager;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.SerializationPolicy;
+import com.ibm.icu.util.Calendar;
 
 /**
  * This class extends RemoteServiceServlet from GWT and adds
@@ -68,11 +70,9 @@ public class AppServlet extends RemoteServiceServlet {
         session.setAttribute("IPAddress",
                              getThreadLocalRequest().getRemoteAddr());
         SessionManager.setSession(session);
-        try {
-           // ServiceUtils.getPermissions();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+        if(!getThreadLocalRequest().getServletPath().contains("timeout"))
+        	session.setAttribute("last_access", Datetime.getInstance(Datetime.YEAR,Datetime.MINUTE));
     }
     
     protected void onAfterResponseSerialized(String serializedResponse) {

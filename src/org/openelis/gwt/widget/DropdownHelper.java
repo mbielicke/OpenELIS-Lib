@@ -56,5 +56,9 @@ public class DropdownHelper<T> implements WidgetHelper<T> {
     public void setRenderer(Dropdown.Renderer renderer) {
         this.renderer = renderer;
     }
+    
+    public void setPattern(String pattern) {
+    	
+    }
 
 }

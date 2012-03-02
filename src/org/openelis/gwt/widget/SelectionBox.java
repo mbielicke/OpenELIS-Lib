@@ -47,6 +47,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -66,8 +67,8 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -75,6 +76,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by OpenELIS Screens to display and input values in forms
@@ -82,27 +84,28 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  * @param <T>
  */
-public class Selection<T> extends Composite implements ScreenWidgetInt, 
-													   Queryable, 
-													   Focusable,
-													   HasBlurHandlers, 
-													   HasFocusHandlers,
-													   HasValue<T>, 
-													   HasExceptions {
+public class SelectionBox<T> extends Composite implements ScreenWidgetInt, 
+													      Queryable, 
+													      Focusable,
+													      HasBlurHandlers, 
+													      HasFocusHandlers,
+													      HasValue<T>, 
+													      HasExceptions {
 
     /**
      * Used for Dropdown display
      */
 	
 	protected FocusPanel            				outer;
-	protected Grid 					                display,multiHeader;
+	protected Grid 					                multiHeader;
     protected VerticalPanel         				vp;
-    protected Button  					            button,checkAll,uncheckAll,close;
+    protected Button  					            checkAll,uncheckAll,close;
     protected Table                 				table;
     protected PopupPanel      					    popup;
     protected int                   			    cellHeight = 19, itemCount = 10, width, maxDisplay = 3;
     protected boolean 					            required,queryMode,showingOptions,multiSelect,enabled;
     protected ArrayList<T>          				value;
+    protected Widget                                displayWidget;
     
     /**
      * Sorted list of display values for search
@@ -128,6 +131,8 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
      */
     protected Renderer              			    renderer  = new DefaultRenderer();
     
+    protected Display<T>                            display = new DefaultDisplay();
+    
     /**
      * Public Interface used to provide rendering logic for the Selection display
      * 
@@ -135,11 +140,15 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     public interface Renderer {
         public String getDisplay(Row row);
     }
+    
+    public interface Display<T> {
+    	public void setDisplay(ArrayList<Item<T>> values);
+    }
 
     /**
      * Default no-arg constructor
      */
-    public Selection() {
+    public SelectionBox() {
     	init();
     }
 
@@ -151,7 +160,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         /*
          * Final instance used in Anonymous handlers.
          */
-        final Selection<T> source = this;
+        final SelectionBox<T> source = this;
 
         /*
          * Final instance of the private class KeyboardHandler
@@ -159,34 +168,12 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         final KeyboardHandler keyHandler = new KeyboardHandler();
         
         outer = new FocusPanel();
-        display = new Grid(1,2);
-        display.setCellPadding(0);
-        display.setCellSpacing(0);
-        //label = new com.google.gwt.user.client.ui.Label();
-        //label.setWordWrap(false);
-        //DOM.setStyleAttribute(label.getElement(), "overflow", "hidden");
         
-        /*
-         * New constructor in Button to drop the border and a div with the
-         * passed style.
-         */
-        button = new Button();
-        AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName("SelectButton");
-        button.setDisplay(image, false);
-        
-        //(label);
-        display.setWidget(0,1,button);
-        display.getCellFormatter().setWidth(0,1,"16px");
-
-        outer.add(display);
+        DOM.setStyleAttribute(outer.getElement(), "borderWidth", "0");
         /*
          * Sets the panel as the wrapped widget
          */
         initWidget(outer);
-
-        //setStyleName("AutoDropdown");
-        display.setStyleName("SelectBox");
 
         /*
          * Since HorizontalPanel is not a Focusable widget we need to listen to
@@ -217,20 +204,27 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         });
 
         /*
-         * Register click handler to button to show the popup table
-         */
-        button.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                showPopup();
-            }
-        });
-
-        /*
          * Registers the keyboard handling this widget
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         addHandler(keyHandler, KeyPressEvent.getType());
         
+    }
+    
+    public void setDisplay(Widget widget) {
+    	assert widget instanceof HasClickHandlers;
+    	
+    	displayWidget = widget;
+    	outer.setWidget(widget);
+    	
+    	((HasClickHandlers)widget).addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if(enabled)
+					showPopup();
+			}
+		});
     }
 
 
@@ -268,7 +262,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     						if(item.enabled)
     							item.setCell(0, "Y");
     					}
-    					setDisplay();
+    					display.setDisplay(getSelectedItems());
     					table.setModel(getModel());
     				}
     			});
@@ -278,7 +272,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     				public void onClick(ClickEvent event) {
     					for(Item<T> item : getModel())
     						item.setCell(0, null);
-    					setDisplay();
+    					display.setDisplay(null);
     					table.setModel(getModel());
     				}
     			});
@@ -311,53 +305,10 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         
     }
 
-    /**
-     * Method called by various event handlers to set the displayed text for the
-     * selected row in the table without firing value change events to the end
-     * user.
-     */
-    protected void setDisplay() {
-        StringBuffer sb;
-        ArrayList<Item<T>> items;
-        int selected = 0;
-
-        sb = new StringBuffer();
-        if(multiSelect) 
-        	items = getModel();
-        else
-        	items = getSelectedItems();
-        if(items != null) {
-        	for (int i = 0; i < items.size(); i++ ) {
-        		if(!multiSelect || (multiSelect && "Y".equals(items.get(i).getCell(0)))) {
-        			selected++;
-        			if (sb.length() > 0)
-        				sb.append(", ");
-        			sb.append(renderer.getDisplay(items.get(i)));
-        		}
-        	}
-        	if(selected > maxDisplay)
-        		sb = new StringBuffer().append(selected+" options selected");
-        }
-
-        display.setText(0, 0, sb.toString());
-        //label.setText(sb.toString());
-    }
 
     @Override
     public void setWidth(String w) {    
-        width = Util.stripUnits(w) - 5;
-
-        /*
-         * Set the outer panel to full width;
-         */
-        if (display != null)
-            display.setWidth(width+"px");
-
-        /*
-         * set the Textbox to width - 16 to account for button.
-         */
-        
-        display.getCellFormatter().setWidth(0,0,(width - 16) + "px");
+    	width = Util.stripUnits(w);
         
         if(table != null) 
             table.setWidth(width+"px");
@@ -368,11 +319,6 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         return width;
     }
     
-    @Override
-    public void setHeight(String height) {
-        display.setHeight(height);
-        button.setHeight(height);
-    }
 
     /**
      * This method sets up the key hash which is used to search for the correct
@@ -397,6 +343,10 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
      */
     public void setRenderer(Renderer renderer) {
         this.renderer = renderer;
+    }
+    
+    public void setDisplay(Display<T> display) {
+    	this.display = display;
     }
 
     /**
@@ -432,7 +382,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
      					table.setValueAt(event.getItem(),0,"N");
      				else
      					table.setValueAt(event.getItem(),0,"Y");
-     				setDisplay();
+     				display.setDisplay(getSelectedItems());
      				event.cancel();
          		}
             }
@@ -444,7 +394,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
          */
         table.addSelectionHandler(new SelectionHandler<Integer>() {
             public void onSelection(SelectionEvent<Integer> event) {
-                setDisplay();
+            	display.setDisplay(getSelectedItems());
             }
         });
             
@@ -536,14 +486,15 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
             if(index > -1) 
             	getModel().get(index).setCell(0, "Y");
             
-            setDisplay();
+            display.setDisplay(getSelectedItems());
+            
     	}else {
     		if(index > -1) {
     			table.selectRowAt(index);
-    			display.setText(0, 0, renderer.getDisplay(getSelectedItem()));
+    			display.setDisplay(getSelectedItems());
     		}else{
     			table.clearRowSelection();
-    			display.setText(0, 0, "");
+    			display.setDisplay(null);
     		}
     	}
     }
@@ -616,19 +567,9 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     			 * The table will remove the column from the model
     			 */
     			table.removeColumnAt(0);
-    			display.setText(0, 0, "");
+    			display.setDisplay(null);
     		}
     	}
-    }
-
-    /**
-     * Returns the string currently displayed in the textbox portion of the
-     * widget.
-     * 
-     * @return
-     */
-    public String getDisplay() {
-        return display.getText(0,0);
     }
 
     // ********** Methods Overridden in the ScreenWidetInt ****************
@@ -644,7 +585,6 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     	
     	this.enabled = enabled;
     	
-        button.setEnabled(enabled);
         table.setEnabled(enabled);
         
         if (enabled)
@@ -683,10 +623,11 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
             	value = null;
             table.selectRowAt(keyHash.get(value));
             
-            setDisplay();
+            display.setDisplay(getSelectedItems());
+            
         } else {
             table.selectRowAt( -1);
-            display.setText(0,0,"");
+            display.setDisplay(null);
         }
 
         this.value = values;
@@ -771,11 +712,11 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         if (values != null) {
         	
         	for(T key : values)
-        		getModel().get(keyHash.get(key)).setCell(0, "Y");
+        		getModel().get(keyHash.get(key)).setCell(0, "Y");        
         	
-            setDisplay();
+        	display.setDisplay(getSelectedItems());
         } else {
-            display.setText(0,0,"");
+        	display.setDisplay(null);
         }
 
         this.value = values;
@@ -893,7 +834,7 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
         		getModel().get(keyHash.get(key)).setCell(0, "Y");
         	}
         }
-        setDisplay();
+        display.setDisplay(getSelectedItems());
         
         table.setModel(getModel());
     }
@@ -999,6 +940,15 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
             return row != null ? row.getCells().get(index).toString() : "";
         }
     }    
+    
+    protected class DefaultDisplay implements Display<T> {
+
+		@Override
+		public void setDisplay(ArrayList<Item<T>> values) {
+			//Do nothing
+		}
+    	
+    }
     
     // ********** Table Keyboard Handling ****************************
 
@@ -1194,7 +1144,10 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
     }
 	
 	public void setFocus(boolean focused) {
-		outer.setFocus(focused);
+		//if(display instanceof Focusable)
+		//	((Focusable) display).setFocus(true);
+		//else
+			outer.setFocus(focused);
 	}
 
     /**
@@ -1217,11 +1170,11 @@ public class Selection<T> extends Composite implements ScreenWidgetInt,
 	}
 
     public void addFocusStyle(String style) {
-        display.addStyleName(style);
+        addStyleName(style);
     }
 
     public void removeFocusStyle(String style) {
-        display.removeStyleName(style);
+        removeStyleName(style);
     }
     
     public void setRequired(boolean required) {

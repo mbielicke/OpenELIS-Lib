@@ -9,6 +9,7 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
+import org.openelis.gwt.widget.Selection;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
@@ -23,8 +24,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 public class DropdownScreen extends Screen {
 
 	Dropdown         test;
-	Dropdown<String> field, tCase,logLevel;
-	TextBox<String>  value;
+	Selection<String> field, tCase,logLevel;
+	TextBox<String>  value,css;
 	TextBox<Integer> visibleItems;
 	CheckBox         enabled, required, query;
 	Table            testModel;
@@ -95,11 +96,11 @@ public class DropdownScreen extends Screen {
 			}
 		});
 		
-		field = (Dropdown<String>)def.getWidget("field");
+		field = (Selection<String>)def.getWidget("field");
 		field.setEnabled(true);
 
 		
-		tCase = (Dropdown<String>)def.getWidget("case");
+		tCase = (Selection<String>)def.getWidget("case");
 		tCase.setEnabled(true);
 
 		tCase.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -153,6 +154,15 @@ public class DropdownScreen extends Screen {
 		removeRow.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				testModel.removeRowAt(testModel.getSelectedRow());
+			}
+		});
+		
+		css = (TextBox<String>)def.getWidget("css");
+		css.setEnabled(true);
+		css.setValue(test.getStyleName());
+		css.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				test.setStyleName(event.getValue());
 			}
 		});
 		

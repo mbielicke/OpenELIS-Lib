@@ -40,56 +40,42 @@ UIRF Software License are applicable instead of those above.
   xmlns:so="xalan://org.openelis.gwt.common.ModulePermission">
 
   <xsl:template match="doc">
-    <screen name="Calendar">
+    <screen name="Button">
       <HorizontalPanel style="WhiteContentPanel">
         <CollapsePanel key="collapsePanel" style="noButtons">
           <VerticalPanel>
             <TablePanel style="Form">
               <row>
-                <text style="Prompt">Begin:</text>
-                <select key="begin" field="Integer" width="100"/>
+                <text style="Prompt">Icon:</text>
+                <textbox key="icon"/>
               </row>
               <row>
-                <text style="Prompt">End:</text>
-                <select key="end" field="Integer" width="100"/>
+                <text style="Prompt">Text:</text>
+                <textbox key="text"/>
+              </row>
+              <row>
+                <text style="Prompt">Wrap:</text>
+                <check key="wrap"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>
                 <check key="enabled"/>
               </row>
               <row>
-                <text style="Prompt">Alignment:</text>
-                <select key="alignment" width="75"/>
+                <text style="Prompt">Pressed:</text>
+                <check key="pressed"/>
               </row>
               <row>
-                <text style="Prompt">Query Mode:</text>
-                <HorizontalPanel>
-                  <check key="query"/>
-                  <button key="getQuery" icon="nothing" text="Query"/>
-                </HorizontalPanel>
+                <text style="Prompt">Locked:</text>
+                <check key="locked"/>
               </row>
               <row>
-                <text style="Prompt">Mask:</text>
-                <textbox key="mask"/>
-              </row>
-              <row>
-                <text style="Prompt">Pattern:</text>
-                <textbox key="pattern"/>
-              </row>
-              <row>
-                <text style="Prompt">Required:</text>
-                <check key="required"/>
+                <text style="Prompt">Toggles:</text>
+                <check key="toggles"/>
               </row>
               <row>
                 <text style="Prompt">CSS Class:</text>
                 <textbox key="css"/>
-              </row>
-              <row>
-                <text style="Prompt">Value:</text>
-                <HorizontalPanel>
-                  <textbox key="value"/>
-                  <button key="setValue" icon="nothing" text="Set"/>
-                </HorizontalPanel>
               </row>
             </TablePanel>
           </VerticalPanel>
@@ -102,7 +88,7 @@ UIRF Software License are applicable instead of those above.
             </row>
             <row>
               <text style="Prompt">Test:</text>
-              <calendar begin="0" end="2" key="test" tab="dummy2,dummy1"/>
+              <button key="test" icon="nothing" text="Button" tab="dummy2,dummy1"/>
             </row>
             <row>
               <text style="Prompt">Dummy</text>

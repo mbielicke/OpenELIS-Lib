@@ -40,85 +40,63 @@ UIRF Software License are applicable instead of those above.
   xmlns:so="xalan://org.openelis.gwt.common.ModulePermission">
 
   <xsl:template match="doc">
-    <screen name="Tree">
+    <screen name="AutoComplete">
       <HorizontalPanel style="WhiteContentPanel">
         <CollapsePanel key="collapsePanel" style="noButtons">
           <VerticalPanel>
             <TablePanel style="Form">
               <row>
-                <text style="Prompt">Rows:</text>
-                <textbox key="rows" field="Integer"/>
+                <text style="Prompt">Visible Items:</text>
+                <textbox key="visibleItems" field="Integer" width="75px"/>
               </row>
               <row>
-                <text style="Prompt">Row Height:</text>
-                <textbox key="rowHeight" field="Integer"/>
-              </row>
-              <row>
-                <text style="Prompt">Width:</text>
-                <textbox key="width" field="Integer"/>
+                <text style="Prompt">Case:</text>
+                <select key="case" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>
                 <check key="enabled"/>
               </row>
               <row>
-                <text style="Prompt">MultiSelect:</text>
-                <check key="multiSelect"/>
-              </row>
-              <row>
                 <text style="Prompt">Query Mode:</text>
-                <check key="query"/>
+                <HorizontalPanel>
+                  <check key="query"/>
+                  <button key="getQuery" icon="nothing" text="Query"/>
+                </HorizontalPanel>
               </row>
               <row>
-                <text style="Prompt">Has Header:</text>
-                <check key="hasHeader"/>
-              </row>
-              <row>
-                <text style="Prompt">Fix Scroll:</text>
-                <check key="fixScroll"/>
-              </row>
-              <row>
-                <text style="Prompt">VScroll:</text>
-                <select key="vscroll" width="100"/>
-              </row>
-              <row>
-                <text style="Prompt">HScroll:</text>
-                <select key="hscroll" width="100"/>
+                <text style="Prompt">Required:</text>
+                <check key="required"/>
               </row>
               <row>
                 <text style="Prompt">CSS Class:</text>
                 <textbox key="css"/>
               </row>
               <row>
+                <text style="Prompt">Value:</text>
+                <HorizontalPanel spacing="0" padding="0">
+                  <textbox key="value" width="100px"/>
+                  <button key="setValue" icon="nothing" text="Set"/>
+                </HorizontalPanel>
+              </row>
+              <row>
                 <widget colspan="2">
-                  <table key="columns" rows="5" vscroll="ALWAYS" hscroll="ALWAYS">
-                    <col header="Label" width="75">
-                      <textbox/>
+                  <table rows="5" vscroll="ALWAYS" hscroll="ALWAYS" key="model" style="ScreenTableWithSides">
+                    <col header="Key" width="75">
+                      <textbox required="true"/>
                     </col>
-                    <col header="Width" width="75">
-                      <textbox field="Integer"/>
-                    </col>
-                    <col header="Widget" width="100">
-                      <dropdown width="100"/>
-                    </col>
-                    <col header="Resizable" width="30">
-                      <check/>
-                    </col>
-                    <col header="Required" width="30">
-                      <check/>
-                    </col>
-                    <col header="Enabled" width="30">
-                      <check/>
+                    <col header="Display" width="150">
+                      <textbox required="true"/>
                     </col>
                   </table>
                 </widget>
               </row>
               <row>
-                <widget colspan="2">
-                  <HorizontalPanel>
-                    <button style="Button" key="set" text="Set"/>
-                    <button style="Button" key="add" text="Add"/>
-                    <button style="Button" key="remove" text="Remove"/>
+                <widget colspan="2" halign="center">
+                  <HorizontalPanel spacing="0" padding="0">
+                    <button key="setModel" style="Button" text="Set"/>
+                    <button key="addRow" style="Button" text="Add"/>
+                    <button key="removeRow" style="Button" text="Remove"/>
                   </HorizontalPanel>
                 </widget>
               </row>
@@ -132,27 +110,9 @@ UIRF Software License are applicable instead of those above.
               <textbox key="dummy1" tab="test,dummy2" enabled="true"/>
             </row>
             <row>
-              <widget colspan="2">
-              <tree key="test" rows="10" style="ScreenTableWithSides" tab="dummy2,dummy1">
-                <columns>
-                  <col header="Col 1" width="100"/>
-                </columns>
-                <node key="top">
-                  <col>
-                    <textbox/>
-                  </col>
-                </node>
-              </tree>
-              </widget>
-            </row>
-            <row>
-              <widget colspan="2">
-              <HorizontalPanel>
-                <button key="addRow" style="Button" text="Add Row"/>
-                <button key="removeRow" style="Button" text="Remove Row"/>
-              </HorizontalPanel>
-              </widget>
-            </row>
+              <text style="Prompt">Test:</text>
+              <autoComplete key="test" width="100" tab="dummy2,dummy1"/>
+            </row>       
             <row>
               <text style="Prompt">Dummy</text>
               <textbox key="dummy2" tab="dummy1,test" enabled="true"/>
@@ -164,3 +124,4 @@ UIRF Software License are applicable instead of those above.
   </xsl:template>
  
 </xsl:stylesheet>
+  

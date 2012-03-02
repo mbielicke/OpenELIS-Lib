@@ -37,7 +37,6 @@ UIRF Software License are applicable instead of those above.
     <inherits name="com.google.gwt.logging.Logging"/>
     <inherits name="com.allen_sauer.gwt.dnd.gwt-dnd"/> 
     
-    <source path="test"/>
     
     <stylesheet src="CSS/lib.css"/>
     

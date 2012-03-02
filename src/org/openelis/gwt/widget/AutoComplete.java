@@ -58,6 +58,7 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
@@ -118,7 +119,6 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     @Override
     public void init() {
-
         /*
          * Final instance of the private class KeyboardHandler
          */
@@ -173,6 +173,21 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 	}
                 }
             }
+        });
+        
+        textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
+            /*
+             * This event calls validate(true) so that that the valueChangeEvent
+             * for the HasValue<T> interface will be fired. In Query mode it
+             * will validate the query string through the helper class
+             */
+            public void onValueChange(ValueChangeEvent<String> event) {
+                if (queryMode) 
+                    validateQuery();
+                else
+                    validateValue(true);
+            }
+
         });
 
         /*

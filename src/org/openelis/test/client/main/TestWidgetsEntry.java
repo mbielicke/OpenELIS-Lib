@@ -1,7 +1,8 @@
 package org.openelis.test.client.main;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.openelis.test.client.Application;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -18,9 +19,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
-	  	 
-	  protected Logger logger = Logger.getLogger("TestWidgets");
-	  
+	  	 	  
 	  /**
 	   * This is the entry point method.
 	   */
@@ -30,7 +29,7 @@ public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 		  GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
 			public void onUncaughtException(Throwable e) {
 				Window.alert("Sorry, but an unexpected error has occurred.  Please contact IT support");
-				logger.log(Level.SEVERE,e.getMessage(),e);
+				Application.logger().log(Level.SEVERE,e.getMessage(),e);
 			}
 		  });
 		  
@@ -45,13 +44,13 @@ public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 							  RootPanel.get().add(new org.openelis.test.client.main.TestWidgetsScreen());
 						  }catch(Throwable e){
 							  Window.alert("Unable to start app : "+e.getMessage());
-							  logger.log(Level.SEVERE,e.getMessage(),e);
+							  Application.logger().log(Level.SEVERE,e.getMessage(),e);
 						  }
 					  }
 
 					  public void onFailure(Throwable caught) {
 						  Window.alert(caught.getMessage());
-						  logger.log(Level.SEVERE,caught.getMessage(),caught);
+						  Application.logger().log(Level.SEVERE,caught.getMessage(),caught);
 					  }
 				  });
 			  }
@@ -67,6 +66,8 @@ public class TestWidgetsEntry implements EntryPoint, NativePreviewHandler {
 		  if(event.getTypeInt() == Event.ONMOUSEDOWN && event.getNativeEvent().getCtrlKey())
 			  event.getNativeEvent().preventDefault();
 		  if(event.getTypeInt() == Event.ONMOUSEWHEEL && event.getNativeEvent().getShiftKey())
+			  event.getNativeEvent().preventDefault();
+		  if(event.getTypeInt() == Event.KEYEVENTS && event.getNativeEvent().getKeyCode() >=112 && event.getNativeEvent().getKeyCode() <=124)
 			  event.getNativeEvent().preventDefault();
 		
 	  }
