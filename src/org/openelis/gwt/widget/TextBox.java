@@ -6,7 +6,10 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
@@ -24,9 +27,11 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     public TextAlignConstant alignment = TextBox.ALIGN_LEFT;
     private Field<T> field;
     private boolean enabled;
+    private NewMaskListener maskListener;
+    private com.google.gwt.user.client.ui.TextBox source = this;
     
     public TextBox() {
-        
+
     }
     
     public void setCase(Case textCase){
@@ -85,9 +90,19 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     		}
     	}
     	picture = pic.toString();
-        
-    	new NewMaskListener(this,mask);
+    	
+    	if(maskListener == null) {
+    		new NewMaskListener(this,mask);
+    		addBlurHandler(new BlurHandler() {
+				public void onBlur(BlurEvent event) {
+					ValueChangeEvent.fire(source, getText());
+				}
+			});
+    	}else
+    		maskListener.mask = mask;
+    	
         setLength(mask.length()); 
+        
         enforceMask = true;
     }
     
