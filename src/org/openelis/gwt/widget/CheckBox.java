@@ -234,6 +234,9 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	}
 
 	public void setQueryMode(boolean query) {
+		if(query == field.queryMode)
+			return;
+		
 		if(query)
 			setType(CheckType.THREE_STATE);
 		else
