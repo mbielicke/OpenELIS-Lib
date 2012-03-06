@@ -344,10 +344,11 @@ public class DateField extends Field<Datetime> {
         	
        
         if(valid){
-        	if(getValue() == null && date == null)
+        	Datetime old = getValue();
+        	if(old == null && date == null)
         		return;
         	setValue(Datetime.getInstance(begin, end, date));
-        	ValueChangeEvent.fire(this, getValue());
+        	ValueChangeEvent.fireIfNotEqual(this, old, getValue());
         }
         
     }
