@@ -300,7 +300,8 @@ public class Window extends FocusPanel implements WindowInt {
          */
         addDomHandler(new KeyPressHandler() {
          	 public void onKeyPress(KeyPressEvent event) {
-        		 KeyPressEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());   
+         		 if(content instanceof Screen)
+         			 KeyPressEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());   
         	 }
         },KeyPressEvent.getType());
     }
