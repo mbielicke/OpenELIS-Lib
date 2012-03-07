@@ -86,6 +86,9 @@ public class NewMaskListener {
 					if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_BACKSPACE)
 						cursor--;
 					
+					if(cursor < 0)
+						return;
+					
 					mc = mask.charAt(cursor);  // get current mask char based on cursor
 
 					/*
@@ -190,6 +193,9 @@ public class NewMaskListener {
 				ch = event.getCharCode();   // character typed by user
 
 				applied.append(input.substring(0,cursor));  // Copy the portion of input up to the cursor to the buffer
+				
+				if(applied.length() >= mask.length())
+					return;
 
 				mc = mask.charAt(applied.length());  // Get the Mask char for the position typed
 
