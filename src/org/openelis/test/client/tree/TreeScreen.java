@@ -10,10 +10,8 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.KeyCodes;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.PercentBar;
-import org.openelis.gwt.widget.Selection;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.table.AutoCompleteCell;
@@ -24,7 +22,6 @@ import org.openelis.gwt.widget.table.ImageCell;
 import org.openelis.gwt.widget.table.LabelCell;
 import org.openelis.gwt.widget.table.PercentCell;
 import org.openelis.gwt.widget.table.Row;
-import org.openelis.gwt.widget.table.SelectionCell;
 import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.TextBoxCell;
 import org.openelis.gwt.widget.table.TimeCell;
@@ -33,11 +30,8 @@ import org.openelis.gwt.widget.tree.Tree;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -47,7 +41,7 @@ public class TreeScreen extends Screen {
 	protected TextBox<Integer> rows,rowHeight,width;
 	protected TextBox<String> css;
 	protected CheckBox enabled,multiSelect,query,hasHeader,fixScroll;
-	protected Selection<String> vscroll,hscroll;
+	protected Dropdown<String> vscroll,hscroll;
 	protected Table columns;
 	protected Button set,add,remove,addRow,removeRow;
 	
@@ -143,7 +137,7 @@ public class TreeScreen extends Screen {
 		
 		fixScroll.setValue("Y");
 		
-		vscroll = (Selection<String>)def.getWidget("vscroll");
+		vscroll = (Dropdown<String>)def.getWidget("vscroll");
 		vscroll.setEnabled(true);
 		vscroll.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
@@ -153,7 +147,7 @@ public class TreeScreen extends Screen {
 		});
 		
 		
-		hscroll = (Selection<String>)def.getWidget("hscroll");
+		hscroll = (Dropdown<String>)def.getWidget("hscroll");
 		hscroll.setEnabled(true);
 		hscroll.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
@@ -307,7 +301,7 @@ public class TreeScreen extends Screen {
 			} else if("time".equals(editor)) {
 				column.setCellRenderer(new TimeCell());
 			} else if("select".equals(editor)) {
-				Selection<String> sel = new Selection<String>();
+				Dropdown<String> sel = new Dropdown<String>();
 				Table t = new Table();
 				t.addColumn();
 				sel.setPopupContext(t);
@@ -316,7 +310,7 @@ public class TreeScreen extends Screen {
 				model.add(new Item<String>("2","Option 2"));
 				model.add(new Item<String>("3","Option 3"));
 				sel.setModel(model);
-				column.setCellRenderer(new SelectionCell<String>(sel));
+				column.setCellRenderer(new DropdownCell<String>(sel));
 			}
 			column.setResizable("Y".equals(row.getCell(3)));
 			column.setRequired("Y".equals(row.getCell(4)));

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.BeforeGetMatchesEvent;
 import org.openelis.gwt.event.BeforeGetMatchesHandler;
 import org.openelis.gwt.event.GetMatchesEvent;
@@ -46,11 +47,19 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -63,6 +72,10 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 
@@ -74,26 +87,45 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * 
  * @param <T>
  */
-public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMatchesHandlers,HasBeforeGetMatchesHandlers {
+public class AutoComplete extends Composite implements ScreenWidgetInt,
+													   Queryable,
+													   Focusable,
+													   HasBlurHandlers,
+													   HasFocusHandlers,
+													   HasValue<AutoCompleteValue>,
+													   HasHelper<String>,
+													   HasExceptions,
+													   HasGetMatchesHandlers,
+													   HasBeforeGetMatchesHandlers {
     /**
      * Used for AutoComplete display
      */
-    protected HorizontalPanel hp;
-    protected Button          button;
-    protected Table           table;
-    protected PopupPanel      popup;
-    protected int             cellHeight = 21, delay = 350, itemCount = 10, width;
-    protected Timer           timer;
-    protected boolean         showingOptions;
-    protected String          prevText;
+	protected AbsolutePanel                         outer;
+    protected Grid                                  display;
+    protected Button                                button;
+    protected Table                                 table;
+    protected PopupPanel                            popup;
+    protected int                                   cellHeight = 21, delay = 350, itemCount = 10, width;
+    protected Timer                                 timer;
+    protected boolean                               required,queryMode,showingOptions,enabled;
+    protected String                                prevText;
+    
+    protected TextBase                              textbox;
+    
+    protected AutoCompleteValue                     value;
 
-    final AutoComplete        source;
+    final AutoComplete                              source;
+    
+    /**
+     * Exceptions list
+     */
+    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
 
     /**
      * Instance of the Renderer interface. Initially set to the DefaultRenderer
      * implementation.
      */
-    protected Renderer        renderer   = new DefaultRenderer();
+    protected Renderer                              renderer   = new DefaultRenderer();
 
     /**
      * Public Interface used to provide rendering logic for the Dropdown display
@@ -102,11 +134,14 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     public interface Renderer {
         public String getDisplay(Row row);
     }
+    
+    protected WidgetHelper<String> helper = new StringHelper();
 
     /**
      * Default no-arg constructor
      */
     public AutoComplete() {
+    	init();
         /*
          * Final instance used in Anonymous handlers.
          */
@@ -117,15 +152,20 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      * Init() method overrriden from TextBox to draw the Dropdown correctly.
      * Also set up handlers for click and key handling
      */
-    @Override
     public void init() {
         /*
          * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
 
-        hp = new HorizontalPanel();
-        textbox = new com.google.gwt.user.client.ui.TextBox();
+        /*
+         * Focus Panel is used to catch Focus and blur events internal to the widget
+         */
+        display = new Grid(1,2);
+        display.setCellPadding(0);
+        display.setCellSpacing(0);
+
+        textbox = new TextBase();
         /*
          * New constructor in Button to drop the border and a div with the
          * passed style.
@@ -135,33 +175,59 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         image.setStyleName("AutoDropdownButton");
         button.setDisplay(image, false);
 
-        hp.add(textbox);
-        hp.add(button);
-
+        display.setWidget(0,0,textbox);
+        display.setWidget(0,1,button);
+        display.getCellFormatter().setWidth(0, 1, "16px");
+                
         /*
-         * Sets the panel as the wrapped widget
+         * We wrap the focus panel again so that the focus and blur events 
+         * do not directly go from inner events to being external events;
          */
-        initWidget(hp);
+        outer = new AbsolutePanel();
+        outer.add(display);
+        initWidget(outer);
 
-        setStyleName("AutoDropDown");
+        display.setStyleName("SelectBox");
         textbox.setStyleName("TextboxUnselected");
 
+
         /*
-         * Since HorizontalPanel is not a Focusable widget we need to listen to
-         * the textbox focus and blur events and pass them through to the
-         * handlers registered to source.
+         * Set the focus style when the Focus event is fired Externally
+         */
+        addFocusHandler(new FocusHandler() {
+        	public void onFocus(FocusEvent event) {
+        		if(enabled)
+        			display.addStyleName("Focus");
+        	}
+        });
+
+        /*
+         * Removes the focus style when the Blur event is fires externally
+         */
+        addBlurHandler(new BlurHandler() {
+        	public void onBlur(BlurEvent event) {
+        		display.removeStyleName("Focus");
+        	}
+        });
+        
+        /*
+         *  Receives the Focus Event internally and exposes it Externally 
          */
         textbox.addFocusHandler(new FocusHandler() {
             public void onFocus(FocusEvent event) {
-                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
+            	FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
             }
         });
-
+        
+        /*
+         *  Receives the Blur Event internally and determines if it should be
+         *  fired externally or if the widget still has focus
+         */
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
                 Item<Integer> item;
 
-                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+                
                 if(!showingOptions && isEnabled() && !queryMode) {
                 	if("".equals(textbox.getText()) && getValue() != null){
                 		setValue(null,"",true);
@@ -171,6 +237,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 		if (item != null)
                 			setValue(item.key, renderer.getDisplay(item),true);
                 	}
+                	BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
                 }
             }
         });
@@ -189,7 +256,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             }
 
         });
-
+        
         /*
          * Register click handler to button to show the popup table
          */
@@ -197,11 +264,11 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             public void onClick(ClickEvent event) {
             	BeforeGetMatchesEvent bgme;
             	
-            	bgme = BeforeGetMatchesEvent.fire(source, getText());
+            	bgme = BeforeGetMatchesEvent.fire(source, textbox.getText());
             	if(bgme != null && bgme.isCancelled())
             		return;
             	
-                GetMatchesEvent.fire(source, getText());
+                GetMatchesEvent.fire(source, textbox.getText());
                 /*
                  * Call showPopup because the textbox will have lost focus so
                  * showMatches will not call.
@@ -210,6 +277,17 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 textbox.setFocus(true);
             }
         });
+        
+        /*
+         * This is added so the showingOptions can be set before the BlurEvent for textbox is 
+         * handled.
+         */
+        button.addMouseDownHandler(new MouseDownHandler() {			
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				showingOptions = true;
+			}
+		});
 
         /*
          * Registers the keyboard handling this widget
@@ -223,9 +301,9 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                 int cursorPos;
                 String text;
                 
-                text = getText();
+                text = textbox.getText();
                 
-            	bgme = BeforeGetMatchesEvent.fire(source, getText());
+            	bgme = BeforeGetMatchesEvent.fire(source, textbox.getText());
             	if(bgme != null && bgme.isCancelled())
             		return;
                 
@@ -235,8 +313,8 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
 
                 setSelectedIndex(0);
                 
-                if(getText().length() > cursorPos)
-                	textbox.setSelectionRange(cursorPos, getText().length() - cursorPos);
+                if(textbox.getText().length() > cursorPos)
+                	textbox.setSelectionRange(cursorPos, textbox.getText().length() - cursorPos);
                 
             }
         };
@@ -283,18 +361,17 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
 
     @Override
     public void setWidth(String w) {        
-        width = Util.stripUnits(w);
+        width = Util.stripUnits(w) - 5;
 
         /*
          * Set the outer panel to full width;
          */
-        if (hp != null)
-            hp.setWidth(width+"px");
+        if (display != null)
+            display.setWidth(width+"px");
 
         /*
          * set the Textbox to width - 16 to account for button.
-         */
-        
+         */        
         textbox.setWidth((width - 16) + "px");
     }
     
@@ -446,7 +523,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      * @return
      */
     public String getDisplay() {
-        return getText();
+        return textbox.getText();
     }
 
     /**
@@ -467,22 +544,20 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
      */
     @Override
     public void setEnabled(boolean enabled) {
-        //if (isEnabled() == enabled)
-        //    return;
+    	this.enabled = enabled;
         button.setEnabled(enabled);
         table.setEnabled(enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
-        super.setEnabled(enabled);
+        textbox.setReadOnly(!enabled);
     }
     
     @Override
     public void setQueryMode(boolean query) {
     	if(query == queryMode)
     		return;
-    	super.setQueryMode(query);
     	if(query)
     		unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
     	else if(isEnabled())
@@ -538,7 +613,6 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
     /**
      * Overridden method of TextBox to check if the Dropdown is valid
      */
-    @Override
     protected void validateValue(boolean fireEvents) {
         Item<Integer> item;
         validateExceptions = null;
@@ -548,11 +622,27 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
             setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),fireEvents);
         
         if (required && value == null) {
-            addValidateException(new LocalizedException("gen.fieldRequiredException"));
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
 
+    /**
+     * Adds a manual Exception to the widgets exception list.
+     */
+    public void addException(LocalizedException error) {
+        if (endUserExceptions == null)
+            endUserExceptions = new ArrayList<LocalizedException>();
+        endUserExceptions.add(error);
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
+    protected void addValidateException(LocalizedException error) {
+        if (validateExceptions == null)
+            validateExceptions = new ArrayList<LocalizedException>();
+        validateExceptions.add(error);
+    }
+    
     /**
      * This method is called by the GetMatchesHandler to show the results of the
      * matching
@@ -595,7 +685,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
          * This method handles all key down events for this table
          */
         public void onKeyDown(KeyDownEvent event) {
-            prevText = getText();
+            prevText = textbox.getText();
             switch (event.getNativeKeyCode()) {
                 case KeyCodes.KEY_TAB:
                     if (popup != null && popup.isShowing())
@@ -611,7 +701,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                     selectLength = textbox.getSelectionLength();
                     if (selectLength > 0) {
                         selectLength++ ;
-                        textbox.setSelectionRange(getText().length() - selectLength, selectLength);
+                        textbox.setSelectionRange(textbox.getText().length() - selectLength, selectLength);
                     }
             }
         }
@@ -633,7 +723,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                     break;
                 case KeyCodes.KEY_ENTER:
                     if (popup == null || !popup.isShowing()) {
-                        text = getText();
+                        text = textbox.getText();
                         GetMatchesEvent.fire(source, text);
                     } else
                         popup.hide();
@@ -643,7 +733,7 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
                     break;
                 default:
                     
-                    text = getText();
+                    text = textbox.getText();
 
                     timer.cancel();
                     /*
@@ -714,6 +804,183 @@ public class AutoComplete extends TextBox<AutoCompleteValue> implements HasGetMa
         }
     }
 
+	@Override
+	public AutoCompleteValue getValue() {
+		return value;
+	}
 
+	@Override
+	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<AutoCompleteValue> handler) {
+		return addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler, MouseOverEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler, MouseOutEvent.getType());
+	}
+
+    /**
+     * Convenience method to check if a widget has exceptions so we do not need
+     * to go through the cost of merging the logical and validation exceptions
+     * in the getExceptions method.
+     * 
+     * @return
+     */
+    public boolean hasExceptions() {
+        return endUserExceptions != null || validateExceptions != null;
+    }
+
+	@Override
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return endUserExceptions;
+	}
+
+	@Override
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return validateExceptions;
+	}
+
+	@Override
+	public void clearExceptions() {
+        endUserExceptions = null;
+        validateExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	@Override
+	public void clearEndUserExceptions() {
+        endUserExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	@Override
+	public void clearValidateExceptions() {
+        validateExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	@Override
+	public void addExceptionStyle(String style) {
+    	addStyleName(style);
+	}
+
+	@Override
+	public void removeExceptionStyle(String style) {
+    	removeStyleName(style);
+	}
+
+	@Override
+	public void validateValue() {
+		validateValue(false);
+	}
+
+	@Override
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addHandler(handler, FocusEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addHandler(handler, BlurEvent.getType());
+	}
+
+	@Override
+	public int getTabIndex() {
+		return -1;
+	}
+
+	@Override
+	public void setAccessKey(char key) {
+		
+	}
+
+	@Override
+	public void setFocus(boolean focused) {
+		textbox.setFocus(focused);
+	}
+
+	@Override
+	public void setTabIndex(int index) {
+		
+	}
+
+    /**
+     * Returns a single QueryData object representing the query string entered
+     * by the user. The Helper class is used here to create the correct
+     * QueryData object for the passed type T.
+     */
+    public Object getQuery() {
+    	Object query;
+    	
+    	query = helper.getQuery(textbox.getText());
+                
+        return query;
+    }
+    
+    /**
+     * Sets a query string to this widget when loaded from a table model
+     */
+    public void setQuery(QueryData qd) {
+        if(qd != null)
+            textbox.setText(qd.getQuery());
+        else
+            textbox.setText("");
+    }
+    
+    /**
+     * Method used to determine if widget is currently in Query mode
+     */
+    public boolean isQueryMode() {
+    	return queryMode;
+    }
+
+    /**
+     * Method used to validate the inputed query string by the user.
+     */
+    public void validateQuery() {
+        try {
+            validateExceptions = null;
+            helper.validateQuery(textbox.getText());
+        } catch (LocalizedException e) {
+            addValidateException(e);
+        }
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setHelper(WidgetHelper<String> helper) {
+		this.helper = helper;
+	}
+
+	@Override
+	public WidgetHelper<String> getHelper() {
+		return helper;
+	}
+	
+	public void selectAll() {
+		textbox.selectAll();
+	}
+	
+    /**
+     * Set the text case for input.
+     */
+    public void setCase(TextBase.Case textCase) {
+    	textbox.setCase(textCase);
+    }
+    
+    public void setRequired(boolean required) {
+    	this.required = required;
+    }
 
 }

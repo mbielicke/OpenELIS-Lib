@@ -64,7 +64,7 @@ public class DoubleHelper implements WidgetHelper<Double> {
 					// Do nothing to Fall through and throw the exception.
 				}
 			}
-			throw new LocalizedException("invalidDouble");
+			throw new LocalizedException("exc.invalidNumeric");
 		}
 	}
 

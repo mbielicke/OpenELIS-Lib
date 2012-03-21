@@ -31,6 +31,8 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.TextBox;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.Widget;
@@ -52,15 +54,22 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
 
     private boolean    query;
 
+    private Column     column;
     /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor
      */
-    public TextBoxCell(TextBox<T> editor) {
+    public TextBoxCell(final TextBox<T> editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableTextBox");
+        editor.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				column.getTable().finishEditing();
+			}
+		});
     }
 
     public String display(T value) {
@@ -77,6 +86,7 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
+        editor.selectAll();
     }
 
     public void render(HTMLTable table, int row, int col, T value) {
@@ -121,5 +131,10 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     public Widget getWidget() {
     	return editor;
     }
+    
+	@Override
+	public void setColumn(Column col) {
+		this.column = col;
+	}
 
 }

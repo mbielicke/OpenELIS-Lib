@@ -62,6 +62,14 @@ UIRF Software License are applicable instead of those above.
                 <textbox key="value"/>
                 <button icon="nothing" text="Set" key="setValue"/>
               </row>
+              <row>
+                <text style="Prompt">Width:</text>
+                <textbox key="width"/>
+              </row>
+              <row>
+                <text style="Prompt">Height:</text>
+                <textbox key="height"/>
+              </row>
             </TablePanel>
           </VerticalPanel>
         </CollapsePanel>

@@ -25,7 +25,7 @@
 */
 package org.openelis.util;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
@@ -33,9 +33,10 @@ import java.util.ResourceBundle;
 
 public class UTFResource {
     
-    private PropertyResourceBundle bundle;
+    private ArrayList<PropertyResourceBundle> bundles;
     private static final String OPENELIS_CONSTANTS = "org.openelis.constants.OpenELISConstants";
     public static String DEFAULT_LANG = "en";
+    
     private static HashMap<String, UTFResource> cache = new HashMap<String,UTFResource>();
     
     public static UTFResource getBundle(String constantClass, Locale locale){
@@ -68,27 +69,46 @@ public class UTFResource {
     
     public String getString(String key){
         try {
-            return new String(this.bundle.getString(key).getBytes("ISO-8859-1"),"UTF-8");
-
-        }catch(Exception e){
-            try {
-                return new String(this.bundle.getString("+"+key).getBytes("ISO-8859-1"),"UTF-8");
-            }catch(Exception ec){
-                return "EXCEPTION";
-            }
+        	for(PropertyResourceBundle bundle : bundles) {
+        		if(bundle.containsKey(key))
+        			return new String(bundle.getString(key).getBytes("ISO-8859-1"),"UTF-8");
+        	}
+            return "EXCEPTION";
+        }catch(Exception e) {
+        	e.printStackTrace();
+        	return "EXCEPTION";
         }
     }
     
     private static UTFResource buildBundle(String name, Locale locale){
         UTFResource ret = new UTFResource();
+        ret.bundles = new ArrayList<PropertyResourceBundle>();
         
-        ret.bundle = (PropertyResourceBundle)ResourceBundle.getBundle(name,locale);
+        ret.bundles.add((PropertyResourceBundle)ResourceBundle.getBundle(name,locale));
+        
+        if(ret.bundles.get(0).containsKey("include")) {
+        	String[] includes = ret.bundles.get(0).getString("include").split(",");
+        	for(String include : includes) {
+        		ret.bundles.add((PropertyResourceBundle)ResourceBundle.getBundle(include,locale));
+        	}
+        }
+        
         cache.put(name+locale.toString(), ret);
         
         return ret;
     }
     
-    public  Enumeration<String> getKeys() {
-        return bundle.getKeys();
+    public HashMap<String,String> getMap() {
+    	HashMap<String,String> map;
+    	
+    	map = new HashMap<String,String>();
+    	
+    	for(int i = bundles.size() -1; i > -1; i--) {
+    		for(String key : bundles.get(i).keySet())
+    			map.put(key, bundles.get(i).getString(key));
+    	}
+    	
+    	return map;
     }
+   
 }

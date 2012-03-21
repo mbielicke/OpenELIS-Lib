@@ -79,11 +79,11 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">VScroll:</text>
-                <select key="vscroll" width="100"/>
+                <dropdown key="vscroll" width="100"/>
               </row>
               <row>
                 <text style="Prompt">HScroll:</text>
-                <select key="hscroll" width="100"/>
+                <dropdown key="hscroll" width="100"/>
               </row>
               <row>
                 <text style="Prompt">CSS Class:</text>

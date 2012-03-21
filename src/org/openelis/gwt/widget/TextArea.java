@@ -174,7 +174,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
         try {
             setValue(helper.getValue(textarea.getText()), fireEvents);
             if(required && value == null)
-                addValidateException(new LocalizedException("gen.fieldRequiredException"));
+                addValidateException(new LocalizedException("exc.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
         }
@@ -196,10 +196,14 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     
     public void addFocusStyle(String style) {
         textarea.addStyleName(style);
+        if(!textarea.isReadOnly())
+        	textarea.selectAll();
     }
     
     public void removeFocusStyle(String style) {
         textarea.removeStyleName(style);
+        textarea.setSelectionRange(0, 0);
+
     }
     
     public void setRequired(boolean required) {

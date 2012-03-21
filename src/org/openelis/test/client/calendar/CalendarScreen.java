@@ -11,10 +11,11 @@ import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.DateHelper;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.Selection;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.calendar.Calendar;
+import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -28,12 +29,13 @@ import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 public class CalendarScreen extends Screen {
 	
-	Calendar           test;
+	Calendar           test,testTable;
 	TextBox<String>    mask,pattern,value,css;
 	CheckBox           enabled,required,query;
-	Selection<Integer> begin,end;
-	Selection<String>  alignment,logLevel;
-	Button			   setValue,getQuery;	
+	Dropdown<Integer> begin,end;
+	Dropdown<String>  alignment,logLevel;
+	Button			   setValue,getQuery;
+	Table              table;
 	
 	public CalendarScreen() {
 		super((ScreenDefInt)GWT.create(CalendarDef.class));
@@ -132,7 +134,7 @@ public class CalendarScreen extends Screen {
 			}
 		});
 		
-		begin = (Selection<Integer>)def.getWidget("begin");
+		begin = (Dropdown<Integer>)def.getWidget("begin");
 		begin.setEnabled(true);
 		begin.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -150,7 +152,7 @@ public class CalendarScreen extends Screen {
 			}
 		});
 		
-		end = (Selection<Integer>)def.getWidget("end");
+		end = (Dropdown<Integer>)def.getWidget("end");
 		end.setEnabled(true);
 		end.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -168,7 +170,7 @@ public class CalendarScreen extends Screen {
 			}
 		});
 		
-		alignment = (Selection<String>)def.getWidget("alignment");
+		alignment = (Dropdown<String>)def.getWidget("alignment");
 		alignment.setEnabled(true);
 
 		alignment.addValueChangeHandler(new ValueChangeHandler<String>() {

@@ -177,7 +177,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt, Focus
         try {
             setValue(helper.getValue(textbox.getText()), fireEvents);
             if(required && value == null)
-                addValidateException(new LocalizedException("gen.fieldRequiredException"));
+                addValidateException(new LocalizedException("exc.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
         }

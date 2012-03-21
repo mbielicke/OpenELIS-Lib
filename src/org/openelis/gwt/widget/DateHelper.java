@@ -59,7 +59,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
         try {
             date =  DateTimeFormat.getFormat(pattern).parseStrict(input);
         }catch(Exception e) {
-            throw new LocalizedException("invalidDateFormat");
+            throw new LocalizedException("exc.invalidDateFormat");
         }
         
         return Datetime.getInstance(begin,end,date);
@@ -114,6 +114,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
      */
     public void setBegin(byte begin) {
         this.begin = begin;
+        setDefaultPattern();
     }
     
     /**
@@ -130,6 +131,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
      */
     public void setEnd(byte end) {
         this.end = end;
+        setDefaultPattern();
     }
     
     /**
@@ -138,6 +140,16 @@ public class DateHelper implements WidgetHelper<Datetime> {
      */
     public byte getEnd() {
     	return end;
+    }
+    
+    private void setDefaultPattern() {
+       	if(begin > Datetime.DAY) {
+    		setPattern("HH:mm");
+    	} else if (end < Datetime.HOUR){
+    		setPattern("yyyy-MM-dd");
+    	} else {
+    		setPattern("yyyy-MM-dd HH:mm");
+    	}
     }
 
 }

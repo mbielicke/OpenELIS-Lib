@@ -158,7 +158,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     	grid.setText(0,0,"");
     	grid.setText(0, 1, label); 
     	grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel");
-    	DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,1),"paddingBottom","3px");
+    	//DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,1),"paddingBottom","3px");
     	setDisplay(grid,wrap);
     }
 

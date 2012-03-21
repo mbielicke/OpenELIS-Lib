@@ -5,6 +5,7 @@ import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
+import org.openelis.gwt.widget.IntegerHelper;
 import org.openelis.gwt.widget.TextArea;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.test.client.Application;
@@ -21,6 +22,7 @@ public class TextareaScreen extends Screen {
 	
 	TextArea           test;
 	TextBox<String>    value,css;
+	TextBox<Integer>   width,height;
 	CheckBox           enabled,required;
 	Button             setValue;
 	
@@ -93,9 +95,31 @@ public class TextareaScreen extends Screen {
 			}
 		});
 		
+		width = (TextBox<Integer>)def.getWidget("width");
+		width.setEnabled(true);
+		width.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				test.setWidth(event.getValue()+"px");
+			}
+		});
+		width.setHelper(new IntegerHelper());
+		
+		height = (TextBox<Integer>)def.getWidget("height");
+		height.setEnabled(true);
+		height.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				test.setHeight(event.getValue()+"px");
+			}
+		});
+		height.setHelper(new IntegerHelper());
+		
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				((CollapsePanel)def.getWidget("collapsePanel")).open();
+				width.setValue(test.getOffsetWidth());
+				height.setValue(test.getOffsetHeight());
 			}
 		});
 		

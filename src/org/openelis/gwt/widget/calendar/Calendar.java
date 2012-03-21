@@ -25,11 +25,21 @@
 */
 package org.openelis.gwt.widget.calendar;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
-import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.ExceptionHelper;
+import org.openelis.gwt.widget.HasExceptions;
+import org.openelis.gwt.widget.HasHelper;
+import org.openelis.gwt.widget.HasValue;
+import org.openelis.gwt.widget.Queryable;
+import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.TextBase;
 import org.openelis.gwt.widget.WidgetHelper;
 
 import com.google.gwt.core.client.Scheduler;
@@ -39,79 +49,128 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 /**
  * This class extends the TextBox<Datetime> and adds a button for using the
  * CalendarWidget to pick Dates.
  * 
  */
-public class Calendar extends TextBox<Datetime> {
-
+public class Calendar extends Composite implements ScreenWidgetInt,
+												   Queryable,
+												   Focusable,
+												   HasBlurHandlers,
+												   HasFocusHandlers,
+												   HasValue<Datetime>,
+												   HasHelper<Datetime>,
+												   HasExceptions {
+												  
     /**
      * Used for Calendar display
      */
-    protected HorizontalPanel hp;
-    protected Button          button;
-    protected PopupPanel      popup;
-    protected CalendarWidget  calendar;
-    protected MonthYearWidget monthYearWidget;
-    protected int             width;
+    protected Grid                                  display;
+    protected Button                                button;
+    protected PopupPanel                            popup;
+    protected CalendarWidget                        calendar;
+    protected MonthYearWidget                       monthYearWidget;
+    protected int                                   width,maxLength;
+    protected boolean                               enabled,showingCalendar,queryMode,required;
 
+    protected TextBase                              textbox;
+    
+    protected Datetime                              value;
+    
+    protected WidgetHelper<Datetime>                helper = new DateHelper();
+    
+    final Calendar                                  source;
+    
+    /**
+     * Exceptions list
+     */
+    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+    
     /**
      * Default no-arg constructor
      */
     public Calendar() {
-
+    	init();
+    	source = this;
     }
 
     /**
      * This method will set the display of the Calendar and set up Event
      * Handlers
      */
-    @Override
     public void init() {
     	
-        /*
-         * Final instance of this class used Anonymous handlers
-         */
-        final Calendar source = this;
-
         /*
          * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
 
-        hp = new HorizontalPanel();
-        hp.setSpacing(0);
-        textbox = new com.google.gwt.user.client.ui.TextBox();
+        display  = new Grid(1,2);
+        display.setCellSpacing(0);
+        display.setCellPadding(0);
+        
+        textbox = new TextBase();
 
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
         image.setStyleName("CalendarButton");
         button.setDisplay(image, false);
 
-        hp.add(textbox);
-        hp.add(button);
+        display.setWidget(0,0,textbox);
+        display.setWidget(0,1,button);
+        display.getCellFormatter().setWidth(0, 1, "16px");
         
-        initWidget(hp);
+        initWidget(display);
 
-        hp.setStyleName("Calendar");
+        display.setStyleName("SelectBox");
         textbox.setStyleName("TextboxUnselected");
 
+        
+        /*
+         * Set the focus style when the Focus event is fired Externally
+         */
+        addFocusHandler(new FocusHandler() {
+        	public void onFocus(FocusEvent event) {
+        		if(enabled)
+        			display.addStyleName("Focus");
+        	}
+        });
+
+        /*
+         * Removes the focus style when the Blue event is fires externally
+         */
+        addBlurHandler(new BlurHandler() {
+        	public void onBlur(BlurEvent event) {
+        		display.removeStyleName("Focus");
+        	}
+        });
+        
         /*
          * Since HorizontalPanel is not a Focusable widget we need to listen to
          * the textbox focus and blur events and pass them through to the
@@ -125,11 +184,14 @@ public class Calendar extends TextBox<Datetime> {
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-                BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-                if(queryMode)
-                	validateQuery();
-                else
-                	validateValue(true);
+            	
+            	if(!showingCalendar && isEnabled()) {
+            		if(queryMode)
+            			validateQuery();
+            		else
+            			validateValue(true);
+            		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
+            	}
             }
         });
 
@@ -141,40 +203,45 @@ public class Calendar extends TextBox<Datetime> {
                 showPopup();
             }
         });
+        
+        button.addMouseDownHandler(new MouseDownHandler() {
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				showingCalendar = true;
+			}
+		});
 
         /*
          * Registers the keyboard handling this widget
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         
-        textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
-            /*
-             * This event calls validate(true) so that that the valueChangeEvent
-             * for the HasValue<T> interface will be fired. In Query mode it
-             * will validate the query string through the helper class
-             */
-            public void onValueChange(ValueChangeEvent<String> event) {
-                if (queryMode) {
-                    validateQuery();
-                } else
-                    validateValue(true);
-            }
-
-        });
+    }
+    
+    /**
+     * This method is overwritten to implement case management. Use the
+     * setValue/getValue methods for normal screen use.
+     */
+    public String getText() {
+        return textbox.getText();
+    }
+    
+    public void setText(String text) {
+        textbox.setText(text);
     }
 
     /**
      * This method will initialize and show the popup panel for this widget.
      */
     private void showPopup() {
-
+    	showingCalendar = true;
         if (popup == null) {
             popup = new PopupPanel(true);
             popup.setStyleName("DropdownPopup");
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
-
+                	showingCalendar = false;
                 }
             });
         }
@@ -234,7 +301,7 @@ public class Calendar extends TextBox<Datetime> {
              * Sets the calendar to the current month and date entered in the widget.  If null 
              * is passed then the current date from the server will be displayed and selected.
              */
-            calendar.setDate(helper.getValue(getText()));
+            calendar.setDate(helper.getValue(textbox.getText()));
             popup.setWidget(calendar);
 
         } catch (Exception e) {
@@ -259,8 +326,8 @@ public class Calendar extends TextBox<Datetime> {
         /*
          * Set the outer panel to full width;
          */
-        if (hp != null)
-            hp.setWidth(width+"px");
+        if (display != null)
+            display.setWidth(width+"px");
 
         /*
          * set the Textbox to width - 14 to account for button.
@@ -302,11 +369,11 @@ public class Calendar extends TextBox<Datetime> {
     @Override
     public void setEnabled(boolean enabled) {
         button.setEnabled(enabled);
+        this.enabled = enabled;
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
             unsinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
-        super.setEnabled(enabled);
     }
 
     /**
@@ -314,7 +381,7 @@ public class Calendar extends TextBox<Datetime> {
      */
     @Override
     public void addExceptionStyle(String style) {
-        textbox.addStyleName(style);
+        addStyleName(style);
     }
 
     /**
@@ -322,14 +389,14 @@ public class Calendar extends TextBox<Datetime> {
      */
     @Override
     public void removeExceptionStyle(String style) {
-        textbox.removeStyleName(style);
+        removeStyleName(style);
     }
     
     @Override
     public void setHelper(WidgetHelper<Datetime> helper) {
     	DateHelper dh;
     	
-    	super.setHelper(helper);
+    	this.helper = helper;
     	
     	setDefaultMask();
     }
@@ -356,15 +423,338 @@ public class Calendar extends TextBox<Datetime> {
     	 * xsl, but defaults are provided if none set.
     	 */
     	if(dh.getBegin() > Datetime.DAY) {
-    		setMask("99:99");
-    		dh.setPattern("HH:mm");
+    		textbox.setMask("99:99");
     	} else if (dh.getEnd() < Datetime.HOUR){
-    		setMask("9999-99-99");
-    		dh.setPattern("yyyy-MM-dd");
+    		textbox.setMask("9999-99-99");
     	} else {
-    		setMask("9999-99-99 99:99");
-    		dh.setPattern("yyyy-MM-dd HH:mm");
+    		textbox.setMask("9999-99-99 99:99");
     	}
+    }
+
+    /**
+     * Returns the current value for this widget.
+     */
+    public Datetime getValue() {
+        return value;
+    }
+
+    /**
+     * Sets the current value of this widget without firing the
+     * ValueChangeEvent.
+     */
+    public void setValue(Datetime value) {
+        setValue(value, false);
+    }
+
+    /**
+     * Sets the current value of this widget and will fire a ValueChangeEvent if
+     * the value is different than what is currently stored.
+     */
+    public void setValue(Datetime value, boolean fireEvents) {
+    	
+        if(!Util.isDifferent(this.value, value)) {
+        	if(value != null)
+        		textbox.setText(helper.format(value));
+            return;
+        }
+        
+        this.value = value;
+        if (value != null) {
+            textbox.setText(helper.format(value));
+        } else {
+            textbox.setText("");
+        }
+
+        if (fireEvents) 
+            ValueChangeEvent.fire(this, value);
+        
+    }
+
+    /**
+     * This method is made available so the Screen can on commit make sure all
+     * required fields are entered without having the user visit each widget on
+     * the screen.
+     */
+    public void validateValue() {
+        validateValue(false);
+    }
+
+    /**
+     * This method will call the Helper to get the T value from the entered
+     * string input. if invalid input is entered, Helper is expected to throw an
+     * en exception and that exception will be added to the validate exceptions
+     * list.
+     * 
+     * @param fireEvents
+     */
+    protected void validateValue(boolean fireEvents) {
+    	String text;
+    	
+    	text = textbox.getText();
+    		
+    	validateExceptions = null;
+        
+    	try {
+            setValue(helper.getValue(text), fireEvents);
+            if (required && value == null) 
+                addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        } catch (LocalizedException e) {
+            addValidateException(e);
+            setValue(null,fireEvents);
+        }
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
+    /**
+     * Method used to validate the inputed query string by the user.
+     */
+    public void validateQuery() {
+        try {
+            validateExceptions = null;
+            helper.validateQuery(textbox.getText());
+        } catch (LocalizedException e) {
+            addValidateException(e);
+        }
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+    
+    // ********** Implementation of HasException interface ***************
+    /**
+     * Convenience method to check if a widget has exceptions so we do not need
+     * to go through the cost of merging the logical and validation exceptions
+     * in the getExceptions method.
+     * 
+     * @return
+     */
+    public boolean hasExceptions() {
+        return endUserExceptions != null || validateExceptions != null;
+    }
+
+    /**
+     * Adds a manual Exception to the widgets exception list.
+     */
+    public void addException(LocalizedException error) {
+        if (endUserExceptions == null)
+            endUserExceptions = new ArrayList<LocalizedException>();
+        endUserExceptions.add(error);
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
+    protected void addValidateException(LocalizedException error) {
+        if (validateExceptions == null)
+            validateExceptions = new ArrayList<LocalizedException>();
+        validateExceptions.add(error);
+    }
+
+    /**
+     * Combines both exceptions list into a single list to be displayed on the
+     * screen.
+     */
+    public ArrayList<LocalizedException> getValidateExceptions() {
+        return validateExceptions;
+    }
+
+    public ArrayList<LocalizedException> getEndUserExceptions() {
+        return endUserExceptions;
+    }
+
+    /**
+     * Clears all manual and validate exceptions from the widget.
+     */
+    public void clearExceptions() {
+        endUserExceptions = null;
+        validateExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+    
+    public void clearEndUserExceptions() {
+        endUserExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+    
+    public void clearValidateExceptions() {
+        validateExceptions = null;
+        ExceptionHelper.checkExceptionHandlers(this);
+    }
+
+    // ************* Implementation of Focusable ******************
+
+    /**
+     * Method only implemented to satisfy Focusable interface.
+     */
+    public int getTabIndex() {
+        return -1;
+    }
+
+    /**
+     * Method only implemented to satisfy Focusable interface.
+     */
+    public void setTabIndex(int index) {
+
+    }
+
+    /**
+     * Method only implemented to satisfy Focusable interface.
+     */
+    public void setAccessKey(char key) {
+
+    }
+    
+    /**
+     * Exposing this method on the wrapped widget
+     */
+    public void selectAll() {
+    	textbox.selectAll();
+    }
+    
+    /**
+     * Exposing this method on the wrapped widget
+     */
+    public void setSelectionRange(int pos, int length) {
+    	textbox.setSelectionRange(pos, length);
+    }
+    
+    /**
+     * Exposing this method on the wrapped widget
+     */
+    public void unselectAll() {
+    	textbox.setSelectionRange(0, 0);
+    }
+    
+    /**
+     * Sets the maximum input characters allowed for this text field.
+     */
+    public void setMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+        textbox.setMaxLength(maxLength);
+    }
+    
+    public void setMask(String mask) {
+    	textbox.setMask(mask);
+    }
+
+    /**
+     * This is need for Focusable interface and to allow programmatic setting of
+     * focus to this widget. We use the wrapped TextBox to make this work.
+     */
+    public void setFocus(boolean focused) {
+        textbox.setFocus(true);
+    }
+
+    // ************ Handler Registration methods *********************
+
+    /**
+     * The Screen will add its screenHandler here to register for the
+     * onValueChangeEvent
+     */
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Datetime> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+    /**
+     * This Method is here so the Focus logic of ScreenPanel can be notified
+     */
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return addDomHandler(handler, BlurEvent.getType());
+    }
+
+    /**
+     * This method is here so the Focus logic of ScreenPanel can be notified
+     */
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return addDomHandler(handler, FocusEvent.getType());
+    }
+
+    /**
+     * Adds a mouseover handler to the textbox for displaying Exceptions
+     */
+    public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+        return addDomHandler(handler, MouseOverEvent.getType());
+    }
+
+    /**
+     * Adds a MouseOut handler for hiding exceptions display
+     */
+    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+        return addDomHandler(handler, MouseOutEvent.getType());
+    }
+
+	@Override
+	public WidgetHelper<Datetime> getHelper() {
+		return helper;
+	}
+
+    // ******** Implementation of Queryable *****************
+    /**
+     * This method will toggle TextBox into and from query mode and suspend or
+     * resume any format restrictions
+     */
+    public void setQueryMode(boolean query) {
+        if (queryMode == query) {
+            return;
+        } else if (query) {
+            queryMode = true;
+            textbox.enforceMask(false);
+            textbox.setMaxLength(255);
+            textbox.setAlignment(TextAlignment.LEFT);
+        } else {
+            queryMode = false;
+            textbox.enforceMask(true);
+            textbox.setMaxLength(maxLength);
+            textbox.setAlignment(TextAlignment.LEFT);
+            textbox.setText("");
+        }
+    }
+
+    /**
+     * Returns a single QueryData object representing the query string entered
+     * by the user. The Helper class is used here to create the correct
+     * QueryData object for the passed type T.
+     */
+    public Object getQuery() {
+    	Object query;
+    	
+    	query = helper.getQuery(textbox.getText());
+                
+        return query;
+    }
+    
+    /**
+     * Sets a query string to this widget when loaded from a table model
+     */
+    public void setQuery(QueryData qd) {
+        if(qd != null)
+            textbox.setText(qd.getQuery());
+        else
+            textbox.setText("");
+    }
+    
+    /**
+     * Method used to determine if widget is currently in Query mode
+     */
+    public boolean isQueryMode() {
+    	return queryMode;
+    }
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
+    /**
+     * Set the text alignment.
+     */
+    public void setTextAlignment(TextAlignment alignment) {
+        textbox.setAlignment(alignment);
+    }
+
+
+    /**
+     * Method used to set if this widget is required to have a value inputed.
+     * @param required
+     */
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
 }

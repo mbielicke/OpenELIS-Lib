@@ -37,7 +37,7 @@ UIRF Software License are applicable instead of those above.
   <xsl:template match="doc">
     <xsl:variable name="language" select="locale" />
     <xsl:variable name="props" select="props" />
-    <xsl:variable name="constants" select="resource:getBundle(string('org.openelis.gwt.server.CalendarConstants'),locale:new(string($language)))" />
+    <xsl:variable name="constants" select="resource:getBundle(string('org.openelis.gwt.constants.LibraryConstants'),locale:new(string($language)))" />
     <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <FocusPanel key="CalFocus">
         <VerticalPanel style="CalendarWidget">
@@ -67,18 +67,18 @@ UIRF Software License are applicable instead of those above.
             </button>
           </AbsolutePanel>
           <AbsolutePanel visible="false">
-            <label key="month0" text="{resource:getString($constants,'month0')}" />
-            <label key="month1" text="{resource:getString($constants,'month1')}" />
-            <label key="month2" text="{resource:getString($constants,'month2')}" />
-            <label key="month3" text="{resource:getString($constants,'month3')}" />
-            <label key="month4" text="{resource:getString($constants,'month4')}" />
-            <label key="month5" text="{resource:getString($constants,'month5')}" />
-            <label key="month6" text="{resource:getString($constants,'month6')}" />
-            <label key="month7" text="{resource:getString($constants,'month7')}" />
-            <label key="month8" text="{resource:getString($constants,'month8')}" />
-            <label key="month9" text="{resource:getString($constants,'month9')}" />
-            <label key="month10" text="{resource:getString($constants,'month10')}" />
-            <label key="month11" text="{resource:getString($constants,'month11')}" />
+            <label key="month0" text="{resource:getString($constants,'cal.month0')}" />
+            <label key="month1" text="{resource:getString($constants,'cal.month1')}" />
+            <label key="month2" text="{resource:getString($constants,'cal.month2')}" />
+            <label key="month3" text="{resource:getString($constants,'cal.month3')}" />
+            <label key="month4" text="{resource:getString($constants,'cal.month4')}" />
+            <label key="month5" text="{resource:getString($constants,'cal.month5')}" />
+            <label key="month6" text="{resource:getString($constants,'cal.month6')}" />
+            <label key="month7" text="{resource:getString($constants,'cal.month7')}" />
+            <label key="month8" text="{resource:getString($constants,'cal.month8')}" />
+            <label key="month9" text="{resource:getString($constants,'cal.month9')}" />
+            <label key="month10" text="{resource:getString($constants,'cal.month10')}" />
+            <label key="month11" text="{resource:getString($constants,'cal.month11')}" />
           </AbsolutePanel>
         </VerticalPanel>
       </FocusPanel>

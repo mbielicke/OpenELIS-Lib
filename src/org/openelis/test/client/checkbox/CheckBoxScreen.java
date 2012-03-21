@@ -3,6 +3,7 @@ package org.openelis.test.client.checkbox;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
+import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.TextBox;
@@ -15,7 +16,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 
 public class CheckBoxScreen extends Screen {
 
@@ -79,7 +79,7 @@ public class CheckBoxScreen extends Screen {
 			}
 		});
 		
-		value = (TextBox<String>)def.getWidget("setValue");
+		value = (TextBox<String>)def.getWidget("value");
 		value.setEnabled(true);
 		
 		setValue = (Button)def.getWidget("setValue");

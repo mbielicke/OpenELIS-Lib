@@ -32,6 +32,8 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.calendar.Calendar;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
@@ -51,6 +53,7 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
      */
     private Calendar editor;
     private boolean  query;
+    private Column   column;
 
     /**
      * Constructor that takes the editor to be used as a param
@@ -61,6 +64,11 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableCalendar");
+        editor.addBlurHandler(new BlurHandler() {
+			public void onBlur(BlurEvent event) {
+				column.getTable().finishEditing();
+			}
+		});
     }
 
     /**
@@ -73,6 +81,7 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
+        editor.selectAll();
     }
 
     @SuppressWarnings("rawtypes")
@@ -145,5 +154,10 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
     public Widget getWidget() {
     	return editor;
     }
+    
+	@Override
+	public void setColumn(Column col) {
+		this.column = col;
+	}
 
 }

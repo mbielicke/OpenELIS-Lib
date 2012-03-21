@@ -153,8 +153,10 @@ public class Column {
     @SuppressWarnings("rawtypes")
 	public Column setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
-        if (renderer instanceof CellEditor)
+        if (renderer instanceof CellEditor) {
             editor = (CellEditor)renderer;
+            editor.setColumn(this);
+        }
         return this;
     }
 

@@ -11,13 +11,13 @@ import org.openelis.test.client.button.ButtonScreen;
 import org.openelis.test.client.calendar.CalendarScreen;
 import org.openelis.test.client.dropdown.DropdownScreen;
 import org.openelis.test.client.logging.LoggingScreen;
-import org.openelis.test.client.selection.SelectionScreen;
 import org.openelis.test.client.table.TableScreen;
 import org.openelis.test.client.textbox.TextboxScreen;
 import org.openelis.test.client.tree.TreeScreen;
 import org.openelis.test.client.autocomplete.AutoCompleteScreen;
 import org.openelis.test.client.textarea.TextareaScreen;
 import org.openelis.test.client.checkbox.CheckBoxScreen;
+import org.openelis.test.client.editbox.EditBoxScreen;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -100,17 +100,6 @@ public class TestWidgetsScreen extends Screen {
     		}
     	});
     	
-    	addCommand("selection",new Command() {
-    		public void execute() {
-    			try {
-    				browser.addScreen(new SelectionScreen());
-    			}catch(Exception e) {
-    				Window.alert(e.getMessage());
-    				Application.logger().log(Level.SEVERE,e.getMessage(),e);
-    			}
-    		}
-    	});
-    	
     	addCommand("button", new Command() {
     		public void execute() {
     			try {
@@ -148,6 +137,17 @@ public class TestWidgetsScreen extends Screen {
     		public void execute() {
     			try {
     				browser.addScreen(new CheckBoxScreen());
+    			}catch(Exception e) {
+    				Window.alert(e.getMessage());
+    				Application.logger().log(Level.SEVERE,e.getMessage(),e);
+    			}
+    		}
+    	});
+
+    	addCommand("editbox", new Command() {
+    		public void execute() {
+    			try {
+    				browser.addScreen(new EditBoxScreen());
     			}catch(Exception e) {
     				Window.alert(e.getMessage());
     				Application.logger().log(Level.SEVERE,e.getMessage(),e);

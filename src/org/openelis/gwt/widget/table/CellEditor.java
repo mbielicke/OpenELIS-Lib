@@ -76,5 +76,7 @@ public interface CellEditor<T> {
     public boolean ignoreKey(int keyCode);
         
     public Widget getWidget();
+    
+    public void setColumn(Column col);
 
 }

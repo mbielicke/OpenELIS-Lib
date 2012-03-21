@@ -47,17 +47,6 @@ public interface ScreenWidgetInt {
      * @return TRUE if the screen widget is enabled, FALSE otherwise.
      */
     public boolean isEnabled();
-    
-    /**
-     * Adds the Focus style to the widget
-     * @param style
-     */
-    public void addFocusStyle(String style);
 
-    /**
-     * Removes the Focus style from the widget.
-     * @param style
-     */
-    public void removeFocusStyle(String style);
     
 }

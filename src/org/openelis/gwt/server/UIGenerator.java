@@ -94,7 +94,6 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.DoubleHelper");
         composer.addImport("com.google.gwt.user.client.Window");
         composer.addImport("com.google.gwt.core.client.GWT");
-        composer.addImport("org.openelis.gwt.common.Util");
 
         findImports(doc.getElementsByTagName("screen").item(0));
 
@@ -399,8 +398,6 @@ public class UIGenerator extends Generator {
     		    tableWidth = getAttribute(node,"tableWidth");
     		    
                 sw.println("AutoComplete wid"+id+" = new AutoComplete();");
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 if(node.getAttributes().getNamedItem("tab") != null) 
@@ -457,7 +454,7 @@ public class UIGenerator extends Generator {
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.AutoComplete");
                 composer.addImport("org.openelis.gwt.widget.table.Table");
-                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+                composer.addImport("org.openelis.gwt.widget.TextBase.Case");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
                 composer.addImport("org.openelis.gwt.widget.table.LabelCell");
                 composer.addImport("org.openelis.gwt.widget.table.TextBoxCell");
@@ -592,8 +589,6 @@ public class UIGenerator extends Generator {
                 factoryMap.get("Date").getNewInstance(node, id);
                 sw.println("wid"+id+".setHelper(field"+id+");");
                 
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("wid"+id+".addFocusHandler(panel);");
                 
                 if(enabled != null)
@@ -627,8 +622,6 @@ public class UIGenerator extends Generator {
     	        
     	        setDefaults(node, "wid"+id);
     	            	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -823,13 +816,12 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("dropdown", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String fcase,visibleItems,field,width,enabled,required;
+    			String visibleItems,field,width,enabled,required;
     			NodeList list,cols;
     		    Element table,label,col;
     		    
     		    field = getAttribute(node,"field","Integer");
     		    visibleItems = getAttribute(node,"visibleItems","10");
-    		    fcase = getAttribute(node,"case","MIXED");
     		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
     		    width = getAttribute(node,"width","-1");
     		    enabled = getAttribute(node,"enabled");
@@ -840,8 +832,6 @@ public class UIGenerator extends Generator {
     		    else
     		        sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
     		    
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				
 				if(node.getAttributes().getNamedItem("tab") != null) 
@@ -850,13 +840,13 @@ public class UIGenerator extends Generator {
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node, "wid"+id);
 				
-				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");                
                 sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
 
 				if(table == null) {
 				    table = doc.createElement("table");
 				    table.setAttribute("rows", visibleItems);
 				    table.setAttribute("width",width);
+				    table.setAttribute("hscroll", "NEVER");
 				    cols = ((Element)node).getElementsByTagName("col");
 				    int length = cols.getLength();
 				    if(length > 0){
@@ -864,13 +854,6 @@ public class UIGenerator extends Generator {
 				        	col = (Element)cols.item(0);
 				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                                 continue;
-				        	/*
-				            if(!col.hasChildNodes()) {
-				                label = doc.createElement("label");
-				                label.setAttribute("field", "String");
-				                cols.item(0).appendChild(label);
-				            }
-				            */
 				            table.appendChild(col);  
 				        }
 				    }else{
@@ -897,8 +880,7 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.Dropdown");
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
-                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+                composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
     		}
     	});
     	
@@ -921,9 +903,7 @@ public class UIGenerator extends Generator {
     			setDefaults(node,"wid"+id);
     	        
    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
-
-    			sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    			sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
+   	        	
 				sw.println("wid"+id+".addFocusHandler(panel);");
     			
     		}
@@ -1365,8 +1345,6 @@ public class UIGenerator extends Generator {
     		    else
     		        sw.println("MultiSelection<String> wid"+id+" = new MultiSelection<String>();");
     		    
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 				
 				if(node.getAttributes().getNamedItem("tab") != null) 
@@ -1423,7 +1401,7 @@ public class UIGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
                 composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-                composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+                composer.addImport("org.openelis.gwt.widget.TextBase.Case");
     		}
     	});    	
     	
@@ -1464,8 +1442,6 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setHelper(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -1535,267 +1511,11 @@ public class UIGenerator extends Generator {
     	        	sw.println("wid"+id+".setEnabled("+enabled+");");
     	        }
     	        
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.richtext.RichTextWidget");
-    		}
-    	});
-    	
-    	factoryMap.put("select", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			String visibleItems,field,width,enabled,required;
-    			NodeList list,cols;
-    		    Element table,label,col;
-    		    
-    		    field = getAttribute(node,"field","Integer");
-    		    visibleItems = getAttribute(node,"visibleItems","10");
-    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
-    		    width = getAttribute(node,"width","-1");
-    		    enabled = getAttribute(node,"enabled");
-    		    required = getAttribute(node,"required");
-    		    
-    		    if(field.equals("Integer")) 
-    		        sw.println("Selection<Integer> wid"+id+" = new Selection<Integer>();");
-    		    else
-    		        sw.println("Selection<String> wid"+id+" = new Selection<String>();");
-    		    
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				
-				if(node.getAttributes().getNamedItem("tab") != null) 
-					addTabHandler(node,"wid"+id);
-				
-				if(node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node, "wid"+id);
-				
-                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
-
-				if(table == null) {
-				    table = doc.createElement("table");
-				    table.setAttribute("rows", visibleItems);
-				    table.setAttribute("width",width);
-				    table.setAttribute("hscroll", "NEVER");
-				    cols = ((Element)node).getElementsByTagName("col");
-				    int length = cols.getLength();
-				    if(length > 0){
-				        for(int i = 0; i < length; i++){
-				        	col = (Element)cols.item(0);
-				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                                continue;
-				        	/*
-				            if(!col.hasChildNodes()) {
-				                label = doc.createElement("label");
-				                label.setAttribute("field", "String");
-				                cols.item(0).appendChild(label);
-				            }
-				            */
-				            table.appendChild(col);  
-				        }
-				    }else{
-				        col = doc.createElement("col");
-				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-				        label = doc.createElement("label");
-				        label.setAttribute("field", "String");
-				        col.appendChild(label);
-				        table.appendChild(col);
-				    }
-				}
-				factoryMap.get("table").getNewInstance(table,1000+id);
-				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
-				
-				if(enabled != null)
-					sw.println("wid"+id+".setEnabled("+enabled+");");
-				
-				if(required != null)
-					sw.println("wid"+id+".setRequired("+required+");");
-				
-				setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.Selection");
-                composer.addImport("org.openelis.gwt.widget.table.Table");
-                composer.addImport("org.openelis.gwt.widget.table.Column");
-                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-    		}
-    	});
-    	
-    	factoryMap.put("dropselect", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			String visibleItems,field,width,enabled,required;
-    			NodeList list,cols;
-    		    Element table,label,col;
-    		    
-    		    field = getAttribute(node,"field","Integer");
-    		    visibleItems = getAttribute(node,"visibleItems","10");
-    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
-    		    width = getAttribute(node,"width","-1");
-    		    enabled = getAttribute(node,"enabled");
-    		    required = getAttribute(node,"required");
-    		    
-    		    if(field.equals("Integer")) 
-    		        sw.println("DropSelection<Integer> wid"+id+" = new DropSelection<Integer>();");
-    		    else
-    		        sw.println("DropSelection<String> wid"+id+" = new DropSelection<String>();");
-    		    
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				
-				if(node.getAttributes().getNamedItem("tab") != null) 
-					addTabHandler(node,"wid"+id);
-				
-				if(node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node, "wid"+id);
-				
-                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
-
-				if(table == null) {
-				    table = doc.createElement("table");
-				    table.setAttribute("rows", visibleItems);
-				    table.setAttribute("width",width);
-				    table.setAttribute("hscroll", "NEVER");
-				    cols = ((Element)node).getElementsByTagName("col");
-				    int length = cols.getLength();
-				    if(length > 0){
-				        for(int i = 0; i < length; i++){
-				        	col = (Element)cols.item(0);
-				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                                continue;
-				        	/*
-				            if(!col.hasChildNodes()) {
-				                label = doc.createElement("label");
-				                label.setAttribute("field", "String");
-				                cols.item(0).appendChild(label);
-				            }
-				            */
-				            table.appendChild(col);  
-				        }
-				    }else{
-				        col = doc.createElement("col");
-				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-				        label = doc.createElement("label");
-				        label.setAttribute("field", "String");
-				        col.appendChild(label);
-				        table.appendChild(col);
-				    }
-				}
-				factoryMap.get("table").getNewInstance(table,1000+id);
-				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
-				
-				if(enabled != null)
-					sw.println("wid"+id+".setEnabled("+enabled+");");
-				
-				if(required != null)
-					sw.println("wid"+id+".setRequired("+required+");");
-				
-				setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.DropSelection");
-                composer.addImport("org.openelis.gwt.widget.table.Table");
-                composer.addImport("org.openelis.gwt.widget.table.Column");
-                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
-    		}
-    	});
-    	
-    	factoryMap.put("selectbox", new Factory() {
-    		public void getNewInstance(Node node, int id) {
-    			String visibleItems,field,width,enabled,required;
-    			NodeList list,cols;
-    		    Element table,label,col;
-    		    
-    		    field = getAttribute(node,"field","Integer");
-    		    visibleItems = getAttribute(node,"visibleItems","10");
-    		    table = (list = ((Element)node).getElementsByTagName("table")).getLength() > 0 ? (Element)list.item(0) : null;
-    		    width = getAttribute(node,"width","-1");
-    		    enabled = getAttribute(node,"enabled");
-    		    required = getAttribute(node,"required");
-    		    
-    		    if(field.equals("Integer")) 
-    		        sw.println("SelectionBox<Integer> wid"+id+" = new SelectionBox<Integer>();");
-    		    else
-    		        sw.println("SelectionBox<String> wid"+id+" = new SelectionBox<String>();");
-    		    
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(panel);");
-				
-				if(node.getAttributes().getNamedItem("tab") != null) 
-					addTabHandler(node,"wid"+id);
-				
-				if(node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node, "wid"+id);
-				
-                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
-
-				if(table == null) {
-				    table = doc.createElement("table");
-				    table.setAttribute("rows", visibleItems);
-				    table.setAttribute("width",width);
-				    table.setAttribute("hscroll", "NEVER");
-				    cols = ((Element)node).getElementsByTagName("col");
-				    int length = cols.getLength();
-				    if(length > 0){
-				        for(int i = 0; i < length; i++){
-				        	col = (Element)cols.item(0);
-				        	if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
-                                continue;
-				        	/*
-				            if(!col.hasChildNodes()) {
-				                label = doc.createElement("label");
-				                label.setAttribute("field", "String");
-				                cols.item(0).appendChild(label);
-				            }
-				            */
-				            table.appendChild(col);  
-				        }
-				    }else{
-				        col = doc.createElement("col");
-				        col.setAttribute("width", node.getAttributes().getNamedItem("width").getNodeValue());
-				        label = doc.createElement("label");
-				        label.setAttribute("field", "String");
-				        col.appendChild(label);
-				        table.appendChild(col);
-				    }
-				}
-				factoryMap.get("table").getNewInstance(table,1000+id);
-				sw.println("wid"+id+".setPopupContext(wid"+(1000+id)+");");
-				
-				if(enabled != null)
-					sw.println("wid"+id+".setEnabled("+enabled+");");
-				
-				if(required != null)
-					sw.println("wid"+id+".setRequired("+required+");");
-				
-    			NodeList widgets;
-    			Node widget;
-				
-    			widgets = node.getChildNodes();
-    			for(int k = 0; k < widgets.getLength(); k++) {
-    				widget = widgets.item(k);
-    	            if (widget.getNodeType() == Node.ELEMENT_NODE) {
-    	            	int child = ++count;
-    	                if(!loadWidget(widget,count)){
-    	                	count--;
-    	                	continue;
-    	                }
-    	                sw.println("wid"+id+".setDisplay(wid"+child+");");
-    	                break;
-    	            }
-    	        }
-				
-				setDefaults(node,"wid"+id);
-    		}
-    		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.SelectionBox");
-                composer.addImport("org.openelis.gwt.widget.table.Table");
-                composer.addImport("org.openelis.gwt.widget.table.Column");
-                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
     		}
     	});
     	
@@ -2015,8 +1735,6 @@ public class UIGenerator extends Generator {
                             	sw.println("PercentCell cell"+child+" = new PercentCell(wid"+child+");");
                             else if(name.equals("time"))
                             	sw.println("TimeCell cell"+child+" = new TimeCell();");
-                            else if(name.equals("select"))
-                            	sw.println("SelectionCell cell"+child+" = new SelectionCell<"+field+">(wid"+child+");");
                             else
                                 sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
                             
@@ -2034,8 +1752,6 @@ public class UIGenerator extends Generator {
                 	sw.println("wid"+id+".addFocusHandler(panel);");
                 }
                 
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
                 setDefaults(node,"wid"+id);
      	        
      	    }
@@ -2051,7 +1767,6 @@ public class UIGenerator extends Generator {
                composer.addImport("org.openelis.gwt.widget.table.ImageCell");
                composer.addImport("org.openelis.gwt.widget.table.PercentCell");
                composer.addImport("org.openelis.gwt.widget.table.TimeCell");
-               composer.addImport("org.openelis.gwt.widget.table.SelectionCell");
       	   }
      	});    	
     	
@@ -2256,8 +1971,6 @@ public class UIGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setHelper(field"+id+");");
     	        
-    	        sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-    	        sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
     	        
     		}
@@ -2317,13 +2030,11 @@ public class UIGenerator extends Generator {
 				factoryMap.get(field).getNewInstance(node, id);
 				sw.println("wid"+id+".setHelper(field"+id+");");
 				
-				sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-				sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
 				sw.println("wid"+id+".addFocusHandler(panel);");
 			}
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
-				composer.addImport("org.openelis.gwt.widget.TextBox.Case");
+				composer.addImport("org.openelis.gwt.widget.TextBase.Case");
 				composer.addImport("com.google.gwt.user.client.ui.ValueBoxBase");
                 composer.addImport("org.openelis.gwt.widget.IntegerHelper");
                 composer.addImport("org.openelis.gwt.widget.DoubleHelper");
@@ -2530,8 +2241,6 @@ public class UIGenerator extends Generator {
                 	sw.println("wid"+id+".addNodeDefinition(\""+key+"\",leafDef"+id+"_"+i+");");
                 }
                 setDefaults(node,"wid"+id);
-                sw.println("wid"+id+".addBlurHandler(Util.focusHandler);");
-                sw.println("wid"+id+".addFocusHandler(Util.focusHandler);");
                 sw.println("panel.addFocusHandler(wid"+id+");");
                 sw.println("wid"+id+".addFocusHandler(panel);");
     		}

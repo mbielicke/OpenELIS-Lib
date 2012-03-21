@@ -70,6 +70,8 @@ import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -87,7 +89,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -356,6 +357,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}, KeyDownEvent.getType());
 		
 		setStyleName("ScreenTable");
+		
+		addDomHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				//System.out.println("Table Blurred");
+			}
+		},BlurEvent.getType());
 
 	}
 
@@ -920,7 +928,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		column = new Column(this, name, label);
 		column.setWidth(width);
 		addColumnAt(index,column);
-
+		column.setTable(this);
 		return column;
 	}
 
@@ -937,6 +945,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	
 	public void addColumnAt(int index,Column column) {
 		columns.add(index, column);
+		column.setTable(this);
 		if(model != null) {
 			for(Row row : model)
 				row.cells.add(index,null);
@@ -1787,13 +1796,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 	
 	public void onFocus(FocusEvent event) {
+		/*
 		Widget focused;
 		
 		focused = ((ScreenPanel)event.getSource()).getFocused();
 		
 		if(focused == null || !DOM.isOrHasChild(getElement(),focused.getElement()))
 			finishEditing(false);
-		
+		*/
 	}
 
 	// ********** Implementation of Queryable *******************

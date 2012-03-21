@@ -49,7 +49,7 @@ import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.StringHelper;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.WidgetHelper;
-import org.openelis.gwt.widget.TextBox.Case;
+import org.openelis.gwt.widget.TextBase.Case;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.common.Prompt;
@@ -516,8 +516,6 @@ public class ReportScreen extends Screen {
 		t = new TextBox();
 		t.setRequired(p.isRequired());
 		t.setStyleName("ScreenTextBox");
-		t.addFocusHandler(Util.focusHandler);
-		t.addBlurHandler(Util.focusHandler);
 		t.setHelper(f);
 
 		if (p.getMask() != null)

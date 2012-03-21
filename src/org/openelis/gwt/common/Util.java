@@ -25,16 +25,8 @@
 */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.widget.ScreenWidgetInt;
-
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 
 public class Util {
-
-	public static UIFocusHandler focusHandler = new UIFocusHandler();
 	
     /**
      * Simple method that returns a string representation of the obj.
@@ -61,30 +53,6 @@ public class Util {
     
     public static String addUnits(int value) {
         return value+"px";
-    }
-    
-    private static class UIFocusHandler implements FocusHandler, BlurHandler {
-        public void onFocus(FocusEvent event) {
-        	if(event.getSource() instanceof ScreenWidgetInt) {
-        		if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
-        			((ScreenWidgetInt)event.getSource()).addFocusStyle("Focus");
-        		}
-        	}
-            /*
-            if ( ((HasField)event.getSource()).isEnabled()) {
-                ((Widget)event.getSource()).addStyleName("Focus");
-            }
-            */
-        }
-
-        public void onBlur(BlurEvent event) {
-        	//Remove this outer instance check after the redesign is completed
-        	if(event.getSource() instanceof ScreenWidgetInt) {
-        		if ( ((ScreenWidgetInt)event.getSource()).isEnabled()) {
-        			((ScreenWidgetInt)event.getSource()).removeFocusStyle("Focus");
-        		}
-        	}
-        }
     }
     
     /**

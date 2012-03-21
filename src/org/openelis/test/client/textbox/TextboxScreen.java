@@ -12,23 +12,21 @@ import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.DoubleHelper;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.IntegerHelper;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.Selection;
-import org.openelis.gwt.widget.StringHelper;
+import org.openelis.gwt.widget.TextBase;
 import org.openelis.gwt.widget.TextBox;
+import org.openelis.gwt.widget.table.Table;
 import org.openelis.test.client.Application;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
@@ -38,15 +36,16 @@ import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 public class TextboxScreen extends Screen {
 	
-	TextBox            test;
+	TextBox            test, testTable;
 	TextBox<String>    mask,pattern,value,css,testString;
 	TextBox<Integer>   maxlength,testInteger;
 	TextBox<Double>    testDouble;
 	TextBox<Datetime>  testDatetime;
 	CheckBox           enabled,required,query;
-	Selection<String>  field,tCase,alignment,logLevel;
-	Selection<Integer> begin,end;
+	Dropdown<String>  field,tCase,alignment,logLevel;
+	Dropdown<Integer> begin,end;
 	Button             setValue,getQuery;
+	Table              table;
 	
 	public TextboxScreen() {
 		super((ScreenDefInt)GWT.create(TextboxDef.class));
@@ -79,17 +78,10 @@ public class TextboxScreen extends Screen {
 			
 		test = testString;
 		
-		test.addDomHandler(new KeyUpHandler() {
-			
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if(event.getNativeKeyCode() >=112 && event.getNativeKeyCode() <= 124) {
-					event.preventDefault();
-					event.stopPropagation();
-				}
-				
-			}
-		},KeyUpEvent.getType());
+		table = (Table)def.getWidget("testTable");
+		testTable = (TextBox)table.getColumnWidget(1);
+		table.setEnabled(true);
+		table.addRow();
 		
 		mask = (TextBox<String>)def.getWidget("mask");
 		mask.setEnabled(true);
@@ -97,6 +89,7 @@ public class TextboxScreen extends Screen {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				Application.logger().info(log("mask changed - "+event.getValue()));
 				test.setMask(event.getValue());
+				testTable.setMask(event.getValue());
 			}
 		});
 		
@@ -106,6 +99,7 @@ public class TextboxScreen extends Screen {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				Application.logger().info(log("pattern changed - "+event.getValue()));
 				test.getHelper().setPattern(event.getValue());
+				testTable.getHelper().setPattern(event.getValue());
 			}
 		});
 		
@@ -115,6 +109,7 @@ public class TextboxScreen extends Screen {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
 				Application.logger().info(log("maxLength changed - "+event.getValue()));
 				test.setMaxLength(event.getValue());
+				testTable.setMaxLength(event.getValue());
 			}
 		});
 		
@@ -126,14 +121,19 @@ public class TextboxScreen extends Screen {
 		setValue.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Application.logger().info(log("value being set to - "+value.getValue()));
-				if(field.getValue().equals("String"))
+				if(field.getValue().equals("String")) {
 					test.setValue(value.getValue());
-				else if(field.getValue().equals("Integer"))
+					table.setValueAt(0,1,value.getValue());
+				}else if(field.getValue().equals("Integer")) {
 					test.setValue(Integer.valueOf(value.getValue()));
-				else if(field.getValue().equals("Double"))
+					table.setValueAt(0,1,Integer.valueOf(value.getValue()));
+				}else if(field.getValue().equals("Double")) {
 					test.setValue(Double.valueOf(value.getValue()));
-				else if(field.getValue().equals("Date"))
+					table.setValueAt(0,1,Double.valueOf(value.getValue()));
+				}else if(field.getValue().equals("Date")) {
 					test.setValue(Datetime.getInstance(Datetime.YEAR, Datetime.DAY, new Date(value.getValue())));
+					table.setValueAt(0,1,Datetime.getInstance(Datetime.YEAR, Datetime.DAY, new Date(value.getValue())));
+				}
 			}
 		});
 		
@@ -153,6 +153,7 @@ public class TextboxScreen extends Screen {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				Application.logger().info(log("required changed - "+event.getValue()));
 				test.setRequired("Y".equals(event.getValue()));
+				testTable.setRequired("Y".equals(event.getValue()));
 			}
 		});
 		
@@ -177,12 +178,13 @@ public class TextboxScreen extends Screen {
 			}
 		});
 		
-		field = (Selection<String>)def.getWidget("field");
+		field = (Dropdown<String>)def.getWidget("field");
 		field.setEnabled(true);
 		field.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				if("String".equals(event.getValue())){
 					test = testString;
+					
 				}else if("Integer".equals(event.getValue())) {
 					IntegerHelper helper;
 					
@@ -278,16 +280,16 @@ public class TextboxScreen extends Screen {
 		
 		
 		
-		tCase = (Selection<String>)def.getWidget("case");
+		tCase = (Dropdown<String>)def.getWidget("case");
 		tCase.setEnabled(true);
 		tCase.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				Application.logger().info("case changed - "+event.getValue());
-				test.setCase(TextBox.Case.valueOf(event.getValue().toUpperCase()));
+				test.setCase(TextBase.Case.valueOf(event.getValue().toUpperCase()));
 			}
 		});
 		
-		alignment = (Selection<String>)def.getWidget("alignment");
+		alignment = (Dropdown<String>)def.getWidget("alignment");
 		alignment.setEnabled(true);
 
 		alignment.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -306,7 +308,7 @@ public class TextboxScreen extends Screen {
 			}
 		});
 		
-		begin = (Selection<Integer>)def.getWidget("begin");
+		begin = (Dropdown<Integer>)def.getWidget("begin");
 		begin.setEnabled(false);
 		begin.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -327,7 +329,7 @@ public class TextboxScreen extends Screen {
 			}
 		});
 		
-		end = (Selection<Integer>)def.getWidget("end");
+		end = (Dropdown<Integer>)def.getWidget("end");
 		end.setEnabled(false);
 		end.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
@@ -397,7 +399,7 @@ public class TextboxScreen extends Screen {
 	}
 	
 	private void setAttributes() {
-		test.setCase(TextBox.Case.valueOf(tCase.getValue().toUpperCase()));
+		test.setCase(TextBase.Case.valueOf(tCase.getValue().toUpperCase()));
 		test.setEnabled("Y".equals(enabled.getValue()));
 		test.setTextAlignment(TextAlignment.valueOf(alignment.getValue().toUpperCase()));
 		test.setQueryMode("Y".equals(query.getValue()));

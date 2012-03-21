@@ -51,7 +51,7 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">Case:</text>
-                <select key="case" width="75"/>
+                <dropdown key="case" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>

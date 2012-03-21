@@ -12,8 +12,9 @@ import org.openelis.gwt.widget.AutoCompleteValue;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.CollapsePanel;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.Selection;
+import org.openelis.gwt.widget.TextBase;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
@@ -29,7 +30,7 @@ import com.google.gwt.user.client.Window;
 public class AutoCompleteScreen extends Screen {
 
 	AutoComplete      test;
-	Selection<String> tCase;
+	Dropdown<String> tCase;
 	TextBox<String>   value,css;
 	TextBox<Integer>  visibleItems;
 	CheckBox          enabled, required, query;
@@ -141,12 +142,12 @@ public class AutoCompleteScreen extends Screen {
 			}
 		});
 		
-		tCase = (Selection<String>)def.getWidget("case");
+		tCase = (Dropdown<String>)def.getWidget("case");
 		tCase.setEnabled(true);
 
 		tCase.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setCase(TextBox.Case.valueOf(event.getValue().toUpperCase()));
+				test.setCase(TextBase.Case.valueOf(event.getValue().toUpperCase()));
 			}
 		});
 		

@@ -63,7 +63,7 @@ public class LongHelper implements WidgetHelper<Long> {
 					// Do nothing to Fall through and throw the exception.
 				}
 			}
-			throw new LocalizedException("invalidInteger");
+			throw new LocalizedException("exc.invalidNumeric");
 		}
 	}
 

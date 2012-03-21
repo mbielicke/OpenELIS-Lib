@@ -6,6 +6,8 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.TextBox;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,11 +15,18 @@ import com.google.gwt.user.client.ui.Widget;
 public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
 
 	private TextBox<String> editor;
+	private Column          column;
 	
 	public TimeCell() {
 		editor = new TextBox<String>();
 		editor.setEnabled(true);
 		editor.setStyleName("TableTextBox");
+		editor.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				column.getTable().finishEditing();
+			}
+		});
 	}
 	
 	@Override
@@ -25,6 +34,7 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
 		editor.setValue(getTime(value));
 		editor.setWidth(container.getWidth()+"px");
 		container.setEditor(editor);
+		editor.selectAll();
 	}
 
 	@Override
@@ -109,5 +119,10 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
   
         return "";      
     }
+    
+	@Override
+	public void setColumn(Column col) {
+		this.column = col;
+	}
     
 }

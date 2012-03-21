@@ -47,11 +47,11 @@ UIRF Software License are applicable instead of those above.
             <TablePanel style="Form">
               <row>
                 <text style="Prompt">Begin:</text>
-                <select key="begin" field="Integer" width="100"/>
+                <dropdown key="begin" field="Integer" width="100"/>
               </row>
               <row>
                 <text style="Prompt">End:</text>
-                <select key="end" field="Integer" width="100"/>
+                <dropdown key="end" field="Integer" width="100"/>
               </row>
               <row>
                 <text style="Prompt">Enabled:</text>
@@ -59,7 +59,7 @@ UIRF Software License are applicable instead of those above.
               </row>
               <row>
                 <text style="Prompt">Alignment:</text>
-                <select key="alignment" width="75"/>
+                <dropdown key="alignment" width="75"/>
               </row>
               <row>
                 <text style="Prompt">Query Mode:</text>
@@ -106,7 +106,22 @@ UIRF Software License are applicable instead of those above.
             </row>
             <row>
               <text style="Prompt">Dummy</text>
-              <textbox key="dummy2" tab="dummy1,test" enabled="true"/>
+              <textbox key="dummy2" tab="testTable,test" enabled="true"/>
+            </row>
+            <row>
+              <widget colspan="2">
+                <table key="testTable" rows="1" vscroll="NEVER" hscroll="NEVER" style="ScreenTableWithSides" tab="dummy1,dummy2">
+                  <col header="Dummy" width="100">
+                    <textbox/>
+                  </col>
+                  <col header="Test" width="100">
+                    <calendar begin="0" end="2"/>
+                  </col>
+                  <col header="Dummy" width="100">
+                    <textbox/>
+                  </col>
+                </table>
+              </widget>
             </row>
           </TablePanel>
         </AbsolutePanel>

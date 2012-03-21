@@ -9,8 +9,8 @@ import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.Dropdown;
 import org.openelis.gwt.widget.Item;
-import org.openelis.gwt.widget.Selection;
 import org.openelis.test.client.Application;
 
 import com.google.gwt.core.client.GWT;
@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
  */
 public class LoggingScreen extends Screen {
 	
-	protected Selection<String> logLevel;
+	protected Dropdown<String> logLevel;
 	protected Button           clearLog;
 	protected CheckBox         remoteSwitch;
 	protected HasWidgets	   logPanel;
@@ -67,7 +67,7 @@ public class LoggingScreen extends Screen {
 	 * Method to initialize widgets used in the screen.
 	 */
 	private void initialize() {
-		logLevel = (Selection<String>)def.getWidget("logLevel");
+		logLevel = (Dropdown<String>)def.getWidget("logLevel");
 		logLevel.setEnabled(true);
 		
 		logLevel.addValueChangeHandler(new ValueChangeHandler<String>() {

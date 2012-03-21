@@ -32,6 +32,8 @@ import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteValue;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
@@ -53,6 +55,8 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
     private AutoComplete editor;
 
     private boolean      query;
+    
+    private Column       column;
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -63,6 +67,12 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableDropdown");
+        editor.addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				column.getTable().finishEditing();
+			}
+		});
     }
 
     public Object finishEditing() {
@@ -121,6 +131,7 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
+        editor.selectAll();
     }
 
     @SuppressWarnings("rawtypes")
@@ -146,4 +157,9 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
     public Widget getWidget() {
     	return editor;
     }
+
+	@Override
+	public void setColumn(Column col) {
+		this.column = col;
+	}
 }

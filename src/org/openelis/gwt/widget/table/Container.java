@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.table;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,6 +38,7 @@ public class Container extends AbsolutePanel {
     protected int height;
     protected Scheduler.ScheduledCommand command;
     protected Widget editor;
+    protected Table table;
     
     public Container() {
         setStyleName("CellContainer");

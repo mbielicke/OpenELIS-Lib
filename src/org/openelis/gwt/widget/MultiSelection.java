@@ -132,7 +132,7 @@ public class MultiSelection<T> extends TextBox<ArrayList<T>> {
         final KeyboardHandler keyHandler = new KeyboardHandler();
         
         hp = new HorizontalPanel();
-        textbox = new com.google.gwt.user.client.ui.TextBox();
+        textbox = new TextBase();
         /*
          * New constructor in Button to drop the border and a div with the
          * passed style.
@@ -555,7 +555,7 @@ public class MultiSelection<T> extends TextBox<ArrayList<T>> {
             setValue(values, fireEvents);
 
         if (required && value == null) {
-            addValidateException(new LocalizedException("gen.fieldRequiredException"));
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }

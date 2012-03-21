@@ -44,7 +44,7 @@ UIRF Software License are applicable instead of those above.
     <xsl:variable name="language">
       <xsl:value-of select="locale" />
     </xsl:variable>
-    <xsl:variable name="constants" select="resource:getBundle('org.openelis.gwt.server.CalendarConstants',locale:new(string($language)))" />
+    <xsl:variable name="constants" select="resource:getBundle('org.openelis.gwt.constants..LibraryConstants',locale:new(string($language)))" />
     <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <VerticalPanel style="CalendarWidget">
         <HorizontalPanel style="Calendar" width="100%">
@@ -52,50 +52,50 @@ UIRF Software License are applicable instead of those above.
             <TablePanel padding="0" spacing="0" width="100%">
               <row>
                 <button key="month0" style="Button" toggle="true">
-                  <label key="month0Text" text="{resource:getString($constants,'abrvMonth0')}" wordwrap="true" />
+                  <label key="month0Text" text="{resource:getString($constants,'cal.abrvMonth0')}" wordwrap="true" />
                 </button>
                 <button key="month6" style="Button" toggle="true">
-                  <label key="month6Text" text="{resource:getString($constants,'abrvMonth6')}" wordwrap="true" />
+                  <label key="month6Text" text="{resource:getString($constants,'cal.abrvMonth6')}" wordwrap="true" />
                 </button>
               </row>
               <row>
                 <button key="month1" style="Button" toggle="true">
-                  <label key="month1Text" text="{resource:getString($constants,'abrvMonth1')}" wordwrap="true" />
+                  <label key="month1Text" text="{resource:getString($constants,'cal.abrvMonth1')}" wordwrap="true" />
                 </button>
                 <button key="month7" style="Button" toggle="true">
-                  <label key="month7Text" text="{resource:getString($constants,'abrvMonth7')}" wordwrap="true" />
+                  <label key="month7Text" text="{resource:getString($constants,'cal.abrvMonth7')}" wordwrap="true" />
                 </button>
               </row>
               <row>
                 <button key="month2" style="Button" toggle="true">
-                  <label key="month2Text" text="{resource:getString($constants,'abrvMonth2')}" wordwrap="true" />
+                  <label key="month2Text" text="{resource:getString($constants,'cal.abrvMonth2')}" wordwrap="true" />
                 </button>
                 <button key="month8" style="Button" toggle="true">
-                  <label key="month8Text" text="{resource:getString($constants,'abrvMonth8')}" wordwrap="true" />
+                  <label key="month8Text" text="{resource:getString($constants,'cal.abrvMonth8')}" wordwrap="true" />
                 </button>
               </row>
               <row>
                 <button key="month3" style="Button" toggle="true">
-                  <label key="month3Text" text="{resource:getString($constants,'abrvMonth3')}" wordwrap="true" />
+                  <label key="month3Text" text="{resource:getString($constants,'cal.abrvMonth3')}" wordwrap="true" />
                 </button>
                 <button key="month9" style="Button" toggle="true">
-                  <label key="month9Text" text="{resource:getString($constants,'abrvMonth9')}" wordwrap="true" />
+                  <label key="month9Text" text="{resource:getString($constants,'cal.abrvMonth9')}" wordwrap="true" />
                 </button>
               </row>
               <row>
                 <button key="month4" style="Button" toggle="true">
-                  <label key="month4Text" text="{resource:getString($constants,'abrvMonth4')}" wordwrap="true" />
+                  <label key="month4Text" text="{resource:getString($constants,'cal.abrvMonth4')}" wordwrap="true" />
                 </button>
                 <button key="month10" style="Button" toggle="true">
-                  <label key="month10Text" text="{resource:getString($constants,'abrvMonth10')}" wordwrap="true" />
+                  <label key="month10Text" text="{resource:getString($constants,'cal.abrvMonth10')}" wordwrap="true" />
                 </button>
               </row>
               <row>
                 <button key="month5" style="Button" toggle="true">
-                  <label key="month5Text" text="{resource:getString($constants,'abrvMonth5')}" wordwrap="true" />
+                  <label key="month5Text" text="{resource:getString($constants,'cal.abrvMonth5')}" wordwrap="true" />
                 </button>
                 <button key="month11" style="Button" toggle="true">
-                  <label key="month11Text" text="{resource:getString($constants,'abrvMonth11')}" wordwrap="true" />
+                  <label key="month11Text" text="{resource:getString($constants,'cal.abrvMonth11')}" wordwrap="true" />
                 </button>
               </row>
             </TablePanel>

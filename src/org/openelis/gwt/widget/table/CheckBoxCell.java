@@ -31,6 +31,8 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.CheckBox;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
@@ -51,7 +53,8 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
      * Widget used to edit the cell
      */
     private CheckBox editor;
-    private boolean query;
+    private boolean  query;
+    private Column   column;
     
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -61,6 +64,11 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     public CheckBoxCell(CheckBox editor) {
         this.editor = editor;
         editor.setEnabled(true);
+        editor.addBlurHandler(new BlurHandler() {
+			public void onBlur(BlurEvent event) {
+				column.getTable().finishEditing();
+			}
+		});
     }
     
     public Object finishEditing() {
@@ -155,6 +163,11 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     public Widget getWidget() {
     	return editor;
     }
+    
+	@Override
+	public void setColumn(Column col) {
+		this.column = col;
+	}
   
 
 }
