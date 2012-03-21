@@ -1,0 +1,2 @@
+serviceClass: org.openelis.gwt.services.ScreenServiceInt
+path: 3AEA71536715D8D9BBAA9ACFDB4E7811.gwt.rpc

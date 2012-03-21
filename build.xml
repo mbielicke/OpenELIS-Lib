@@ -57,7 +57,7 @@
 			<fileset dir="war/WEB-INF/deploy/testwidgets">
 				<include name="symbolMaps/*"/>
 		    </fileset>
-			<classes dir="war/WEB-INF/classes" includes="org/openelis/test/**/*, logging.properties" />					
+			<classes dir="war/WEB-INF/classes" includes="org/openelis/util/*, org/openelis/gwt/**/*, org/openelis/test/**/*, logging.properties" />					
 			<lib dir="war/WEB-INF/lib" includes="gwt-servlet.jar" />
 			<!--<lib dir="build" includes="openelis-lib.jar,security-common.jar,timetracker-common.jar" />-->
 		</war>
