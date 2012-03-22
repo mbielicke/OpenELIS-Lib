@@ -59,7 +59,8 @@ public abstract class UnitTest extends GWTTestCase {
 	
 	@Ignore
 	public void clickCell(Table table, int r, int c) {
-		if(!CellClickedEvent.fire(table, r, c, false, false).isCancelled())
+		CellClickedEvent event = CellClickedEvent.fire(table, r, c, false, false);
+		if(event == null || !event.isCancelled())
 			table.startEditing(r, c);
 	}
 	
