@@ -287,13 +287,13 @@ public class TableScreen extends Screen {
 			String editor = (String)row.getCell(2);
 			if("textbox".equals(editor)) {
 				TextBox<String> textbox = new TextBox<String>();
-				column.setCellRenderer(new TextBoxCell<String>(textbox));
+				column.setCellRenderer(new TextBoxCell(textbox));
 			} else if("label".equals(editor)) {
 				Label<String> label = new Label<String>();
-				column.setCellRenderer(new LabelCell<String>(label));
+				column.setCellRenderer(new LabelCell(label));
 			} else if("dropdown".equals(editor)){
 				Dropdown<String> dropdown = new Dropdown<String>();
-				column.setCellRenderer(new DropdownCell<String>(dropdown));
+				column.setCellRenderer(new DropdownCell(dropdown));
 			} else if("check".equals(editor)) {
 				CheckBox check = new CheckBox();
 				column.setCellRenderer(new CheckBoxCell(check));
@@ -320,7 +320,7 @@ public class TableScreen extends Screen {
 				model.add(new Item<String>("2","Option 2"));
 				model.add(new Item<String>("3","Option 3"));
 				sel.setModel(model);
-				column.setCellRenderer(new DropdownCell<String>(sel));
+				column.setCellRenderer(new DropdownCell(sel));
 				sel.setMultiSelect(true);
 			}
 			column.setFilterable("Y".equals(row.getCell(3)));

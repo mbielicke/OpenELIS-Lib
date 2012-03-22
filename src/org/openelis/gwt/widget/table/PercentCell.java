@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.HTMLTable;
  * This class will display a PercentBar for the value passed into the the Table cell. 
  *
  */
-public class PercentCell implements CellRenderer<Double> {
+public class PercentCell implements CellRenderer {
 	
 	/**
 	 * This is the widget used to show Percent in the cell
@@ -30,16 +30,16 @@ public class PercentCell implements CellRenderer<Double> {
 	 * Returns the value of the percentage formatted as a string
 	 */
 	@Override
-	public String display(Double value) {
-		return NumberFormat.getFormat("###0.0").format(value)+"%";
+	public String display(Object value) {
+		return NumberFormat.getFormat("###0.0").format((Double)value)+"%";
 	}
 
 	/**
 	 * Gets the HTML to display the Percentage from the editor and sets it into the cell
 	 */
 	@Override
-	public void render(HTMLTable table, int row, int col, Double value) {
-		editor.setPercent(value);
+	public void render(HTMLTable table, int row, int col, Object value) {
+		editor.setPercent((Double)value);
 		table.setHTML(row,col,DOM.getInnerHTML(editor.getElement()));
 	}
 

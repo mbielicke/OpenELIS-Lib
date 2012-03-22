@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
+public class CheckBoxCell implements CellEditor, CellRenderer {
 
     /**
      * Widget used to edit the cell
@@ -80,10 +80,8 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
 
     public ArrayList<LocalizedException> validate() {
         if (query){
-            editor.validateQuery();
             return editor.getValidateExceptions();
         }        
-        editor.validateValue();
         return editor.getValidateExceptions();
     }
     
@@ -91,10 +89,10 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
      * Returns the current widget set as this cells editor.
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(String value, Container container, GwtEvent event) {
+	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        editor.setValue((String)value);
         if(event instanceof ClickEvent)
             editor.changeValue();
         container.setEditor(editor);
@@ -115,7 +113,7 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, String value) {
+    public void render(HTMLTable table, int row, int col, Object value) {
         String style;
         AbsolutePanel div;
         
@@ -123,14 +121,14 @@ public class CheckBoxCell implements CellEditor<String>, CellRenderer<String> {
         editor.setQueryMode(false);
         if(editor.getMode() == CheckBox.Mode.TWO_STATE && value == null)
         	value = "N";
-        style = CheckBox.Value.getValue(value).getStyle();
+        style = CheckBox.Value.getValue((String)value).getStyle();
         div = new AbsolutePanel();
         div.setStyleName(style);
         table.setWidget(row, col, div);
         table.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
     }
     
-    public String display(String value) {
+    public String display(Object value) {
         return null;
     }
 

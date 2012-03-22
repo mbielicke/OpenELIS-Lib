@@ -29,16 +29,16 @@ public class TableTest extends UnitTest {
 		Column col = test.addColumn();
 		col.setWidth(100);
 		TextBox<String> textbox = new TextBox<String>();
-		col.setCellRenderer(new TextBoxCell<String>(textbox));
+		col.setCellRenderer(new TextBoxCell(textbox));
 		TextBox<Integer> integer = new TextBox<Integer>();
 		integer.setHelper(new IntegerHelper());
 		col = test.addColumn();
 		col.setWidth(100);
-		col.setCellRenderer(new TextBoxCell<Integer>(integer));
+		col.setCellRenderer(new TextBoxCell(integer));
 		textbox = new TextBox<String>();
 		col = test.addColumn();
 		col.setWidth(100);
-		col.setCellRenderer(new TextBoxCell<String>(textbox));
+		col.setCellRenderer(new TextBoxCell(textbox));
 		test.setVisibleRows(10);
 		test.setEnabled(true);
 	}
@@ -135,6 +135,35 @@ public class TableTest extends UnitTest {
 		assertEquals(1,test.editingRow);
 		assertEquals(0,test.editingCol);
 		
+	}
+	
+	public void testException() {
+		TextBox<Integer> editor;
+		testAddModel();
+		
+		// Edit cell and cause an invalid numeric exception
+		clickCell(test, 0, 1);
+		editor = (TextBox<Integer>)test.getColumnWidget(1);
+		editor.setText("fdsdf");
+		blur(editor);
+		assertFalse(test.isEditing());
+		assertTrue(test.hasExceptions());
+		assertTrue(test.hasExceptions(0, 1));
+		assertEquals("fdsdf",test.view.flexTable.getText(0, 1));
+		assertEquals("fdsdf",test.getValueAt(0, 1));
+		assertTrue(test.view.flexTable.getCellFormatter().getStyleName(0, 1).contains("InputError"));
+		
+		//Edit cell to a valid integer and ensure exception is cleared
+		clickCell(test,0,1);
+		editor.setText("4");
+		blur(editor);
+		assertFalse(test.isEditing());
+		assertFalse(test.hasExceptions());
+		assertFalse(test.hasExceptions(0, 1));
+		assertEquals("4",test.view.flexTable.getText(0, 1));
+		assertEquals(new Integer(4), test.getValueAt(0, 1));
+		assertFalse(test.view.flexTable.getCellFormatter().getStyleName(0, 1).contains("InputError"));
+
 	}
 	
 	

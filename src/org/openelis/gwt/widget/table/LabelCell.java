@@ -37,32 +37,35 @@ import com.google.gwt.user.client.ui.HTMLTable;
  * @author tschmidt
  * 
  */
-public class LabelCell<T> implements CellRenderer<T> {
+public class LabelCell implements CellRenderer {
     
     /**
      * Widget used to edit the cell
      */
-    private Label<T>  editor;
+    private Label  editor;
     
     /**
      * Constructor that takes the editor to be used for the cell.
      * 
      * @param editor
      */
-    public LabelCell(Label<T> editor) {
+    public LabelCell(Label editor) {
         this.editor = editor;
     }
     
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, T value) {
-        editor.setValue(value);
-        table.setText(row,col,editor.getText());
+    public void render(HTMLTable table, int row, int col, Object value) {
+   		table.setText(row,col,display(value));
     }
     
-    public String display(T value) {
-        editor.setValue(value);
+    public String display(Object value) {
+    	try {
+    		editor.setValue(value);
+    	}catch(ClassCastException e) {
+    		return value.toString();
+    	}
         return editor.getText();
     }
 

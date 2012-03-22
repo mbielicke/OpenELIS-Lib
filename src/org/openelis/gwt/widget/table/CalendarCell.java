@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime> {
+public class CalendarCell implements CellRenderer, CellEditor {
     /**
      * Editor used by this cell
      */
@@ -75,10 +75,13 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
      * Method to return the editor set for this cell
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(Datetime value, Container container, GwtEvent event) {
+	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        if(value instanceof Datetime)
+        	editor.setValue((Datetime)value);
+        else
+        	editor.setText(value.toString());
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
         editor.selectAll();
@@ -95,37 +98,43 @@ public class CalendarCell implements CellRenderer<Datetime>, CellEditor<Datetime
 
     public Object finishEditing() {
         if (query) {
-            editor.validateQuery();
             return editor.getQuery();
         }
-
-        editor.validateValue();
-        return editor.getValue();
+        if(!editor.hasExceptions())
+        	return editor.getValue();
+        else
+        	return editor.getText();
     }
 
     public ArrayList<LocalizedException> validate() {
         if (query) {
-            editor.validateQuery();
+            //editor.validateQuery();
             return editor.getValidateExceptions();
         }
-        editor.validateValue();
+        //editor.validateValue();
         return editor.getValidateExceptions();
     }
 
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, Datetime value) {
+    public void render(HTMLTable table, int row, int col, Object value) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        if(column.getTable().hasExceptions(row,col) || !(value instanceof Datetime))
+        	table.setText(row,col,value.toString());
+        else
+        	editor.setValue((Datetime)value);
         table.setText(row, col, editor.getText());
     }
 
-    public String display(Datetime value) {
+    public String display(Object value) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        if(value instanceof Datetime)
+        	editor.setValue((Datetime)value);
+        else
+        	return value.toString();
         return editor.getText();
     }
 

@@ -46,8 +46,8 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
-                             CellEditor<AutoCompleteValue> {
+public class AutoCompleteCell implements CellRenderer,
+                             		     CellEditor {
 
     /**
      * Widget used to edit the cell
@@ -87,26 +87,26 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
 
     public ArrayList<LocalizedException> validate() {
         if (query) {
-            editor.validateQuery();
+            //editor.validateQuery();
             return editor.getValidateExceptions();
         }
-        editor.validateValue();
+        //editor.validateValue();
         return editor.getValidateExceptions();
     }
 
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, AutoCompleteValue value) {
+    public void render(HTMLTable table, int row, int col, Object value) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        editor.setValue((AutoCompleteValue)value);
         table.setText(row, col, editor.getDisplay());
     }
 
-    public String display(AutoCompleteValue value) {
+    public String display(Object value) {
         editor.setQueryMode(false);
-        editor.setValue(value);
+        editor.setValue((AutoCompleteValue)value);
         return editor.getDisplay();
     }
 
@@ -125,10 +125,10 @@ public class AutoCompleteCell implements CellRenderer<AutoCompleteValue>,
      * Returns the current widget set as this cells editor.
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(AutoCompleteValue value, Container container, GwtEvent event) {
+	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue(value);
+        editor.setValue((AutoCompleteValue)value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
         editor.selectAll();

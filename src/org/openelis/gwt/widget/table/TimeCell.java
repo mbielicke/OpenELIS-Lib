@@ -12,10 +12,11 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
+public class TimeCell implements CellRenderer, CellEditor {
 
 	private TextBox<String> editor;
 	private Column          column;
+    private boolean         query;
 	
 	public TimeCell() {
 		editor = new TextBox<String>();
@@ -30,8 +31,11 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
 	}
 	
 	@Override
-	public void startEditing(Double value, Container container, GwtEvent event) {
-		editor.setValue(getTime(value));
+	public void startEditing(Object value, Container container, GwtEvent event) {
+		if(value instanceof Double)
+			editor.setValue(getTime((Double)value));
+		else
+			editor.setText(value.toString());
 		editor.setWidth(container.getWidth()+"px");
 		container.setEditor(editor);
 		editor.selectAll();
@@ -45,12 +49,20 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
 
 	@Override
 	public Object finishEditing() {
-		return getHours(editor.getValue());
+        if (query)
+            return editor.getQuery();
+        
+        if(!editor.hasExceptions())
+        	return getHours(editor.getValue());
+        else
+        	return editor.getText();
 	}
 
 	@Override
 	public ArrayList<LocalizedException> validate() {
-        editor.validateValue();
+        if (query) 
+            return editor.getValidateExceptions();
+
         return editor.getValidateExceptions();
 	}
 
@@ -65,12 +77,15 @@ public class TimeCell implements CellRenderer<Double>, CellEditor<Double> {
 	}
 
 	@Override
-	public String display(Double value) {
-		return getTime(value);
+	public String display(Object value) {
+		if(value instanceof Double)
+			return getTime((Double)value);
+		else
+			return value.toString();
 	}
 
 	@Override
-	public void render(HTMLTable table, int row, int col, Double value) {
+	public void render(HTMLTable table, int row, int col, Object value) {
 		table.setText(row, col, display(value));
 	}
 

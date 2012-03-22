@@ -35,11 +35,11 @@ import com.google.gwt.user.client.ui.HTMLTable;
  *
  * @param <T>
  */
-public interface CellRenderer<T> {
+public interface CellRenderer {
 
-    public String display(T value);
+    public String display(Object value);
     
-    public void render(HTMLTable table, int row, int col, T value);
+    public void render(HTMLTable table, int row, int col, Object value);
     
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd);
 }

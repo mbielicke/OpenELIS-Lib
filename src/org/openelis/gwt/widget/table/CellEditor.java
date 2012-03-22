@@ -39,14 +39,14 @@ import com.google.gwt.user.client.ui.Widget;
  *
  * @param <T>
  */
-public interface CellEditor<T> {    
+public interface CellEditor {    
     
     /**
      * Returns the widget used as the editor for this cell
      * @return
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(T value, Container container, GwtEvent event);
+	public void startEditing(Object value, Container container, GwtEvent event);
     
     /**
      * Returns the widget used for querying this cell

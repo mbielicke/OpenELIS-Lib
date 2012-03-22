@@ -45,12 +45,12 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
+public class TextBoxCell implements CellRenderer, CellEditor {
 
     /**
      * Editor used by this cell
      */
-    private TextBox<T> editor;
+    private TextBox editor;
 
     private boolean    query;
 
@@ -60,7 +60,7 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
      * 
      * @param editor
      */
-    public TextBoxCell(final TextBox<T> editor) {
+    public TextBoxCell(final TextBox editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableTextBox");
@@ -72,9 +72,13 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
 		});
     }
 
-    public String display(T value) {
+    public String display(Object value) {
         editor.setQueryMode(false);
-        editor.setValue(value);
+        try {
+        	editor.setValue(value);
+        }catch(ClassCastException e) {
+        	return value.toString();
+        }
         return editor.getText();
     }
 
@@ -82,15 +86,21 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
      * Returns the current widget set as this cells editor.
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(T value, Container container, GwtEvent event) {
-        editor.setValue(value);
+	public void startEditing(Object value, Container container, GwtEvent event) {
+    	if(column.getTable().hasExceptions(column.getTable().getEditingRow(),column.getTable().getEditingCol()))
+    		editor.setText(value.toString());
+    	else 
+    		editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
         editor.selectAll();
     }
 
-    public void render(HTMLTable table, int row, int col, T value) {
-        table.setText(row, col, display(value));
+    public void render(HTMLTable table, int row, int col, Object value) {
+    	if(column.getTable().hasExceptions(row, col))
+    		table.setText(row, col, value.toString());
+    	else
+    		table.setText(row, col, display(value));
     }
 
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
@@ -100,19 +110,20 @@ public class TextBoxCell<T> implements CellRenderer<T>, CellEditor<T> {
     }
 
     public ArrayList<LocalizedException> validate() {
-        if (query) {
-            editor.validateQuery();
+        if (query) 
             return editor.getValidateExceptions();
-        }
-        editor.validateValue();
+
         return editor.getValidateExceptions();
     }
 
     public Object finishEditing() {
         if (query)
             return editor.getQuery();
-
-        return editor.getValue();
+        
+        if(!editor.hasExceptions())
+        	return editor.getValue();
+        else
+        	return editor.getText();
     }
 
     @SuppressWarnings("rawtypes")

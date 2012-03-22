@@ -1720,9 +1720,9 @@ public class UIGenerator extends Generator {
                                 field = "Datetime";
                            
                             if(name.equals("dropdown"))    
-                                sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                                sw.println("DropdownCell cell"+child+" = new DropdownCell(wid"+child+");");
                             else if(name.equals("textbox")) 
-                                sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                                sw.println("TextBoxCell cell"+child+" = new TextBoxCell(wid"+child+");");
                             else if(name.equals("autoComplete"))
                                 sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
                             else if(name.equals("check"))
@@ -1736,7 +1736,7 @@ public class UIGenerator extends Generator {
                             else if(name.equals("time"))
                             	sw.println("TimeCell cell"+child+" = new TimeCell();");
                             else
-                                sw.println("LabelCell<"+field+"> cell"+child+"= new LabelCell<"+field+">(wid"+child+");");
+                                sw.println("LabelCell cell"+child+"= new LabelCell(wid"+child+");");
                             
                             sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
                             break;
@@ -2167,9 +2167,9 @@ public class UIGenerator extends Generator {
                                 	field = "Datetime";
                                                                
                                 if(editor.item(j).getNodeName().equals("dropdown")) 
-                                    sw.println("DropdownCell<"+field+"> cell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                                    sw.println("DropdownCell cell"+child+" = new DropdownCell(wid"+child+");");
                                 else if(editor.item(j).getNodeName().equals("textbox")) 
-                                    sw.println("TextBoxCell<"+field+"> cell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                                    sw.println("TextBoxCell cell"+child+" = new TextBoxCell(wid"+child+");");
                                 else if(editor.item(j).getNodeName().equals("autoComplete"))
                                     sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
                                 else if(editor.item(j).getNodeName().equals("check"))
@@ -2179,7 +2179,7 @@ public class UIGenerator extends Generator {
                                 else if(editor.item(j).getNodeName().equals("image"))
                                 	sw.println("ImageCell cell"+child+" = new ImageCell();");
                                 else
-                                	sw.println("LabelCell<"+field+"> cell"+child+" = new LabelCell<"+field+">(wid"+child+");");
+                                	sw.println("LabelCell cell"+child+" = new LabelCell(wid"+child+");");
                                 
                                 sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
                                 break;
@@ -2219,9 +2219,9 @@ public class UIGenerator extends Generator {
                 					field = "Datetime";
                 				
                 				if(name.equals("dropdown")) 
-                					sw.println("DropdownCell<"+field+"> leafCell"+child+" = new DropdownCell<"+field+">(wid"+child+");");
+                					sw.println("DropdownCell leafCell"+child+" = new DropdownCell(wid"+child+");");
                 				else if(name.equals("textbox")) 
-                					sw.println("TextBoxCell<"+field+"> leafCell"+child+" = new TextBoxCell<"+field+">(wid"+child+");");
+                					sw.println("TextBoxCell leafCell"+child+" = new TextBoxCell(wid"+child+");");
                 				else if(name.equals("autoComplete"))
                 					sw.println("AutoCompleteCell leafCell"+child+" = new AutoCompleteCell(wid"+child+");");
                 				else if(name.equals("check"))
@@ -2229,7 +2229,7 @@ public class UIGenerator extends Generator {
                 				else if(name.equals("calendar"))
                 					sw.println("CalendarCell leafCell"+child+" = new CalendarCell(wid"+child+");");
                 				else
-                                	sw.println("LabelCell<"+field+"> leafCell"+child+" = new LabelCell<"+field+">(wid"+child+");");
+                                	sw.println("LabelCell leafCell"+child+" = new LabelCell(wid"+child+");");
 
                 				sw.println("leafCol"+id+"_"+i+"_"+h+".setCellRenderer(leafCell"+child+");");
                 				//sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");

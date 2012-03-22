@@ -580,12 +580,13 @@ public class View extends Composite {
     @SuppressWarnings("unchecked")
     private void renderCell(int rc, int c, int r) {
 
-        if (table.getQueryMode())
-            table.getColumnAt(c).getCellRenderer(r).renderQuery(flexTable, rc, c,
-                                                               (QueryData)table.getValueAt(r, c));
-        else
-            table.getColumnAt(c).getCellRenderer(r).render(flexTable, rc, c,
-                                                          table.getValueAt(r, c));
+    		if (table.getQueryMode())
+    			table.getColumnAt(c).getCellRenderer(r).renderQuery(flexTable, rc, c,
+    					(QueryData)table.getValueAt(r, c));
+    		else
+    			table.getColumnAt(c).getCellRenderer(r).render(flexTable, rc, c,
+    					table.getValueAt(r, c));
+    		
 
         if (table.hasExceptions(r, c))
             flexTable.getCellFormatter().addStyleName(rc, c, "InputError");

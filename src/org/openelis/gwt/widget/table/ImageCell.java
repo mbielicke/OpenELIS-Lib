@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.HTMLTable;
  * @author tschmidt
  * 
  */
-public class ImageCell implements CellRenderer<String> {
+public class ImageCell implements CellRenderer {
     
     
     /**
@@ -50,12 +50,12 @@ public class ImageCell implements CellRenderer<String> {
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, String value) {
-        table.getCellFormatter().addStyleName(row,col,value);
+    public void render(HTMLTable table, int row, int col, Object value) {
+        table.getCellFormatter().addStyleName(row,col,(String)value);
     }
     
-    public String display(String value) {
-        return value;
+    public String display(Object value) {
+        return value.toString();
     }
 
     public void renderQuery(HTMLTable table,

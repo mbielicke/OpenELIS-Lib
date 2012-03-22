@@ -46,12 +46,12 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
+public class DropdownCell implements CellRenderer, CellEditor {
 
     /**
      * Widget used to edit the cell
      */
-    private Dropdown<T> editor;
+    private Dropdown editor;
 
     private boolean      query;
     
@@ -62,7 +62,7 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
      * 
      * @param editor
      */
-    public DropdownCell(Dropdown<T> editor) {
+    public DropdownCell(Dropdown editor) {
         this.editor = editor;
         editor.setEnabled(true);
         editor.setStyleName("TableDropdown");
@@ -75,12 +75,10 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
 
     public Object finishEditing() {
         if (query) {
-            editor.validateQuery();
             editor.setFocus(false);
             return editor.getQuery();
         }
 
-        editor.setFocus(false);
         editor.validateValue();
 
         return editor.getValue();
@@ -88,23 +86,21 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
 
     public ArrayList<LocalizedException> validate() {
         if (query) {
-            editor.validateQuery();
             return editor.getValidateExceptions();
         }
-        editor.validateValue();
         return editor.getValidateExceptions();
     }
 
     /**
      * Gets Formatted value from editor and sets it as the cells display
      */
-    public void render(HTMLTable table, int row, int col, T value) {
+    public void render(HTMLTable table, int row, int col, Object value) {
         editor.setQueryMode(false);
-        editor.setValue(value);
-        table.setText(row, col, editor.getDisplay());
+       	editor.setValue(value);
+       	table.setText(row, col, editor.getDisplay());
     }
 
-    public String display(T value) {
+    public String display(Object value) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
@@ -126,13 +122,12 @@ public class DropdownCell<T> implements CellRenderer<T>, CellEditor<T> {
      * Returns the current widget set as this cells editor.
      */
     @SuppressWarnings("rawtypes")
-	public void startEditing(T value, Container container, GwtEvent event) {
+	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
         editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
-        //editor.selectAll();
     }
 
     @SuppressWarnings("rawtypes")

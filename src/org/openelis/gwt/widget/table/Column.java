@@ -63,7 +63,7 @@ public class Column {
      * Render widget used for this column
      */
     @SuppressWarnings("rawtypes")
-	protected CellRenderer renderer = new LabelCell<String>(new Label<String>());
+	protected CellRenderer renderer = new LabelCell(new Label<String>());
     
     /**
      * name used to reference column and label for the Header

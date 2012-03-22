@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.widget.table.TableTest;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -11,6 +13,7 @@ public class OpenELISLibTestSuite extends GWTTestSuite {
 		TestSuite suite = new TestSuite("Test Suite for all Lib Widgets");
 		suite.addTestSuite(TextBoxTest.class);
 		suite.addTestSuite(DropdownTest.class);
+		suite.addTestSuite(TableTest.class);
 		return suite;
 	}
 }
