@@ -40,19 +40,19 @@ public class ReportServlet extends HttpServlet {
              */
             filename = req.getParameter("file");
             if (DataBaseUtil.isEmpty(filename)) {
-                error(resp, "Missing file name; please report this error to your sysadmin");
+                error(resp, "Missing file name; please report this error to Lab IT");
                 return;
             }
 
             status = (ReportStatus) req.getSession().getAttribute(filename);
             if (status == null || status.getStatus() != ReportStatus.Status.SAVED) {
-                error(resp, "Specified file key is not valid; please report this error to your sysadmin");
+                error(resp, "Specified file key is not valid; please report this error to Lab IT");
                 return;
             }
 
             file = new File(status.getPath(), status.getMessage());
             if (! file.exists()) {
-                error(resp, "Specified file is not valid; please report this error to your sysadmin");
+                error(resp, "Specified file is not valid; please report this error to Lab IT");
                 System.out.println("File "+file.getAbsolutePath()+" not found");
                 return;
             }
