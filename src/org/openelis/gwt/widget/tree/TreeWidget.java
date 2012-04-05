@@ -830,7 +830,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
         if(item.shown)
         	shownRows--;
         rows.remove(index);
-        for(int i = row; i < data.size(); i++) {
+        for(int i = 0; i < data.size(); i++) {
         	data.get(i).childIndex = i;
         }
         renderer.dataChanged(true);
