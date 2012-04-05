@@ -348,10 +348,22 @@ public class DateField extends Field<Datetime> {
         	if(old == null && date == null)
         		return;
         	setValue(Datetime.getInstance(begin, end, date));
-        	ValueChangeEvent.fire(this, getValue());
+        	ValueChangeEvent.fireIfNotEqual(this, old, getValue());
         }
         
     }
+    
+	public void setValue(Datetime value, boolean fireEvents) {
+		if(queryMode){
+			queryString = getString(value);
+			validateQuery();
+		}else {
+			this.value = value;
+			ValueChangeEvent.fire(this, getValue());
+		}
+				
+		
+	}
     
 	public void checkValue(HasField wid) {
 		clearExceptions(wid);
