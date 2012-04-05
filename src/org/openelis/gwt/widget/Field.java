@@ -119,7 +119,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
 			
 	}
 	
-	private String getString(Object val) {
+	protected String getString(Object val) {
 		if(val == null)
 			return "";
 		return val.toString();
