@@ -348,7 +348,7 @@ public class DateField extends Field<Datetime> {
         	if(old == null && date == null)
         		return;
         	setValue(Datetime.getInstance(begin, end, date));
-        	ValueChangeEvent.fireIfNotEqual(this, old, getValue());
+        	ValueChangeEvent.fire(this, getValue());
         }
         
     }

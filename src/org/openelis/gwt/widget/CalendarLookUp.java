@@ -379,9 +379,9 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
             textbox.setText(field.format());
         else
            textbox.setText("");
-        if(fireEvents) {
-        	ValueChangeEvent.fire(field, value);
-        }
+        //if(fireEvents) {
+        //	ValueChangeEvent.fire(field, value);
+       // }
 	}
 
 	/**
