@@ -175,9 +175,9 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	        	    	}
 	            	}
 	                //if(field.queryMode){
-	                //	field.setStringValue(textbox.getText());
-	                //}else
-	                	//setValue(getValue(),true);
+	               // 	field.setStringValue(textbox.getText());
+	               // }else
+	                //	setValue(getValue(),true);
 	            }
 	        }
         	BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
@@ -379,10 +379,9 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
             textbox.setText(field.format());
         else
            textbox.setText("");
-       // if(fireEvents) {
-        //	ValueChangeEvent.fire(this, value);
-       // }
-		
+        if(fireEvents) {
+        	ValueChangeEvent.fire(field, value);
+        }
 	}
 
 	/**
