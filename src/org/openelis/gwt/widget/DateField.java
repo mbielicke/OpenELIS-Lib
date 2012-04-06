@@ -289,42 +289,16 @@ public class DateField extends Field<Datetime> {
      * If a pattern is set then the date must be passed in the pattern format to be valid.
      */
     public void setStringValue(String val) {
-    	
+    	setValue(getValueFromString(val));
+    }
+    
+    public Datetime getValueFromString(String val) {
         valid = true;
         if(queryMode) {
         	queryString = val;
         	validateQuery();
         }
         Date date = null;
-        
-        /*
-        if(pattern == null){
-        	if (val == null || val.equals("")){ 
-        		if(value != null){
-        			ValueChangeEvent.fire(this, null);
-        		}
-        		value = null;
-        		return;
-        	}
-        	try {
-        		if(begin > 2){
-        			String[] time = val.split(":");
-        			if(time.length == 3)
-        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));
-        			else
-        				date = new Date(0,11,31,Integer.parseInt(time[0]),Integer.parseInt(time[1]));
-        		}else{
-        			val = val.replaceAll("-", "/");
-        			date = new Date(val);
-        		}
-        		removeException("invalidDateFormat");
-        	}catch(Exception e) {
-        		valid = false;
-        		addException(new LocalizedException("invalidDateFormat"));
-        	}
-        }else{
-        */
-			
         if(val != null && !val.equals("")) {
         	try {
         		if(begin > 2){
@@ -340,17 +314,7 @@ public class DateField extends Field<Datetime> {
         		addException(new LocalizedException("invalidDateFormat"));
         	}
         }
-        //}
-        	
-       
-        if(valid){
-        	Datetime old = getValue();
-        	if(old == null && date == null)
-        		return;
-        	setValue(Datetime.getInstance(begin, end, date));
-        	ValueChangeEvent.fireIfNotEqual(this, old, getValue());
-        }
-        
+        return Datetime.getInstance(begin, end, date);
     }
     
 	public void setValue(Datetime value, boolean fireEvents) {
@@ -361,7 +325,6 @@ public class DateField extends Field<Datetime> {
 			this.value = value;
 			ValueChangeEvent.fire(this, getValue());
 		}
-				
 		
 	}
     
