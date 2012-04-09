@@ -323,7 +323,8 @@ public class DateField extends Field<Datetime> {
 			validateQuery();
 		}else {
 			this.value = value;
-			ValueChangeEvent.fire(this, getValue());
+			if(fireEvents)
+				ValueChangeEvent.fire(this, getValue());
 		}
 		
 	}
