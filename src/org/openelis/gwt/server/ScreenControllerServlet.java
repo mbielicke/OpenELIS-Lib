@@ -210,7 +210,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends ArrayList<? extends RPC>> T callList(String method,
-			ArrayList<RPC> param) throws Exception {
+			ArrayList<? extends RPC> param) throws Exception {
 		return (T)invoke(getThreadLocalRequest().getParameter("service"),
 				         method,
 				         new Class[] {param.getClass()},

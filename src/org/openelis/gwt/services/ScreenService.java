@@ -239,7 +239,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
         return service.call(method, param, callback);
     }
 
-    public <T extends ArrayList<? extends RPC>> T callList(String method, ArrayList<RPC> param) throws Exception {
+    public <T extends ArrayList<? extends RPC>> T callList(String method, ArrayList<? extends RPC> param) throws Exception {
     	Callback<T> callback;
     	
     	resetSessionScreenTimer();
@@ -249,7 +249,7 @@ public class ScreenService implements ScreenServiceInt, ScreenServiceIntAsync {
     }
     
     public <T extends ArrayList<? extends RPC>> Request callList(String method, 
-    		                                                     ArrayList<RPC> param,
+    		                                                     ArrayList<? extends RPC> param,
     		                                                     AsyncCallback<? extends ArrayList<? extends RPC>> callback) {
     	resetSessionScreenTimer();
     	return service.callList(method,param,callback);
