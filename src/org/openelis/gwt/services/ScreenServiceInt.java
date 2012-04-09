@@ -69,6 +69,8 @@ public interface ScreenServiceInt extends RemoteService {
     public <T extends RPC> T call(String method, Long param) throws Exception;
 
     public <T extends RPC> T call(String method, String[] param) throws Exception;
+    
+    public <T extends ArrayList<? extends RPC>> T callList(String method, ArrayList<RPC> param) throws Exception;
 
     public <T extends ArrayList<? extends RPC>> T callList(String method, RPC param) throws Exception;
 
@@ -79,5 +81,6 @@ public interface ScreenServiceInt extends RemoteService {
     public <T extends ArrayList<? extends RPC>> T callList(String method, Integer param) throws Exception;
 
     public <T extends ArrayList<? extends RPC>> T callList(String method, String[] param) throws Exception;
+    
 
 }
