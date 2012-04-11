@@ -513,6 +513,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	public void enable(boolean enabled) {
 		this.enabled = enabled;
 		textbox.setReadOnly(!enabled);
+		textbox.enforceMask = enabled;
 		if(enabled) {
 			textbox.sinkEvents(Event.ONFOCUS | Event.ONBLUR | Event.ONMOUSEOUT | Event.ONMOUSEOVER | Event.ONKEYUP);
 			icon.sinkEvents(Event.ONMOUSEOVER | Event.ONMOUSEOUT | Event.ONCLICK | Event.ONMOUSEDOWN | Event.ONMOUSEUP);
