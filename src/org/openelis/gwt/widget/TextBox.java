@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 /**
@@ -67,6 +68,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      */
     protected WidgetHelper<T>                       helper    = (WidgetHelper<T>)new StringHelper();
     
+    protected TextBox<T>                            source = this;
+    
     /**
      * The Constructor now sets the wrapped GWT TextBox as the element widget of
      * this composite and adds an anonymous ValueCahngeHandler to handle input
@@ -92,13 +95,12 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
 		    	textbox.removeStyleName("Focus");
-		    	textbox.setSelectionRange(0, 0);
-
 		    	if(enabled) {
 		    		if (queryMode) 
 		    			validateQuery();
-		    		else
-		    			validateValue(true);
+		    		else{
+		    			finishEditing();
+		    		}
 		    	}
 			}
 		});
@@ -160,6 +162,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        textbox.enforceMask = enabled;
         textbox.setReadOnly( !enabled);
     }
 
@@ -176,20 +179,14 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * resume any format restrictions
      */
     public void setQueryMode(boolean query) {
-        if (queryMode == query) {
+        if (queryMode == query) 
             return;
-        } else if (query) {
-            queryMode = true;
-            textbox.enforceMask = false;
-            textbox.setMaxLength(255);
-            textbox.setAlignment(TextAlignment.LEFT);
-        } else {
-            queryMode = false;
-            textbox.enforceMask = true;
-            textbox.setMaxLength(maxLength);
-            textbox.setAlignment(TextAlignment.LEFT);
-            textbox.setText("");
-        }
+
+        queryMode = query;
+        textbox.enforceMask = !query && enabled;
+        if(maxLength > 0)
+        	textbox.setMaxLength(query ? 255 : maxLength);
+        textbox.setText("");
     }
 
     /**
@@ -273,48 +270,28 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
         } else {
             textbox.setText("");
         }
-
+        
         if (fireEvents) 
             ValueChangeEvent.fire(this, value);
-        
     }
-
+    
     /**
-     * This method is made available so the Screen can on commit make sure all
-     * required fields are entered without having the user visit each widget on
-     * the screen.
+     * This method takes raw input from widget and will call helper to get the 
+     * appropriate value to set and also set any validation exceptions if present
      */
-    public void validateValue() {
-        validateValue(false);
-    }
-
-    /**
-     * This method will call the Helper to get the T value from the entered
-     * string input. if invalid input is entered, Helper is expected to throw an
-     * en exception and that exception will be added to the validate exceptions
-     * list.
-     * 
-     * @param fireEvents
-     */
-    protected void validateValue(boolean fireEvents) {
+    public void finishEditing() {
     	String text;
     	
     	text = textbox.getText();
-    	
-    	if(textbox.enforceMask && text.equals(textbox.picture)) {
-    		text = "";
-    		textbox.setText("");
-    	}
     		
     	validateExceptions = null;
         
     	try {
-            setValue(helper.getValue(text), fireEvents);
-            if (required && value == null) 
-                addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            setValue(helper.getValue(text), true);
+            if (required && getValue() == null) 
+                throw new LocalizedException("exc.fieldRequiredException");
         } catch (LocalizedException e) {
             addValidateException(e);
-          //  setValue(null,fireEvents);
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
@@ -341,7 +318,15 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
-        return endUserExceptions != null || validateExceptions != null;
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	  
+    	return endUserExceptions != null || validateExceptions != null;
     }
 
     /**
@@ -459,7 +444,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
      * focus to this widget. We use the wrapped TextBox to make this work.
      */
     public void setFocus(boolean focused) {
-        textbox.setFocus(true);
+       textbox.setFocus(true);
     }
 
     // ************ Handler Registration methods *********************

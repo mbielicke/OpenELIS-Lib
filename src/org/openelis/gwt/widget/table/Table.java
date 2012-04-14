@@ -34,10 +34,8 @@ import java.util.logging.Logger;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
-import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
@@ -88,8 +86,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -361,7 +359,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		addDomHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
-				//System.out.println("Table Blurred");
 			}
 		},BlurEvent.getType());
 
@@ -475,7 +472,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		/*
 		 * if no filters are in force revert modelView back to model and return;
 		 */
-		if (filters.size() == 0) {
+		if (filters == null ||filters.size() == 0) {
 			modelView = model;
 			rowIndex = null;
 			renderView(-1, -1);
@@ -496,7 +493,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		for (int i = 0; i < model.size(); i++) {
 			include = true;
 			for (Filter filter : filters) {
-				if (filter != null
+				if (filter != null && filter.isFilterSet()
 						&& !filter.include(model.get(i).getCell(
 								filter.getColumn()))) {
 					include = false;
@@ -755,9 +752,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	protected int getWidthWithoutScrollbar() {
-		//if (verticalScroll != Scrolling.NEVER && fixScrollBar && viewWidth > -1)
-			//return viewWidth - 18;
-
 		return viewWidth == -1 ? totalColumnWidth : viewWidth;
 	}
 
@@ -815,20 +809,42 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return -1;
 	}
 
+	/**
+	 * This method can be used to determine the index of the column in the 
+	 * display of the table
+	 * @param col
+	 * @return
+	 */
 	public int getColumn(Column col) {
 		return columns.indexOf(col);
 	}
 	
+	/**
+	 * This method will replace the column at the passed index into the table
+	 * @param index
+	 * @param col
+	 */
 	public void setColumnAt(int index, Column col) {
 		col.setTable(this);
 		columns.set(index, col);
 		layout();
 	}
 	
+	/**
+	 * This method will return the widget used to render/edit the cell contents
+	 * from the cell definition of the column.
+	 * @param index
+	 * @return
+	 */
 	public Widget getColumnWidget(int index) {
 		return index > -1 ? getColumnAt(index).getCellEditor(-1).getWidget() : null;
 	}
 	
+	/**
+	 * This method will return the column used in the table by it's name 
+	 * @param name
+	 * @return
+	 */
 	public Widget getColumnWidget(String name) {
 		return getColumnWidget(getColumnByName(name));
 	}
@@ -960,7 +976,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	public Column removeColumnAt(int index) {
 		Column col;
-
+		
 		col = columns.remove(index);
 		if(model != null) {
 			for(Row row : model) 
@@ -1437,8 +1453,21 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param value
 	 */
 	public void setValueAt(int row, int col, Object value) {
+		Column column;
+		ArrayList<LocalizedException> exceptions;
+		
 		finishEditing();
 		modelView.get(row).setCell(col, value);
+		
+		column = getColumnAt(col);
+		
+		exceptions = column.getCellRenderer().validate(value);
+		
+		if(column.isRequired() && value == null)
+			exceptions.add(new LocalizedException("exc.fieldRequired"));
+		
+		setValidateException(row,col,exceptions);
+		
 		refreshCell(row, col);
 	}
 
@@ -1629,8 +1658,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		 */
 		newValue = view.finishEditing(row, col);
 		oldValue = getValueAt(row, col);
-		modelView.get(row).setCell(col, newValue);
-		refreshCell(row, col);
+		setValueAt(row,col,newValue);
+		//modelView.get(row).setCell(col, newValue);
+		//refreshCell(row, col);
 
 		/*
 		 * fire a cell edited event if the value of the cell was changed
@@ -1933,12 +1963,12 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 		// If hash is null and errors are passed as null, nothing to reset so
 		// return
-		if (validateExceptions == null && errors == null)
+		if (validateExceptions == null && (errors == null || errors.isEmpty())) 
 			return;
 
 		// If hash is not null, but errors passed is null then make sure the
 		// passed cell entry removed
-		if (validateExceptions != null && errors == null) {
+		if (validateExceptions != null && (errors == null || errors.isEmpty())) {
 			if(validateExceptions.containsKey(row)){
 				rowExceptions = validateExceptions.get(row);
 			    rowExceptions.remove(col);
@@ -2320,17 +2350,19 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * This method will check the model to make sure that all required cells
 	 * have values
 	 */
-	public void validateValue() {
+	public void validate() {
 		boolean render = false;
-
+		ArrayList<LocalizedException> exceptions;
+		
 		finishEditing();
 
 		for (int col = 0; col < getColumnCount(); col++) {
 			if (getColumnAt(col).isRequired()) {
 				for (int row = 0; row < getRowCount(); row++) {
-					if (getValueAt(row, col) == null) {
-						getValidateExceptionList(row, col).add(
-								new LocalizedException("fieldRequired"));
+					if (getValueAt(row, col) == null) { 
+				        exceptions = getValidateExceptionList(row, col);
+				        exceptions.add(new LocalizedException("fieldRequired"));
+				        setValidateException(row, col, exceptions);
 						render = true;
 					}
 				}
@@ -2376,41 +2408,31 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 
 	public void addException(LocalizedException exception) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void addExceptionStyle(String style) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public ArrayList<LocalizedException> getEndUserExceptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public ArrayList<LocalizedException> getValidateExceptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public boolean hasExceptions() {
-		// TODO Auto-generated method stub
+		validate();
 		return (endUserExceptions != null && !endUserExceptions.isEmpty())
 				|| (validateExceptions != null && !validateExceptions.isEmpty());
 	}
 
 	public void removeExceptionStyle(String style) {
-		// TODO Auto-generated method stub
 
 	}
 	
-	public void setLogger(Logger logger) {
-		logger.finest("Entering org.openelis.gwt.widget.TextBox.setLogger(Logger)");
-		this.logger = logger;
-		logger.finest("Exiting org.openelis.gwt.widget.TextBox.setLogger(Logger)");
-	}
 
 	/**
 	 * This private inner class is used to map Row indexes from the model to a
@@ -2493,12 +2515,23 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}
 
 		public boolean include(Object value) {
-			return values.get(value).selected;
+			return values == null || values.get(value).selected;
 		}
 		
 		public void unselectAll() {
 			for(FilterChoice choice : choices) 
 				choice.setSelected(false);
+		}
+		
+		public boolean isFilterSet() {
+			if(choices == null)
+				return false;
+			
+			for(FilterChoice choice : choices) {
+				if(choice.isSelected())
+					return true;
+			}
+			return false;
 		}
 	}
 

@@ -201,7 +201,7 @@ public class TreeScreen extends Screen {
 		addRow.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				test.addNode();
+				test.addNode("top");
 			}
 		});
 		

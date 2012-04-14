@@ -1,13 +1,13 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 /**
  * This class is used by ScreenWidgets that implement HasValue<String> to
  * provide methods for formatting, validating and query by String values.
- * 
- * @author tschmidt
  * 
  */
 public class StringHelper implements WidgetHelper<String> {
@@ -77,5 +77,18 @@ public class StringHelper implements WidgetHelper<String> {
     public void setPattern(String pattern) {
     	
     }
+
+	@Override
+	public boolean isCorrectType(Object value) {
+		return value == null || value instanceof String;
+	}
     
+	public ArrayList<LocalizedException> validate(Object value) {
+		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
+		
+		if(!isCorrectType(value))
+			exceptions.add(new LocalizedException("exc.invalidType"));
+		
+		return exceptions;
+	}
 }

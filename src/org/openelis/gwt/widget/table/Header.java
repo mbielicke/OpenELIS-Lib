@@ -500,7 +500,7 @@ public class Header extends FocusPanel {
                 });
                 
                 /*
-                 * If fileter is in force already set the filterMenu to checked.
+                 * If filter is in force already set the filterMenu to checked.
                  */
                 filterItem.setCheck(choice.selected);
                 

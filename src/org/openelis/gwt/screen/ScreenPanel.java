@@ -93,12 +93,12 @@ public class ScreenPanel extends AbsolutePanel implements HasClickHandlers, Focu
 	public void setFocusWidget(final Widget widget) {
 		focused = widget;
 		if(widget instanceof Focusable) {
-			//Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-				//public void execute() {
+			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+				public void execute() {
 					FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), widget);
-					//((Focusable)(widget)).setFocus(true);
-				//}
-			//});
+					((Focusable)(widget)).setFocus(true);
+				}
+			});
 		}
 		//FocusEvent.fireNativeEvent(Document.get().createFocusEvent(), this);
 	}

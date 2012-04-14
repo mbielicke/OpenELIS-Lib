@@ -73,10 +73,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 /**
@@ -196,8 +195,9 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          */
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		if(enabled)
-        			display.addStyleName("Focus");
+        		display.addStyleName("Focus");
+        		if(enabled) 
+        			selectAll();
         	}
         });
 
@@ -207,6 +207,15 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
+        		textbox.setSelectionRange(0, 0);
+        		
+		    	if(enabled) {
+		    		if (queryMode) 
+		    			validateQuery();
+		    		else{
+		    			finishEditing();
+		    		}
+		    	}
         	}
         });
         
@@ -240,21 +249,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
                 	BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
                 }
             }
-        });
-        
-        textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
-            /*
-             * This event calls validate(true) so that that the valueChangeEvent
-             * for the HasValue<T> interface will be fired. In Query mode it
-             * will validate the query string through the helper class
-             */
-            public void onValueChange(ValueChangeEvent<String> event) {
-                if (queryMode) 
-                    validateQuery();
-                else
-                    validateValue(true);
-            }
-
         });
         
         /*
@@ -613,13 +607,13 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     /**
      * Overridden method of TextBox to check if the Dropdown is valid
      */
-    protected void validateValue(boolean fireEvents) {
+    public void finishEditing() {
         Item<Integer> item;
         validateExceptions = null;
         
         item = getSelectedItem();
         if (item != null)
-            setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),fireEvents);
+            setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),true);
         
         if (required && value == null) {
             addValidateException(new LocalizedException("exc.fieldRequiredException"));
@@ -832,7 +826,15 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
-        return endUserExceptions != null || validateExceptions != null;
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	  
+    	return endUserExceptions != null || validateExceptions != null;
     }
 
 	@Override
@@ -872,11 +874,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 	@Override
 	public void removeExceptionStyle(String style) {
     	removeStyleName(style);
-	}
-
-	@Override
-	public void validateValue() {
-		validateValue(false);
 	}
 
 	@Override

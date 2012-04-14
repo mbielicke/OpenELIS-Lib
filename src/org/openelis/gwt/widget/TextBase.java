@@ -1,11 +1,10 @@
 package org.openelis.gwt.widget;
 
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 /**
  * This class is an extension of GWT's TextBox widget to add our Masking, Alignment, and Case
@@ -21,7 +20,8 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     protected Case                                  textCase  = Case.MIXED;
 
 	
-    protected boolean                               enforceMask,maskEnabled;
+    protected boolean                               enforceMask;
+    protected HandlerRegistration                   keyDown,keyPress;
     
     public enum Case {
         MIXED, UPPER, LOWER
@@ -110,6 +110,12 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     	if(msk == null) {
     		enforceMask = false;
     		picture = null;
+    		if(keyDown != null) {
+    			keyDown.removeHandler();
+    			keyPress.removeHandler();
+    			keyDown = null;
+    			keyPress = null;
+    		}
     		return;
     	}
     	
@@ -136,13 +142,12 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     	 * If mask has been previously enabled we don't want or need to 
     	 * re-add the key handlers
     	 */
-    	if(!maskEnabled) {
-    		maskEnabled = true;
+    	if(keyDown == null) {
     		/*
     		 * Delete and BackSpace keys are handled in KeyDown because Chrome and IE do not 
     		 * pass these keys to the KeyPressEvent.  
     		 */
-    		addKeyDownHandler(new KeyDownHandler() {
+    		keyDown = addKeyDownHandler(new KeyDownHandler() {
     			public void onKeyDown(KeyDownEvent event) {
     				String input;
     				char mc;
@@ -249,7 +254,7 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     		 * Masks are applied in all browsers in KeyPressEvent because it is the only method that will allow us to
     		 * view the typed character before it being applied to the textbox itself. 
     		 */
-    		addKeyPressHandler(new KeyPressHandler() {
+    		keyPress = addKeyPressHandler(new KeyPressHandler() {
     			public void onKeyPress(KeyPressEvent event) {
     				String input;
     				int cursor,selectStart,selectEnd;

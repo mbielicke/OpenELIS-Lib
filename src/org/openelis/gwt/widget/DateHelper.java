@@ -1,5 +1,6 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
@@ -151,5 +152,19 @@ public class DateHelper implements WidgetHelper<Datetime> {
     		setPattern("yyyy-MM-dd HH:mm");
     	}
     }
+
+	public boolean isCorrectType(Object value) {
+		return value == null || value instanceof Datetime;
+	}
+	
+	public ArrayList<LocalizedException> validate(Object value) {
+		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
+		
+		if(!isCorrectType(value))
+			exceptions.add(new LocalizedException("exc.invalidDateFormat"));
+		
+		return exceptions;
+		
+	}
 
 }

@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget;
 
 
+
 /**
  * This interface is used for widgets that are used in out Screen layout framework
  * and have the ability to be enabled/disabled, recieve/lose focus, defined in the

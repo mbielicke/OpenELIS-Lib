@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
@@ -109,5 +111,20 @@ public class DoubleHelper implements WidgetHelper<Double> {
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
+
+	@Override
+	public boolean isCorrectType(Object value) {
+		return value == null || value instanceof Double; 
+	}
+	
+	public ArrayList<LocalizedException> validate(Object value) {
+		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
+		
+		if(!isCorrectType(value)) 
+			exceptions.add(new LocalizedException("exc.invalidNumeric"));
+		
+		return exceptions;
+			
+	}
 
 }

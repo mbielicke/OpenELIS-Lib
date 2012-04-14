@@ -64,4 +64,9 @@ public interface Filter {
      */
     public void unselectAll();
     
+    /**
+     * checks if any filter is set
+     */
+    public boolean isFilterSet();
+    
 }

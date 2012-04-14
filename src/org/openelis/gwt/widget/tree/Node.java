@@ -41,6 +41,10 @@ public class Node extends Row {
         super(columns);
     }
     
+    public Node(Object... objects) {
+    	super(objects);
+    }
+    
     public Node() {
         super();
     }
@@ -53,8 +57,9 @@ public class Node extends Row {
     	return key;
     }
     
-    public void setType(String type) {
-        this.type = type; 
+    public Node setType(String type) {
+        this.type = type;
+        return this;
     }
     
     public String getType() {

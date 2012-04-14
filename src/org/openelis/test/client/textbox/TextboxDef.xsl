@@ -112,7 +112,7 @@ UIRF Software License are applicable instead of those above.
             </row>
             <row>
               <text style="Prompt">Test:</text>
-              <textbox key="test" tab="dummy2,dummy1"/>
+              <textbox id="testBox" key="test" tab="dummy2,dummy1"/>
             </row>
             <row>
               <text style="Prompt">Dummy</text>

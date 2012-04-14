@@ -35,7 +35,6 @@ import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
-import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.table.CellEditor;
@@ -97,6 +96,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -875,7 +875,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param key
      * @param def
      */
-    public void addNodeDefinition(String key, ArrayList<Column> def) {
+    public void addNodeDefinition(String key, ArrayList<Column> def) {  
+    	for(Column col : def) 
+    		col.setTree(this);
+    	
         if(nodeDefs == null)
             nodeDefs = new HashMap<String,ArrayList<Column>>();
         nodeDefs.put(key, def);
@@ -886,7 +889,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param key
      * @return
      */
-    public ArrayList<Column> getNodeDefintion(String type) {
+    public ArrayList<Column> getNodeDefinition(String type) {
         return nodeDefs.get(type);
     }
     
@@ -929,7 +932,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      */
     public int getColumnByName(String name) {
         for (int i = 0; i < columns.size(); i++ ) {
-            if (columns.get(i).name.equals(name))
+            if (columns.get(i).getName().equals(name))
                 return i;
         }
         return -1;
@@ -1040,7 +1043,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
         columns.add(index, column);
         for(Node node : getAllNodes()) {
         	if(node.getCells().size() >= index)
-        		node.getCells().add(null);
+        		node.getCells().add(index,null);
         }
         layout();
 
@@ -1089,8 +1092,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * 
      * @return
      */
-    public Node addNode() {
-        return addNode(getRowCount(), root, null);
+    public Node addNode(String type) {
+        return addNodeAt(type, getRowCount());
     }
 
     /**
@@ -1100,8 +1103,12 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param index
      * @return
      */
-    public Node addNodeAt(int index) {
-        return addNode(index, root, null);
+    public Node addNodeAt(String type,int index) {
+    	Node node;
+    	
+    	node = new Node(getNodeDefinition(type).size()).setType(type);
+    
+        return addNode(index, root, node);
     }
 
     /**
@@ -1139,13 +1146,12 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      *         returned or if a Row is passed to the method it will echoed back.
      */
     private Node addNode(int index, Node parent, Node node) {
-        ArrayList<Node> children;
+    	assert(node != null);
+        
+    	ArrayList<Node> children;
         int pos;
 
         finishEditing();
-
-        if (node == null)
-            node = new Node(columns.size());
 
         if ( !fireBeforeNodeAddedEvent(index, parent, node))
             return null;
@@ -1358,6 +1364,15 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             return false;
         
         return selectNodeAt(nodeIndex.get(node).index,addTo);
+    }
+    
+    public void selectAll() {
+		if(isMultipleSelectionAllowed()) {
+			selections = new ArrayList<Integer>();
+			for(int i = 0; i < getRowCount(); i++)
+    			selections.add(i);
+			renderView(-1,-1);
+		}
     }
 
     /**
@@ -1683,8 +1698,21 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * @param value
      */
     public void setValueAt(int row, int col, Object value) {
+		Column column;
+		ArrayList<LocalizedException> exceptions;
+		
         finishEditing();
         modelView.get(row).setCell(col, value);
+        
+		column = getNodeDefinition(modelView.get(row).getType()).get(col);
+		
+		exceptions = column.getCellRenderer().validate(value);
+		
+		if(column.isRequired() && value == null)
+			exceptions.add(new LocalizedException("exc.fieldRequired"));
+		
+		setValidateException(row,col,exceptions);
+        
         refreshCell(row, col);
     }
 
@@ -1713,7 +1741,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         replace.removeFromParent();
 
-        modelView.add(index, node);
+        modelView.set(index, node);
         nodeIndex.put(node, new NodeIndex(index));
 
         if (node.isOpen()) {
@@ -1841,7 +1869,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             return false;
         
         // If a column is outside the definition of this column then return false
-        if (col >= getNodeDefintion(getNodeAt(row).getType()).size())
+        if (col >= getNodeDefinition(getNodeAt(row).getType()).size())
             return false;
         
         // If a column is not editable then return false
@@ -1912,8 +1940,9 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
          */
         newValue = view.finishEditing(row, col);
         oldValue = getValueAt(row, col);
-        modelView.get(row).setCell(col, newValue);
-        refreshCell(row, col);
+        setValueAt(row,col,newValue);
+        //modelView.get(row).setCell(col, newValue);
+        //refreshCell(row, col);
 
         /*
          * fire a cell edited event if the value of the cell was changed
@@ -2134,7 +2163,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * Puts the tree into and out of query mode.
      */
     public void setQueryMode(boolean query) {
-
+    	assert(getNodeDefinition("query") != null);
+    	
         Node root;
 
         if (query == queryMode)
@@ -2142,7 +2172,11 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         this.queryMode = query;
         if (query) {
-            root = new Node(getColumnCount());
+        	if(!showRoot) {
+        		root = new Node();
+        		root.add(new Node(getNodeDefinition("query").size()).setType("query"));
+        	}else
+        		root = new Node(getNodeDefinition("query").size()).setType("query");
             setRoot(root);
         } else
             setRoot(null);
@@ -2220,12 +2254,12 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
 
         // If hash is null and errors are passed as null, nothing to reset so
         // return
-        if (validateExceptions == null && errors == null)
+        if (validateExceptions == null && (errors == null || errors.isEmpty()))
             return;
 
         // If hash is not null, but errors passed is null then make sure the
         // passed cell entry removed
-        if (validateExceptions != null && errors == null) {
+        if (validateExceptions != null && (errors == null || errors.isEmpty())) {
         	if(validateExceptions.containsKey(node)) {
         		rowExceptions = validateExceptions.get(node);
         		rowExceptions.remove(col);
@@ -2610,7 +2644,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
      * This method will check the model to make sure that all required cells
      * have values
      */
-    public void validateValue() {
+    public void validate() {
+        ArrayList<LocalizedException> exceptions;
         boolean render = false;
 
         finishEditing();
@@ -2619,9 +2654,10 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
             if (getColumnAt(col).isRequired()) {
                 for (int row = 0; row < getRowCount(); row++ ) {
                     if (getValueAt(row, col) == null) {
-                        getValidateExceptionList(row, col).add(
-                                                               new LocalizedException(
-                                                                                      "fieldRequired"));
+				        exceptions = getValidateExceptionList(row, col);
+				        exceptions.add(new LocalizedException("fieldRequired"));
+				        setValidateException(row, col, exceptions);
+						render = true;
                         render = true;
                     }
                 }
@@ -2686,7 +2722,7 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     }
 
     public boolean hasExceptions() {
-        // TODO Auto-generated method stub
+        validate();
         return (endUserExceptions != null && !endUserExceptions.isEmpty()) ||
                (validateExceptions != null && !validateExceptions.isEmpty());
     }

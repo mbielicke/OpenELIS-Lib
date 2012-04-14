@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.user.client.ui.HTMLTable;
@@ -42,4 +45,6 @@ public interface CellRenderer {
     public void render(HTMLTable table, int row, int col, Object value);
     
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd);
+    
+    public ArrayList<LocalizedException> validate(Object value);
 }

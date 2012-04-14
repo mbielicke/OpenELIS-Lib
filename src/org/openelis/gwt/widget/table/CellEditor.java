@@ -63,12 +63,6 @@ public interface CellEditor {
     public Object finishEditing();
     
     /**
-     * Validates the entered value in the cell and will return a list of exceptions or null
-     * @return
-     */
-    public ArrayList<LocalizedException> validate();
-    
-    /**
      * Returns whether the passed key should be ignored by the KeyHandler when editing;
      * @param keyCode
      * @return
@@ -77,6 +71,6 @@ public interface CellEditor {
         
     public Widget getWidget();
     
-    public void setColumn(Column col);
+    public void setColumn(ColumnInt col);
 
 }

@@ -1,5 +1,8 @@
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.PercentBar;
 
@@ -49,6 +52,12 @@ public class PercentCell implements CellRenderer {
 	@Override
 	public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
 		table.setText(row,col,"");
+	}
+
+	@Override
+	public ArrayList<LocalizedException> validate(Object value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
@@ -8,9 +10,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 /**
  * This class is used by ScreenWidgets that implement HasValue<Long> to
  * provide methods for formatting, validating and query by Long values.
- * 
- * @author tschmidt
- * 
+ *  
  */
 public class LongHelper implements WidgetHelper<Long> {
 
@@ -109,5 +109,19 @@ public class LongHelper implements WidgetHelper<Long> {
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
+
+	@Override
+	public boolean isCorrectType(Object value) {
+		return value == null || value instanceof Long;
+	}
+	
+	public ArrayList<LocalizedException> validate(Object value) {
+		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
+		
+		if(!isCorrectType(value)) 
+			exceptions.add(new LocalizedException("exc.invalidNumeric"));
+		
+		return exceptions;
+	}
 
 }

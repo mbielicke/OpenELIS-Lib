@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
@@ -60,5 +62,17 @@ public class DropdownHelper<T> implements WidgetHelper<T> {
     public void setPattern(String pattern) {
     	
     }
+
+	@Override
+	public boolean isCorrectType(Object value) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<LocalizedException> validate(Object value) {
+		// TODO Auto-generated method stub
+		return null;
+		
+	}
 
 }

@@ -264,11 +264,13 @@ public class View extends Composite {
         }
 
         flexTable.setStyleName(table.TABLE_STYLE);
+        flexTable.removeAllRows();
         for (int c = 0; c < table.getColumnCount(); c++ ) {
             flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
             if(table.getColumnAt(c).getStyle() != null)
             	flexTable.getColumnFormatter().setStyleName(c, table.getColumnAt(c).getStyle());
         }
+        
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
@@ -579,19 +581,19 @@ public class View extends Composite {
     
     @SuppressWarnings("unchecked")
     private void renderCell(int rc, int c, int r) {
+    	CellRenderer renderer;
+    	
+    	renderer = table.getColumnAt(c).getCellRenderer(r);
 
-    		if (table.getQueryMode())
-    			table.getColumnAt(c).getCellRenderer(r).renderQuery(flexTable, rc, c,
-    					(QueryData)table.getValueAt(r, c));
-    		else
-    			table.getColumnAt(c).getCellRenderer(r).render(flexTable, rc, c,
-    					table.getValueAt(r, c));
-    		
-
-        if (table.hasExceptions(r, c))
-            flexTable.getCellFormatter().addStyleName(rc, c, "InputError");
-        else
-            flexTable.getCellFormatter().removeStyleName(rc, c, "InputError");
+    	if (table.getQueryMode())
+    		renderer.renderQuery(flexTable, rc, c,(QueryData)table.getValueAt(r, c));
+    	else
+    		renderer.render(flexTable, rc, c, table.getValueAt(r, c));
+    	
+    	if (table.hasExceptions(r, c))
+    		flexTable.getCellFormatter().addStyleName(rc, c, "InputError");
+    	else
+    		flexTable.getCellFormatter().removeStyleName(rc, c, "InputError");
     }
 
     /**
@@ -653,8 +655,6 @@ public class View extends Composite {
         CellEditor cellEditor;
 
         cellEditor = table.getColumnAt(c).getCellEditor(r);
-
-        table.setValidateException(r, c, cellEditor.validate());
 
         return cellEditor.finishEditing();
     }

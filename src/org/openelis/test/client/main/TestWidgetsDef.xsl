@@ -28,8 +28,8 @@
       <VerticalPanel style="AppBackground">
         <AbsolutePanel style="topMenuBar">
           <menuBar>
-            <menu display="Widgets">
-              <menuItem description="Screen to test TextBox functionality" display="TextBox" enabled="false" icon="nothing" key="textbox"/>
+            <menu display="Widgets" id="widgetMenu">
+              <menuItem id="textboxMenu" description="Screen to test TextBox functionality" display="TextBox" enabled="false" icon="nothing" key="textbox"/>
               <menuItem description="Screen to test Dropdown functionality" enabled="false" display="Dropdown" icon="nothing" key="dropdown"/>
               <menuItem description="Screen to test Table functionality" display="Table" enabled="true" icon="nothing" key="table" />
               <menuItem description="Screen to test Tree functionality" display="Tree" enabled="false" icon="nothing" key="tree" />

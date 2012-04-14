@@ -51,11 +51,11 @@ public class DropdownCell implements CellRenderer, CellEditor {
     /**
      * Widget used to edit the cell
      */
-    private Dropdown editor;
+    private Dropdown      editor;
 
-    private boolean      query;
+    private boolean       query;
     
-    private Column       column;
+    private ColumnInt     column;
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -68,27 +68,27 @@ public class DropdownCell implements CellRenderer, CellEditor {
         editor.setStyleName("TableDropdown");
         editor.addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
     }
 
     public Object finishEditing() {
-        if (query) {
-            editor.setFocus(false);
+    	editor.finishEditing();
+        if (query) 
             return editor.getQuery();
-        }
-
-        editor.validateValue();
-
+        
         return editor.getValue();
     }
 
-    public ArrayList<LocalizedException> validate() {
-        if (query) {
-            return editor.getValidateExceptions();
-        }
-        return editor.getValidateExceptions();
+    public ArrayList<LocalizedException> validate(Object value) {
+    	if(!query) {
+    		editor.setValue(value);
+    		editor.hasExceptions();
+        	return editor.getValidateExceptions();
+    	}
+        
+        return null;
     }
 
     /**
@@ -155,7 +155,7 @@ public class DropdownCell implements CellRenderer, CellEditor {
     }
     
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
 }

@@ -21,10 +21,17 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 
-public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, HasBlurHandlers, HasFocusHandlers, HasValueChangeHandlers<String>, HasValue<String>,  HasExceptions {
+public class TextArea  extends Composite implements ScreenWidgetInt, 
+													Focusable, 
+													HasBlurHandlers, 
+													HasFocusHandlers, 
+													HasValueChangeHandlers<String>, 
+													HasValue<String>,  
+													HasExceptions {
 
     /**
      * Wrapped GWT TextBox
@@ -44,14 +51,14 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     /**
      * Data moved from Field to the widget
      */
-    protected boolean                                queryMode,required;
+    protected boolean                                queryMode,required,enabled;
     protected String                                 value;
 
     /**
      * This class replaces the functionality that Field used to provide but now
      * in a static way.
      */
-    protected StringHelper                       helper = new StringHelper();
+    protected WidgetHelper<String>                     helper = new StringHelper();
 
     /**
      * The Constructor now sets the wrapped GWT TextBox as the element widget of
@@ -64,20 +71,29 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     
     public void init() {
         textarea = new com.google.gwt.user.client.ui.TextArea();
-        textarea.addValueChangeHandler(new ValueChangeHandler<String>() {
-            /*
-             * This event calls validate(true) so that that the valueChangeEvent
-             * for the HasValue<T> interface will be fired. In Query mode it
-             * will validate the query string through the helper class
-             */
-            public void onValueChange(ValueChangeEvent<String> event) {
+        	
+        addFocusHandler(new FocusHandler() {
+        	public void onFocus(FocusEvent event) {
+        		if(enabled) {
+        			textarea.selectAll();
+        			addStyleName("Focus");
+        		}
+        	}
+        });
+        
+        addBlurHandler(new BlurHandler() {			
+			@Override
+			public void onBlur(BlurEvent event) {
+				textarea.setSelectionRange(0,0);
+				removeStyleName("Focus");
                 if (queryMode) {
                     validateQuery();
                 } else
-                    validateValue(true);
+                    finishEditing();
             }
 
         });
+       
         initWidget(textarea);
     }
 
@@ -105,11 +121,8 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
      * Enables or disables the textbox for editing.
      */
     public void setEnabled(boolean enabled) {
+    	this.enabled = enabled;
         textarea.setReadOnly( !enabled);
-        /*
-         * if ( !enabled) unsinkEvents(Event.KEYEVENTS); else
-         * sinkEvents(Event.KEYEVENTS);
-         */
     }
 
     /**
@@ -145,20 +158,11 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
     }
     
     public void setHelper(WidgetHelper<String> helper) {
-        //this.helper = helper;
+        this.helper = helper;
     }
     
     public WidgetHelper<String> getHelper() {
         return null;
-    }
-
-    /**
-     * This method is made available so the Screen can on commit make sure all
-     * required fields are entered without having the user visit each widget on
-     * the screen.
-     */
-    public void validateValue() {
-        validateValue(false);
     }
 
     /**
@@ -169,10 +173,10 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
      * 
      * @param fireEvents
      */
-    protected void validateValue(boolean fireEvents) {
+    protected void finishEditing() {
         validateExceptions = null;
         try {
-            setValue(helper.getValue(textarea.getText()), fireEvents);
+            setValue(helper.getValue(textarea.getText()), true);
             if(required && value == null)
                 addValidateException(new LocalizedException("exc.fieldRequiredException"));
         } catch (LocalizedException e) {
@@ -193,18 +197,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
-    
-    public void addFocusStyle(String style) {
-        textarea.addStyleName(style);
-        if(!textarea.isReadOnly())
-        	textarea.selectAll();
-    }
-    
-    public void removeFocusStyle(String style) {
-        textarea.removeStyleName(style);
-        textarea.setSelectionRange(0, 0);
-
-    }
+   
     
     public void setRequired(boolean required) {
         this.required = required;
@@ -219,7 +212,15 @@ public class TextArea  extends Composite implements ScreenWidgetInt, Focusable, 
      * @return
      */
     public boolean hasExceptions() {
-        return endUserExceptions != null || validateExceptions != null;
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	  
+    	return endUserExceptions != null || validateExceptions != null;
     }
 
     /**

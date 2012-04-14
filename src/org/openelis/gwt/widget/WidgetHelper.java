@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import java.util.ArrayList;
+
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
@@ -50,5 +52,9 @@ public interface WidgetHelper<T> {
     public String format(T value);
     
     public void setPattern(String pattern);
+    
+    public boolean isCorrectType(Object value);
+    
+    public ArrayList<LocalizedException> validate(Object value);
 
 }

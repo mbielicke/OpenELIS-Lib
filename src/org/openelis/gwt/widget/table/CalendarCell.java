@@ -51,9 +51,9 @@ public class CalendarCell implements CellRenderer, CellEditor {
     /**
      * Editor used by this cell
      */
-    private Calendar editor;
-    private boolean  query;
-    private Column   column;
+    private Calendar  editor;
+    private boolean   query;
+    private ColumnInt column;
 
     /**
      * Constructor that takes the editor to be used as a param
@@ -66,7 +66,7 @@ public class CalendarCell implements CellRenderer, CellEditor {
         editor.setStyleName("TableCalendar");
         editor.addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
     }
@@ -97,22 +97,23 @@ public class CalendarCell implements CellRenderer, CellEditor {
     }
 
     public Object finishEditing() {
-        if (query) {
+    	editor.finishEditing();
+        if (query) 
             return editor.getQuery();
-        }
+        
         if(!editor.hasExceptions())
         	return editor.getValue();
         else
         	return editor.getText();
     }
 
-    public ArrayList<LocalizedException> validate() {
-        if (query) {
-            //editor.validateQuery();
-            return editor.getValidateExceptions();
+    public ArrayList<LocalizedException> validate(Object value) {
+        if (!query) 
+        	return editor.getHelper().validate(value);
+        else {
+        	editor.setQuery((QueryData)value);
+        	return editor.getValidateExceptions();
         }
-        //editor.validateValue();
-        return editor.getValidateExceptions();
     }
 
     /**
@@ -121,11 +122,7 @@ public class CalendarCell implements CellRenderer, CellEditor {
     public void render(HTMLTable table, int row, int col, Object value) {
         query = false;
         editor.setQueryMode(false);
-        if(column.getTable().hasExceptions(row,col) || !(value instanceof Datetime))
-        	table.setText(row,col,value.toString());
-        else
-        	editor.setValue((Datetime)value);
-        table.setText(row, col, editor.getText());
+        table.setText(row, col, display(value));
     }
 
     public String display(Object value) {
@@ -165,7 +162,7 @@ public class CalendarCell implements CellRenderer, CellEditor {
     }
     
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
 

@@ -92,6 +92,7 @@ public class UIGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.IntegerHelper");
         composer.addImport("org.openelis.gwt.widget.LongHelper");
         composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+        composer.addImport("org.openelis.gwt.widget.table.LabelCell");
         composer.addImport("com.google.gwt.user.client.Window");
         composer.addImport("com.google.gwt.core.client.GWT");
 
@@ -267,7 +268,7 @@ public class UIGenerator extends Generator {
     private void setDefaults(Node node, String wid) {
     	String style,css;
     	String[] styles;
-    	String width,height,tip,visible;
+    	String width,height,tip,visible,id;
     	Node attrib;
     	
     	style = getAttribute(node,"style");
@@ -276,6 +277,7 @@ public class UIGenerator extends Generator {
     	tip = getAttribute(node,"tip");
     	visible = getAttribute(node,"visible","true");
     	css = getAttribute(node,"css");
+    	id = getAttribute(node,"id");
     	
         if (style != null){
         	styles = style.split(",");
@@ -296,6 +298,9 @@ public class UIGenerator extends Generator {
         
         if (tip != null)
             sw.println(wid+".setTitle(\""+tip+"\");");
+        
+        if (id  != null)
+        	sw.println("DOM.setElementProperty("+wid+".getElement(),\"id\",\""+id+"\");");
         
         sw.println(wid+".setVisible("+visible+");");
         

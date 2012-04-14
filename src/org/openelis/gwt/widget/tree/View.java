@@ -276,6 +276,7 @@ public class View extends Composite {
         }
         
         flexTable.setStyleName(tree.TREE_STYLE);
+        flexTable.removeAllRows();
         for (int c = 0; c < tree.getColumnCount(); c++ )
             flexTable.getColumnFormatter().setWidth(c, tree.getColumnAt(c).getWidth() + "px");
         flexTable.setWidth(tree.getTotalColumnWidth() + "px");
@@ -591,7 +592,7 @@ public class View extends Composite {
 
         node = tree.getNodeAt(r);
         
-        if (c < tree.getNodeDefintion(node.getType()).size())
+        if (c < tree.getNodeDefinition(node.getType()).size())
             cellRenderer = tree.getCellRenderer(r, c);
         else {
             flexTable.setText(rc, c, "");
@@ -685,7 +686,7 @@ public class View extends Composite {
 
         cellEditor = tree.getCellEditor(r,c);
 
-        tree.setValidateException(r, c, cellEditor.validate());
+        //tree.setValidateException(r, c, cellEditor.validate());
 
         return cellEditor.finishEditing();
     }
@@ -755,7 +756,7 @@ public class View extends Composite {
             return false;
 
         if (r >= firstVisibleRow)
-            r -= tree.getVisibleRows() + 1;
+        	r = r - tree.getVisibleRows() + 1;
 
         vertScrollBar.setVerticalScrollPosition(r * rowHeight);
 
@@ -839,7 +840,7 @@ public class View extends Composite {
         visibleChanged = changed;
     }
 
-    private TreeGrid getTreeCell(Node node, int row, int col) {
+    protected TreeGrid getTreeCell(Node node, int row, int col) {
         TreeGrid grid = null;
         int level;
         String image;
@@ -874,7 +875,7 @@ public class View extends Composite {
         return grid;
     }
 
-    private class TreeGrid extends Grid {
+    protected class TreeGrid extends Grid {
         public TreeGrid() {
             super(1,3);
             addStyleName("TreeCell");

@@ -52,9 +52,9 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     /**
      * Widget used to edit the cell
      */
-    private CheckBox editor;
-    private boolean  query;
-    private Column   column;
+    private CheckBox  editor;
+    private boolean   query;
+    private ColumnInt column;
     
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -66,7 +66,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
         editor.setEnabled(true);
         editor.addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
     }
@@ -78,7 +78,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
         return editor.getValue();
     }
 
-    public ArrayList<LocalizedException> validate() {
+    public ArrayList<LocalizedException> validate(Object value) {
         if (query){
             return editor.getValidateExceptions();
         }        
@@ -163,7 +163,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     }
     
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
   

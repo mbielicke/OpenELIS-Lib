@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TimeCell implements CellRenderer, CellEditor {
 
 	private TextBox<String> editor;
-	private Column          column;
+	private ColumnInt       column;
     private boolean         query;
 	
 	public TimeCell() {
@@ -25,7 +25,7 @@ public class TimeCell implements CellRenderer, CellEditor {
 		editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
 	}
@@ -59,7 +59,7 @@ public class TimeCell implements CellRenderer, CellEditor {
 	}
 
 	@Override
-	public ArrayList<LocalizedException> validate() {
+	public ArrayList<LocalizedException> validate(Object validate) {
         if (query) 
             return editor.getValidateExceptions();
 
@@ -136,8 +136,9 @@ public class TimeCell implements CellRenderer, CellEditor {
     }
     
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
+
     
 }

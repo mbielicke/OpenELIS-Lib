@@ -36,7 +36,6 @@ import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.HasHelper;
-import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TextBase;
@@ -71,6 +70,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
@@ -168,6 +168,12 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
+            	if(!showingCalendar && isEnabled()) {
+            		if(queryMode)
+            			validateQuery();
+            		else
+            			finishEditing(true);
+            	}
         	}
         });
         
@@ -184,14 +190,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-            	
-            	if(!showingCalendar && isEnabled()) {
-            		if(queryMode)
-            			validateQuery();
-            		else
-            			validateValue(true);
+            
             		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-            	}
             }
         });
 
@@ -370,6 +370,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     public void setEnabled(boolean enabled) {
         button.setEnabled(enabled);
         this.enabled = enabled;
+        textbox.enforceMask(enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
@@ -401,15 +402,14 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     	setDefaultMask();
     }
     
-    public void setBegin(byte begin) {
+    public void setPrecision(byte begin, byte end) {
+    	assert(begin < end);
+    	
     	((DateHelper)getHelper()).setBegin(begin);
-    	calendar = null;
-    	setDefaultMask();
-    }
-    
-    public void setEnd(byte end) {
     	((DateHelper)getHelper()).setEnd(end);
+    	
     	calendar = null;
+    	
     	setDefaultMask();
     }
     
@@ -475,8 +475,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * required fields are entered without having the user visit each widget on
      * the screen.
      */
-    public void validateValue() {
-        validateValue(false);
+    public void finishEditing() {
+        finishEditing(false);
     }
 
     /**
@@ -487,7 +487,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * 
      * @param fireEvents
      */
-    protected void validateValue(boolean fireEvents) {
+    protected void finishEditing(boolean fireEvents) {
     	String text;
     	
     	text = textbox.getText();

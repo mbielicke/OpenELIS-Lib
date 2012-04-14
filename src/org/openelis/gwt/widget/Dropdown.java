@@ -75,6 +75,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -213,13 +214,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				
 				removeStyleName("Focus");
 				
-				values = getValues();
+				finishEditing();
 
-				if(multiSelect)
-					setValues(values, true);
-				else
-					setValue(values != null ? values.get(0) : null,true);
-				validateValue();
 			}
 		});
 
@@ -733,25 +729,27 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 		if (fireEvents) 
 			ValueChangeEvent.fire(this, value);
-		
-		validateValue();
 
 	};
 
 	/**
 	 * Check if the Dropdown is valid
 	 */
-	public void validateValue() {
-		//Item<T> item;
+	public void finishEditing() {
+		ArrayList<T> values;
+		
+		values = getValues();
+
+		if(multiSelect)
+			setValues(values, true);
+		else
+			setValue(values != null ? values.get(0) : null,true);
+
 		validateExceptions = null;
 
-		//item = getSelectedItem();
-		//if (item != null)
-		//	setValue(item.key, fireEvents);
-
-		if (required && value == null) {
+		if (required && value == null) 
 			addValidateException(new LocalizedException("exc.fieldRequiredException"));
-		}
+		
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
@@ -1167,7 +1165,15 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * @return
 	 */
 	public boolean hasExceptions() {
-		return endUserExceptions != null || validateExceptions != null;
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	  
+    	return endUserExceptions != null || validateExceptions != null;
 	}
 
 	/**

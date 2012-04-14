@@ -138,7 +138,7 @@ public class CalendarScreen extends Screen {
 		begin.setEnabled(true);
 		begin.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				test.setBegin(event.getValue().byteValue());
+				test.setPrecision(event.getValue().byteValue(),end.getValue().byteValue());
 		    	if(event.getValue() > Datetime.DAY) {
 		    		mask.setValue("99:99");
 		    		pattern.setValue("HH:mm");
@@ -156,7 +156,7 @@ public class CalendarScreen extends Screen {
 		end.setEnabled(true);
 		end.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				test.setEnd(event.getValue().byteValue());
+				test.setPrecision(begin.getValue().byteValue(),event.getValue().byteValue());
 		    	if(begin.getValue() > Datetime.DAY) {
 		    		mask.setValue("99:99");
 		    		pattern.setValue("HH:mm");

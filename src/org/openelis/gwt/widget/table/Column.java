@@ -35,7 +35,7 @@ import org.openelis.gwt.widget.Label;
  * @author tschmidt
  * 
  */
-public class Column {
+public class Column implements ColumnInt {
 
     /**
      * Reference to the Table containing this column
@@ -430,4 +430,9 @@ public class Column {
     public boolean hasEditor() {
         return editor != null;
     }
+
+	@Override
+	public void finishEditing() {
+		table.finishEditing();
+	}
 }

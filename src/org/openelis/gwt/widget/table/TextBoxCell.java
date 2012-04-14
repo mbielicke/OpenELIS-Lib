@@ -50,11 +50,11 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     /**
      * Editor used by this cell
      */
-    private TextBox editor;
+    private TextBox     editor;
 
-    private boolean    query;
+    private boolean     query;
 
-    private Column     column;
+    private ColumnInt   column;
     /**
      * Constructor that takes the editor to be used as a param
      * 
@@ -67,19 +67,17 @@ public class TextBoxCell implements CellRenderer, CellEditor {
         editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
     }
 
     public String display(Object value) {
         editor.setQueryMode(false);
-        try {
-        	editor.setValue(value);
-        }catch(ClassCastException e) {
+        if(editor.getHelper().isCorrectType(value))
+        	return editor.getHelper().format(value);
+        else
         	return value.toString();
-        }
-        return editor.getText();
     }
 
     /**
@@ -87,7 +85,7 @@ public class TextBoxCell implements CellRenderer, CellEditor {
      */
     @SuppressWarnings("rawtypes")
 	public void startEditing(Object value, Container container, GwtEvent event) {
-    	if(column.getTable().hasExceptions(column.getTable().getEditingRow(),column.getTable().getEditingCol()))
+    	if(!editor.getHelper().isCorrectType(value))
     		editor.setText(value.toString());
     	else 
     		editor.setValue(value);
@@ -97,10 +95,7 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     }
 
     public void render(HTMLTable table, int row, int col, Object value) {
-    	if(column.getTable().hasExceptions(row, col))
-    		table.setText(row, col, value.toString());
-    	else
-    		table.setText(row, col, display(value));
+   		table.setText(row, col, display(value));
     }
 
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
@@ -109,21 +104,21 @@ public class TextBoxCell implements CellRenderer, CellEditor {
         table.setText(row, col, editor.getText());
     }
 
-    public ArrayList<LocalizedException> validate() {
-        if (query) 
-            return editor.getValidateExceptions();
-
-        return editor.getValidateExceptions();
+    public ArrayList<LocalizedException> validate(Object value) {
+        return editor.getHelper().validate(value);
     }
 
     public Object finishEditing() {
+    	editor.finishEditing();
         if (query)
             return editor.getQuery();
-        
-        if(!editor.hasExceptions())
-        	return editor.getValue();
-        else
-        	return editor.getText();
+        else {
+        	try {
+        		return editor.getHelper().getValue(editor.getText());
+        	}catch(Exception e){
+       			return editor.getText();
+        	}
+        }
     }
 
     @SuppressWarnings("rawtypes")
@@ -144,7 +139,7 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     }
     
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
 

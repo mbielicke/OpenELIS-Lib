@@ -57,6 +57,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
@@ -124,8 +125,10 @@ public class EditBox extends Composite implements ScreenWidgetInt,
          */
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		if(enabled)
+        		if(enabled) {
         			display.addStyleName("Focus");
+        			selectAll();
+        		}
         	}
         });
 
@@ -135,6 +138,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
+        		unselectAll();
         	}
         });
         
@@ -156,28 +160,11 @@ public class EditBox extends Composite implements ScreenWidgetInt,
             		if(queryMode)
             			validateQuery();
             		else
-            			validateValue(true);
+            			finishEditing();
             		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
             	}
             }
         });
-        
-        /*
-        textbox.addValueChangeHandler(new ValueChangeHandler<String>() {
-            /*
-             * This event calls validate(true) so that that the valueChangeEvent
-             * for the HasValue<T> interface will be fired. In Query mode it
-             * will validate the query string through the helper class
-             
-            public void onValueChange(ValueChangeEvent<String> event) {
-                if (queryMode) {
-                    validateQuery();
-                } else
-                    validateValue(true);
-            }
-
-        });
-        */
     	
     	button.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -267,15 +254,6 @@ public class EditBox extends Composite implements ScreenWidgetInt,
         if (fireEvents) 
             ValueChangeEvent.fire(this, value);
 	}
-	
-    /**
-     * This method is made available so the Screen can on commit make sure all
-     * required fields are entered without having the user visit each widget on
-     * the screen.
-     */
-    public void validateValue() {
-        validateValue(false);
-    }
 
     /**
      * This method will call the Helper to get the T value from the entered
@@ -285,7 +263,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
      * 
      * @param fireEvents
      */
-    protected void validateValue(boolean fireEvents) {
+    protected void finishEditing() {
     	String text;
     	
     	text = textbox.getText();
@@ -298,12 +276,11 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     	validateExceptions = null;
         
     	try {
-            setValue(helper.getValue(text), fireEvents);
+            setValue(helper.getValue(text), true);
             if (required && value == null) 
                 addValidateException(new LocalizedException("exc.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
-            setValue(null,fireEvents);
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
@@ -382,7 +359,15 @@ public class EditBox extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
-        return endUserExceptions != null || validateExceptions != null;
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	  
+    	return endUserExceptions != null || validateExceptions != null;
     }
 
     /**

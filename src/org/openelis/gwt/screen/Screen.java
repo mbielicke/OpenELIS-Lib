@@ -45,7 +45,6 @@ import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.DeckPanel;
 import org.openelis.gwt.widget.HasExceptions;
-import org.openelis.gwt.widget.HasValue;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TabPanel;
@@ -264,23 +263,15 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      */
     @SuppressWarnings("rawtypes")
 	public boolean validate() {
-        boolean valid = true;
-
-        for (Widget wid : def.getWidgets().values()) {
-            if(state == State.QUERY) {
-                if(wid instanceof Queryable) {
-                    ((Queryable)wid).validateQuery();
-                    if ( ((HasExceptions)wid).hasExceptions())
-                        valid = false;
-                }
-            }else {
-                if(wid instanceof HasValue) {
-                    ((HasValue)wid).validateValue();
-                    if ( ((HasExceptions)wid).hasExceptions())
-                        valid = false;
-                }
-            }
+        boolean valid = true;        
+        
+        for(Widget wid : def.getWidgets().values()) {
+          if(wid instanceof HasExceptions) {
+        	  if ( ((HasExceptions)wid).hasExceptions())
+        		  valid = false;
+          }
         }
+        
         return valid;
     }
 

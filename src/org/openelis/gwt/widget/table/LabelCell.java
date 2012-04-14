@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget.table;
 
+import java.util.ArrayList;
+
+import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Label;
 
@@ -76,5 +79,10 @@ public class LabelCell implements CellRenderer {
     	table.setText(frow, col, "");
         
     }
+
+	@Override
+	public ArrayList<LocalizedException> validate(Object value) {
+		return null;
+	}
     
 }

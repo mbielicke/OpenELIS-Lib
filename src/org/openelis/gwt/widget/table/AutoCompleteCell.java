@@ -56,7 +56,7 @@ public class AutoCompleteCell implements CellRenderer,
 
     private boolean      query;
     
-    private Column       column;
+    private ColumnInt    column;
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -70,28 +70,28 @@ public class AutoCompleteCell implements CellRenderer,
         editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
-				column.getTable().finishEditing();
+				column.finishEditing();
 			}
 		});
     }
 
     public Object finishEditing() {
+    	editor.finishEditing();
         if (query) {
             editor.validateQuery();
             return editor.getQuery();
         }
 
-        editor.validateValue();
         return editor.getValue();
     }
 
-    public ArrayList<LocalizedException> validate() {
-        if (query) {
-            //editor.validateQuery();
+    public ArrayList<LocalizedException> validate(Object value) {
+        if (!query) {
+        	editor.setValue((AutoCompleteValue)value);
+        	editor.hasExceptions();
             return editor.getValidateExceptions();
         }
-        //editor.validateValue();
-        return editor.getValidateExceptions();
+        return null;
     }
 
     /**
@@ -100,14 +100,16 @@ public class AutoCompleteCell implements CellRenderer,
     public void render(HTMLTable table, int row, int col, Object value) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue((AutoCompleteValue)value);
-        table.setText(row, col, editor.getDisplay());
+        table.setText(row, col, display(value));
     }
 
     public String display(Object value) {
         editor.setQueryMode(false);
-        editor.setValue((AutoCompleteValue)value);
-        return editor.getDisplay();
+        if(value instanceof AutoCompleteValue) {
+        	editor.setValue((AutoCompleteValue)value);
+        	return editor.getDisplay();
+        }else
+        	return value.toString(); 
     }
 
     /**
@@ -128,7 +130,10 @@ public class AutoCompleteCell implements CellRenderer,
 	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
         editor.setQueryMode(false);
-        editor.setValue((AutoCompleteValue)value);
+        if(value instanceof AutoCompleteValue)
+        	editor.setValue((AutoCompleteValue)value);
+        else
+        	editor.setValue(null,value.toString());
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
         editor.selectAll();
@@ -159,7 +164,7 @@ public class AutoCompleteCell implements CellRenderer,
     }
 
 	@Override
-	public void setColumn(Column col) {
+	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
 }

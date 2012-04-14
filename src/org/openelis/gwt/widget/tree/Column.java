@@ -28,6 +28,7 @@ package org.openelis.gwt.widget.tree;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.table.CellEditor;
 import org.openelis.gwt.widget.table.CellRenderer;
+import org.openelis.gwt.widget.table.ColumnInt;
 import org.openelis.gwt.widget.table.LabelCell;
 
 /**
@@ -36,7 +37,7 @@ import org.openelis.gwt.widget.table.LabelCell;
  * @author tschmidt
  * 
  */
-public class Column {
+public class Column implements ColumnInt {
 
     /**
      * Reference to the Table containing this column
@@ -114,6 +115,7 @@ public class Column {
     @SuppressWarnings("rawtypes")
 	public Column setCellEditor(CellEditor editor) {
         this.editor = editor;
+        this.editor.setColumn(this);
         return this;
     }
     
@@ -133,8 +135,10 @@ public class Column {
     @SuppressWarnings("rawtypes")
 	public Column setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
-        if (renderer instanceof CellEditor)
+        if (renderer instanceof CellEditor) {
             editor = (CellEditor)renderer;
+            editor.setColumn(this);
+        }
         return this;
     }
 
@@ -228,7 +232,8 @@ public class Column {
      */
     public Column setWidth(int width) {
         this.width = Math.max(width, minWidth);
-        tree.resize();
+        if(tree != null)
+        	tree.resize();
         return this;
     }
 
@@ -309,5 +314,10 @@ public class Column {
     public boolean hasEditor() {
         return editor != null;
     }
+
+	@Override
+	public void finishEditing() {
+		tree.finishEditing();
+	}
 
 }
