@@ -38,7 +38,7 @@ public class ReportStatus implements RPC {
     protected Status status;
         
     public enum Status {
-        RUNNING, SAVED, PRINTED
+        RUNNING, SAVED, PRINTED, FAXED
     };
     
     public ReportStatus() {
