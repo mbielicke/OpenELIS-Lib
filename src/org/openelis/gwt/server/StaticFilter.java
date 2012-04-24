@@ -28,6 +28,7 @@ package org.openelis.gwt.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -89,6 +90,7 @@ public abstract class StaticFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException {
         boolean error;
+        Date now;
         HttpServletRequest hreq = (HttpServletRequest)req;
 
         //
@@ -102,6 +104,17 @@ public abstract class StaticFilter implements Filter {
         //
         if (hreq.getRequestURI().endsWith(".jpg") || hreq.getRequestURI().endsWith(".gif") ||
             hreq.getSession().getAttribute("USER_NAME") != null) {
+            //
+            // prevent cache
+            //
+            if (hreq.getRequestURI().contains(".nocache.")) {
+                now = new Date();
+                response = (HttpServletResponse) response;
+                ((HttpServletResponse)response).setDateHeader("Date", now.getTime());
+                ((HttpServletResponse)response).setDateHeader("Expires", now.getTime() - 86400000L);
+                ((HttpServletResponse)response).setHeader("Pragma", "no-cache");
+                ((HttpServletResponse)response).setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+            }
             try {
                 chain.doFilter(req, response);
             } catch (Exception e) {
@@ -150,10 +163,6 @@ public abstract class StaticFilter implements Filter {
                 errorEL.appendChild(doc.createTextNode(constantsAuthFailure));
                 doc.getDocumentElement().appendChild(errorEL);
             }
-            ((HttpServletResponse)response).setHeader("pragma", "no-cache");
-            ((HttpServletResponse)response).setHeader("Cache-Control", "no-cache");
-            ((HttpServletResponse)response).setHeader("Cache-Control", "no-store");
-            ((HttpServletResponse)response).setDateHeader("Expires", 0);
             ((HttpServletResponse)response).setContentType("text/html");
             ((HttpServletResponse)response).setCharacterEncoding("UTF-8");
             response.getWriter().write(ServiceUtils.getXML(loginXSL, doc));
