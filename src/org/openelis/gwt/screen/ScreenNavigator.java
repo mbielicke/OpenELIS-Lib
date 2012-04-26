@@ -70,8 +70,7 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 public abstract class ScreenNavigator {
     protected int         selection, oldPage;
     protected boolean     byRow, enable;
-    @SuppressWarnings("rawtypes")
-	protected ArrayList   result;
+	protected ArrayList<? extends RPC>   result;
     protected Query       query;
     protected Table       table;
     protected Button   atozNext, atozPrev;
@@ -172,9 +171,9 @@ public abstract class ScreenNavigator {
         select(row);
     }
 
-    @SuppressWarnings("rawtypes")
-	public ArrayList getQueryResult() {
-        return result;
+	@SuppressWarnings("unchecked")
+	public <T extends RPC> ArrayList<T> getQueryResult() {
+        return (ArrayList<T>)result;
     }
 
     /**

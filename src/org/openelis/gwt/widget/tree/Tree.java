@@ -119,8 +119,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     /**
      * Cell that is currently being edited.
      */
-    protected int                    editingRow, 
-                                     editingCol;
+    protected int                    editingRow = -1, 
+                                     editingCol = -1;
 
     /**
      * Table dimensions
@@ -201,30 +201,98 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     protected TreeDragController dragController;
     protected TreeDropController dropController;
 
-    /**
-     * Default no-arg constructor that initializes all needed fields so the
-     * layout of the tree can succeed.
-     */
-    public Tree() {
-        editingRow = -1;
-        editingCol = -1;
-        rowHeight = 20;
-        visibleNodes = 0;
-        enabled = false;
-        multiSelect = false;
-        editing = false;
-        hasFocus = false;
-        queryMode = false;
-        verticalScroll = Scrolling.ALWAYS;
-        horizontalScroll = Scrolling.ALWAYS;
-        selections = new ArrayList<Integer>(5);
-        columns = new ArrayList<Column>(5);
-        root = null;
-        modelView = null;
-        nodeIndex = null;
+    
+    public static class Builder {
+    	int nodes,rowHeight = 18,width;
+    	Scrolling verticalScroll;
+    	Scrolling horizontalScroll;
+    	ArrayList<Column> columns = new ArrayList<Column>(5);
+    	HashMap<String, ArrayList<Column>> nodeDefs = new HashMap<String, ArrayList<Column>>();
+    	boolean enabled,multiselect,hasHeader,showRoot,fixScroll = true;
+    	
+    	
+    	public Builder(int nodes) {    		
+    		this.nodes = nodes;
+    	}
+    	
+    	public Builder rowHeight(int rowHeight) {
+    		this.rowHeight = rowHeight;
+    		return this;
+    	}
+    	
+    	public Builder verticalScroll(Scrolling vertical) {
+    		this.verticalScroll = vertical;
+    		return this;
+    	}
+    	
+    	public Builder horizontalScroll(Scrolling horizontal) {
+    		this.horizontalScroll = horizontal;
+    		return this;
+    	}
+    	
+    	public Builder column(Column col) {
+    		columns.add(col);
+    		return this;
+    	}
+    	
+    	public Builder node(String key, ArrayList<Column> cols) {
+    		nodeDefs.put(key,cols);
+    		return this;
+    	}
+    	
+    	public Builder enabled(boolean enabled) {
+    		this.enabled = enabled;
+    		return this;
+    	}
+    	
+    	public Builder multiSelect(boolean multi) {
+    		multiselect = multi;
+    		return this;
+    	}
+    	
+    	public Builder hasHeader(boolean header) {
+    		hasHeader = header;
+    		return this;
+    	}
+    	
+    	public Builder showRoot(boolean showRoot) {
+    		this.showRoot = showRoot;
+    		return this;
+    	}
+    	
+    	public Builder fixScrollbar(boolean fixScrollbar) {
+    		this.fixScroll = fixScrollbar;
+    		return this;
+    	}
+    	
+    	public Builder width(int width) {
+    		this.width = width;
+    		return this;
+    	}
+    	
+    	public Tree build() {
+    		return new Tree(this);
+    	}
+    }
+
+    private Tree(Builder builder) {
+    	visibleNodes = builder.nodes;
+        enabled = builder.enabled;
+        multiSelect = builder.multiselect;
+        verticalScroll = builder.verticalScroll;
+        horizontalScroll = builder.horizontalScroll;
+        hasHeader = builder.hasHeader;
+        showRoot = builder.showRoot;
+        fixScrollBar = builder.fixScroll;
+        rowHeight = builder.rowHeight;
+        
+        for(String key : builder.nodeDefs.keySet()) 
+        	addNodeDefinition(key, builder.nodeDefs.get(key));
+        
         view = new View(this);
         setWidget(view);
-        layout();
+        
+        setColumns(builder.columns);
 
         /*
          * This Handler takes care of all key events on the tree when editing
@@ -1039,7 +1107,8 @@ public class Tree extends FocusPanel implements ScreenWidgetInt, Queryable,
     public Column addColumnAt(int index, String name, String label) {
         Column column;
 
-        column = new Column(this, name, label);
+        column = new Column.Builder(75).name(name).label(label).build();
+        column.setTree(this);
         columns.add(index, column);
         for(Node node : getAllNodes()) {
         	if(node.getCells().size() >= index)

@@ -96,7 +96,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     protected PopupPanel                            popup;
     protected CalendarWidget                        calendar;
     protected MonthYearWidget                       monthYearWidget;
-    protected int                                   width,maxLength;
+    protected int                                   width;
     protected boolean                               enabled,showingCalendar,queryMode,required;
 
     protected TextBase                              textbox;
@@ -500,7 +500,6 @@ public class Calendar extends Composite implements ScreenWidgetInt,
                 addValidateException(new LocalizedException("exc.fieldRequiredException"));
         } catch (LocalizedException e) {
             addValidateException(e);
-            setValue(null,fireEvents);
         }
         ExceptionHelper.checkExceptionHandlers(this);
     }
@@ -527,6 +526,14 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
+    	if(validateExceptions != null)
+    		return true;
+    	  
+    	if (!queryMode && required && getValue() == null) {
+            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            ExceptionHelper.checkExceptionHandlers(this);
+    	}
+    	
         return endUserExceptions != null || validateExceptions != null;
     }
 
@@ -621,14 +628,6 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     	textbox.setSelectionRange(0, 0);
     }
     
-    /**
-     * Sets the maximum input characters allowed for this text field.
-     */
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-        textbox.setMaxLength(maxLength);
-    }
-    
     public void setMask(String mask) {
     	textbox.setMask(mask);
     }
@@ -690,20 +689,12 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * resume any format restrictions
      */
     public void setQueryMode(boolean query) {
-        if (queryMode == query) {
+        if (queryMode == query) 
             return;
-        } else if (query) {
-            queryMode = true;
-            textbox.enforceMask(false);
-            textbox.setMaxLength(255);
-            textbox.setAlignment(TextAlignment.LEFT);
-        } else {
-            queryMode = false;
-            textbox.enforceMask(true);
-            textbox.setMaxLength(maxLength);
-            textbox.setAlignment(TextAlignment.LEFT);
-            textbox.setText("");
-        }
+        
+        queryMode = query;
+        textbox.enforceMask(!query && enabled);
+        textbox.setText("");
     }
 
     /**

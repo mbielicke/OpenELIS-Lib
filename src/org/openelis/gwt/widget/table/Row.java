@@ -109,8 +109,9 @@ public class Row {
      * @param index
      * @return
      */
-    public Object getCell(int index) {
-        return cells.get(index);
+    @SuppressWarnings("unchecked")
+	public <T> T getCell(int index) {
+        return (T)cells.get(index);
     }
     
     /**
@@ -125,8 +126,9 @@ public class Row {
      * Method called to retrieve the data object attached to this Row
      * @return
      */
-    public Object getData() {
-        return data;
+    @SuppressWarnings("unchecked")
+	public <T> T getData() {
+        return (T)data;
     }
     
     /**

@@ -45,7 +45,7 @@ public class StateChangeEvent<I> extends GwtEvent<StateChangeHandler<I>>{
 	    }
     }
 
-    protected StateChangeEvent(I state) {
+    public StateChangeEvent(I state) {
     	this.state = state;
     }
     

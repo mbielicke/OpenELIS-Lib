@@ -476,10 +476,7 @@ public class NewReportScreen extends Screen {
 		d.setWidth(w + "px");
 
 
-		t = new Table();
-		t.setVisibleRows(10);
-		c = t.addColumn();
-		c.setWidth(w);
+		t = new Table.Builder(10).column(new Column.Builder(w).build()).build();
 
 		d.setPopupContext(t);
 		

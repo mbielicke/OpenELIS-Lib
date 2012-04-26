@@ -302,7 +302,7 @@ public class TreeScreen extends Screen {
 				column.setCellRenderer(new TimeCell());
 			} else if("select".equals(editor)) {
 				Dropdown<String> sel = new Dropdown<String>();
-				Table t = new Table();
+				Table t = new Table.Builder(10).build();
 				t.addColumn();
 				sel.setPopupContext(t);
 				ArrayList<Item<String>> model = new ArrayList<Item<String>>();

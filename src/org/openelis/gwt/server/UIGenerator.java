@@ -46,7 +46,7 @@ public class UIGenerator extends Generator {
 			JClassType classType = typeOracle.getType(typeName);
 			packageName = classType.getPackage().getName();
 			className = classType.getSimpleSourceName();
-			 generateClass(logger,context);
+			generateClass(logger,context);
 		}catch(Exception e) {
 			logger.log(TreeLogger.ERROR,"Screen ERROR",e);
 		}
@@ -58,7 +58,7 @@ public class UIGenerator extends Generator {
 		PrintWriter printWriter = null;
 		InputStream  xsl;
 	
-		String props = null;
+		String props = null;		
 		
 		printWriter = context.tryCreate(logger, packageName, className+"_"+lang);
 		
@@ -105,6 +105,7 @@ public class UIGenerator extends Generator {
         composer.addImplementedInterface("ScreenDefInt");
         
         sw = composer.createSourceWriter(context,printWriter);
+        
 	  
 		sw.println("protected ScreenPanel panel;");
 		sw.println("protected HashMap<String,Widget> widgets;");
@@ -127,8 +128,11 @@ public class UIGenerator extends Generator {
 		sw.println("public HashMap<String,Widget> getWidgets() {");
 		sw.println("return widgets;");
 		sw.println("}");
-		sw.println("public Widget getWidget(String key) {");
-		sw.println("return widgets.get(key);");
+		sw.println("public <T extends Widget> T getWidget(String key) {");
+		sw.println("return (T)widgets.get(key);");
+		sw.println("}");
+		sw.println("public <T extends Widget> T getWidget(Enum key) {");
+		sw.println("return (T)getWidget(key.toString());");
 		sw.println("}");
 		sw.println("public void setWidget(Widget widget, String key) {");
 		sw.println("widgets.put(key,widget);");
@@ -161,6 +165,7 @@ public class UIGenerator extends Generator {
 	    }
 	    
 	    sw.println("}");
+			
 	    sw.println("}");
 	    
 		context.commit(logger, printWriter);
@@ -1637,7 +1642,7 @@ public class UIGenerator extends Generator {
     	
     	factoryMap.put("table", new Factory() {
      	   public void getNewInstance(Node node, int id) {
-     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,align,multiSelect,fixScroll;
+     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,multiSelect,fixScroll;
      		   Node col;
      		   NodeList cols,editor;
      		   
@@ -1649,26 +1654,22 @@ public class UIGenerator extends Generator {
      		   multiSelect = getAttribute(node,"multiSelect");
      		   fixScroll = getAttribute(node,"fixScroll","true");
      		   
-     	       sw.println("Table wid"+id+" = new Table();");
-     		   
-                if(node.getAttributes().getNamedItem("tab") != null) 
-                	addTabHandler(node,"wid"+id);
-                
-                sw.println("wid"+id+".setVisibleRows("+rows+");");
-                
-                if(width != null)
-             	   sw.println("wid"+id+".setWidth("+width+");");
-                
-                sw.println("wid"+id+".setVerticalScroll(Table.Scrolling.valueOf(\""+vscroll+"\"));");
-                sw.println("wid"+id+".setHorizontalScroll(Table.Scrolling.valueOf(\""+hscroll+"\"));");
-                
-                if(rowHeight != null) 
-             	   sw.println("wid"+id+".setRowHeight("+rowHeight+");");
-                
-                if(multiSelect != null) 
-             	   sw.println("wid"+id+".setAllowMultipleSelection("+multiSelect+");");
-                
-                sw.println("wid"+id+".setFixScrollbar("+fixScroll+");");
+     	       sw.println("Table.Builder builder"+id+" = new Table.Builder("+rows+");");
+               
+     	       if(width != null)
+             	   sw.println("builder"+id+".width("+width+");");
+               
+     	       sw.println("builder"+id+".verticalScroll(Table.Scrolling.valueOf(\""+vscroll+"\"));");
+               sw.println("builder"+id+".horizontalScroll(Table.Scrolling.valueOf(\""+hscroll+"\"));");
+               
+               if(rowHeight != null) 
+             	   sw.println("builder"+id+".rowHeight("+rowHeight+");");
+               
+               if(multiSelect != null) 
+             	   sw.println("builder"+id+".multiselect("+multiSelect+");");
+               
+               sw.println("builder"+id+".fixScrollbar("+fixScroll+");");
+     	      
      	       
                 cols = node.getChildNodes();
                 for(int i = 0; i < cols.getLength(); i++) {
@@ -1681,34 +1682,28 @@ public class UIGenerator extends Generator {
                     minWidth = getAttribute(col,"minWidth");
                     filter = getAttribute(col,"filter");
                     sort = getAttribute(col,"sort");
-                    align = getAttribute(col,"align");
                     
-                    sw.println("Column column"+id+"_"+i+" = wid"+id+".addColumn();");
+                    sw.println("Column.Builder colBuilder"+id+"_"+i+" = new Column.Builder("+width+");");
                     
                     if(key != null)
-                        sw.println("column"+id+"_"+i+".setName(\""+key+"\");");
+                        sw.println("colBuilder"+id+"_"+i+".name(\""+key+"\");");
                     
-                    if(header != null){
-                        sw.println("column"+id+"_"+i+".setLabel(\""+header+"\");");
-                        sw.println("wid"+id+".setHeader(true);");
+                    if(header != null) {
+                        sw.println("colBuilder"+id+"_"+i+".label(\""+header+"\");");
+                        sw.println("builder"+id+".hasHeader(true);");
                     }
                     
-                    if(width != null)
-                        sw.println("column"+id+"_"+i+".setWidth("+width+");");
                     
                     if(minWidth != null)
-                        sw.println("column"+id+"_"+i+".setMinWidth("+minWidth+");");
+                        sw.println("colBuilder"+id+"_"+i+".minWidth("+minWidth+");");
                     
                     if(sort != null)
-                        sw.println("column"+id+"_"+i+".setSortable("+sort+");");
+                        sw.println("colBuilder"+id+"_"+i+".sortable("+sort+");");
                     
                     if(filter != null)
-                 	   sw.println("column"+id+"_"+i+".setFilterable("+filter+");");
+                 	   sw.println("colBuilder"+id+"_"+i+".filterable("+filter+");");
                     
-                    
-                    //if(align != null)
-                 	  // sw.println("column"+id+"_"+i+".setAlignment(\")
-                    
+                                       
                     editor = col.getChildNodes();
                     for(int j = 0; j < editor.getLength(); j++){
                         if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
@@ -1725,39 +1720,36 @@ public class UIGenerator extends Generator {
                                 field = "Datetime";
                            
                             if(name.equals("dropdown"))    
-                                sw.println("DropdownCell cell"+child+" = new DropdownCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new DropdownCell(wid"+child+"));");
                             else if(name.equals("textbox")) 
-                                sw.println("TextBoxCell cell"+child+" = new TextBoxCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new TextBoxCell(wid"+child+"));");
                             else if(name.equals("autoComplete"))
-                                sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new AutoCompleteCell(wid"+child+"));");
                             else if(name.equals("check"))
-                                sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new CheckBoxCell(wid"+child+"));");
                             else if(name.equals("calendar"))
-                                sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new CalendarCell(wid"+child+"));");
                             else if(name.equals("image"))
-                            	sw.println("ImageCell cell"+child+" = new ImageCell();");
+                            	sw.println("colBuilder"+id+"_"+i+".renderer(new ImageCell());");
                             else if(name.equals("percentBar"))
-                            	sw.println("PercentCell cell"+child+" = new PercentCell(wid"+child+");");
+                            	sw.println("colBuilder"+id+"_"+i+".renderer(new PercentCell(wid"+child+"));");
                             else if(name.equals("time"))
-                            	sw.println("TimeCell cell"+child+" = new TimeCell();");
+                            	sw.println("colBuilder"+id+"_"+i+".renderer(new TimeCell());");
                             else
-                                sw.println("LabelCell cell"+child+"= new LabelCell(wid"+child+");");
+                                sw.println("colBuilder"+id+"_"+i+".renderer(new LabelCell(wid"+child+"));");
                             
-                            sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
+                            sw.println("builder"+id+".column(colBuilder"+id+"_"+i+".build());");
                             break;
                         }
                     }
                 }
                 
-                // if parentNode is null or is dropdown or autocomplete we don't want to add this table to the panel 
-                // focus handler since it is part of another widget and not a stand alone table.
-                if(node.getParentNode() != null && !node.getParentNode().getNodeName().equals("dropdown") 
-                		                        && !node.getParentNode().getNodeName().equals("autoComplete")) {
-                	sw.println("panel.addFocusHandler(wid"+id+");");
-                	sw.println("wid"+id+".addFocusHandler(panel);");
-                }
+                sw.println("Table wid"+id+" = builder"+id+".build();");
                 
                 setDefaults(node,"wid"+id);
+                
+                if(node.getAttributes().getNamedItem("tab") != null) 
+                	addTabHandler(node,"wid"+id);
      	        
      	    }
      	   public void addImport() {
@@ -2106,27 +2098,21 @@ public class UIGenerator extends Generator {
     			rowHeight = getAttribute(node,"rowHeight");
     			enabled = getAttribute(node,"enabled");
     			
-    			sw.println("Tree wid"+id+" = new Tree();");
-    			
-				if(node.getAttributes().getNamedItem("tab") != null) 
-					addTabHandler(node,"wid"+id);
-				
-				if (node.getAttributes().getNamedItem("shortcut") != null)
-					addShortcutHandler(node,"wid"+id);
+    			sw.println("Tree.Builder builder"+id+" = new Tree.Builder("+rows+");");
+    	
                 
-                sw.println("wid"+id+".setWidth("+width+");");
-                sw.println("wid"+id+".setVisibleRows("+rows+");");
-                sw.println("wid"+id+".setVerticalScroll(Tree.Scrolling.valueOf(\""+vscroll+"\"));");
-                sw.println("wid"+id+".setHorizontalScroll(Tree.Scrolling.valueOf(\""+hscroll+"\"));");
+                sw.println("builder"+id+".width("+width+");");
+                sw.println("builder"+id+".verticalScroll(Tree.Scrolling.valueOf(\""+vscroll+"\"));");
+                sw.println("builder"+id+".horizontalScroll(Tree.Scrolling.valueOf(\""+hscroll+"\"));");
                 
                 if(rowHeight != null) 
-                	sw.println("wid"+id+".setRowHeight("+rowHeight+");");
+                	sw.println("builder"+id+".rowHeight("+rowHeight+");");
                 
                 if(multiSelect != null)
-                	sw.println("wid"+id+".setAllowMultipleSelection("+multiSelect+");");
+                	sw.println("builder"+id+".multiSelect("+multiSelect+");");
                 
                 if(enabled != null)
-                	sw.println("wid"+id+".setEnabled("+enabled+");");
+                	sw.println("builder"+id+".enabled("+enabled+");");
                 
                 columns  = ((Element)node).getElementsByTagName("columns").item(0);
                 if(columns != null){
@@ -2137,24 +2123,22 @@ public class UIGenerator extends Generator {
                             continue;
                         key = getAttribute(col,"key");
                         header = getAttribute(col,"header");
-                        width = getAttribute(col,"width");
+                        width = getAttribute(col,"width","75");
                         minWidth = getAttribute(col,"minWidth");
                         
-                        sw.println("org.openelis.gwt.widget.tree.Column column"+id+"_"+i+" = wid"+id+".addColumn();");
+                        sw.println("org.openelis.gwt.widget.tree.Column.Builder builder"+id+"_"+i+" = new org.openelis.gwt.widget.tree.Column.Builder("+width+");");
                         
                         if(key != null)
-                            sw.println("column"+id+"_"+i+".setName(\""+key+"\");");
+                            sw.println("builder"+id+"_"+i+".name(\""+key+"\");");
                         
                         if(header != null){
-                            sw.println("column"+id+"_"+i+".setLabel(\""+header+"\");");
-                            sw.println("wid"+id+".setHeader(true);");
+                            sw.println("builder"+id+"_"+i+".label(\""+header+"\");");
+                            sw.println("builder"+id+".hasHeader(true);");
                         }
                         
-                        if(width != null)
-                            sw.println("column"+id+"_"+i+".setWidth("+width+");");
                         
                         if(minWidth != null)
-                            sw.println("column"+id+"_"+i+".setMinWidth("+minWidth+");");
+                            sw.println("builder"+id+"_"+i+".minWidth("+minWidth+");");
                         
                         editor = col.getChildNodes();
                         for(int j = 0; j < editor.getLength(); j++){
@@ -2172,21 +2156,21 @@ public class UIGenerator extends Generator {
                                 	field = "Datetime";
                                                                
                                 if(editor.item(j).getNodeName().equals("dropdown")) 
-                                    sw.println("DropdownCell cell"+child+" = new DropdownCell(wid"+child+");");
+                                    sw.println("builder"+id+"_"+i+".renderer(new DropdownCell(wid"+child+"));");
                                 else if(editor.item(j).getNodeName().equals("textbox")) 
-                                    sw.println("TextBoxCell cell"+child+" = new TextBoxCell(wid"+child+");");
+                                    sw.println("builder"+id+"_"+i+".renderer(new TextBoxCell(wid"+child+"));");
                                 else if(editor.item(j).getNodeName().equals("autoComplete"))
-                                    sw.println("AutoCompleteCell cell"+child+" = new AutoCompleteCell(wid"+child+");");
+                                    sw.println("builder"+id+"_"+i+".renderer(new AutoCompleteCell(wid"+child+"));");
                                 else if(editor.item(j).getNodeName().equals("check"))
-                                    sw.println("CheckBoxCell cell"+child+" = new CheckBoxCell(wid"+child+");");
+                                    sw.println("builder"+id+"_"+i+".renderer(new CheckBoxCell(wid"+child+"));");
                                 else if(editor.item(j).getNodeName().equals("calendar"))
-                                    sw.println("CalendarCell cell"+child+" = new CalendarCell(wid"+child+");");
+                                    sw.println("builder"+id+"_"+i+".renderer(new CalendarCell(wid"+child+"));");
                                 else if(editor.item(j).getNodeName().equals("image"))
-                                	sw.println("ImageCell cell"+child+" = new ImageCell();");
+                                	sw.println("builder"+id+"_"+i+".renderer(new ImageCell());");
                                 else
-                                	sw.println("LabelCell cell"+child+" = new LabelCell(wid"+child+");");
+                                	sw.println("builder"+id+"_"+i+".renderer(new LabelCell(wid"+child+"));");
                                 
-                                sw.println("column"+id+"_"+i+".setCellRenderer(cell"+child+");");
+                                sw.println("builder"+id+".colulmn(builder"+id+"_"+i+".build());");
                                 break;
                             }
                         }
@@ -2201,13 +2185,13 @@ public class UIGenerator extends Generator {
                 		col = colList.item(h);
                 		if(col.getNodeType() != Node.ELEMENT_NODE || !col.getNodeName().equals("col"))
                 			continue;
-                		sw.println("org.openelis.gwt.widget.tree.Column leafCol"+id+"_"+i+"_"+h+" = new org.openelis.gwt.widget.tree.Column();");
-                		sw.println("leafDef"+id+"_"+i+".add(leafCol"+id+"_"+i+"_"+h+");");
+                		sw.println("org.openelis.gwt.widget.tree.Column.Builder builder"+id+"_"+i+"_"+h+" = new org.openelis.gwt.widget.tree.Column.Builder(75);");
+                		
                 		
                 		key = getAttribute(col,"key");
                 		
                 		if(key != null)
-                			sw.println("leafCol"+id+"_"+i+"_"+h+".setName(\""+key+"\");");
+                			sw.println("builder"+id+"_"+i+"_"+h+".name(\""+key+"\");");
                 		
                 		editor = col.getChildNodes();
                 		for(int j = 0; j < editor.getLength(); j++){
@@ -2224,28 +2208,38 @@ public class UIGenerator extends Generator {
                 					field = "Datetime";
                 				
                 				if(name.equals("dropdown")) 
-                					sw.println("DropdownCell leafCell"+child+" = new DropdownCell(wid"+child+");");
+                					sw.println("builder"+id+"_"+i+"_"+h+".renderer(new DropdownCell(wid"+child+"));");
                 				else if(name.equals("textbox")) 
-                					sw.println("TextBoxCell leafCell"+child+" = new TextBoxCell(wid"+child+");");
+                					sw.println("builder"+id+"_"+i+"_"+h+".renderer(new TextBoxCell(wid"+child+"));");
                 				else if(name.equals("autoComplete"))
-                					sw.println("AutoCompleteCell leafCell"+child+" = new AutoCompleteCell(wid"+child+");");
+                					sw.println("builder"+id+"_"+i+"_"+h+".renderer(new AutoCompleteCell(wid"+child+"));");
                 				else if(name.equals("check"))
-                					sw.println("CheckBoxCell leafCell"+child+" = new CheckBoxCell(wid"+child+");");
+                					sw.println("builder"+id+"_"+i+"_"+h+".renderer(new CheckBoxCell(wid"+child+"));");
                 				else if(name.equals("calendar"))
-                					sw.println("CalendarCell leafCell"+child+" = new CalendarCell(wid"+child+");");
+                					sw.println("builder"+id+"_"+i+"_"+h+".renderer(new CalendarCell(wid"+child+"));");
                 				else
-                                	sw.println("LabelCell leafCell"+child+" = new LabelCell(wid"+child+");");
+                                	sw.println("builder"+id+"_"+i+"_"+h+".renderer(new LabelCell(wid"+child+"));");
 
-                				sw.println("leafCol"+id+"_"+i+"_"+h+".setCellRenderer(leafCell"+child+");");
                 				//sw.println("column"+id+"_"+i+".setCellEditor(cell"+child+");");
+                				sw.println("leafDef"+id+"_"+i+".add(builder"+id+"_"+i+"_"+h+".build());");
                 				break;
                 			}
                 		}
                 	}
                 	key = leafList.item(i).getAttributes().getNamedItem("key").getNodeValue();
-                	sw.println("wid"+id+".addNodeDefinition(\""+key+"\",leafDef"+id+"_"+i+");");
+                	sw.println("builder"+id+".node(\""+key+"\",leafDef"+id+"_"+i+");");
                 }
+                
+                sw.println("Tree wid"+id+" = builder"+id+".build();");
+                
                 setDefaults(node,"wid"+id);
+				
+                if(node.getAttributes().getNamedItem("tab") != null) 
+					addTabHandler(node,"wid"+id);
+				
+				if (node.getAttributes().getNamedItem("shortcut") != null)
+					addShortcutHandler(node,"wid"+id);
+				
                 sw.println("panel.addFocusHandler(wid"+id+");");
                 sw.println("wid"+id+".addFocusHandler(panel);");
     		}

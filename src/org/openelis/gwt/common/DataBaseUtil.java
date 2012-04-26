@@ -33,6 +33,8 @@ import java.util.List;
 
 public class DataBaseUtil {
 
+	private DataBaseUtil() {} // Disallows creating an instance;
+	
     /*
      * Removed blanks from both sides of the string and nullifies empty strings
      */
@@ -228,17 +230,16 @@ public class DataBaseUtil {
      * For paged result list, this method returns a subList of the query list
      * starting at first for max number of results.
      */
-    @SuppressWarnings("unchecked")
-    public static ArrayList subList(List query, int first, int max) {
+    public static <T> ArrayList<T> subList(List<T> query, int first, int max) {
         int to;
-        Iterator e;
-        ArrayList list;
+        Iterator<T> e;
+        ArrayList<T> list;
 
         if (query == null || query.isEmpty() || first >= query.size())
             return null;
 
         to = Math.min(first + max, query.size());
-        list = new ArrayList(to - first);
+        list = new ArrayList<T>(to - first);
         e = query.listIterator(first);
         for (; first < to; first++ )
             list.add(e.next());
@@ -249,11 +250,10 @@ public class DataBaseUtil {
     /**
      * Convert a List to ArrayList
      */
-    @SuppressWarnings("unchecked")
-    public static ArrayList toArrayList(List from) {
+    public static <T> ArrayList<T> toArrayList(List<T> from) {
         if (from instanceof ArrayList)
-            return (ArrayList)from;
-        return new ArrayList(from);
+            return (ArrayList<T>)from;
+        return new ArrayList<T>(from);
     }
 
     /**
@@ -320,6 +320,13 @@ public class DataBaseUtil {
     }
     
     public static String toString(Object obj) {
+    	if(obj == null)
+    		return "";
+    	
+    	return obj.toString();
+    }
+    
+    public static String asString(Object obj) {
     	if(obj == null)
     		return "";
     	

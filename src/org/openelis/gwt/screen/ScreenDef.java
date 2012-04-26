@@ -27,6 +27,7 @@ package org.openelis.gwt.screen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -76,8 +77,8 @@ public class ScreenDef implements ScreenDefInt {
 	/**
 	 * Returns the widget referenced by the passed key value
 	 */
-	public Widget getWidget(String key) {
-		return widgets.get(key);
+	public <T extends Widget> T getWidget(String key) {
+		return (T)widgets.get(key);
 	}
 	
 	/**
@@ -124,5 +125,18 @@ public class ScreenDef implements ScreenDefInt {
 	public void setShortcuts(ArrayList<Shortcut> shortcuts) {
 		this.shortcuts = shortcuts;
 		
+	}
+
+
+	@Override
+	public <T extends Widget> T getWidget(Enum key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean validate() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

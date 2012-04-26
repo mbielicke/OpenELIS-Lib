@@ -321,7 +321,7 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     	if(validateExceptions != null)
     		return true;
     	  
-    	if (required && getValue() == null) {
+    	if (!queryMode && required && getValue() == null) {
             addValidateException(new LocalizedException("exc.fieldRequiredException"));
             ExceptionHelper.checkExceptionHandlers(this);
     	}

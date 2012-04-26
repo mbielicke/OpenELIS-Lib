@@ -45,12 +45,19 @@ public class Query implements RPC {
     }
 
     /**
-     * Gets/Sets the query fields
+     * Gets the query fields.
+     * 
+     * @return list of QueryData to create query
      */
     public ArrayList<QueryData> getFields() {
         return fields;
     }
 
+    /**
+     * Adds a new QueryData parameter to the Query.
+     * 
+     * @param field query parameter to ad  to query
+     */
     public void setFields(QueryData field) {
         if (fields == null)
             fields = new ArrayList<QueryData>(1);
@@ -58,29 +65,55 @@ public class Query implements RPC {
         fields.add(field);
     }
 
+    /**
+     * Sets the list of query parameters used to build a query.
+     * 
+     * @param fields list of query parameters to make the query
+     */
     public void setFields(ArrayList<QueryData> fields) {
         this.fields = fields;
     }
     
     /**
-     * Gets/Sets the number of rows that we want to search for in a page
+     * Gets the number of rows that we want to search for in a page
+     * 
+     * @return number of rows to be returned for each execution of the query
      */
     public int getRowsPerPage() {
         return rowsPerPage;
     }
     
+    /**
+     * Sets the number of rows to return when executing the query.
+     * 
+     * @param rows - number {@literal >} 1 seting max rows to return per query
+     * @throws IndexOutOfBoundsException if rows {@literal <} 1 
+     */
     public void setRowsPerPage(int rows) {
+    	if(rows < 1)
+    		throw new IndexOutOfBoundsException("Rows per page must >= 1");
+    	
         rowsPerPage = rows;
     }
 
     /**
-     * Gets/Sets the current page number for result lists that are paged
+     * Gets the current page number for result lists that are paged
+     * 
+     * @return the current cursor for the page to fetch
      */
     public int getPage() {
         return page;
     }
 
+    /**
+     * Sets the the current page number to be fetched
+     * 
+     * @param page positive number indicating page index
+     */
     public void setPage(int page) {
+    	if(page < 0)
+    		throw new IndexOutOfBoundsException("Page must be positive");
+    	
         this.page = page;
     }
 }

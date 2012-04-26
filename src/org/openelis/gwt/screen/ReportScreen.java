@@ -27,18 +27,15 @@ package org.openelis.gwt.screen;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.OptionListItem;
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.OptionListItem;
+import org.openelis.gwt.common.Prompt;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.ReportStatus;
-import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.screen.ScreenEventHandler;
 import org.openelis.gwt.widget.Button;
-import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.DoubleHelper;
@@ -47,12 +44,12 @@ import org.openelis.gwt.widget.IntegerHelper;
 import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.StringHelper;
+import org.openelis.gwt.widget.TextBase.Case;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.WidgetHelper;
-import org.openelis.gwt.widget.TextBase.Case;
+import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.Table;
-import org.openelis.gwt.common.Prompt;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -475,10 +472,7 @@ public class ReportScreen extends Screen {
 		d.setWidth(w + "px");
 
 
-		t = new Table();
-		t.setVisibleRows(10);
-		c = t.addColumn();
-		c.setWidth(w);
+		t = new Table.Builder(10).column(new Column.Builder(w).build()).build();
 
 		d.setPopupContext(t);
 		

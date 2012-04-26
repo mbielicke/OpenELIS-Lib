@@ -39,7 +39,9 @@ public interface ScreenDefInt {
 	
 	public HashMap<String,Widget> getWidgets();
 	
-	public Widget getWidget(String key);
+	public <T extends Widget> T getWidget(String key);
+	
+	public <T extends Widget> T getWidget(Enum key);
 	
 	public void setWidget(Widget widget, String key);
 	
@@ -53,7 +55,7 @@ public interface ScreenDefInt {
 	
 	public void setShortcuts(ArrayList<Shortcut> shortcuts);
 	
-	
 	public HashMap<Widget,Tab> getTabs();
-
+	
+	public boolean validate();
 }

@@ -408,4 +408,8 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     public void enforceMask(boolean enforce) {
     	enforceMask = enforce;
     }
+    
+    public boolean isMaskEnforced() {
+    	return enforceMask;
+    }
 }

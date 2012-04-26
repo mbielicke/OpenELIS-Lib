@@ -470,9 +470,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * 
      * @return
      */
-    @SuppressWarnings("unchecked")
     public ArrayList<Item<Integer>> getModel() {
-        return (ArrayList<Item<Integer>>)table.getModel();
+        return table.getModel();
     }
 
     /**
@@ -503,11 +502,10 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * 
      * @return
      */
-    @SuppressWarnings("unchecked")
     public Item<Integer> getSelectedItem() {
         if(table == null || table.getModel() == null || getSelectedIndex() < 0)
             return null;
-        return (Item<Integer>)table.getModel().get(getSelectedIndex());
+        return table.getRowAt(getSelectedIndex());
     }
 
     /**
@@ -829,7 +827,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     	if(validateExceptions != null)
     		return true;
     	  
-    	if (required && getValue() == null) {
+    	if (!queryMode && required && getValue() == null) {
             addValidateException(new LocalizedException("exc.fieldRequiredException"));
             ExceptionHelper.checkExceptionHandlers(this);
     	}

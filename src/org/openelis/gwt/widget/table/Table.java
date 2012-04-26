@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openelis.gwt.common.LocalizedException;
@@ -108,7 +109,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	/**
 	 * Cell that is currently being edited.
 	 */
-	protected int editingRow, editingCol;
+	protected int editingRow  = -1, editingCol = -1;
 
 	/**
 	 * Table dimensions
@@ -119,8 +120,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	/**
 	 * Model used by the Table
 	 */
-	protected ArrayList<Row> model, modelView, modelSort;
-	protected HashMap<Row, RowIndexes> rowIndex;
+	protected ArrayList<Row> model,modelView,modelSort; 
+	protected HashMap<Object, RowIndexes> rowIndex;
 
 	/**
 	 * Columns used by the Table
@@ -130,7 +131,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	/**
 	 * List of selected Rows by index in the table
 	 */
-	protected ArrayList<Integer> selections;
+	protected ArrayList<Integer> selections = new ArrayList<Integer>(5);
 
 	/**
 	 * Exception lists for the table
@@ -188,32 +189,81 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public static final int SORT_ASCENDING = 1, SORT_DESCENDING = -1;
 	
     protected Logger logger = Logger.getLogger("Widget");
-
-	/**
-	 * Default no-arg constructor that initializes all needed fields so the
-	 * layout of the table can succeed.
-	 */
-	public Table() {
-		editingRow = -1;
-		editingCol = -1;
-		rowHeight = 20;
-		visibleRows = 0;
-		enabled = false;
-		multiSelect = false;
-		editing = false;
-		hasFocus = false;
-		queryMode = false;
-		verticalScroll = Scrolling.ALWAYS;
-		horizontalScroll = Scrolling.ALWAYS;
-		selections = new ArrayList<Integer>(5);
-		columns = new ArrayList<Column>(5);
-		model = null;
-		modelView = null;
-		rowIndex = null;
+    
+	public static class Builder {
+		final int visibleRows;
+		int rowHeight = 20;
+		Integer width;
+		boolean multiSelect,hasHeader,fixScroll = true;
+		Scrolling verticalScroll = Scrolling.ALWAYS;
+		Scrolling horizontalScroll = Scrolling.ALWAYS;
+		ArrayList<Column> columns = new ArrayList<Column>(5);
+		
+		public Builder(int visibleRows) {
+			this.visibleRows = visibleRows;
+		}
+		
+		public Builder rowHeight(int rowHeight) {
+			this.rowHeight = rowHeight;
+			return this;
+		}
+		
+		public Builder multiSelect(boolean multiSelect) {
+			this.multiSelect = multiSelect;
+			return this;
+		}
+		
+		public Builder verticalScroll(Scrolling vertical) {
+			this.verticalScroll = vertical;
+			return this;
+		}
+		
+		public Builder horizontalScroll(Scrolling horizontal) {
+			this.horizontalScroll = horizontal;
+			return this;
+		}
+		
+		public Builder hasHeader(boolean hasHeader) {
+			this.hasHeader = hasHeader;
+			return this;
+		}
+		
+		public Builder column(Column col) {
+			columns.add(col);
+			return this;
+		}
+		
+		public Builder width(Integer width) {
+			this.width = width;
+			return this;
+		}
+		
+		public Builder fixScrollbar(boolean fixScroll) {
+			this.fixScroll = fixScroll;
+			return this;
+		}
+		
+		public Table build() {
+			return new Table(this);
+		}
+	}
+	
+	private Table(Builder builder) {
+		rowHeight = builder.rowHeight;
+		visibleRows = builder.visibleRows;
+		multiSelect = builder.multiSelect;
+		verticalScroll = builder.verticalScroll;
+		horizontalScroll = builder.horizontalScroll;
+		fixScrollBar = builder.fixScroll;
+		hasHeader = builder.hasHeader;
 		view = new View(this);
 		setWidget(view);
-		layout();
-
+		
+		if(builder.width != null)
+			setWidth(builder.width.intValue());
+		
+		setColumns(builder.columns);
+		
 		/*
 		 * This Handler takes care of all key events on the table when editing
 		 * and when only selection is on
@@ -409,8 +459,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * 
 	 * @return
 	 */
-	public ArrayList<? extends Row> getModel() {
-		return model;
+	@SuppressWarnings("unchecked")
+	public <T extends Row> ArrayList<T> getModel() {
+		return (ArrayList<T>)model;
 	}
 
 	/**
@@ -483,7 +534,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		 * Reset the modelView and the rowIndex hash
 		 */
 		modelView = new ArrayList<Row>();
-		rowIndex = new HashMap<Row, RowIndexes>();
+		rowIndex = new HashMap<Object, RowIndexes>();
 		for (int i = 0; i < model.size(); i++)
 			rowIndex.put(model.get(i), new RowIndexes(i, -1));
 
@@ -593,21 +644,20 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param sort
 	 * @param desc
 	 */
-	@SuppressWarnings("rawtypes")
-	public void applySort(int col, int dir, Comparator comp) {
+	public void applySort(int col, int dir, Comparator<? super Row> comp) {
 		/*
 		 * Setup the modelView as its own object if not already
 		 */
 		if (modelView == model) {
-			modelView = new ArrayList<Row>(model.size());
-			rowIndex = new HashMap<Row, RowIndexes>();
+			modelView = new ArrayList<Row>();
+			rowIndex = new HashMap<Object, RowIndexes>();
 			for (int i = 0; i < model.size(); i++) {
 				modelView.add(model.get(i));
 				rowIndex.put(model.get(i), new RowIndexes(i, -1));
 			}
 		}
 
-		Collections.sort(modelView, new Sort(col, dir, comp));
+		Collections.sort(modelView, new Sort<Row>(col, dir, comp));
 
 		/*
 		 * Set the view index of the hash based on the sort
@@ -836,8 +886,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param index
 	 * @return
 	 */
-	public Widget getColumnWidget(int index) {
-		return index > -1 ? getColumnAt(index).getCellEditor(-1).getWidget() : null;
+	@SuppressWarnings("unchecked")
+	public <T extends Widget> T getColumnWidget(int index) {
+		return (T)(index > -1 ? getColumnAt(index).getCellEditor(-1).getWidget() : null);
 	}
 	
 	/**
@@ -845,8 +896,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param name
 	 * @return
 	 */
-	public Widget getColumnWidget(String name) {
-		return getColumnWidget(getColumnByName(name));
+	@SuppressWarnings("unchecked")
+	public <T extends Widget> T getColumnWidget(String name) {
+		return (T)getColumnWidget(getColumnByName(name));
 	}
 
 	/**
@@ -896,9 +948,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	public void setColumns(ArrayList<Column> columns) {
 		this.columns = columns;
-
-		for (Column column : columns)
-			column.setTable(this);
+		
+		if(columns != null) {
+			for (Column column : columns)
+				column.setTable(this);
+		}
 
 		layout();
 	}
@@ -941,8 +995,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public Column addColumnAt(int index, String name, String label, int width) {
 		Column column;
 
-		column = new Column(this, name, label);
-		column.setWidth(width);
+		column = new Column.Builder(width).name(name).label(label).build();
 		addColumnAt(index,column);
 		column.setTable(this);
 		return column;
@@ -1000,7 +1053,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * 
 	 * @return
 	 */
-	public Row addRow() {
+	public <T extends Row> T addRow() {
 		return addRow(getRowCount(), null);
 	}
 
@@ -1011,7 +1064,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param index
 	 * @return
 	 */
-	public Row addRowAt(int index) {
+	public <T extends Row>  T addRowAt(int index) {
 		return addRow(index, null);
 	}
 
@@ -1021,7 +1074,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param row
 	 * @return
 	 */
-	public Row addRow(Row row) {
+	public <T extends Row> T addRow(T row) {
 		return addRow(getRowCount(), row);
 	}
 
@@ -1032,8 +1085,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param row
 	 * @return
 	 */
-	public Row addRowAt(int index, Row row) {
-		return addRow(index, row);
+	public <T extends Row> T addRowAt(int index, T row) {
+		return (T)addRow(index, row);
 	}
 
 	/**
@@ -1049,13 +1102,14 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 *         BeforeRowAddedHandler, otherwise the newly created Row will be
 	 *         returned or if a Row is passed to the method it will echoed back.
 	 */
-	private Row addRow(int index, Row row) {
+	@SuppressWarnings("unchecked")
+	private <T extends Row> T addRow(int index, T row) {
 		int modelIndex;
 
 		finishEditing();
 
 		if (row == null)
-			row = new Row(columns.size());
+			row = (T)new Row(columns.size());
 
 		if (!fireBeforeRowAddedEvent(index, row))
 			return null;
@@ -1089,9 +1143,9 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param index
 	 * @return
 	 */
-	public Row removeRowAt(int index) {
+	public <T extends Row> T removeRowAt(int index) {
 		int modelIndex;
-		Row row;
+		T row;
 
 		finishEditing();
 
@@ -1133,10 +1187,11 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param row
 	 * @return
 	 */
-	public Row getRowAt(int row) {
+	@SuppressWarnings("unchecked")
+	public <T extends Row> T getRowAt(int row) {
 		if(row < 0 || row >= getRowCount())
 			return null;
-		return modelView.get(row);
+		return (T)modelView.get(row);
 	}
 
 	// ************ Selection Methods ***************
@@ -1452,7 +1507,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param col
 	 * @param value
 	 */
-	public void setValueAt(int row, int col, Object value) {
+	public <T> void setValueAt(int row, int col, T value) {
 		Column column;
 		ArrayList<LocalizedException> exceptions;
 		
@@ -1477,7 +1532,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param index
 	 * @param row
 	 */
-	public void setRowAt(int index, Row row) {
+	public <T extends Row> void setRowAt(int index, T row) {
 		finishEditing();
 		modelView.set(index, row);
 		renderView(index, index);
@@ -1490,10 +1545,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param col
 	 * @return
 	 */
-	public Object getValueAt(int row, int col) {
+	public <T> T getValueAt(int row, int col) {
 		if (modelView == null || row >= modelView.size())
 			return null;
-		return modelView.get(row).getCell(col);
+		return (T)modelView.get(row).getCell(col);
 	}
 
 	/**
@@ -1930,7 +1985,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						.containsKey(col)));
 	}
 	
-	public void addException(Row row, int col, LocalizedException error) {
+	public <T extends Row> void addException(T row, int col, LocalizedException error) {
 		if(rowIndex != null && rowIndex.containsKey(row))
 			addException(rowIndex.get(row).model,col,error);
 		else 
@@ -2088,7 +2143,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 	}
 	
-	public void clearEndUserExceptions(Row row, int col) {
+	public <T extends Row> void clearEndUserExceptions(T row, int col) {
+		
 		if(rowIndex != null && rowIndex.containsKey(row))
 			clearEndUserExceptions(rowIndex.get(row).model,col);
 		else
@@ -2434,6 +2490,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	}
 	
 
+
 	/**
 	 * This private inner class is used to map Row indexes from the model to a
 	 * sorted or filtered view
@@ -2452,7 +2509,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * sort the table model using the Collections.sort() method
 	 */
 
-	private class Sort implements Comparator<Row> {
+	private class Sort<T extends Row> implements Comparator<T> {
 		int col, dir;
 	
 		@SuppressWarnings("rawtypes")
@@ -2481,7 +2538,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		ArrayList<FilterChoice> choices;
 		HashMap<Object, FilterChoice> values;
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public ArrayList<FilterChoice> getChoices(ArrayList<? extends Row> model) {
 			Object value;
 			FilterChoice choice;
@@ -2534,5 +2590,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			return false;
 		}
 	}
+
 
 }

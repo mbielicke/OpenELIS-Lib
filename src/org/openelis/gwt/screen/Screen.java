@@ -185,6 +185,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
         this.def = def;
         setWidget(def.getPanel());
     }
+    
 
 
     /**

@@ -32,6 +32,7 @@ import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.screen.Screen.State;
+import org.openelis.gwt.widget.ScreenWidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

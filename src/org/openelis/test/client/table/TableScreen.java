@@ -312,8 +312,7 @@ public class TableScreen extends Screen {
 				column.setCellRenderer(new TimeCell());
 			} else if("select".equals(editor)) {
 				Dropdown<String> sel = new Dropdown<String>();
-				Table t = new Table();
-				t.addColumn();
+				Table t = new Table.Builder(10).column(new Column.Builder(100).build()).build();
 				sel.setPopupContext(t);
 				ArrayList<Item<String>> model = new ArrayList<Item<String>>();
 				model.add(new Item<String>("1","Option 1"));

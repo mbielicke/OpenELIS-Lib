@@ -46,39 +46,78 @@ public class QueryData implements RPC {
 	protected String key;
 	protected Logical logical;
 	
-	
+	/**
+	 * No arg constructor
+	 */
 	public QueryData() {
 		setLogical(Logical.AND);
 	}
 	
+	/**
+	 * Constructor to initialize QD Object with type and query params set.
+	 * 
+	 * @param type - enum that indicates type of data for the column
+	 * @param query - the query string entered by the user
+	 */
 	public QueryData(Type type, String query) {
 		this();
 		setType(type);
 		setQuery(query);
-		
 	}
 	
+	/**
+	 * Constructor to initial QD object with Key, Type and query string. 
+	 *
+	 * @param key - string representing the column key
+	 * @param type - enum that indicates the type of data for the column
+	 * @param query - the query string entered by the user
+	 */
 	public QueryData(String key, Type type, String query) {
 		this(type,query);
 		setKey(key);
 	}
 	
+	/**
+	 * Sets the type of data this query parameter is used for
+	 * 
+	 * @param type - enum that indicates type of data for the column
+	 */
 	public void setType(Type type) {
 		this.type = type;
 	}
 	
+	/**
+	 * Gets the enum that represents the type of data for this query param.
+	 * 
+	 * @return - Type enum representing data type of column
+	 */
 	public Type getType() {
 		return type;
 	}
 	
+	/**
+	 * Gets the enum that for the logical glue how this parameter should be added to the query.
+
+	 * @return - Logical enum that returns AND by defualt
+	 */
 	public Logical getLogical() {
 		return logical;
 	}
 	
+	/**
+	 * Sets the enum that is used for the logical glue for how this parameter is added to the query
+	 * 
+	 * @param logical - Logical enum {AND,OR}
+	 */
 	public void setLogical(Logical logical) {
 		this.logical = logical;
 	}
 	
+	/**
+	 * Sets the query string entered by the user for this parameter.
+	 * 
+	 * @param query - string entered by user
+	 */
 	public void setQuery(String query) {
 		if(query.startsWith("|")) {
 			setLogical(Logical.OR);
@@ -87,18 +126,38 @@ public class QueryData implements RPC {
 			this.query = query;
 	}
 	
+	/**
+	 * Gets the query string entered by the user for this parameter.
+	 * 
+	 * @return - string the user entered for this query parameter
+	 */
 	public String getQuery() {
 		return query;
 	}
 	
+	/**
+	 * Sets the key used to identify a column in the query.
+	 * 
+	 * @param key - string identifier for column in a query
+	 */
 	public void setKey(String key) {
 		this.key = key;
 	}
 	
+	/**
+	 * Gets the key used to identify a column in the query.
+	 * 
+	 * @return - string identifying a column in a query.
+	 */
 	public String getKey() {
 		return key;
 	}
 	
+	/**
+	 * Convenience method to inspect the contents of query parameter.
+	 * 
+	 * @return - string representing contents
+	 */
 	public String toString() {
 	    return key+"("+type.toString() + ") = " + query;
 	}

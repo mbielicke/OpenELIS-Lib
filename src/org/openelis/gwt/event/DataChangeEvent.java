@@ -61,7 +61,7 @@ public class DataChangeEvent extends GwtEvent<DataChangeHandler>{
 	    }
     }
     
-    protected DataChangeEvent(Widget target) {
+    public DataChangeEvent(Widget target) {
     	this.target = target;
     }
 

@@ -81,7 +81,7 @@ public class TimeCell implements CellRenderer, CellEditor {
 		if(value instanceof Double)
 			return getTime((Double)value);
 		else
-			return value.toString();
+			return value != null ? value.toString() : "";
 	}
 
 	@Override

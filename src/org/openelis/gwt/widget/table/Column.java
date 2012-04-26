@@ -83,26 +83,88 @@ public class Column implements ColumnInt {
 
 
     protected String style;
-    /**
-     * Creates a default column that exist outside a table has a TextBox<String>
-     * has the editor.
-     */
-    public Column() {
-        this(null, "", "");
+    
+    public static class Builder {
+    	
+    	String name,label,style;
+    	int width,minWidth = 15;
+    	boolean enabled = true,
+    	        resizable = true,
+    	        isSortable, isFilterable, required;
+    	CellRenderer renderer;
+    	
+    	public Builder(int width) {
+    		this.width = width;
+    	}
+    	
+    	public Builder minWidth(int minWidth) {
+    		this.minWidth = minWidth;
+    		return this;
+    	}
+    	
+    	public Builder name(String name) {
+    		this.name = name;
+    		return this;
+    	}
+    	
+    	public Builder label(String label) {
+    		this.label = label;
+    		return this;
+    	}
+    	
+    	public Builder style(String style) {
+    		this.style = style;
+    		return this;
+    	}
+    	
+    	public Builder enabled(boolean enabled) {
+    		this.enabled = enabled;
+    		return this;
+    	}
+    	
+    	public Builder resizable(boolean resizable) {
+    		this.resizable = resizable;
+    		return this;
+    	}
+    	
+    	public Builder isSortable(boolean sortable) {
+    		this.isSortable = sortable;
+    		return this;
+    	}
+    	
+    	public Builder isFilterable(boolean filterable) {
+    		this.isFilterable = filterable;
+    		return this;
+    	}
+    	
+    	public Builder required(boolean required) {
+    		this.required = required;
+    		return this;
+    	}
+    	
+    	public Builder renderer(CellRenderer renderer) {
+    		this.renderer = renderer;
+    		return this;
+    	}
+    	
+    	public Column build() {
+    		return new Column(this);
+    	}
     }
-
-    /**
-     * Creates a column for the Table passed and defaults the editor to a
-     * TextBox<String>
-     */
-    public Column(Table table, String name, String label) {
-        this.table = table;
-        this.name = name;
-        this.label = label;
-        enabled = true;
-        resizable = true;
-        width = 15;
-        minWidth = 15;
+    
+    private Column(Builder builder) {
+        name = builder.name;
+        label = builder.label;
+        enabled = builder.enabled;
+        resizable = builder.resizable;
+        width = builder.width;
+        minWidth = builder.minWidth;
+        style = builder.style;
+        isSortable = builder.isSortable;
+        isFilterable = builder.isFilterable;
+        required = builder.required;
+        if(builder.renderer != null)
+        	setCellRenderer(builder.renderer);
     }
     
     @SuppressWarnings("rawtypes")

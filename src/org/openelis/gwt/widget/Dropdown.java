@@ -201,7 +201,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 */
 		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
-				addStyleName("Focus");
+				if(enabled)
+					display.addStyleName("Focus");
 			}
 		});
 
@@ -210,9 +211,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 */
 		addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				ArrayList<T> values;
 				
-				removeStyleName("Focus");
+				display.removeStyleName("Focus");
 				
 				finishEditing();
 
@@ -554,9 +554,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public ArrayList<Item<T>> getModel() {
-		return (ArrayList<Item<T>>)table.getModel();
+		return table.getModel();
 	}
 
 	/**
@@ -598,10 +597,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Item<T> getSelectedItem() {
 		if(table.isAnyRowSelected())
-			return (Item<T>)table.getModel().get(table.getSelectedRow());
+			return getModel().get(table.getSelectedRow());
 		return null;
 	}
 
@@ -610,7 +608,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public ArrayList<Item<T>> getSelectedItems() {
 		ArrayList<Item<T>> items = null;
 
@@ -625,7 +622,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 			}
 		}else {
 			for(int i = 0; i < table.getSelectedRows().length; i++) 
-				items.add((Item<T>)table.getModel().get(table.getSelectedRows()[i]));
+				items.add(getModel().get(table.getSelectedRows()[i]));
 		}
 		return items.size() > 0 ? items : null;
 	}
@@ -643,7 +640,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				 * If switching to multi select and checkbox column at position 0
 				 * Table will add the value to te model correctly
 				 */
-				Column col = new Column();
+				Column col = new Column.Builder(15).build();
 				col.setCellRenderer(new CheckBoxCell(new CheckBox()));
 				table.addColumnAt(0, col);
 			}else{
@@ -1168,7 +1165,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
     	if(validateExceptions != null)
     		return true;
     	  
-    	if (required && getValue() == null) {
+    	if (!queryMode && required && getValue() == null) {
             addValidateException(new LocalizedException("exc.fieldRequiredException"));
             ExceptionHelper.checkExceptionHandlers(this);
     	}
@@ -1209,11 +1206,11 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 
 	public void addExceptionStyle(String style) {
-		focus.addStyleName(style);
+		display.addStyleName(style);
 	}
 
 	public void removeExceptionStyle(String style) {
-		focus.removeStyleName(style);
+		display.removeStyleName(style);
 	}
 
 
