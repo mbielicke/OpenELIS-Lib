@@ -18,6 +18,7 @@ import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,6 +34,9 @@ public class ViewGenerator extends Generator {
 	private int count;
 	private ClassSourceFileComposerFactory composer;
 	private String lang;
+	private HashMap<String,String> keyToField;
+	private HashMap<String,String[]> tabs;
+	private HashMap<String,String> keyToWidget;
 	
 	@Override
 	public String generate(TreeLogger logger, GeneratorContext context,	String typeName) throws UnableToCompleteException {
@@ -98,69 +102,54 @@ public class ViewGenerator extends Generator {
         composer.addImport("org.openelis.gwt.widget.IntegerHelper");
         composer.addImport("org.openelis.gwt.widget.LongHelper");
         composer.addImport("org.openelis.gwt.widget.DoubleHelper");
+        composer.addImport("org.openelis.gwt.widget.HasExceptions");
         composer.addImport("org.openelis.gwt.widget.table.LabelCell");
+        composer.addImport("com.google.gwt.user.client.ui.Focusable");
+        composer.addImport("com.google.gwt.event.dom.client.FocusEvent");
         composer.addImport("com.google.gwt.user.client.Window");
         composer.addImport("com.google.gwt.core.client.GWT");
-
+        composer.addImport("org.openelis.gwt.screen.ScreenViewInt");
+        composer.addImport("com.google.gwt.event.dom.client.FocusHandler");
+        composer.addImport("org.openelis.gwt.screen.ViewPanel");
         findImports(doc.getElementsByTagName("screen").item(0));
 
         composer.addImport("org.openelis.gwt.screen.Screen");
         composer.addImport("org.openelis.gwt.screen.Tab");
         composer.addImport("org.openelis.gwt.screen.Shortcut");
         composer.addImport("com.google.gwt.event.dom.client.HasFocusHandlers");
-        composer.addImplementedInterface(viewType.getName());
+        composer.addImplementedInterface(className);
+        composer.setSuperclass("ViewPanel");
         
         sw = composer.createSourceWriter(context,printWriter);
         
-	  
-		sw.println("protected ScreenPanel panel;");
-		sw.println("protected HashMap<String,Widget> widgets;");
-		sw.println("protected HashMap<Widget,Tab> tabs;");
-		sw.println("protected ArrayList<Shortcut> shortcuts;");
-		sw.println("public String name;");
-		
-		sw.println("");
+        keyToField = new HashMap<String,String>();
+        keyToWidget = new HashMap<String,String>();
+        tabs = new HashMap<String,String[]>();
+        for(JField field : viewType.getFields()) {
+        	UIWidget anno =  field.getAnnotation(UIWidget.class);
+        	if(anno != null) {
+        		sw.println(field.getType().getSimpleSourceName() + " " +field.getName()+"_def;");
+        		keyToField.put(anno.value(), field.getName());
+        	}
+        }
+        
+        for(JMethod field : viewType.getMethods()) {
+        	UIWidget anno =  field.getAnnotation(UIWidget.class);
+        	if(anno != null) {
+        		sw.println(field.getReturnType().getSimpleSourceName() + " " +field.getName()+"_def;");
+        		keyToField.put(anno.value(), field.getName());
+        	}
+        }
+        
+        sw.println("HashMap<Focusable,Focusable> tab = new HashMap<Focusable,Focusable>();");
+        sw.println("HashMap<Focusable,Focusable> shiftTab = new HashMap<Focusable,Focusable>();");
+        sw.println("HashMap<Shortcut,Focusable> shortcuts = new HashMap<Shortcut,Focusable>();");
+        
 		sw.println("public "+className+"_"+lang+"() {");
-		sw.println("widgets = new HashMap<String,Widget>();");
-		sw.println("tabs = new HashMap<Widget,Tab>();");
-		sw.println("shortcuts = new ArrayList<Shortcut>();");
-		sw.println("panel = (ScreenPanel)GWT.create(ScreenPanel.class);");
 		sw.println("createPanel();");
 		sw.println("}");
 		
-		sw.println("public void setWidgets(HashMap<String,Widget> widgets) {");
-		sw.println("this.widgets = widgets;");
-		sw.println("}");
-		sw.println("public HashMap<String,Widget> getWidgets() {");
-		sw.println("return widgets;");
-		sw.println("}");
-		sw.println("public <T extends Widget> T getWidget(String key) {");
-		sw.println("return (T)widgets.get(key);");
-		sw.println("}");
-		sw.println("public <T extends Widget> T getWidget(Enum key) {");
-		sw.println("return (T)getWidget(key.toString());");
-		sw.println("}");
-		sw.println("public void setWidget(Widget widget, String key) {");
-		sw.println("widgets.put(key,widget);");
-		sw.println("}");
-		sw.println("public ScreenPanel getPanel() {");
-		sw.println("return panel;");
-		sw.println("}");
-		sw.println("public String getName() {");
-		sw.println("return name;");
-		sw.println("}");
-		sw.println("public void setName(String name) {");
-		sw.println("this.name = name;");
-		sw.println("}");
-		sw.println("public ArrayList<Shortcut> getShortcuts() {");
-		sw.println("return shortcuts;");
-		sw.println("}");
-		sw.println("public void setShortcuts(ArrayList<Shortcut> shortcuts) {");
-		sw.println("this.shortcuts = shortcuts;");
-		sw.println("}");
-		sw.println("public HashMap<Widget,Tab> getTabs() {");
-		sw.println("return tabs;");
-		sw.println("}");
+
 		sw.println("private void createPanel() {");
 	    
 		try {
@@ -169,21 +158,41 @@ public class ViewGenerator extends Generator {
 	    }catch(Exception e) {
 	    	e.printStackTrace();
 	    }
+		
+		for(String key : tabs.keySet()) {
+	        sw.println("tab.put("+keyToField.get(key)+"_def,"+keyToField.get(tabs.get(key)[0])+"_def);");
+	        sw.println("shiftTab.put("+keyToField.get(key)+"_def,"+keyToField.get(tabs.get(key)[1])+"_def);");
+		}
 	    
 	    sw.println("}");
 	    
-	    for(JMethod method : viewType.getMethods()) {
-	    	Field anno = method.getAnnotation(Field.class);
-			sw.println(method.getReadableDeclaration(false,false,false,false,true)+"{");
-			if(anno != null)
-				sw.println("return getWidget(\""+anno.value()+"\");");
-			sw.println("}");
-	    }
-			
-			
+	    sw.println("public void bind("+viewType.getName()+" view) { ");
+	    //for(String key : keyToField.keySet()) {
+	    //	sw.println("view."+keyToField.get(key)+ " = " +keyToField.get(key)+"_def;");
+	    //}
 	    sw.println("}");
 	    
-
+	    sw.println("public Focusable tab(Focusable widget, boolean shift) {");
+	    sw.println("if(shift)");
+	    sw.println("return shiftTab.get(widget);");
+	    sw.println("else ");
+	    sw.println("return tab.get(widget);");
+	    sw.println("}");
+	    
+	    sw.println("public Focusable shortcut(boolean ctrl, boolean shift, boolean alt, char key) {");
+	    sw.println("return shortcuts.get(new Shortcut(ctrl,shift,alt,key));");
+	    sw.println("}");
+	    
+        for(JMethod method : viewType.getMethods()) {
+        	UIWidget anno =  method.getAnnotation(UIWidget.class);
+        	if(anno != null) {
+        		sw.println(method.getReadableDeclaration(false,false,false,false,true)+"{");
+        		sw.println("return ("+method.getReturnType().getSimpleSourceName()+")"+keyToField.get(anno.value())+"_def;");
+        		sw.println("}");
+        	}
+        }
+			
+	    sw.println("}");
 	    
 		context.commit(logger, printWriter);
 		
@@ -198,8 +207,8 @@ public class ViewGenerator extends Generator {
     	screen = doc.getElementsByTagName("screen").item(0);
     	name = (attrib = screen.getAttributes().getNamedItem("name")) != null ? attrib.getNodeValue() : null;
     	
-    	if(name != null) 
-    		sw.println("name = \""+name+"\";");
+    	//if(name != null) 
+    		//sw.println("name = \""+name+"\";");
     	
         widgets = screen.getChildNodes();
         for (int i = 0; i < widgets.getLength(); i++) {
@@ -213,7 +222,7 @@ public class ViewGenerator extends Generator {
                 if(key != null)
                 	sw.println("setWidget(wid0, \""+key+"\");");
                 
-                sw.println("panel.add(wid0);");
+                sw.println("add(wid0);");
                 break;
             }
         }
@@ -264,8 +273,8 @@ public class ViewGenerator extends Generator {
         factoryMap.get(widName).getNewInstance(node,id);
         
         key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null; 
-        if(key != null) 
-        	sw.println("widgets.put(\""+key+"\", wid"+id+");");
+        if(key != null && keyToField.containsKey(key)) 
+        	sw.println(keyToField.get(key)+"_def = wid"+id+";");
         
         return true;
     }
@@ -300,6 +309,7 @@ public class ViewGenerator extends Generator {
     	visible = getAttribute(node,"visible","true");
     	css = getAttribute(node,"css");
     	id = getAttribute(node,"id");
+
     	
         if (style != null){
         	styles = style.split(",");
@@ -349,20 +359,18 @@ public class ViewGenerator extends Generator {
     	
     	key = keys.get(keys.size()-1).charAt(0);
     	
-    	sw.println("panel.shortcuts.add(new Shortcut("+ctrl+","+shift+","+alt+",'"+key+"',"+wid+"));");
+    	sw.println("shortcuts.put(new Shortcut("+ctrl+","+shift+","+alt+",Character.toUpperCase('"+key+"')),"+wid+");");
     }	
     
     public void addTabHandler(Node node,String wid) {
     	String[] tab;
     	String key;
     	
-    	
     	tab = getAttribute(node,"tab").split(",");
     	key = getAttribute(node,"key");
     	
-    	if(tab != null && tab.length > 0)
-    		sw.println("tabs.put("+wid+",new Tab(\""+key+"\",\""+tab[0]+"\",\""+tab[1]+"\"));");
-    	 
+    	tabs.put(key, tab);
+    	    	 
     }
     
     private static HashMap<String,Factory> factoryMap = new HashMap<String,Factory>();
@@ -425,7 +433,7 @@ public class ViewGenerator extends Generator {
     		    tableWidth = getAttribute(node,"tableWidth");
     		    
                 sw.println("AutoComplete wid"+id+" = new AutoComplete();");
-                sw.println("wid"+id+".addFocusHandler(panel);");
+                sw.println("wid"+id+".addFocusHandler(this);");
                 
                 if(node.getAttributes().getNamedItem("tab") != null) 
                 	addTabHandler(node,"wid"+id);
@@ -616,7 +624,7 @@ public class ViewGenerator extends Generator {
                 factoryMap.get("Date").getNewInstance(node, id);
                 sw.println("wid"+id+".setHelper(field"+id+");");
                 
-                sw.println("wid"+id+".addFocusHandler(panel);");
+                sw.println("wid"+id+".addFocusHandler(this);");
                 
                 if(enabled != null)
                 	sw.println("wid"+id+".setEnabled("+enabled+");");
@@ -649,7 +657,7 @@ public class ViewGenerator extends Generator {
     	        
     	        setDefaults(node, "wid"+id);
     	            	        
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
     	        
     		}
     		public void addImport() {
@@ -826,15 +834,19 @@ public class ViewGenerator extends Generator {
     	
         factoryMap.put("Double", new Factory() {
             public void getNewInstance(Node node, int id) {
-            	String pattern;
+            	String pattern,units,mask;
             	 
             	pattern = getAttribute(node,"pattern");
+            	units = getAttribute(node,"units");
 
                 sw.println("DoubleHelper field"+id+" = new DoubleHelper();");
                 
                 if (pattern != null) 
                     sw.println("field"+id+".setPattern(\""+pattern+"\");");
-                                
+                
+                if (units != null)
+                	sw.println("field"+id+".setUnits(\""+units+"\");");
+                
             }
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.DoubleHelper");
@@ -859,7 +871,7 @@ public class ViewGenerator extends Generator {
     		    else
     		        sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
     		    
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
 				
 				if(node.getAttributes().getNamedItem("tab") != null) 
 					addTabHandler(node,"wid"+id);
@@ -908,6 +920,7 @@ public class ViewGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.table.Table");
                 composer.addImport("org.openelis.gwt.widget.table.Column");
                 composer.addImport("org.openelis.gwt.widget.table.DropdownCell");
+                composer.addImport("org.openelis.gwt.widget.table.LabelCell");
     		}
     	});
     	
@@ -931,7 +944,7 @@ public class ViewGenerator extends Generator {
     	        
    	        	sw.println("wid"+id+".setEnabled("+enabled+");");
    	        	
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
     			
     		}
     		public void addImport() {
@@ -1115,7 +1128,7 @@ public class ViewGenerator extends Generator {
     			
     			splitPos = getAttribute(node,"splitpos");
     			
-    			sw.println("final HorizontalSplitPanel wid"+id+" = new HorizontalSplitPanel();");
+    			sw.println("HorizontalSplitPanel wid"+id+" = new HorizontalSplitPanel();");
     	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
     	        sections = ((Element)node).getElementsByTagName("section");
     	        for (int k = 0; k < sections.getLength(); k++) {
@@ -1194,6 +1207,31 @@ public class ViewGenerator extends Generator {
                 composer.addImport("org.openelis.gwt.widget.IntegerHelper");
             }
         });    	
+    	
+        factoryMap.put("fileUpload", new Factory() {
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("FileLoad wid"+id+" = new FileLoad();");
+    			if(node.getAttributes().getNamedItem("service") != null)
+    				sw.println("wid"+id+".setService(\""+node.getAttributes().getNamedItem("service").getNodeValue()+"\");");
+    			if(node.getAttributes().getNamedItem("method") != null)
+    				sw.println("wid"+id+".setMethod(\""+node.getAttributes().getNamedItem("method").getNodeValue()+"\");");
+    	        NodeList widgets = node.getChildNodes();
+    	        for (int k = 0; k < widgets.getLength(); k++) {
+    	            if (widgets.item(k).getNodeType() == Node.ELEMENT_NODE) {
+    	            	int child = ++count;
+    	                if(!loadWidget(widgets.item(k),child)){
+    	                	count--;
+    	                	continue;
+    	                }
+    	                sw.println("wid"+id+".setWidget(wid"+child+");");
+    	            }
+    	        }
+    			setDefaults(node,"wid"+id);
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.fileupload.FileLoad");
+    		}
+    	});
     	
     	factoryMap.put("label", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -1372,7 +1410,7 @@ public class ViewGenerator extends Generator {
     		    else
     		        sw.println("MultiSelection<String> wid"+id+" = new MultiSelection<String>();");
     		    
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
 				
 				if(node.getAttributes().getNamedItem("tab") != null) 
 					addTabHandler(node,"wid"+id);
@@ -1469,13 +1507,24 @@ public class ViewGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setHelper(field"+id+");");
     	        
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
     	        
     		}
     		public void addImport(){
     			composer.addImport("org.openelis.gwt.widget.PassWordTextBox");
     		}
     	});    	
+    	
+    	factoryMap.put("Percent", new Factory() {
+    		@Override
+    		public void getNewInstance(Node node, int id) {
+    			sw.println("PercentHelper field"+id+" = new PercentHelper();");
+    		}    
+    		@Override
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.PercentHelper");
+    		}
+    	});
     	
     	factoryMap.put("percentBar", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -1538,7 +1587,7 @@ public class ViewGenerator extends Generator {
     	        	sw.println("wid"+id+".setEnabled("+enabled+");");
     	        }
     	        
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
     	        
     		}
     		public void addImport() {
@@ -1614,7 +1663,7 @@ public class ViewGenerator extends Generator {
     	        setDefaults(node, "wid"+id);
     		}
     		public void addImport(){
-    			composer.addImport("com.google.gwt.user.client.ui.StackPanel");
+    			composer.addImport("org.openelis.gwt.widget.StackPanel");
     		}
     	});
     	
@@ -1627,7 +1676,24 @@ public class ViewGenerator extends Generator {
             public void addImport() {
                 composer.addImport("org.openelis.gwt.widget.StringHelper");
             }
-        });    	
+        });  
+        
+        factoryMap.put("SubPanel", new Factory() {
+        	@Override
+        	public void getNewInstance(Node node, int id) {
+        		String view;
+        		
+        		view = getAttribute(node,"view");
+        		
+        		sw.println(view +" wid"+id+" = ("+view+")GWT.create("+view+".class);");
+        		
+        	}
+        	
+        	@Override
+        	public void addImport() {
+        		
+        	}
+        });
     	
     	factoryMap.put("TabBar", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -1735,6 +1801,8 @@ public class ViewGenerator extends Generator {
                             
                             if(field.equals("Date"))
                                 field = "Datetime";
+                            else if(field.equals("Percent"))
+                            	field = "Double";
                            
                             if(name.equals("dropdown"))    
                                 sw.println("colBuilder"+id+"_"+i+".renderer(new DropdownCell(wid"+child+"));");
@@ -1829,7 +1897,7 @@ public class ViewGenerator extends Generator {
     	            sw.println("wid"+id+".selectTab(0);");
     	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
     	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
-    	    				sw.println("panel.setFocusWidget(null);");
+    	    				sw.println("finishEditing();");
     	    			sw.println("}");	
     	    		sw.println("});");
     	        }
@@ -1861,8 +1929,10 @@ public class ViewGenerator extends Generator {
     	        if (padding != null)
     	            sw.println("wid"+id+".setCellPadding("+padding+");");
     	        
-    	        rows = ((Element)node).getElementsByTagName("row");
+    	        rows = ((Element)node).getChildNodes();
     	        for (int k = 0; k < rows.getLength(); k++) {
+    	        	if(rows.item(k).getNodeType() != Node.ELEMENT_NODE)
+    	        		continue;
     	            widgets = rows.item(k).getChildNodes();
     	            int w = -1;
     	            for (int l = 0; l < widgets.getLength(); l++) {
@@ -1985,7 +2055,7 @@ public class ViewGenerator extends Generator {
     	        factoryMap.get("String").getNewInstance(node, id);
     	        sw.println("wid"+id+".setHelper(field"+id+");");
     	        
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
     	        
     		}
     		public void addImport() {
@@ -1998,6 +2068,8 @@ public class ViewGenerator extends Generator {
 				String field,fcase,max,textAlign,required,enabled,cField,mask;
 				
 				cField = (field = getAttribute(node,"field","String")).equals("Date") ? "Datetime" : field;
+				if(cField.equals("Percent"))
+					cField = "Double";
 				fcase = getAttribute(node,"case","MIXED");
 				max = getAttribute(node,"max");
 				textAlign = getAttribute(node,"textAlign","LEFT");
@@ -2044,7 +2116,7 @@ public class ViewGenerator extends Generator {
 				factoryMap.get(field).getNewInstance(node, id);
 				sw.println("wid"+id+".setHelper(field"+id+");");
 				
-				sw.println("wid"+id+".addFocusHandler(panel);");
+				sw.println("wid"+id+".addFocusHandler(this);");
 			}
 			public void addImport() {
 				composer.addImport("org.openelis.gwt.widget.TextBox");
@@ -2257,8 +2329,8 @@ public class ViewGenerator extends Generator {
 				if (node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
 				
-                sw.println("panel.addFocusHandler(wid"+id+");");
-                sw.println("wid"+id+".addFocusHandler(panel);");
+                //sw.println("panel.addFocusHandler(wid"+id+");");
+                sw.println("wid"+id+".addFocusHandler(this);");
     		}
     	
     		public void addImport() {
