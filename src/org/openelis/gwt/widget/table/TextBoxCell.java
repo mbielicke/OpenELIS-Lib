@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.TextBox;
@@ -77,7 +78,7 @@ public class TextBoxCell implements CellRenderer, CellEditor {
         if(editor.getHelper().isCorrectType(value))
         	return editor.getHelper().format(value);
         else
-        	return value.toString();
+        	return DataBaseUtil.asString(value);
     }
 
     /**
@@ -86,7 +87,7 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     @SuppressWarnings("rawtypes")
 	public void startEditing(Object value, Container container, GwtEvent event) {
     	if(!editor.getHelper().isCorrectType(value))
-    		editor.setText(value.toString());
+    		editor.setText(DataBaseUtil.asString(value));
     	else 
     		editor.setValue(value);
         editor.setWidth(container.getWidth()+"px");
@@ -112,13 +113,13 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     	editor.finishEditing();
         if (query)
             return editor.getQuery();
-        else {
-        	try {
-        		return editor.getHelper().getValue(editor.getText());
-        	}catch(Exception e){
-       			return editor.getText();
-        	}
+        
+        try {
+        	return editor.getHelper().getValue(editor.getText());
+        }catch(Exception e){
+       		return editor.getText();
         }
+        
     }
 
     @SuppressWarnings("rawtypes")

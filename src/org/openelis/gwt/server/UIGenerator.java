@@ -1844,8 +1844,10 @@ public class UIGenerator extends Generator {
     	        if (padding != null)
     	            sw.println("wid"+id+".setCellPadding("+padding+");");
     	        
-    	        rows = ((Element)node).getElementsByTagName("row");
+    	        rows = ((Element)node).getChildNodes();
     	        for (int k = 0; k < rows.getLength(); k++) {
+    	        	if(rows.item(k).getNodeType() != Node.ELEMENT_NODE)
+    	        		continue;
     	            widgets = rows.item(k).getChildNodes();
     	            int w = -1;
     	            for (int l = 0; l < widgets.getLength(); l++) {

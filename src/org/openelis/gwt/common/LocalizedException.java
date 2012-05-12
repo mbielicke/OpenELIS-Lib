@@ -8,6 +8,7 @@ public class LocalizedException extends Exception implements Cloneable {
 
 	private String key;
 	private String[] params;
+	
 
 	public LocalizedException() {
 		super();

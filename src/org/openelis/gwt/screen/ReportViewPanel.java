@@ -26,19 +26,18 @@
 package org.openelis.gwt.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.openelis.gwt.common.OptionListItem;
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.OptionListItem;
+import org.openelis.gwt.common.Prompt;
 import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.ReportStatus;
-import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.screen.Screen;
-import org.openelis.gwt.screen.ScreenEventHandler;
+import org.openelis.gwt.widget.AppStatusInt;
 import org.openelis.gwt.widget.Button;
-import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.DoubleHelper;
@@ -47,12 +46,13 @@ import org.openelis.gwt.widget.IntegerHelper;
 import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.StringHelper;
+import org.openelis.gwt.widget.TextBase.Case;
 import org.openelis.gwt.widget.TextBox;
 import org.openelis.gwt.widget.WidgetHelper;
-import org.openelis.gwt.widget.TextBase.Case;
+import org.openelis.gwt.widget.WindowInt;
+import org.openelis.gwt.widget.calendar.Calendar;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.Table;
-import org.openelis.gwt.common.Prompt;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -61,6 +61,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -71,7 +72,7 @@ import com.google.gwt.user.client.ui.Widget;
  * should extend this class and specify the report servlet service to get report
  * prompts and run the report.
  */
-public class NewReportScreen extends Screen {
+public class ReportViewPanel extends ViewPanel {
 
 	protected ArrayList<Prompt> reportParameters;
 
@@ -82,20 +83,27 @@ public class NewReportScreen extends Screen {
 
 	protected static String defaultPrinter, defaultBarcodePrinter;
 	
-	protected ReportService reportService;
-
-	protected NewReportScreen() throws Exception {
+	protected WindowInt window;
+	protected HashMap<String,String> consts;
+	protected ReportService  service;
+	
+	protected HashMap<String,Widget> widgets;
+	
+	
+	protected ReportViewPanel(String url, WindowInt window, HashMap<String,String> consts) throws Exception {
+		this.window = window;
+		this.consts = consts;
+		widgets = new HashMap<String,Widget>();
+		service = new ReportService(url);
+		
 		name = null;
 		attachmentName = null;
 		runReportInterface = "runReport";
 		promptsInterface = "getPrompts";
 		reportParameters = new ArrayList<Prompt>();
 
-		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-			public void execute() {
-				initialize();
-			}
-		});
+		initialize();
+
 	}
 
 	protected void initialize() {
@@ -152,9 +160,10 @@ public class NewReportScreen extends Screen {
 	 * Gets the prompts from the report
 	 */
 	protected void getReportParameters() {
-		window.setBusy(consts.get("gettingReportParam"));
+		//window.setBusy(consts.get("gettingReportParam"));
 
-		reportService.getPrompts(new AsyncCallback<ArrayList<Prompt>>() {
+		service.getPrompts( 
+				new AsyncCallback<ArrayList<Prompt>>() {
 					public void onSuccess(ArrayList<Prompt> result) {
 						reportParameters = result;
 						createReportWindow();
@@ -182,7 +191,7 @@ public class NewReportScreen extends Screen {
 
 		main = new VerticalPanel();
 		main.setStyleName("WhiteContentPanel");
-		def.getPanel().add(main);
+		add(main);
 		tp = new FlexTable();
 		tp.setStyleName("Form");
 		main.add(tp);
@@ -235,7 +244,7 @@ public class NewReportScreen extends Screen {
 			}
 
 			if (w != null) {
-				def.setWidget(w, p.getName());
+				widgets.put(p.getName(),w);
 				addLabelAndWidget(p, tp, w);
 			}
 		}
@@ -248,7 +257,7 @@ public class NewReportScreen extends Screen {
 		runReportButton = createButton(consts.get("btn.runReport"));
 		runReportButton.setEnabled(true);
 		hp.add(runReportButton);
-		def.setWidget(runReportButton, "run");
+		widgets.put("run",runReportButton);
 
 		addScreenHandler(runReportButton, new ScreenEventHandler<Object>() {
 			public void onClick(ClickEvent event) {
@@ -259,7 +268,7 @@ public class NewReportScreen extends Screen {
 		resetButton = createButton(consts.get("btn.reset"));
 		resetButton.setEnabled(true);
 		hp.add(resetButton);
-		def.setWidget(resetButton, "reset");
+		widgets.put("reset",resetButton);
 
 		addScreenHandler(resetButton, new ScreenEventHandler<Object>() {
 			public void onClick(ClickEvent event) {
@@ -304,7 +313,7 @@ public class NewReportScreen extends Screen {
     public void runReport(RPC rpc) {
         window.setBusy(consts.get("genReportMessage"));
 
-        reportService.runReport((Query)rpc, new AsyncCallback<ReportStatus>() {
+        service.runReport((Query)rpc, new AsyncCallback<ReportStatus>() {
             public void onSuccess(ReportStatus status) {
                 String url;
 
@@ -336,9 +345,9 @@ public class NewReportScreen extends Screen {
 		Calendar cl;
 		ArrayList<Item<String>> data;
 
-		for (String key : def.getWidgets().keySet()) {
-			if (def.getWidget(key) instanceof Dropdown) {
-				dd = ((Dropdown<String>) def.getWidget(key));
+		for (String key : widgets.keySet()) {
+			if (getWidget(key) instanceof Dropdown) {
+				dd = getWidget(key);
 				dd.clearExceptions();
 				data = dd.getModel();
 				for (Prompt p : reportParameters) {
@@ -347,12 +356,12 @@ public class NewReportScreen extends Screen {
 						break;
 					}
 				}
-			} else if (def.getWidget(key) instanceof Calendar) {
-				cl = ((Calendar) def.getWidget(key));
+			} else if (getWidget(key) instanceof Calendar) {
+				cl =  getWidget(key);
 				cl.setValue(null);
 				cl.clearExceptions();
-			} else if (def.getWidget(key) instanceof TextBox) {
-				tb = ((TextBox) def.getWidget(key));
+			} else if (getWidget(key) instanceof TextBox) {
+				tb = getWidget(key);
 				tb.setValue("");
 				tb.clearExceptions();
 			}
@@ -366,7 +375,7 @@ public class NewReportScreen extends Screen {
 	 * Resets the dropdown to prompt specified value
 	 */
 	protected void resetDropdown(Prompt p, ArrayList<Item<String>> l,
-			Dropdown<String> d) {
+	    Dropdown<String> d) {
 		String key;
 		
 		
@@ -397,13 +406,13 @@ public class NewReportScreen extends Screen {
 		QueryData field;
 
 		list = new ArrayList<QueryData>();
-		for (String key : def.getWidgets().keySet()) {
-			if (def.getWidget(key) instanceof Dropdown)
-				field = getQuery((Dropdown<String>) def.getWidget(key), key);
-			else if (def.getWidget(key) instanceof TextBox)
-				field = getQuery((TextBox) def.getWidget(key), key);
-			else if (def.getWidget(key) instanceof Calendar)
-				field = getQuery((Calendar) def.getWidget(key), key);
+		for (String key : widgets.keySet()) {
+			if (getWidget(key) instanceof Dropdown)
+				field = getQuery((Dropdown<String>)getWidget(key), key);
+			else if (getWidget(key) instanceof TextBox)
+				field = getQuery((TextBox)getWidget(key), key);
+			else if (getWidget(key) instanceof Calendar)
+				field = getQuery((Calendar)getWidget(key), key);
 			else
 				continue;
 			if (field != null)
@@ -625,6 +634,28 @@ public class NewReportScreen extends Screen {
 		}
 
 		return 0;
+	}
+
+	@Override
+	public Focusable tab(Focusable widget, boolean shift) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Focusable shortcut(boolean ctrl, boolean shift, boolean alt, char key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T getWidget(String key) {
+		return (T)widgets.get(key);
+	}
+
+	@Override
+	public HashMap<String, Widget> getWidgets() {
+		return widgets;
 	}
 	
 }

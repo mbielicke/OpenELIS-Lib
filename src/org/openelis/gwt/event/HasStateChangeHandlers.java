@@ -32,7 +32,7 @@ import com.google.gwt.event.shared.HasHandlers;
  * Interface implemented by objects that fire StateChangeEvent
  * @param <I>
  */
-public interface HasStateChangeHandlers<I> extends HasHandlers {
+public interface HasStateChangeHandlers extends HasHandlers {
 	
-	HandlerRegistration addStateChangeHandler(StateChangeHandler<I> handler);
+	HandlerRegistration addStateChangeHandler(StateChangeHandler handler);
 }

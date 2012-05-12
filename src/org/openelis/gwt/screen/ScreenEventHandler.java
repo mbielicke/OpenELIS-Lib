@@ -31,8 +31,6 @@ import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
-import org.openelis.gwt.screen.Screen.State;
-import org.openelis.gwt.widget.ScreenWidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -47,12 +45,12 @@ import com.google.gwt.user.client.ui.Widget;
  *
  * @param <Type>
  */
-public class ScreenEventHandler<Type> implements ValueChangeHandler<Type>, DataChangeHandler, StateChangeHandler<Screen.State>, ClickHandler {
+public class ScreenEventHandler<T> implements ValueChangeHandler<T>, DataChangeHandler, StateChangeHandler, ClickHandler {
 	
 	public Widget target;
 	public ArrayList<HandlerRegistration> handlers = new ArrayList<HandlerRegistration>();
 	
-	public void onValueChange(ValueChangeEvent<Type> event) {
+	public void onValueChange(ValueChangeEvent<T> event) {
 		
 	}
 
@@ -60,7 +58,7 @@ public class ScreenEventHandler<Type> implements ValueChangeHandler<Type>, DataC
 		
 	}
 
-	public void onStateChange(StateChangeEvent<State> event) {
+	public void onStateChange(StateChangeEvent event) {
 
 	}
 

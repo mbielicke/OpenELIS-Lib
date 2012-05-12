@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -63,7 +64,7 @@ public class CalendarCell implements CellRenderer, CellEditor {
     public CalendarCell(Calendar editor) {
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableCalendar");
+       // editor.setStyleName("TableCalendar");
         editor.addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
 				column.finishEditing();
@@ -76,12 +77,10 @@ public class CalendarCell implements CellRenderer, CellEditor {
      */
     @SuppressWarnings("rawtypes")
 	public void startEditing(Object value, Container container, GwtEvent event) {
-        query = false;
-        editor.setQueryMode(false);
         if(value instanceof Datetime)
         	editor.setValue((Datetime)value);
         else
-        	editor.setText(value.toString());
+        	editor.setText(DataBaseUtil.asString(value));
         editor.setWidth(container.getWidth()+"px");
         container.setEditor(editor);
         editor.selectAll();
@@ -120,8 +119,6 @@ public class CalendarCell implements CellRenderer, CellEditor {
      * Gets Formatted value from editor and sets it as the cells display
      */
     public void render(HTMLTable table, int row, int col, Object value) {
-        query = false;
-        editor.setQueryMode(false);
         table.setText(row, col, display(value));
     }
 
@@ -129,10 +126,9 @@ public class CalendarCell implements CellRenderer, CellEditor {
         query = false;
         editor.setQueryMode(false);
         if(value instanceof Datetime)
-        	editor.setValue((Datetime)value);
+        	return editor.getHelper().format((Datetime)value);
         else
-        	return value.toString();
-        return editor.getText();
+        	return DataBaseUtil.asString(value);
     }
 
     /**

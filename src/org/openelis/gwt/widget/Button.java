@@ -358,6 +358,12 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     public void setWrap(boolean wrap) {
     	setDisplay(icon,text,wrap);
     }
+
+	@Override
+	public void finishEditing() {
+		// TODO Auto-generated method stub
+		
+	}
     
     
     

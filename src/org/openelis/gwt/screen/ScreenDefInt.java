@@ -57,5 +57,4 @@ public interface ScreenDefInt {
 	
 	public HashMap<Widget,Tab> getTabs();
 	
-	public boolean validate();
 }

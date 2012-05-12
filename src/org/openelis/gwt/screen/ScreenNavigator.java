@@ -78,11 +78,23 @@ public abstract class ScreenNavigator {
     public ScreenNavigator(ScreenDefInt def) {
         oldPage = -1;
         selection = -1;
-        initialize(def);
-    }
-
-    protected void initialize(ScreenDefInt def) {
         table = (Table)def.getWidget("atozTable");
+        atozNext = (Button)def.getWidget("atozNext");
+        atozPrev = (Button)def.getWidget("atozPrev");
+        initialize();
+    }
+    
+    public ScreenNavigator(ScreenViewInt def) {
+        oldPage = -1;
+        selection = -1;
+        table = (Table)def.getWidget("atozTable");
+        atozNext = (Button)def.getWidget("atozNext");
+        atozPrev = (Button)def.getWidget("atozPrev");
+        initialize();
+    }
+    
+    protected void initialize() {
+        
         if (table != null) {
             table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
                 public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
@@ -105,7 +117,7 @@ public abstract class ScreenNavigator {
             table.setEnabled(false);
         }
 
-        atozNext = (Button)def.getWidget("atozNext");
+        
         if (atozNext != null) {
             atozNext.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {
@@ -114,7 +126,7 @@ public abstract class ScreenNavigator {
             });
         }
 
-        atozPrev = (Button)def.getWidget("atozPrev");
+        
         if (atozPrev != null) {
             atozPrev.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {

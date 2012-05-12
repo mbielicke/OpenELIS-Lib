@@ -416,4 +416,10 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         
     }
 
+	@Override
+	public void finishEditing() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

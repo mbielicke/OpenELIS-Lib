@@ -40,7 +40,7 @@ public class ReportService implements ReportServiceInt, ReportServiceIntAsync {
 	private static ScreenSessionTimer timer;
 		
     /**
-     * Constructor that takes a URL to a service and wii create a service object from it 
+     * Constructor that takes a URL to a service and will create a service object from it 
      * to make calls
      * @param url
      */

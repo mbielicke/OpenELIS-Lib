@@ -396,4 +396,10 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
     public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
         return addDomHandler(handler, MouseOutEvent.getType());
     }
+
+	@Override
+	public void finishEditing() {
+		// TODO Auto-generated method stub
+		
+	}
 }

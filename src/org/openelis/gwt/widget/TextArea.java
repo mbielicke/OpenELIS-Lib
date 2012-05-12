@@ -173,7 +173,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      * 
      * @param fireEvents
      */
-    protected void finishEditing() {
+    public void finishEditing() {
         validateExceptions = null;
         try {
             setValue(helper.getValue(textarea.getText()), true);

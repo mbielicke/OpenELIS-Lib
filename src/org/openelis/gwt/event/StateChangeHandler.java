@@ -32,8 +32,8 @@ import com.google.gwt.event.shared.EventHandler;
  *
  * @param <I>
  */
-public interface StateChangeHandler<I> extends EventHandler {
+public interface StateChangeHandler extends EventHandler {
 	
-	public void onStateChange(StateChangeEvent<I> event);
+	public void onStateChange(StateChangeEvent event);
 
 }

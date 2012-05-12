@@ -68,15 +68,9 @@ import com.google.gwt.user.client.ui.Widget;
  * to the user. 
  *
  */
-public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen.State>,
+public class Screen extends SimplePanel implements HasStateChangeHandlers,
                                      HasDataChangeHandlers, HasResizeHandlers {
 
-	/**
-	 * Enumeration of states for a Screen
-	 */
-    public enum State {
-        DEFAULT, DISPLAY, UPDATE, ADD, QUERY, DELETE
-    };
 
     /**
      * Current state of the screen
@@ -241,7 +235,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
      * state has changed
      * @param state
      */
-    public void setState(Screen.State state) {
+    public void setState(State state) {
         if (state != this.state) {
             this.state = state;
             StateChangeEvent.fire(this, state);
@@ -421,7 +415,7 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers<Screen
     /**
      * Registers a StateChangeHandler to the Screen.
      */
-    public HandlerRegistration addStateChangeHandler(StateChangeHandler<org.openelis.gwt.screen.Screen.State> handler) {
+    public HandlerRegistration addStateChangeHandler(StateChangeHandler handler) {
         return addHandler(handler, StateChangeEvent.getType());
     }
 

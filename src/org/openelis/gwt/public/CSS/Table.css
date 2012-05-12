@@ -213,10 +213,10 @@ background: url("../Images/buttonbarbg.gif") repeat-x scroll 0 0 transparent;
 }
 
 .TableCalendar .CalendarButton{
-    width:16px;
+    width:14px;
     //height:17px;
     background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
-    margin-left : -2px;
+    //margin-left : -2px;
 }
 
 .TableCalendar .TextboxSelected{

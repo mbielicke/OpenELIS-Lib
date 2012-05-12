@@ -69,4 +69,36 @@ public class Shortcut {
 		this.key = key;
 		this.wid = wid;
 	}
+	
+	public Shortcut(boolean ctrl,boolean shift,boolean alt,char key) {
+		this(ctrl,shift,alt,key,null);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Shortcut comp;
+		
+		if(!(obj instanceof Shortcut))
+			return super.equals(obj);
+		
+		comp = (Shortcut)obj;
+		
+		return comp.ctrl  == ctrl  &&
+		       comp.alt   == alt   &&
+		       comp.shift == shift && 
+		       comp.key   == key;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		
+		result = 31 * result + (ctrl  ? 1 : 0);
+		result = 31 * result + (shift ? 1 : 0);
+		result = 31 * result + (alt   ? 1 : 0);
+		result = 31 * result + key;
+		
+		return result; 
+	}
+	
 }

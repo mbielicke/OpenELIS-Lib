@@ -263,7 +263,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
      * 
      * @param fireEvents
      */
-    protected void finishEditing() {
+    public void finishEditing() {
     	String text;
     	
     	text = textbox.getText();

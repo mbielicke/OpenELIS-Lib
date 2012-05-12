@@ -32,12 +32,15 @@ import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.event.BeforeCloseEvent;
 import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.screen.Screen;
+import org.openelis.gwt.screen.ViewPanel;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -282,7 +285,13 @@ public class Window extends FocusPanel implements WindowInt {
             RootPanel.get().removeStyleName("ScreenLoad");
             setStatus("Done","");
             setKeyHandling();
+        }else {
+        	setVisible(true);
+        	setKeyHandling();
+        	setStatus("Done","");
+        	RootPanel.get().removeStyleName("ScreenLoad");
         }
+
         
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
@@ -298,12 +307,16 @@ public class Window extends FocusPanel implements WindowInt {
          * This handler is added to forward the key press event if received by the window 
          * down to the screen.
          */
-        addDomHandler(new KeyPressHandler() {
-         	 public void onKeyPress(KeyPressEvent event) {
+        addDomHandler(new KeyDownHandler() {
+         	 public void onKeyDown(KeyDownEvent event) {
          		 if(content instanceof Screen)
-         			 KeyPressEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());   
+         			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());
+         		 if(content instanceof ViewPanel)
+         			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((ViewPanel)content));
+         		 //event.stopPropagation();
+         		 //event.preventDefault();
         	 }
-        },KeyPressEvent.getType());
+        },KeyDownEvent.getType());
     }
     
     public void setName(String name) {

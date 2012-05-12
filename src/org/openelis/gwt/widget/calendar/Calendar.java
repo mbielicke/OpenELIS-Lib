@@ -144,7 +144,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
         display.setWidget(0,0,textbox);
         display.setWidget(0,1,button);
-        display.getCellFormatter().setWidth(0, 1, "16px");
+        display.getCellFormatter().setWidth(0, 1, "14px");
         
         initWidget(display);
 
@@ -168,12 +168,16 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
+        		
+        		finishEditing();
+        		/*
             	if(!showingCalendar && isEnabled()) {
             		if(queryMode)
             			validateQuery();
             		else
             			finishEditing(true);
             	}
+            	*/
         	}
         });
         
@@ -190,7 +194,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-            
+            	if(!showingCalendar && isEnabled())
             		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
             }
         });

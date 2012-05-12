@@ -25,45 +25,45 @@
 */
 package org.openelis.gwt.event;
 
+import org.openelis.gwt.screen.State;
+
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
  * This class will fire events to registered objects for StateChange actions
- *
- * @param <I>
  */
-public class StateChangeEvent<I> extends GwtEvent<StateChangeHandler<I>>{
+public class StateChangeEvent extends GwtEvent<StateChangeHandler>{
 	
-	private static Type<StateChangeHandler<?>> TYPE;
-	private I state;
+	private static Type<StateChangeHandler> TYPE;
+	private State state;
 	
 	@SuppressWarnings("rawtypes")
-    public static <I> void fire(HasStateChangeHandlers source, I state) {
+    public static void fire(HasStateChangeHandlers source, State state) {
 	    if (TYPE != null) {
-	      StateChangeEvent<I> event = new StateChangeEvent<I>(state);
+	      StateChangeEvent event = new StateChangeEvent(state);
 	      source.fireEvent(event);
 	    }
     }
 
-    public StateChangeEvent(I state) {
+    public StateChangeEvent(State state) {
     	this.state = state;
     }
     
 	@Override
-	protected void dispatch(StateChangeHandler<I> handler) {
+	protected void dispatch(StateChangeHandler handler) {
 		handler.onStateChange(this);
 		
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public final Type<StateChangeHandler<I>> getAssociatedType() {
+	public final Type<StateChangeHandler> getAssociatedType() {
 		return (Type) TYPE;
 	}
 
-	public static Type<StateChangeHandler<?>> getType() {
+	public static Type<StateChangeHandler> getType() {
 	   if (TYPE == null) {
-	      TYPE = new Type<StateChangeHandler<?>>();
+	      TYPE = new Type<StateChangeHandler>();
 	    }
 	    return TYPE;
 	 }
@@ -72,7 +72,7 @@ public class StateChangeEvent<I> extends GwtEvent<StateChangeHandler<I>>{
 	 * Method returns the new State for the source object
 	 * @return
 	 */
-	public I getState() {
+	public State getState() {
 		return state;
 	}
 }

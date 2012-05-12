@@ -2,6 +2,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.TextBox;
@@ -35,7 +36,7 @@ public class TimeCell implements CellRenderer, CellEditor {
 		if(value instanceof Double)
 			editor.setValue(getTime((Double)value));
 		else
-			editor.setText(value.toString());
+			editor.setText(DataBaseUtil.asString(value));
 		editor.setWidth(container.getWidth()+"px");
 		container.setEditor(editor);
 		editor.selectAll();
@@ -49,21 +50,21 @@ public class TimeCell implements CellRenderer, CellEditor {
 
 	@Override
 	public Object finishEditing() {
+		editor.finishEditing();
         if (query)
             return editor.getQuery();
-        
-        if(!editor.hasExceptions())
-        	return getHours(editor.getValue());
-        else
-        	return editor.getText();
+        else {
+        	if(!editor.hasExceptions())
+        		return getHours(editor.getValue());
+        	else
+        		return editor.getText();
+        }
 	}
 
 	@Override
 	public ArrayList<LocalizedException> validate(Object validate) {
-        if (query) 
-            return editor.getValidateExceptions();
-
-        return editor.getValidateExceptions();
+		//return editor.getHelper().validate(validate);
+		return new ArrayList<LocalizedException>();
 	}
 
 	@Override

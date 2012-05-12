@@ -363,7 +363,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+        removeExceptionStyle("InputError");
+        removeExceptionStyle("InputWarning");
     }
     
     public void clearEndUserExceptions() {

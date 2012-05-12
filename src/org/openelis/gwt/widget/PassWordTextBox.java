@@ -204,7 +204,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * This method takes raw input from widget and will call helper to get the 
 	 * appropriate value to set and also set any validation exceptions if present
 	 */
-	protected void finishEditing() {
+	public void finishEditing() {
 		String text;
 
 		text = textbox.getText();

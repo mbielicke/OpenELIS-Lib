@@ -48,6 +48,10 @@ public interface ScreenWidgetInt {
      * @return TRUE if the screen widget is enabled, FALSE otherwise.
      */
     public boolean isEnabled();
+    
+    
+    public void finishEditing();
+  
 
     
 }

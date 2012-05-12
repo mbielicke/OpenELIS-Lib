@@ -36,6 +36,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -43,6 +45,7 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -63,6 +66,7 @@ public class Browser extends Composite {
      * The main panel used to contain and display windows
      */
     protected AbsolutePanel browser;
+    protected FocusPanel    fp;
     
     /*
      * Hash of all currently displayed windows
@@ -102,6 +106,7 @@ public class Browser extends Composite {
     
     public void init(boolean size, int limit) {
         browser = new AbsolutePanel();
+        fp = new FocusPanel();
         windows = new HashMap<Window, WindowValues>();
         windowsByKey = new HashMap<String,Window>();
         
@@ -116,7 +121,9 @@ public class Browser extends Composite {
         };
         
         this.limit = limit;
-        initWidget(browser);
+        
+        fp.add(browser);
+        initWidget(fp);
         
         dragController.setBehaviorDragProxy(true);
         dragController.registerDropController(dropController);
@@ -146,12 +153,15 @@ public class Browser extends Composite {
         /**
          * This handler is added to forward the key press event on to the focused window if received by the browser
          */
-        addDomHandler(new KeyPressHandler() {
-        	public void onKeyPress(KeyPressEvent event) {
-   				KeyPressEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+        addDomHandler(new KeyDownHandler() {
+        	public void onKeyDown(KeyDownEvent event) {
+   				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
+   				//event.stopPropagation();
+   				//event.preventDefault();
         		
         	}
-        },KeyPressEvent.getType());
+        },KeyDownEvent.getType());
+        
     } 
     
     /**

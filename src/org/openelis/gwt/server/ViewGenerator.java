@@ -21,7 +21,6 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -36,7 +35,6 @@ public class ViewGenerator extends Generator {
 	private String lang;
 	private HashMap<String,String> keyToField;
 	private HashMap<String,String[]> tabs;
-	private HashMap<String,String> keyToWidget;
 	
 	@Override
 	public String generate(TreeLogger logger, GeneratorContext context,	String typeName) throws UnableToCompleteException {
@@ -123,7 +121,7 @@ public class ViewGenerator extends Generator {
         sw = composer.createSourceWriter(context,printWriter);
         
         keyToField = new HashMap<String,String>();
-        keyToWidget = new HashMap<String,String>();
+
         tabs = new HashMap<String,String[]>();
         for(JField field : viewType.getFields()) {
         	UIWidget anno =  field.getAnnotation(UIWidget.class);
@@ -144,6 +142,7 @@ public class ViewGenerator extends Generator {
         sw.println("HashMap<Focusable,Focusable> tab = new HashMap<Focusable,Focusable>();");
         sw.println("HashMap<Focusable,Focusable> shiftTab = new HashMap<Focusable,Focusable>();");
         sw.println("HashMap<Shortcut,Focusable> shortcuts = new HashMap<Shortcut,Focusable>();");
+        sw.println("HashMap<String,Widget> widgets = new HashMap<String,Widget>();");
         
 		sw.println("public "+className+"_"+lang+"() {");
 		sw.println("createPanel();");
@@ -160,18 +159,12 @@ public class ViewGenerator extends Generator {
 	    }
 		
 		for(String key : tabs.keySet()) {
-	        sw.println("tab.put("+keyToField.get(key)+"_def,"+keyToField.get(tabs.get(key)[0])+"_def);");
-	        sw.println("shiftTab.put("+keyToField.get(key)+"_def,"+keyToField.get(tabs.get(key)[1])+"_def);");
+	        sw.println("tab.put((Focusable)widgets.get(\""+key+"\"),(Focusable)widgets.get(\""+tabs.get(key)[0]+"\"));");
+	        sw.println("shiftTab.put((Focusable)widgets.get(\""+key+"\"),(Focusable)widgets.get(\""+tabs.get(key)[1]+"\"));");
 		}
 	    
 	    sw.println("}");
-	    
-	    sw.println("public void bind("+viewType.getName()+" view) { ");
-	    //for(String key : keyToField.keySet()) {
-	    //	sw.println("view."+keyToField.get(key)+ " = " +keyToField.get(key)+"_def;");
-	    //}
-	    sw.println("}");
-	    
+	    	    
 	    sw.println("public Focusable tab(Focusable widget, boolean shift) {");
 	    sw.println("if(shift)");
 	    sw.println("return shiftTab.get(widget);");
@@ -181,6 +174,14 @@ public class ViewGenerator extends Generator {
 	    
 	    sw.println("public Focusable shortcut(boolean ctrl, boolean shift, boolean alt, char key) {");
 	    sw.println("return shortcuts.get(new Shortcut(ctrl,shift,alt,key));");
+	    sw.println("}");
+	    
+	    sw.println("public HashMap<String,Widget> getWidgets() {");
+	    sw.println("return widgets;");
+	    sw.println("}");
+	    
+	    sw.println("public <T> T getWidget(String key) {");
+	    sw.println("return (T)widgets.get(key);");
 	    sw.println("}");
 	    
         for(JMethod method : viewType.getMethods()) {
@@ -273,8 +274,11 @@ public class ViewGenerator extends Generator {
         factoryMap.get(widName).getNewInstance(node,id);
         
         key = (attrib = node.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null; 
-        if(key != null && keyToField.containsKey(key)) 
-        	sw.println(keyToField.get(key)+"_def = wid"+id+";");
+        if(key != null) {
+        	sw.println("widgets.put(\""+key+"\",wid"+id+");");
+        	if(keyToField.containsKey(key))
+        		sw.println(keyToField.get(key)+"_def = wid"+id+";");
+        }
         
         return true;
     }
