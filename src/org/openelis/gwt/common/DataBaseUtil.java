@@ -324,4 +324,54 @@ public class DataBaseUtil {
             return o.toString();
         return "";            
     }
+    
+    /**
+     * Concats two strings together. Null parameters are ignored.
+     */
+    public static String concat(Object a, Object b) {
+        StringBuffer buf;
+
+        buf = new StringBuffer();
+        if (a != null)
+            buf.append(a.toString().trim());
+        if (b != null)
+            buf.append(b.toString().trim());
+
+        return buf.toString();
+    }
+
+    /**
+     * Concats two strings together with the specified delimiter. Null
+     * parameters are ignored and the delimiter is not used.
+     */
+    public static String concatWithSeparator(Object a, Object delimiter, Object b) {
+        StringBuffer buf;
+
+        buf = new StringBuffer();
+        if (a != null)
+            buf.append(a.toString().trim());
+        if (b != null) {
+            if (a != null)
+                buf.append(delimiter);
+            buf.append(b.toString().trim());
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Concats a list of objects together using delimiter.
+     */
+    public static String concatWithSeparator(List list, Object delimiter) {
+        StringBuffer buf;
+
+        buf = new StringBuffer();
+        for (Object i : list) {
+            if (i != null) {
+                if (buf.length() > 0)
+                    buf.append(delimiter);
+                buf.append(i.toString().trim());
+            }
+        }
+        return buf.toString();
+    }
 }
