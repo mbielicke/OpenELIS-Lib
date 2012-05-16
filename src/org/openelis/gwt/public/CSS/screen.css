@@ -642,10 +642,10 @@ background:white;
     background:url("../Images/page_finddisabled.gif") no-repeat;
 }
 .chartButtonImage{
-    background:url("../Images/chart_line.png") no-repeat;
+    background:url("../Images/chart_curve.png") no-repeat;
 }
 .disabled .chartButtonImage{
-    background:url("../Images/chart_linedisabled.png") no-repeat;
+    background:url("../Images/chart_curvedisabled.png") no-repeat;
 }
  
 /*******End General Button Class***********/
