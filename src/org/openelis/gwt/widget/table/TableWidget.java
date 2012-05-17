@@ -1138,7 +1138,8 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     			dragController.addBeforeStartHandler(new BeforeDragStartHandler<TableRow>() {
 					public void onBeforeDragStart(
 							BeforeDragStartEvent<TableRow> event) {
-						finishEditing();
+						if(isEditing())
+							event.cancel();
 					}
     			});
       			for(TableRow row : renderer.rows) 
