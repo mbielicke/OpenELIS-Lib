@@ -483,6 +483,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     		select(row,col);
     }
     
+    public boolean isEditing() {
+    	return activeWidget != null;
+    }
+    
     /**
      * Scrolls the table to the first selected index in the selected list.  The Row will be at the top of
      * the view regardless of the current position.
