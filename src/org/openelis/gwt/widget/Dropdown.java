@@ -67,6 +67,8 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     public ArrayList<TableDataRow> searchText;
     private static PartialCompare partialCompare;
     private int delay = 0;
+
+    private boolean noBlur;
     
     static {
         partialCompare = new PartialCompare();
@@ -89,6 +91,9 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
                     	selectRow((Integer)widget.getSelectedRows()[0]);
                 }
                 widget.showTable();
+                noBlur = true;
+                setFocus(false);
+                
             }
 
         }
@@ -191,6 +196,11 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     }
     
     private void doBlur() {
+    	if(noBlur) {
+    		noBlur = false;
+    		return;
+    	}
+    	
         String textValue = getTextBoxDisplay();
 
         textbox.setText(textValue.trim());
