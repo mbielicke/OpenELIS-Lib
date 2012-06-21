@@ -1000,6 +1000,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public void clearExceptions() {
 		exceptions = null;
+		refresh();
 		
 	}
 
