@@ -1000,8 +1000,14 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public void clearExceptions() {
 		exceptions = null;
+	}
+	
+	public void clearCellExceptions() {
+		for(int i = 0; i < model.size(); i++) {
+			for(int j = 0; j < model.get(i).size(); j++)
+				((TableDataCell)model.get(i).cells.get(j)).clearExceptions();
+		}
 		refresh();
-		
 	}
 
 	public Field getField() {
