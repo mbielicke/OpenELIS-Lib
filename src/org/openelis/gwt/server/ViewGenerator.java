@@ -21,6 +21,9 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -201,12 +204,21 @@ public class ViewGenerator extends Generator {
 
      
     public void createWidgets() throws Exception{
-    	String name,key;
+    	String name,key,width,height;
     	Node attrib,screen,widget;
     	NodeList widgets;
     	
     	screen = doc.getElementsByTagName("screen").item(0);
     	name = (attrib = screen.getAttributes().getNamedItem("name")) != null ? attrib.getNodeValue() : null;
+    	width = getAttribute(screen,"width");
+    	height = getAttribute(screen,"height");
+    	
+    	if(width != null)
+    		sw.println("setWidth(\""+width+"\");");
+    	
+    	if(height != null)
+    	sw.println("setHeight(\""+height+"\");");
+    	
     	
     	//if(name != null) 
     		//sw.println("name = \""+name+"\";");
@@ -836,6 +848,51 @@ public class ViewGenerator extends Generator {
     		}
     	});
     	
+    	factoryMap.put("DockLayout",new Factory() {
+    		@Override
+    		public void getNewInstance(Node node, int id) {
+    			String unit;
+    			NodeList widgets;
+    			Node widget;
+    			
+    			unit = getAttribute(node,"unit","PX");
+    			
+    			
+    			sw.println("DockLayoutPanel wid"+id+" = new DockLayoutPanel(Unit."+unit+");");
+    			
+    			widgets = node.getChildNodes();
+                for (int k = 0; k < widgets.getLength(); k++) {
+                	
+                	widget = widgets.item(k);
+                    if (widget.getNodeType() == Node.ELEMENT_NODE) {
+                        int child = ++count;
+                        if(!loadWidget(widget.getChildNodes().item(0),count)){
+                            count--;
+                            continue;
+                        }
+                        if(widget.getNodeName().equals("Center"))
+                        	sw.println("wid"+id+".add(wid"+child+");");
+                        else if(widget.getNodeName().equals("East"))
+                        	sw.println("wid"+id+".addEast(wid"+child+","+getAttribute(widget,"size")+");");
+                        else if(widget.getNodeName().equals("West"))
+                        	sw.println("wid"+id+".addWest(wid"+child+","+getAttribute(widget,"size")+");");
+                        else if(widget.getNodeName().equals("North"))
+                        	sw.println("wid"+id+".addNorth(wid"+child+","+getAttribute(widget,"size")+");");
+                        else if(widget.getNodeName().equals("South"))
+                        	sw.println("wid"+id+".addSouth(wid"+child+","+getAttribute(widget,"size")+");");
+                    }
+                }    			
+                
+                setDefaults(node,"wid"+id);
+    		}
+    		
+    		@Override
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.DockLayoutPanel");
+    			composer.addImport("com.google.gwt.dom.client.Style.Unit");
+    		}
+    	});
+    	
         factoryMap.put("Double", new Factory() {
             public void getNewInstance(Node node, int id) {
             	String pattern,units,mask;
@@ -870,10 +927,13 @@ public class ViewGenerator extends Generator {
     		    enabled = getAttribute(node,"enabled");
     		    required = getAttribute(node,"required");
     		    
-    		    if(field.equals("Integer")) 
+    		    if(field.equals("Integer")) {
     		        sw.println("Dropdown<Integer> wid"+id+" = new Dropdown<Integer>();");
-    		    else
+    		        sw.println("wid"+id+".setHelper(new IntegerHelper());");
+    		    }else {
     		        sw.println("Dropdown<String> wid"+id+" = new Dropdown<String>();");
+    		        sw.println("wid"+id+".setHelper(new StringHelper());");
+    		    }
     		    
 				sw.println("wid"+id+".addFocusHandler(this);");
 				
@@ -1485,6 +1545,47 @@ public class ViewGenerator extends Generator {
     		}
     	});    	
     	
+    	factoryMap.put("OpenELISLayout",new Factory() {
+    		@Override
+    		public void getNewInstance(Node node, int id) {
+    			NodeList widgets;
+    			Node widget;			
+    			String width,height;
+    			
+    			//width = getAttribute(node,"width");
+    			//height = getAttribute(node,"height");
+    			
+    			sw.println("OpenELISLayout wid"+id+" = new OpenELISLayout();");
+    			
+    			widgets = node.getChildNodes();
+                for (int k = 0; k < widgets.getLength(); k++) {
+                	
+                	widget = widgets.item(k);
+                    if (widget.getNodeType() == Node.ELEMENT_NODE) {
+                        int child = ++count;
+                        if(!loadWidget(widget.getChildNodes().item(0),count)){
+                            count--;
+                            continue;
+                        }
+                        if(widget.getNodeName().equals("Center"))
+                        	sw.println("wid"+id+".addContent(wid"+child+");");
+                        else if(widget.getNodeName().equals("Left"))
+                        	sw.println("wid"+id+".addLeft(wid"+child+");");
+                    }
+                }    			
+                
+                //sw.println("wid"+id+".setWidth("+width+");");
+                //sw.println("wid"+id+".setHeight("+height+");");
+                
+                setDefaults(node,"wid"+id);
+    		}
+    		
+    		@Override
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.OpenELISLayout");
+    		}
+    	});
+    	
     	factoryMap.put("password", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			String enabled,required;
@@ -1637,6 +1738,46 @@ public class ViewGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.ScrollableTabBar");
     		}
     	});    	
+    	
+    	factoryMap.put("SplitLayout", new Factory() {
+    		@Override
+    		public void getNewInstance(Node node, int id) {
+    			NodeList widgets;
+    			Node widget;
+    			
+    			sw.println("SplitLayoutPanel wid"+id+" = new SplitLayoutPanel();");
+    			
+    			widgets = node.getChildNodes();
+                for (int k = 0; k < widgets.getLength(); k++) {
+                	
+                	widget = widgets.item(k);
+                    if (widget.getNodeType() == Node.ELEMENT_NODE) {
+                        int child = ++count;
+                        if(!loadWidget(widget.getChildNodes().item(0),count)){
+                            count--;
+                            continue;
+                        }
+                        if(widget.getNodeName().equals("Center"))
+                        	sw.println("wid"+id+".add(wid"+child+");");
+                        else if(widget.getNodeName().equals("East"))
+                        	sw.println("wid"+id+".addEast(wid"+child+","+getAttribute(widget,"size")+");");
+                        else if(widget.getNodeName().equals("West"))
+                        	sw.println("wid"+id+".addWest(wid"+child+","+getAttribute(widget,"size")+");");
+                        else if(widget.getNodeName().equals("North"))
+                        	sw.println("wid"+id+".addNorth(wid"+child+","+getAttribute(widget,"size")+";)");
+                        else if(widget.getNodeName().equals("South"))
+                        	sw.println("wid"+id+".addSouth(wid"+child+","+getAttribute(widget,"size")+";)");
+                    }
+                }    			
+                
+                setDefaults(node,"wid"+id);
+    		}
+    		
+    		@Override
+    		public void addImport() {
+    			composer.addImport("com.google.gwt.user.client.ui.SplitLayoutPanel");
+    		}
+    	});
     	
     	factoryMap.put("StackPanel", new Factory(){
     		public void getNewInstance(Node node, int id) {
@@ -1908,6 +2049,66 @@ public class ViewGenerator extends Generator {
     		}
     		public void addImport() {
     			composer.addImport("org.openelis.gwt.widget.TabPanel");
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");
+    		}
+    	});
+    	
+    	factoryMap.put("TabLayout", new Factory() {
+    		public void getNewInstance(Node node, int id){
+    			String width,height,text,tabKey,visible;
+    			NodeList tabs,widgets;
+    			Node tab,widget;
+    			
+    			width = getAttribute(node,"width");
+    			height = getAttribute(node,"height");
+    			
+    			sw.println("TabLayout wid"+id+" = new TabLayout(20);");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+    	        if(width != null)
+    	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
+    	        if(height != null)
+    	        	sw.println("wid"+id+".setHeight(\""+height+"\");");
+
+    	        tabs = ((Element)node).getElementsByTagName("tab");
+    	        for (int k = 0; k < tabs.getLength(); k++) {
+    	        	tab = tabs.item(k);
+    	            widgets = tabs.item(k).getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	
+    	                    if(!loadWidget(widget,child)){
+    	    	               count--;
+    	    	               continue;    	    	            
+    	    	            }
+    	                    
+    	                    tabKey = getAttribute(tab,"tab");
+    	                    text = getAttribute(tab,"text","");
+    	                    visible = getAttribute(tab,"visible","true");
+    	                    
+    	                    if(tabKey != null)
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\",\""+tabKey+"\");");
+    	                    else
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
+
+                    		sw.println("wid"+id+".setTabVisible(wid"+id+".getWidgetCount() -1,"+visible+");");
+    	                }
+    	            }
+    	            sw.println("wid"+id+".selectTab(0);");
+    	            /*
+    	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
+    	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
+    	    				sw.println("panel.setFocusWidget(null);");
+    	    			sw.println("}");	
+    	    		sw.println("});");
+    	    		*/
+    	        }
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.TabLayout");
     			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
     			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
     			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");

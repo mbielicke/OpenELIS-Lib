@@ -78,7 +78,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     protected Button                                button;
     protected PopupPanel                            popup;
     protected TextArea                              ta;
-    protected boolean                               enabled,required,showing,queryMode;
+    protected boolean                               required,showing,queryMode;
     protected int                                   maxLength;
     
     protected TextBase                              textbox;
@@ -125,7 +125,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
          */
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		if(enabled) {
+        		if(isEnabled()) {
         			display.addStyleName("Focus");
         			selectAll();
         		}
@@ -139,6 +139,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
         		unselectAll();
+        		finishEditing();
         	}
         });
         
@@ -155,14 +156,10 @@ public class EditBox extends Composite implements ScreenWidgetInt,
 
         textbox.addBlurHandler(new BlurHandler() {
             public void onBlur(BlurEvent event) {
-            	
-            	if(!showing && isEnabled()) {
-            		if(queryMode)
-            			validateQuery();
-            		else
-            			finishEditing();
+
+            	if(!showing && isEnabled()) 
             		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-            	}
+            	
             }
         });
     	
@@ -266,23 +263,30 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     public void finishEditing() {
     	String text;
     	
-    	text = textbox.getText();
+    	if(isEnabled()) {
+    		if(queryMode)
+    			validateQuery();
+    		else {
+    			
+    			text = textbox.getText();
     	
-    	if(textbox.enforceMask && textbox.picture.equals(text)) {
-    		text = "";
-    		textbox.setText("");
-    	}
+    			if(textbox.enforceMask && textbox.picture.equals(text)) {
+    				text = "";
+    				textbox.setText("");
+    			}
     		
-    	validateExceptions = null;
+    			validateExceptions = null;
         
-    	try {
-            setValue(helper.getValue(text), true);
-            if (required && value == null) 
-                addValidateException(new LocalizedException("exc.fieldRequiredException"));
-        } catch (LocalizedException e) {
-            addValidateException(e);
-        }
-        ExceptionHelper.checkExceptionHandlers(this);
+    			try {
+    				setValue(helper.getValue(text), true);
+    				if (required && value == null) 
+    					addValidateException(new LocalizedException("exc.fieldRequiredException"));
+    			} catch (LocalizedException e) {
+    				addValidateException(e);
+    			}
+    			ExceptionHelper.checkExceptionHandlers(this);
+    		}
+    	}
     }
 
     /**
@@ -404,7 +408,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+        ExceptionHelper.clearExceptionHandlers(this);
     }
     
     public void clearEndUserExceptions() {
@@ -531,7 +535,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     @Override
     public void setEnabled(boolean enabled) {
         button.setEnabled(enabled);
-        this.enabled = enabled;
+        textbox.setReadOnly(!enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
@@ -541,7 +545,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
 
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return !textbox.isReadOnly();
 	}
 
 	@Override

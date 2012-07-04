@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Label;
@@ -64,12 +65,10 @@ public class LabelCell implements CellRenderer {
     }
     
     public String display(Object value) {
-    	try {
-    		editor.setValue(value);
-    	}catch(ClassCastException e) {
-    		return value.toString();
-    	}
-        return editor.getText();
+        if(editor.getHelper().isCorrectType(value))
+        	return editor.getHelper().format(value);
+        else
+        	return DataBaseUtil.asString(value);
     }
 
     public void renderQuery(HTMLTable table,
@@ -82,7 +81,7 @@ public class LabelCell implements CellRenderer {
 
 	@Override
 	public ArrayList<LocalizedException> validate(Object value) {
-		return null;
+		 return editor.getHelper().validate(value);
 	}
     
 }

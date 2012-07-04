@@ -3,24 +3,23 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TabPanel extends com.google.gwt.user.client.ui.TabPanel { 
+public class TabLayout extends com.google.gwt.user.client.ui.TabLayoutPanel { 
 	private ArrayList<String> keyTabList = new  ArrayList<String>();
-	private ArrayList<Grid> tabWidgets = new ArrayList<Grid>();
 	private String width;	
 	private String height;
 	private TabBar bar;
 	private TabBarScroller barScroller;
 	
 	
-	public TabPanel() {
-		super();
+	public TabLayout(double height) {
+		super(height,Unit.PX);
+		/*
 		VerticalPanel panel = ((VerticalPanel)getWidget());
 		bar = (TabBar)panel.getWidget(0);
 		Widget deck = panel.getWidget(1);
@@ -28,6 +27,8 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		panel.clear();
 		panel.add(barScroller);
 		panel.add(deck);
+		*/
+		
 	}
 
 	public void add(Widget wid, String text, String tab) {
@@ -37,37 +38,25 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	
 	@Override
 	public void add(Widget wid, final String tabText) {
-		Grid tabWidget;
-		AbsolutePanel icon;
-		
-		tabWidget = new Grid(1,2);
-		icon = new AbsolutePanel();
-		tabWidget.setText(0, 0, tabText);
-		tabWidget.setWidget(0,1,icon);
-		tabWidget.getCellFormatter().setWordWrap(0, 0, false);
-		
-		
-		tabWidgets.add(tabWidget);
-		
 		final ScrollPanel scroll = new ScrollPanel();
 		scroll.setWidget(wid);
-        super.add(scroll, tabWidget);
+        super.add(scroll, tabText);
 		scroll.setWidth(width);
         scroll.setHeight(height);
 	}
 	
 	public String getNextTabWidget() {
-		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[0];
+		return keyTabList.get(getSelectedIndex()).split(",")[0];
 	}
 	
 	public String getPrevTabWidget() {
-		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[1];
+		return keyTabList.get(getSelectedIndex()).split(",")[1];
 	}
 	
 	@Override
 	public void setWidth(String width) {
 		this.width = width;
-		barScroller.setWidth(width);
+		//barScroller.setWidth(width);
 		super.setWidth(width);
 	}
 	
@@ -78,26 +67,19 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	}
 	
 	public void setTabVisible(int index, boolean visible) {
-		((Widget)getTabBar().getTab(index)).setVisible(visible);
+		getTabWidget(index).setVisible(visible);
+		//((Widget)getTabBar().getTab(index)).setVisible(visible);
 		if(isAttached()) {
 			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 				public void execute() {
-					barScroller.checkScroll();
+					//barScroller.checkScroll();
 				}
 			});
 		}
 	}
 	
 	public void checkScroll() {
-		barScroller.checkScroll();
-	}
-	
-	public void setTabInError(int index) {
-		tabWidgets.get(index).getWidget(0, 1).setStyleName("TabError");
-	}
-	
-	public void setTabHasData(int index) {
-		tabWidgets.get(index).getWidget(0,1).setStyleName("TabData");
+		//barScroller.checkScroll();
 	}
 
 }

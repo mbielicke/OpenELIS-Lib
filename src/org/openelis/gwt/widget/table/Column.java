@@ -29,13 +29,19 @@ import java.util.Comparator;
 
 import org.openelis.gwt.widget.Label;
 
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
+
 /**
  * This is a logical class used to describe a column in a Table
  * 
  * @author tschmidt
  * 
  */
-public class Column implements ColumnInt {
+public class Column extends AbsolutePanel implements ColumnInt {
 
     /**
      * Reference to the Table containing this column
@@ -152,7 +158,7 @@ public class Column implements ColumnInt {
     	}
     }
     
-    private Column(Builder builder) {
+    public Column(Builder builder) {
         name = builder.name;
         label = builder.label;
         enabled = builder.enabled;
@@ -165,6 +171,7 @@ public class Column implements ColumnInt {
         required = builder.required;
         if(builder.renderer != null)
         	setCellRenderer(builder.renderer);
+        //setVisible(false);
     }
     
     @SuppressWarnings("rawtypes")
@@ -496,5 +503,11 @@ public class Column implements ColumnInt {
 	@Override
 	public void finishEditing() {
 		table.finishEditing();
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

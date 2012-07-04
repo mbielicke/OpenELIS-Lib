@@ -51,7 +51,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
     /**
      * Data moved from Field to the widget
      */
-    protected boolean                                queryMode,required,enabled;
+    protected boolean                                queryMode,required;
     protected String                                 value;
 
     /**
@@ -74,7 +74,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
         	
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		if(enabled) {
+        		if(isEnabled()) {
         			textarea.selectAll();
         			addStyleName("Focus");
         		}
@@ -86,10 +86,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
 			public void onBlur(BlurEvent event) {
 				textarea.setSelectionRange(0,0);
 				removeStyleName("Focus");
-                if (queryMode) {
-                    validateQuery();
-                } else
-                    finishEditing();
+				finishEditing();
             }
 
         });
@@ -121,7 +118,6 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      * Enables or disables the textbox for editing.
      */
     public void setEnabled(boolean enabled) {
-    	this.enabled = enabled;
         textarea.setReadOnly( !enabled);
     }
 
@@ -175,14 +171,22 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      */
     public void finishEditing() {
         validateExceptions = null;
-        try {
-            setValue(helper.getValue(textarea.getText()), true);
-            if(required && value == null)
-                addValidateException(new LocalizedException("exc.fieldRequiredException"));
-        } catch (LocalizedException e) {
-            addValidateException(e);
+        
+        if(isEnabled()) {
+        	if(queryMode)
+        		validateQuery();
+        	else {
+        
+        		try {
+        			setValue(helper.getValue(textarea.getText()), true);
+        			if(required && value == null)
+        				addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        		} catch (LocalizedException e) {
+        			addValidateException(e);
+        		}
+        		ExceptionHelper.checkExceptionHandlers(this);
+        	}
         }
-        ExceptionHelper.checkExceptionHandlers(this);
     }
     
     /**
@@ -257,7 +261,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+        ExceptionHelper.clearExceptionHandlers(this);
     }
     
     public void clearEndUserExceptions() {

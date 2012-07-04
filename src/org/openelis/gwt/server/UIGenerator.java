@@ -1825,6 +1825,64 @@ public class UIGenerator extends Generator {
     		}
     	});
     	
+    	factoryMap.put("TabLayout", new Factory() {
+    		public void getNewInstance(Node node, int id){
+    			String width,height,text,tabKey,visible;
+    			NodeList tabs,widgets;
+    			Node tab,widget;
+    			
+    			width = getAttribute(node,"width");
+    			height = getAttribute(node,"height");
+    			
+    			sw.println("TabLayout wid"+id+" = new TabLayout(20);");
+    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+    	        if(width != null)
+    	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
+    	        if(height != null)
+    	        	sw.println("wid"+id+".setHeight(\""+height+"\");");
+
+    	        tabs = ((Element)node).getElementsByTagName("tab");
+    	        for (int k = 0; k < tabs.getLength(); k++) {
+    	        	tab = tabs.item(k);
+    	            widgets = tabs.item(k).getChildNodes();
+    	            for (int l = 0; l < widgets.getLength(); l++) {
+    	            	widget = widgets.item(l);
+    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
+    	                	int child = ++count;
+    	                	
+    	                    if(!loadWidget(widget,child)){
+    	    	               count--;
+    	    	               continue;    	    	            
+    	    	            }
+    	                    
+    	                    tabKey = getAttribute(tab,"tab");
+    	                    text = getAttribute(tab,"text","");
+    	                    visible = getAttribute(tab,"visible","true");
+    	                    
+    	                    if(tabKey != null)
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\",\""+tabKey+"\");");
+    	                    else
+    	                    	sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
+
+                    		sw.println("wid"+id+".setTabVisible(wid"+id+".getWidgetCount() -1,"+visible+");");
+    	                }
+    	            }
+    	            sw.println("wid"+id+".selectTab(0);");
+    	    		sw.println("wid"+id+".addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {");
+    	    			sw.println("public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {");
+    	    				sw.println("panel.setFocusWidget(null);");
+    	    			sw.println("}");	
+    	    		sw.println("});");
+    	        }
+    		}
+    		public void addImport() {
+    			composer.addImport("org.openelis.gwt.widget.TabLayout");
+    			composer.addImport("com.google.gwt.user.client.ui.ScrollPanel");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionEvent");
+    			composer.addImport("com.google.gwt.event.logical.shared.BeforeSelectionHandler");
+    		}
+    	});
+    	
     	factoryMap.put("TablePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			String spacing,padding,colSpan,rowSpan,align,valign,style,text,height,width;

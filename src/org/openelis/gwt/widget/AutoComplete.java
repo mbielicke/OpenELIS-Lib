@@ -106,7 +106,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     protected PopupPanel                            popup;
     protected int                                   cellHeight = 21, delay = 350, itemCount = 10, width;
     protected Timer                                 timer;
-    protected boolean                               required,queryMode,showingOptions,enabled;
+    protected boolean                               required,queryMode,showingOptions;
     protected String                                prevText;
     
     protected TextBase                              textbox;
@@ -196,7 +196,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
         		display.addStyleName("Focus");
-        		if(enabled) 
+        		if(isEnabled()) 
         			selectAll();
         	}
         });
@@ -208,14 +208,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
         		textbox.setSelectionRange(0, 0);
-        		
-		    	if(enabled) {
-		    		if (queryMode) 
-		    			validateQuery();
-		    		else{
-		    			finishEditing();
-		    		}
-		    	}
+        		finishEditing();
         	}
         });
         
@@ -536,7 +529,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      */
     @Override
     public void setEnabled(boolean enabled) {
-    	this.enabled = enabled;
         button.setEnabled(enabled);
         table.setEnabled(enabled);
         if (enabled)
@@ -609,14 +601,20 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         Item<Integer> item;
         validateExceptions = null;
         
-        item = getSelectedItem();
-        if (item != null)
-            setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),true);
-        
-        if (required && value == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        if(isEnabled()) {
+        	if(queryMode)
+        		validateQuery();
+        	else{
+        		item = getSelectedItem();
+        		if (item != null)
+        			setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),true);
+        		
+        		if (required && value == null) 
+        			addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        		
+        		ExceptionHelper.checkExceptionHandlers(this);
+        	}
         }
-        ExceptionHelper.checkExceptionHandlers(this);
     }
 
     /**
@@ -849,7 +847,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 	public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+        ExceptionHelper.clearExceptionHandlers(this);
 	}
 
 	@Override
@@ -950,7 +948,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return !textbox.isReadOnly();
 	}
 
 	@Override

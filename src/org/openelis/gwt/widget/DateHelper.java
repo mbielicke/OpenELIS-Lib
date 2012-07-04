@@ -28,7 +28,8 @@ public class DateHelper implements WidgetHelper<Datetime> {
      * Public no arg constructor;
      */
     public DateHelper() {
-
+    	setBegin(Datetime.YEAR);
+    	setEnd(Datetime.DAY);
     }
     
     /**
@@ -60,7 +61,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
         try {
             date =  DateTimeFormat.getFormat(pattern).parseStrict(input);
         }catch(Exception e) {
-            throw new LocalizedException("exc.invalidDateFormat");
+            throw new LocalizedException("exc.invalidDate");
         }
         
         return Datetime.getInstance(begin,end,date);
@@ -161,7 +162,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
 		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
 		
 		if(!isCorrectType(value))
-			exceptions.add(new LocalizedException("exc.invalidDateFormat"));
+			exceptions.add(new LocalizedException("exc.invalidDate"));
 		
 		return exceptions;
 		

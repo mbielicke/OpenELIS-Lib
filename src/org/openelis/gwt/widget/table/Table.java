@@ -77,6 +77,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
@@ -87,7 +89,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -104,7 +109,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		HasUnselectionHandlers<Integer>, HasBeforeCellEditedHandlers,
 		HasCellEditedHandlers, HasBeforeRowAddedHandlers, HasRowAddedHandlers,
 		HasBeforeRowDeletedHandlers, HasRowDeletedHandlers, HasCellClickedHandlers,
-		HasValue<ArrayList<? extends Row>>, HasExceptions, FocusHandler, HasFilterHandlers {
+		HasValue<ArrayList<? extends Row>>, HasExceptions, Focusable, FocusHandler, HasFilterHandlers {
 
 	/**
 	 * Cell that is currently being edited.
@@ -247,8 +252,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			return new Table(this);
 		}
 	}
-	
-	private Table(Builder builder) {
+		
+	public Table(Builder builder) {
 		rowHeight = builder.rowHeight;
 		visibleRows = builder.visibleRows;
 		multiSelect = builder.multiSelect;
@@ -257,7 +262,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		fixScrollBar = builder.fixScroll;
 		hasHeader = builder.hasHeader;
 		view = new View(this);
-		setWidget(view);
+	    setWidget(view);
 		
 		if(builder.width != null)
 			setWidth(builder.width.intValue());
@@ -980,6 +985,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return addColumn("", "");
 	}
 
+	public void addColumn(Column col) {
+		addColumnAt(columns.size(),col);
+	}
+	
 	/**
 	 * Creates and inserts a new Column int the table at the specified index
 	 * using the name and label passed.
@@ -2590,6 +2599,43 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			return false;
 		}
 	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getTabIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setAccessKey(char key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFocus(boolean focused) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTabIndex(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 
 }

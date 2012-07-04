@@ -2,6 +2,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -54,7 +55,7 @@ public class TimeCell implements CellRenderer, CellEditor {
         if (query)
             return editor.getQuery();
         else {
-        	if(!editor.hasExceptions())
+        	if(isValid(editor.getText()))
         		return getHours(editor.getValue());
         	else
         		return editor.getText();
@@ -63,8 +64,13 @@ public class TimeCell implements CellRenderer, CellEditor {
 
 	@Override
 	public ArrayList<LocalizedException> validate(Object validate) {
-		//return editor.getHelper().validate(validate);
-		return new ArrayList<LocalizedException>();
+		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
+		
+		if(validate != null && !(validate instanceof Double))
+			exceptions.add(new LocalizedException("exc.InvalidNumeric"));
+		
+		return exceptions;
+			
 	}
 
 	@Override
@@ -135,6 +141,37 @@ public class TimeCell implements CellRenderer, CellEditor {
   
         return "";      
     }
+    
+    private boolean isValid(String input) {
+    	String[] time = null;
+    	
+    	if(input == null || "".equals(input))
+    		return true;
+    	
+    	if(input.contains(":")) {
+    		time = input.split(":");
+    		if(time.length > 2)
+    			return false;
+    	}
+    	
+    	if(time == null) {
+    		try {
+    			Integer.parseInt(input);
+    		}catch(Exception e) {
+    			return false;
+    		}
+    	}else {
+    		try {
+    			Integer.parseInt(time[0]);
+    			Integer.parseInt(time[1]);
+    		}catch(Exception e) {
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+      
     
 	@Override
 	public void setColumn(ColumnInt col) {

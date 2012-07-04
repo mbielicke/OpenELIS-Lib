@@ -34,456 +34,460 @@ import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class TextBox<T> extends Composite implements ScreenWidgetInt, 
-                                                     Queryable, 
-                                                     Focusable,
-                                                     HasBlurHandlers, 
-                                                     HasFocusHandlers,
-                                                     HasValue<T>, 
-                                                     HasHelper<T>,
-                                                     HasExceptions {
-	
+public class TextBox<T> extends Composite implements ScreenWidgetInt,
+		Queryable, Focusable, HasBlurHandlers, HasFocusHandlers, HasValue<T>,
+		HasHelper<T>, HasExceptions {
 
-    /**
-     * Wrapped GWT TextBox
-     */
-    public TextBase                               textbox;
+	/**
+	 * Wrapped GWT TextBox
+	 */
+	protected TextBase textbox;
 
+	/**
+	 * Exceptions list
+	 */
+	protected ArrayList<LocalizedException> endUserExceptions,
+			validateExceptions;
 
-    /**
-     * Exceptions list
-     */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+	/**
+	 * Data moved from Field to the widget
+	 */
+	protected int maxLength;
+	protected boolean queryMode, required;
+	protected T value;
 
-    /**
-     * Data moved from Field to the widget
-     */
-    protected int                                   maxLength;
-    protected boolean                               queryMode, required,enabled;
-    protected T                                     value;
+	/**
+	 * This class replaces the functionality that Field used to provide but now
+	 * in a static way.
+	 */
+	protected WidgetHelper<T> helper = (WidgetHelper<T>) new StringHelper();
 
-    /**
-     * This class replaces the functionality that Field used to provide but now
-     * in a static way.
-     */
-    protected WidgetHelper<T>                       helper    = (WidgetHelper<T>)new StringHelper();
-    
-    protected TextBox<T>                            source = this;
-    
-    /**
-     * The Constructor now sets the wrapped GWT TextBox as the element widget of
-     * this composite and adds an anonymous ValueCahngeHandler to handle input
-     * from the user.
-     */
-    public TextBox() {
-        init();
-    }
+	protected TextBox<T> source = this;
 
-    public void init() {
-        textbox = new TextBase();
-        
-        setEnabled(false);
-        
-        addFocusHandler(new FocusHandler() {
+	/**
+	 * The Constructor now sets the wrapped GWT TextBox as the element widget of
+	 * this composite and adds an anonymous ValueCahngeHandler to handle input
+	 * from the user.
+	 */
+	public TextBox() {
+		init();
+	}
+
+	public void init() {
+		textbox = new TextBase();
+
+		setEnabled(false);
+
+		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
-		        textbox.addStyleName("Focus");
-		        if(enabled)
-		        	textbox.selectAll();
+				textbox.addStyleName("Focus");
+				if (isEnabled())
+					textbox.selectAll();
 			}
 		});
-        
-        addBlurHandler(new BlurHandler() {
+
+		addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-		    	textbox.removeStyleName("Focus");
-		    	if(enabled) {
-		    		if (queryMode) 
-		    			validateQuery();
-		    		else{
-		    			finishEditing();
-		    		}
-		    	}
+				textbox.removeStyleName("Focus");
+				finishEditing();
 			}
 		});
 
-        initWidget(textbox);
-    }
-    
-    public String getText() {
-    	return textbox.getText();
-    }
-    
-    public void setText(String text) {
-    	textbox.setText(text);
-    }
-    
-    /**
-     * This method is overridden to make sure the Case style is applied to the widget  
-     */
-    @Override
-    public void setStyleName(String style) {
-    	textbox.setStyleName(style);
-    }
+		initWidget(textbox);
+	}
 
-    /**
-     * Set the text case for input.
-     */
-    public void setCase(TextBase.Case textCase) {
-    	textbox.setCase(textCase);
-    }
+	public String getText() {
+		return textbox.getText();
+	}
 
-    /**
-     * Sets the maximum input characters allowed for this text field.
-     */
-    public void setMaxLength(int maxLength) {
-    	this.maxLength = maxLength;
-    	textbox.setMaxLength(maxLength);
-    }
+	public void setText(String text) {
+		textbox.setText(text);
+	}
 
-    /**
-     * Set the text alignment.
-     */
-    public void setTextAlignment(TextAlignment alignment) {
-        textbox.setAlignment(alignment);
-    }
+	/**
+	 * This method is overridden to make sure the Case style is applied to the
+	 * widget
+	 */
+	@Override
+	public void setStyleName(String style) {
+		textbox.setStyleName(style);
+	}
 
+	/**
+	 * Set the text case for input.
+	 */
+	public void setCase(TextBase.Case textCase) {
+		textbox.setCase(textCase);
+	}
 
-    /**
-     * Method used to set if this widget is required to have a value inputed.
-     * @param required
-     */
-    public void setRequired(boolean required) {
-        this.required = required;
-    }
-    
-    // ************** Implementation of ScreenWidgetInt ********************
+	/**
+	 * Sets the maximum input characters allowed for this text field.
+	 */
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
+		textbox.setMaxLength(maxLength);
+	}
 
-    /**
-     * Enables or disables the textbox for editing.
-     */
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        textbox.enforceMask = enabled;
-        textbox.setReadOnly( !enabled);
-    }
+	/**
+	 * Set the text alignment.
+	 */
+	public void setTextAlignment(TextAlignment alignment) {
+		textbox.setAlignment(alignment);
+	}
 
-    /**
-     * Returns whether the text is enabled for editing
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
+	/**
+	 * Method used to set if this widget is required to have a value inputed.
+	 * 
+	 * @param required
+	 */
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
 
-    // ******** Implementation of Queryable *****************
-    /**
-     * This method will toggle TextBox into and from query mode and suspend or
-     * resume any format restrictions
-     */
-    public void setQueryMode(boolean query) {
-        if (queryMode == query) 
-            return;
+	// ************** Implementation of ScreenWidgetInt ********************
 
-        queryMode = query;
-        textbox.enforceMask = !query && enabled;
-        if(maxLength > 0)
-        	textbox.setMaxLength(query ? 255 : maxLength);
-        textbox.setText("");
-    }
+	/**
+	 * Enables or disables the textbox for editing.
+	 */
+	public void setEnabled(boolean enabled) {
+		textbox.setReadOnly(!enabled);
+	}
 
-    /**
-     * Returns a single QueryData object representing the query string entered
-     * by the user. The Helper class is used here to create the correct
-     * QueryData object for the passed type T.
-     */
-    public Object getQuery() {
-    	Object query;
-    	
-    	query = helper.getQuery(textbox.getText());
-                
-        return query;
-    }
-    
-    /**
-     * Sets a query string to this widget when loaded from a table model
-     */
-    public void setQuery(QueryData qd) {
-        if(qd != null)
-            textbox.setText(qd.getQuery());
-        else
-            textbox.setText("");
-    }
-    
-    /**
-     * Method used to determine if widget is currently in Query mode
-     */
-    public boolean isQueryMode() {
-    	return queryMode;
-    }
+	/**
+	 * Returns whether the text is enabled for editing
+	 */
+	public boolean isEnabled() {
+		return !textbox.isReadOnly();
+	}
 
-    // ********** Implementation of HasHelper ***************************
-    /**
-     * Sets the implentation of the WidgetHelper<T> interface to be used by this
-     * widget.
-     */
-    public void setHelper(WidgetHelper<T> helper) {
-        this.helper = helper;
-    }
+	// ******** Implementation of Queryable *****************
+	/**
+	 * This method will toggle TextBox into and from query mode and suspend or
+	 * resume any format restrictions
+	 */
+	public void setQueryMode(boolean query) {
+		if (queryMode == query)
+			return;
 
-    /**
-     * Returns the helper set for this widget
-     */
-    public WidgetHelper<T> getHelper() {
-        return helper;
-    }
+		queryMode = query;
+		textbox.enforceMask(!query);
+		if (maxLength > 0)
+			textbox.setMaxLength(query ? 255 : maxLength);
+		/*
+		 * When coming out of query mode with abort, the setValue will not
+		 * override the the text in the widget since query mode does not change
+		 * the value of the widget
+		 */
+		if (!query)
+			textbox.setText("");
+	}
 
-    // ************** Implementation of HasValue<T> interface ***************
+	/**
+	 * Returns a single QueryData object representing the query string entered
+	 * by the user. The Helper class is used here to create the correct
+	 * QueryData object for the passed type T.
+	 */
+	public Object getQuery() {
+		Object query;
 
-    /**
-     * Returns the current value for this widget.
-     */
-    public T getValue() {
-        return value;
-    }
+		query = helper.getQuery(textbox.getText());
 
-    /**
-     * Sets the current value of this widget without firing the
-     * ValueChangeEvent.
-     */
-    public void setValue(T value) {
-        setValue(value, false);
-    }
+		return query;
+	}
 
-    /**
-     * Sets the current value of this widget and will fire a ValueChangeEvent if
-     * the value is different than what is currently stored.
-     */
-    public void setValue(T value, boolean fireEvents) {
-    	
-        if(!Util.isDifferent(this.value, value)) {
-        	if(value != null)
-        		textbox.setText(helper.format(value));
-            return;
-        }
-        
-        this.value = value;
-        if (value != null) {
-            textbox.setText(helper.format(value));
-        } else {
-            textbox.setText("");
-        }
-        
-        if (fireEvents) 
-            ValueChangeEvent.fire(this, value);
-    }
-    
-    /**
-     * This method takes raw input from widget and will call helper to get the 
-     * appropriate value to set and also set any validation exceptions if present
-     */
-    public void finishEditing() {
-    	String text;
-    	
-    	text = textbox.getText();
-    		
-    	validateExceptions = null;
-        
-    	try {
-            setValue(helper.getValue(text), true);
-            if (required && getValue() == null) 
-                throw new LocalizedException("exc.fieldRequiredException");
-        } catch (LocalizedException e) {
-            addValidateException(e);
-        }
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Sets a query string to this widget when loaded from a table model
+	 */
+	public void setQuery(QueryData qd) {
+		if (qd != null)
+			textbox.setText(qd.getQuery());
+		else
+			textbox.setText("");
+	}
 
-    /**
-     * Method used to validate the inputed query string by the user.
-     */
-    public void validateQuery() {
-        try {
-            validateExceptions = null;
-            helper.validateQuery(textbox.getText());
-        } catch (LocalizedException e) {
-            addValidateException(e);
-        }
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Method used to determine if widget is currently in Query mode
+	 */
+	public boolean isQueryMode() {
+		return queryMode;
+	}
 
-    // ********** Implementation of HasException interface ***************
-    /**
-     * Convenience method to check if a widget has exceptions so we do not need
-     * to go through the cost of merging the logical and validation exceptions
-     * in the getExceptions method.
-     * 
-     * @return
-     */
-    public boolean hasExceptions() {
-    	if(validateExceptions != null)
-    		return true;
-    	  
-    	if (!queryMode && required && getValue() == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
-            ExceptionHelper.checkExceptionHandlers(this);
-    	}
-    	  
-    	return endUserExceptions != null || validateExceptions != null;
-    }
+	// ********** Implementation of HasHelper ***************************
+	/**
+	 * Sets the implementation of the WidgetHelper<T> interface to be used by this
+	 * widget.
+	 */
+	public void setHelper(WidgetHelper<T> helper) {
+		this.helper = helper;
+	}
 
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Returns the helper set for this widget
+	 */
+	public WidgetHelper<T> getHelper() {
+		return helper;
+	}
 
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
-    }
+	// ************** Implementation of HasValue<T> interface ***************
 
-    /**
-     * Combines both exceptions list into a single list to be displayed on the
-     * screen.
-     */
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        return validateExceptions;
-    }
+	/**
+	 * Returns the current value for this widget.
+	 */
+	public T getValue() {
+		return value;
+	}
 
-    public ArrayList<LocalizedException> getEndUserExceptions() {
-        return endUserExceptions;
-    }
+	/**
+	 * Sets the current value of this widget without firing the
+	 * ValueChangeEvent.
+	 */
+	public void setValue(T value) {
+		setValue(value, false);
+	}
 
-    /**
-     * Clears all manual and validate exceptions from the widget.
-     */
-    public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        removeExceptionStyle("InputError");
-        removeExceptionStyle("InputWarning");
-    }
-    
-    public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Sets the current value of this widget and will fire a ValueChangeEvent if
+	 * the value is different than what is currently stored.
+	 */
+	public void setValue(T value, boolean fireEvents) {
 
+		if (!Util.isDifferent(this.value, value)) {
+			if (value != null)
+				textbox.setText(helper.format(value));
+			return;
+		}
 
-    /**
-     * Will add the style to the widget.
-     */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
-    }
+		this.value = value;
+		if (value != null) {
+			textbox.setText(helper.format(value));
+		} else {
+			textbox.setText("");
+		}
 
-    /**
-     * will remove the style from the widget
-     */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
-    }
+		if (fireEvents)
+			ValueChangeEvent.fire(this, value);
+	}
 
-    // ************* Implementation of Focusable ******************
+	/**
+	 * This method takes raw input from widget and will call helper to get the
+	 * appropriate value to set and also set any validation exceptions if
+	 * present
+	 */
+	public void finishEditing() {
+		String text;
 
-    /**
-     * Method only implemented to satisfy Focusable interface.
-     */
-    public int getTabIndex() {
-        return -1;
-    }
+		if (isEnabled()) {
+			if (queryMode)
+				validateQuery();
+			else {
+				text = textbox.getText();
 
-    /**
-     * Method only implemented to satisfy Focusable interface.
-     */
-    public void setTabIndex(int index) {
+				validateExceptions = null;
 
-    }
+				try {
+					setValue(helper.getValue(text), true);
+					if (required && getValue() == null)
+						throw new LocalizedException(
+								"exc.fieldRequiredException");
+				} catch (LocalizedException e) {
+					addValidateException(e);
+				}
+				ExceptionHelper.checkExceptionHandlers(this);
+			}
+		}
 
-    /**
-     * Method only implemented to satisfy Focusable interface.
-     */
-    public void setAccessKey(char key) {
+	}
 
-    }
-    
-    /**
-     * Exposing this method on the wrapped widget
-     */
-    public void selectAll() {
-    	textbox.selectAll();
-    }
-    
-    /**
-     * Exposing this method on the wrapped widget
-     */
-    public void setSelectionRange(int pos, int length) {
-    	textbox.setSelectionRange(pos, length);
-    }
-    
-    /**
-     * Exposing this method on the wrapped widget
-     */
-    public void unselectAll() {
-    	textbox.setSelectionRange(0, 0);
-    }
-    
-    public void setMask(String mask) {
-    	textbox.setMask(mask);
-    }
+	/**
+	 * Method used to validate the inputed query string by the user.
+	 */
+	public void validateQuery() {
+		try {
+			validateExceptions = null;
+			helper.validateQuery(textbox.getText());
+		} catch (LocalizedException e) {
+			addValidateException(e);
+		}
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    /**
-     * This is need for Focusable interface and to allow programmatic setting of
-     * focus to this widget. We use the wrapped TextBox to make this work.
-     */
-    public void setFocus(boolean focused) {
-       textbox.setFocus(true);
-    }
+	// ********** Implementation of HasException interface ***************
+	/**
+	 * Convenience method to check if a widget has exceptions so we do not need
+	 * to go through the cost of merging the logical and validation exceptions
+	 * in the getExceptions method.
+	 * 
+	 * @return
+	 */
+	public boolean hasExceptions() {
+		if (validateExceptions != null)
+			return true;
 
-    // ************ Handler Registration methods *********************
+		if (!queryMode && required && getValue() == null) {
+			addValidateException(new LocalizedException(
+					"exc.fieldRequiredException"));
+			ExceptionHelper.checkExceptionHandlers(this);
+		}
 
-    /**
-     * The Screen will add its screenHandler here to register for the
-     * onValueChangeEvent
-     */
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<T> handler) {
-        return addHandler(handler, ValueChangeEvent.getType());
-    }
+		return endUserExceptions != null || validateExceptions != null;
+	}
 
-    /**
-     * This Method is here so the Focus logic of ScreenPanel can be notified
-     */
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return addDomHandler(handler, BlurEvent.getType());
-    }
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		if (endUserExceptions == null)
+			endUserExceptions = new ArrayList<LocalizedException>();
+		endUserExceptions.add(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    /**
-     * This method is here so the Focus logic of ScreenPanel can be notified
-     */
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return addDomHandler(handler, FocusEvent.getType());
-    }
+	protected void addValidateException(LocalizedException error) {
+		if (validateExceptions == null)
+			validateExceptions = new ArrayList<LocalizedException>();
+		validateExceptions.add(error);
+	}
 
-    /**
-     * Adds a mouseover handler to the textbox for displaying Exceptions
-     */
-    public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-        return addDomHandler(handler, MouseOverEvent.getType());
-    }
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return validateExceptions;
+	}
 
-    /**
-     * Adds a MouseOut handler for hiding exceptions display
-     */
-    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-        return addDomHandler(handler, MouseOutEvent.getType());
-    }
-    
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return endUserExceptions;
+	}
+
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
+	public void clearExceptions() {
+		endUserExceptions = null;
+		validateExceptions = null;
+		removeExceptionStyle("InputError");
+		removeExceptionStyle("InputWarning");
+		ExceptionHelper.clearExceptionHandlers(this);
+	}
+
+	public void clearEndUserExceptions() {
+		endUserExceptions = null;
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	public void clearValidateExceptions() {
+		validateExceptions = null;
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	/**
+	 * Will add the style to the widget.
+	 */
+	public void addExceptionStyle(String style) {
+		addStyleName(style);
+	}
+
+	/**
+	 * will remove the style from the widget
+	 */
+	public void removeExceptionStyle(String style) {
+		removeStyleName(style);
+	}
+
+	// ************* Implementation of Focusable ******************
+
+	/**
+	 * Method only implemented to satisfy Focusable interface.
+	 */
+	public int getTabIndex() {
+		return -1;
+	}
+
+	/**
+	 * Method only implemented to satisfy Focusable interface.
+	 */
+	public void setTabIndex(int index) {
+
+	}
+
+	/**
+	 * Method only implemented to satisfy Focusable interface.
+	 */
+	public void setAccessKey(char key) {
+
+	}
+
+	/**
+	 * Exposing this method on the wrapped widget
+	 */
+	public void selectAll() {
+		textbox.selectAll();
+	}
+
+	/**
+	 * Exposing this method on the wrapped widget
+	 */
+	public void setSelectionRange(int pos, int length) {
+		textbox.setSelectionRange(pos, length);
+	}
+
+	/**
+	 * Exposing this method on the wrapped widget
+	 */
+	public void unselectAll() {
+		textbox.setSelectionRange(0, 0);
+	}
+
+	public void setMask(String mask) {
+		textbox.setMask(mask);
+	}
+
+	/**
+	 * This is need for Focusable interface and to allow programmatic setting of
+	 * focus to this widget. We use the wrapped TextBox to make this work.
+	 */
+	public void setFocus(boolean focused) {
+		textbox.setFocus(true);
+	}
+
+	// ************ Handler Registration methods *********************
+
+	/**
+	 * The Screen will add its screenHandler here to register for the
+	 * onValueChangeEvent
+	 */
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<T> handler) {
+		return addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	/**
+	 * This Method is here so the Focus logic of ScreenPanel can be notified
+	 */
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return addDomHandler(handler, BlurEvent.getType());
+	}
+
+	/**
+	 * This method is here so the Focus logic of ScreenPanel can be notified
+	 */
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return addDomHandler(handler, FocusEvent.getType());
+	}
+
+	/**
+	 * Adds a mouseover handler to the textbox for displaying Exceptions
+	 */
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler, MouseOverEvent.getType());
+	}
+
+	/**
+	 * Adds a MouseOut handler for hiding exceptions display
+	 */
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return addDomHandler(handler, MouseOutEvent.getType());
+	}
+
 }

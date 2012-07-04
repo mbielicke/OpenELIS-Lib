@@ -27,6 +27,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Dropdown;
@@ -82,12 +83,10 @@ public class DropdownCell implements CellRenderer, CellEditor {
     }
 
     public ArrayList<LocalizedException> validate(Object value) {
-    	if(!query) {
-    		editor.setValue(value);
-    		editor.hasExceptions();
-        	return editor.getValidateExceptions();
-    	}
-        
+    	
+    	if(!query) 
+    		return editor.getHelper().validate(value);
+    	        	
         return null;
     }
 
@@ -96,15 +95,16 @@ public class DropdownCell implements CellRenderer, CellEditor {
      */
     public void render(HTMLTable table, int row, int col, Object value) {
         editor.setQueryMode(false);
-       	editor.setValue(value);
-       	table.setText(row, col, editor.getDisplay());
+       	table.setText(row, col, display(value));
     }
 
     public String display(Object value) {
-        query = false;
-        editor.setQueryMode(false);
-        editor.setValue(value);
-        return editor.getDisplay();
+    	if(value != null && editor.getHelper().isCorrectType(value) && editor.isValidKey(value)) {
+   			editor.setValue(value);
+        	return editor.getDisplay();
+    	}else {
+    		return DataBaseUtil.asString(value);
+    	}
     }
 
     /**

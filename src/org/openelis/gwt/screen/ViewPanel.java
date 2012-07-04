@@ -202,8 +202,6 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
         for (Widget wid : getWidgets().values()) {
             if (wid instanceof HasExceptions)
                 ((HasExceptions)wid).clearExceptions();
-            if (wid instanceof HasExceptions)
-                ((HasExceptions)wid).clearExceptions();
         }
         window.clearStatus();
         window.clearMessagePopup("");

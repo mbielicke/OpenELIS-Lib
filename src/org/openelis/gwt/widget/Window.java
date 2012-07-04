@@ -34,10 +34,20 @@ import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ViewPanel;
 
+import com.allen_sauer.gwt.dnd.client.AbstractDragController;
 import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DragEndEvent;
+import com.google.gwt.event.dom.client.DragEndHandler;
+import com.google.gwt.event.dom.client.DragEvent;
+import com.google.gwt.event.dom.client.DragHandler;
+import com.google.gwt.event.dom.client.DragStartEvent;
+import com.google.gwt.event.dom.client.DragStartHandler;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -109,6 +119,8 @@ public class Window extends FocusPanel implements WindowInt {
     protected VerticalPanel body = new VerticalPanel();
     protected Grid middleGrid = new Grid(1,3);
     protected HorizontalPanel bottomRow = new HorizontalPanel();
+    protected ResizeDragController  dragController = new ResizeDragController(RootPanel.get(),this);
+    //protected AbsolutePositionDropController dropController = new AbsolutePositionDropController(RootPanel.get());
 
     /**
      * The Screen or panel that is displayed by this window.
@@ -248,6 +260,11 @@ public class Window extends FocusPanel implements WindowInt {
         bottomRow.add(blCorner);
         bottomRow.add(status);
         bottomRow.add(brCorner);
+        
+        dragController.makeDraggable(brCorner);
+        //dragController.setBehaviorDragProxy(true);
+        //dragController.registerDropController(dropController);		
+        
         
         bottomRow.setCellWidth(status, "100%");
         

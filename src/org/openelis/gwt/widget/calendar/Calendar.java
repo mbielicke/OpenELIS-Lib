@@ -97,7 +97,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     protected CalendarWidget                        calendar;
     protected MonthYearWidget                       monthYearWidget;
     protected int                                   width;
-    protected boolean                               enabled,showingCalendar,queryMode,required;
+    protected boolean                               showingCalendar,queryMode,required;
 
     protected TextBase                              textbox;
     
@@ -157,7 +157,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
          */
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		if(enabled)
+        		if(isEnabled())
         			display.addStyleName("Focus");
         	}
         });
@@ -168,16 +168,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
         		display.removeStyleName("Focus");
-        		
-        		finishEditing();
-        		/*
-            	if(!showingCalendar && isEnabled()) {
-            		if(queryMode)
-            			validateQuery();
-            		else
-            			finishEditing(true);
-            	}
-            	*/
+        		finishEditing(true);
         	}
         });
         
@@ -373,8 +364,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     @Override
     public void setEnabled(boolean enabled) {
         button.setEnabled(enabled);
-        this.enabled = enabled;
         textbox.enforceMask(enabled);
+        textbox.setReadOnly(!enabled);
         if (enabled)
             sinkEvents(Event.ONKEYDOWN | Event.ONKEYUP);
         else
@@ -494,18 +485,25 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     protected void finishEditing(boolean fireEvents) {
     	String text;
     	
-    	text = textbox.getText();
+    	if(isEnabled()) {
+    		if(queryMode) {
+    			validateQuery();
+    		}else {
+    			
+    			text = textbox.getText();
     		
-    	validateExceptions = null;
+    			validateExceptions = null;
         
-    	try {
-            setValue(helper.getValue(text), fireEvents);
-            if (required && value == null) 
-                addValidateException(new LocalizedException("exc.fieldRequiredException"));
-        } catch (LocalizedException e) {
-            addValidateException(e);
-        }
-        ExceptionHelper.checkExceptionHandlers(this);
+    			try {
+    				setValue(helper.getValue(text), fireEvents);
+    				if (required && value == null) 
+    					addValidateException(new LocalizedException("exc.fieldRequiredException"));
+    			} catch (LocalizedException e) {
+    				addValidateException(e);
+    			}
+    			ExceptionHelper.checkExceptionHandlers(this);
+    		}
+    	}
     }
 
     /**
@@ -575,7 +573,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     public void clearExceptions() {
         endUserExceptions = null;
         validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+        ExceptionHelper.clearExceptionHandlers(this);
     }
     
     public void clearEndUserExceptions() {
@@ -697,7 +695,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
             return;
         
         queryMode = query;
-        textbox.enforceMask(!query && enabled);
+        textbox.enforceMask(!query && isEnabled());
         textbox.setText("");
     }
 
@@ -733,7 +731,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return !textbox.isReadOnly();
 	}
 	
     /**

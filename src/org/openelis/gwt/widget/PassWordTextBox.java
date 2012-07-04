@@ -47,7 +47,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * Data moved from Field to the widget
 	 */
 	protected int                                   maxLength;
-	protected boolean                               required,enabled;
+	protected boolean                               required;
 	protected String                                value;
 
 	/**
@@ -75,7 +75,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
 				textbox.addStyleName("Focus");
-				if(enabled)
+				if(isEnabled())
 					textbox.selectAll();
 			}
 		});
@@ -85,7 +85,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 				textbox.removeStyleName("Focus");
 				textbox.setSelectionRange(0, 0);
 
-				if(enabled) 
+				if(isEnabled()) 
 					finishEditing();
 			}
 		});
@@ -133,7 +133,6 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * Enables or disables the textbox for editing.
 	 */
 	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
 		textbox.setReadOnly( !enabled);
 	}
 
@@ -141,7 +140,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * Returns whether the text is enabled for editing
 	 */
 	public boolean isEnabled() {
-		return enabled;
+		return !textbox.isReadOnly();
 	}
 
 	// ********** Implementation of HasHelper ***************************
@@ -288,7 +287,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	public void clearExceptions() {
 		endUserExceptions = null;
 		validateExceptions = null;
-		ExceptionHelper.checkExceptionHandlers(this);
+		ExceptionHelper.clearExceptionHandlers(this);
 	}
 
 	public void clearEndUserExceptions() {

@@ -138,6 +138,13 @@ public class ExceptionHelper {
         }
         
     }
+    
+    public static void clearExceptionHandlers(HasExceptions widget) {
+    	if (overHandlers.containsKey(widget)){ 
+    		overHandlers.remove(widget).removeHandler();
+    		outHandlers.remove(widget).removeHandler();
+    	}
+    }
 
     public static void drawExceptions(ArrayList<LocalizedException> endUser, ArrayList<LocalizedException> valid,final int x, final int y) {
         ArrayList<LocalizedException> exceptions = null;
