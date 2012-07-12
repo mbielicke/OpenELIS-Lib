@@ -394,8 +394,10 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		String[] keys;
 		ArrayList<Object> selections;
 		
-		if(qd == null)
+		if(qd == null) {
+			clearSelections();
 			return;
+		}
 		
 		keys = qd.query.split("|");
 		
