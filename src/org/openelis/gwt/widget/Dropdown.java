@@ -399,7 +399,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			return;
 		}
 		
-		keys = qd.query.split("|");
+		keys = qd.query.split("\\|");
 		
 		selections = new ArrayList<Object>();
 		
