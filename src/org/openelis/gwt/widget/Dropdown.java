@@ -390,6 +390,27 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		}
 	}
 	
+	public void setQuery(QueryData qd) {
+		String[] keys;
+		ArrayList<Object> selections;
+		
+		if(qd == null)
+			return;
+		
+		keys = qd.query.split("|");
+		
+		selections = new ArrayList<Object>();
+		
+		for(String key : keys) {
+			if(qd.type == QueryData.Type.INTEGER) 
+				selections.add(Integer.valueOf(key));
+			else
+				selections.add(key);
+		}
+		
+		setSelections(selections);
+	}
+	
 	public void onBlur(BlurEvent event) {
 		textbox.removeStyleName("Focus");
 		if(!queryMode)

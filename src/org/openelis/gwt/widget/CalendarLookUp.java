@@ -497,7 +497,11 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 			qd.type = QueryData.Type.DATE;
 			list.add(qd);
 		}
-		
+	}
+	
+	public void setQuery(QueryData qd) {
+		if(qd != null)
+			textbox.setText(qd.query);
 	}
 
 	/**
