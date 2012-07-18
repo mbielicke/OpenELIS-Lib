@@ -396,6 +396,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 		
 		if(qd == null) {
 			clearSelections();
+			textbox.setText("");
 			return;
 		}
 		
