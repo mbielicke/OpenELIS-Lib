@@ -1114,6 +1114,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 	
 	protected boolean canEditCell(int row, int col) {
+		if(col < 0)
+			return false;
+		
 		if(columns.get(col).colWidget instanceof PercentBar || (columns.get(col).colWidget instanceof TableImage && !byClick) ) {
 			return false;
 		}
