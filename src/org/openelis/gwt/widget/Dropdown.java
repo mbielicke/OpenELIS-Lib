@@ -256,7 +256,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
     	}
     	index = Collections.binarySearch(searchText,new TableDataRow(null,textValue), partialCompare);
 
-    	if(index < 0) {
+    	if(index < 0 || !isEnabled(index)) {
     		return -1;
     	}else{
     		//we need to do a linear search backwards to find the first entry that matches our search
