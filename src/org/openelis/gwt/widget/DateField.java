@@ -289,7 +289,11 @@ public class DateField extends Field<Datetime> {
      * If a pattern is set then the date must be passed in the pattern format to be valid.
      */
     public void setStringValue(String val) {
-    	setValue(getValueFromString(val));
+        if(queryMode) {
+        	queryString = val;
+        	validateQuery();
+        }else
+        	setValue(getValueFromString(val));
     }
     
     public Datetime getValueFromString(String val) {
