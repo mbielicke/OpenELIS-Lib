@@ -187,13 +187,12 @@ public class TreeRenderer {
     public void setCellEditor(int row, int col) {
     	TreeColumn column = controller.columns.get(controller.getRow(row).leafType).get(col);
         controller.activeWidget = (Widget)column.getWidgetEditor(controller.getRow(row));
+        if(controller.activeWidget instanceof AbsolutePanel)
+        	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
         if(col == 0)
         	((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(controller.activeWidget);
-        else{
+        else
         	controller.view.table.setWidget(controller.treeIndex(row), col, controller.activeWidget);
-            if(controller.activeWidget instanceof AbsolutePanel)
-            	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
-        }
         if(controller.activeWidget instanceof Focusable)
         	((Focusable)controller.activeWidget).setFocus(true);
     }
