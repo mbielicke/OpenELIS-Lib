@@ -42,6 +42,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Widget;
@@ -188,8 +189,11 @@ public class TreeRenderer {
         controller.activeWidget = (Widget)column.getWidgetEditor(controller.getRow(row));
         if(col == 0)
         	((ItemGrid)controller.view.table.getWidget(controller.treeIndex(row), col)).setWidget(controller.activeWidget);
-        else
+        else{
         	controller.view.table.setWidget(controller.treeIndex(row), col, controller.activeWidget);
+            if(controller.activeWidget instanceof AbsolutePanel)
+            	controller.activeWidget = ((AbsolutePanel)controller.activeWidget).getWidget(0);
+        }
         if(controller.activeWidget instanceof Focusable)
         	((Focusable)controller.activeWidget).setFocus(true);
     }
