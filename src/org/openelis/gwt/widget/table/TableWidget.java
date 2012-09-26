@@ -1074,10 +1074,10 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 	}
 
 	public void checkValue() {
+		exceptions = null;
 		if(model == null)
 			return;
 		finishEditing();
-		exceptions = null;
 		for(int i = 0; i < numRows(); i++) {
 			for(int j = 0; j < model.get(i).cells.size(); j++){
 				Widget wid = columns.get(j).getWidgetEditor(model.get(i));
