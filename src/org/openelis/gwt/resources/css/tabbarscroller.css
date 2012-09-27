@@ -1,0 +1,21 @@
+@sprite .MoveRight{
+	height:20px;
+	width:18px;
+	gwt-image:'moveRight';
+	border-right:1px solid #8DB2E3;
+	cursor:pointer;
+}
+
+@sprite .MoveLeft{
+	height:20px;
+	width:18px;
+	gwt-image:'moveLeft';
+	border-left:1px solid #8DB2E3;
+	cursor:pointer;
+}
+
+.inactive div{
+     color:lightgrey;
+}
+
+.Hover{}

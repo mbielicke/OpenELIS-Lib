@@ -6,6 +6,7 @@ import java.util.Date;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
@@ -61,7 +62,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
         try {
             date =  DateTimeFormat.getFormat(pattern).parseStrict(input);
         }catch(Exception e) {
-            throw new LocalizedException("exc.invalidDate");
+            throw new LocalizedException(Constants.get().invalidDate());
         }
         
         return Datetime.getInstance(begin,end,date);
@@ -146,11 +147,11 @@ public class DateHelper implements WidgetHelper<Datetime> {
     
     private void setDefaultPattern() {
        	if(begin > Datetime.DAY) {
-    		setPattern("HH:mm");
+    		setPattern(Constants.get().timePattern());
     	} else if (end < Datetime.HOUR){
-    		setPattern("yyyy-MM-dd");
+    		setPattern(Constants.get().datePattern());
     	} else {
-    		setPattern("yyyy-MM-dd HH:mm");
+    		setPattern(Constants.get().dateTimePattern());
     	}
     }
 
@@ -162,7 +163,7 @@ public class DateHelper implements WidgetHelper<Datetime> {
 		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
 		
 		if(!isCorrectType(value))
-			exceptions.add(new LocalizedException("exc.invalidDate"));
+			exceptions.add(new LocalizedException(Constants.get().invalidDate()));
 		
 		return exceptions;
 		

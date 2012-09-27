@@ -29,6 +29,8 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.AutoCompleteValue;
 
@@ -57,6 +59,8 @@ public class AutoCompleteCell implements CellRenderer,
     private boolean      query;
     
     private ColumnInt    column;
+    
+    protected TableCSS   css;
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -65,8 +69,10 @@ public class AutoCompleteCell implements CellRenderer,
      */
     public AutoCompleteCell(AutoComplete editor) {
         this.editor = editor;
+        css = OpenELISResources.INSTANCE.table();
+        css.ensureInjected();
         editor.setEnabled(true);
-        editor.setStyleName("TableDropdown");
+        editor.setStyleName(css.TableDropdown());
         editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {

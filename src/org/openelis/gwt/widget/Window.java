@@ -29,30 +29,21 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
+import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.event.BeforeCloseEvent;
 import org.openelis.gwt.event.BeforeCloseHandler;
-import org.openelis.gwt.screen.Screen;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.WindowNoImageCSS;
 import org.openelis.gwt.screen.ViewPanel;
 
-import com.allen_sauer.gwt.dnd.client.AbstractDragController;
 import com.allen_sauer.gwt.dnd.client.DragController;
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.VetoDragException;
-import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
-import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DragEndEvent;
-import com.google.gwt.event.dom.client.DragEndHandler;
-import com.google.gwt.event.dom.client.DragEvent;
-import com.google.gwt.event.dom.client.DragHandler;
-import com.google.gwt.event.dom.client.DragStartEvent;
-import com.google.gwt.event.dom.client.DragStartHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -73,11 +64,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -88,115 +77,107 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Window extends FocusPanel implements WindowInt {
     
-    protected Caption cap = new Caption();
-    protected VerticalPanel messagePanel;
-    protected PopupPanel pop;
-    protected Window source;
-    private VerticalPanel outer = new VerticalPanel() {
-       public void onBrowserEvent(Event event) {
-           switch (DOM.eventGetType(event)) {
-               case Event.ONCLICK: {
-            	   //FocusEvent.fireNativeEvent(Document.get().createFocusEvent(),source);
-                   //setFocus(true);
-                   break;
-               }
-           }
-           super.onBrowserEvent(event);
-       }
-    };
-
-    protected HorizontalPanel status = new HorizontalPanel();
-    protected FocusPanel fp = new FocusPanel();
-    protected FocusPanel close = new FocusPanel();
-    protected FocusPanel collapse = new FocusPanel();
-    protected FocusPanel statusImg = new FocusPanel();
-    protected FocusPanel trCorner = new FocusPanel();
-    protected FocusPanel tlCorner = new FocusPanel();
-    protected FocusPanel brCorner = new FocusPanel();
-    protected FocusPanel blCorner = new FocusPanel();
-    protected FocusPanel leftSide = new FocusPanel();
-    protected FocusPanel rightSide = new FocusPanel();
-    protected VerticalPanel body = new VerticalPanel();
-    protected Grid middleGrid = new Grid(1,3);
-    protected HorizontalPanel bottomRow = new HorizontalPanel();
-    protected ResizeDragController  dragController = new ResizeDragController(RootPanel.get(),this);
-    //protected AbsolutePositionDropController dropController = new AbsolutePositionDropController(RootPanel.get());
+    protected Caption                               cap;
+    protected VerticalPanel                         outer,messagePanel;
+    protected PopupPanel                            pop;
+    
+    protected Grid                                  bottom,top;
+    protected FocusPanel                            statusImg,close,collapse;
+    protected AbsolutePanel                         body,glass;
+    protected HTML                                  label;
+ 
+   // protected ResizeDragController  dragController = new ResizeDragController(RootPanel.get(),this);
 
     /**
      * The Screen or panel that is displayed by this window.
      */
-    protected Widget content;
-    protected Label message = new Label("Loading...");
-    protected Label winLabel = new Label();
+    protected Widget                                content;
+           
+    protected WindowNoImageCSS                      css;
     
-    protected AbsolutePanel glass;
-   
-    private HorizontalPanel titleButtonsContainer;
-    private ProgressBar progressBar = new ProgressBar();
-    
+    protected Window                             source = this;
     
     
     public Window() {
-        setWidget(outer);
+    	css = OpenELISResources.INSTANCE.windowNoImage();
+    	css.ensureInjected();
+        
+    	/* Create container for Window elements */
+    	outer =  new VerticalPanel() {
+    		public void onBrowserEvent(Event event) {
+    			switch (DOM.eventGetType(event)) {
+    				case Event.ONCLICK: {
+    					//FocusEvent.fireNativeEvent(Document.get().createFocusEvent(),source);
+    					//setFocus(true);
+    					break;
+    				}
+    			}
+    			super.onBrowserEvent(event);
+    		}
+    	};
+    	
+    	setWidget(outer);
         setVisible(false);
-                
-        tlCorner.addStyleName("WindowTL");
-        trCorner.addStyleName("WindowTR");
-        blCorner.addStyleName("WindowBL");
-        brCorner.addStyleName("WindowBR");
-        leftSide.addStyleName("WindowLeft");
-        rightSide.addStyleName("WindowRight");
         
-        HorizontalPanel hp = new HorizontalPanel();
-        hp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        titleButtonsContainer = new HorizontalPanel();
-        titleButtonsContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        /* Create top of window consisting of a caption and close, collapse buttons */
         
-        hp.setWidth("100%");
-        titleButtonsContainer.addStyleName("Caption");
-        titleButtonsContainer.setWidth("100%");
+        top = new Grid(1,3);
+        top.setCellPadding(0);
+        top.setCellSpacing(1);
+        top.setWidth("100%");
         
+        cap = new Caption();
         cap.addMouseDownHandler(new MouseDownHandler() {
             public void onMouseDown(MouseDownEvent event) {
                 setFocus(true);
             }
         });
-        
-        winLabel.setStyleName("ScreenWindowLabel");
-        cap.add(winLabel);
         cap.setWidth("100%");
+        
+        label = new HTML();
+        label.setText(" ");
+       
+        cap.add(label);
+        
+        top.setWidget(0,0,cap);
+        top.getCellFormatter().setWidth(0,0,"100%");
+        
+        close = new FocusPanel();
+      
         close.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 close();
             }
         });
-        close.setStyleName("CloseButton");
+        
+        collapse = new FocusPanel();
+        
         collapse.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                if(middleGrid.isVisible())
+                if(body.isVisible())
                     outer.setWidth(outer.getOffsetWidth()+"px");
                 else
                     outer.setWidth("");
-                middleGrid.setVisible(!middleGrid.isVisible());
-                bottomRow.setVisible(!bottomRow.isVisible());
+                body.setVisible(!body.isVisible());
+                bottom.setVisible(!bottom.isVisible());
             }
         });
-        collapse.setStyleName("MinimizeButton");
-        hp.add(tlCorner);
-        titleButtonsContainer.add(cap);
-        titleButtonsContainer.setCellWidth(cap, "100%");
-        hp.add(titleButtonsContainer);        
-        hp.setCellWidth(titleButtonsContainer, "100%");
-        HorizontalPanel hp2 = new HorizontalPanel();
-        hp2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        hp2.add(collapse);
-        hp2.add(close);
-        titleButtonsContainer.add(hp2);
-        titleButtonsContainer.setCellHorizontalAlignment(hp2, HasAlignment.ALIGN_RIGHT);
-        hp.setCellWidth(hp2,"32px");
-        hp.setCellHorizontalAlignment(hp2,HasAlignment.ALIGN_RIGHT);
-
-        hp.add(trCorner);
+        
+        
+        top.setWidget(0,1,collapse);
+        
+        top.setWidget(0,2,close);
+        
+        outer.add(top);
+        
+        /* Set up middle of the window that contains window content */
+        body = new AbsolutePanel();
+        
+        outer.add(body);
+        
+        /* Set up bottom of the window that contans the status message */
+        statusImg = new FocusPanel();
+        
         statusImg.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
                 if(messagePanel == null){
@@ -206,12 +187,11 @@ public class Window extends FocusPanel implements WindowInt {
                     pop = new PopupPanel();
                 }
                 
-                DecoratorPanel dp = new DecoratorPanel();
-                dp.setStyleName("ErrorWindow");
-                dp.add(messagePanel);
-                dp.setVisible(true);
+                Window errorWin = new Window();
+                errorWin.setCSS(OpenELISResources.INSTANCE.dialog());
+                errorWin.setContent(messagePanel);
                 
-                pop.setWidget(dp);
+                pop.setWidget(errorWin);
                 final int left = ((Widget)event.getSource()).getAbsoluteLeft()+16;
                 final int top = ((Widget)event.getSource()).getAbsoluteTop();
                 pop.setPopupPositionAndShow(new PopupPanel.PositionCallback(){
@@ -225,6 +205,7 @@ public class Window extends FocusPanel implements WindowInt {
                 pop.show();
             }
         });
+        
         statusImg.addMouseOutHandler(new MouseOutHandler() {
            public void onMouseOut(MouseOutEvent event) {
                if(pop != null){
@@ -232,49 +213,18 @@ public class Window extends FocusPanel implements WindowInt {
                }
             } 
         });
-        status.setStyleName("StatusBar");
-        status.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-
-        status.add(statusImg);
-        status.add(message);
-        status.add(progressBar);
-        progressBar.setVisible(false);
-        status.setWidth("100%");
         
+        bottom = new Grid(1,2);
+        bottom.setWidget(0, 0,statusImg);
+        bottom.setText(0,1,Constants.get().loading());
+        bottom.getCellFormatter().setWidth(0,1,"100%");
+        bottom.setCellSpacing(0);
+        outer.add(bottom);
         
-        status.setCellWidth(message, "100%");
-        message.setStyleName("ScreenWindowLabel");
-        outer.add(hp);
-        
-        bottomRow.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        
-        bottomRow.setWidth("100%");
-        bottomRow.setSpacing(0);
-              
-        middleGrid.setCellPadding(0);
-        middleGrid.setCellSpacing(0);
-        middleGrid.getCellFormatter().addStyleName(0,0,"WindowLeft");
-        middleGrid.setWidget(0, 1, body);
-        middleGrid.getCellFormatter().addStyleName(0,2,"WindowRight");
-        
-        bottomRow.add(blCorner);
-        bottomRow.add(status);
-        bottomRow.add(brCorner);
-        
-        dragController.makeDraggable(brCorner);
-        //dragController.setBehaviorDragProxy(true);
-        //dragController.registerDropController(dropController);		
-        
-        
-        bottomRow.setCellWidth(status, "100%");
-        
-        body.addStyleName("WindowBody");
-        
-        outer.add(middleGrid);
-        outer.add(bottomRow);
-        outer.addStyleName("WindowPanel");
+        /* Sink events and add resize Handler */
         outer.sinkEvents(Event.ONCLICK);
         outer.setWidth("auto");
+       
         com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler() {
             public void onResize(ResizeEvent event) {
                 if(glass != null) {
@@ -283,6 +233,9 @@ public class Window extends FocusPanel implements WindowInt {
                 }
             }
         });
+        
+        /* Apply style to the window elements */
+        setCSS(css);
     }
 
     /**
@@ -291,32 +244,13 @@ public class Window extends FocusPanel implements WindowInt {
      * @param content
      */
     public void setContent(final Widget content){
-        if(this.content != null) 
-            body.remove(this.content);
         this.content = content;
-        body.insert(content, 0);
-        if(content instanceof Screen) {
-            ((Screen)content).setWindow(this);
-            setName(((Screen)content).getDefinition().getName());
-            setVisible(true);
-            RootPanel.get().removeStyleName("ScreenLoad");
-            setStatus("Done","");
-            setKeyHandling();
-        }else {
-        	setVisible(true);
-        	setKeyHandling();
-        	setStatus("Done","");
-        	RootPanel.get().removeStyleName("ScreenLoad");
-        }
-
-        
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-			public void execute() {
-                if(content.getOffsetWidth() < titleButtonsContainer.getOffsetWidth())
-                    body.setWidth(titleButtonsContainer.getOffsetWidth()+"px");
-                setFocus(true);
-			}
-		});
+        body.clear();
+        body.add(content);
+       	setVisible(true);
+       	setKeyHandling();
+       	setDone(Constants.get().done());
+       	RootPanel.get().removeStyleName(css.ScreenLoad());
     }
     
     public void setKeyHandling() {
@@ -326,19 +260,14 @@ public class Window extends FocusPanel implements WindowInt {
          */
         addDomHandler(new KeyDownHandler() {
          	 public void onKeyDown(KeyDownEvent event) {
-         		 if(content instanceof Screen)
-         			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((Screen)content).getDefinition().getPanel());
          		 if(content instanceof ViewPanel)
          			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((ViewPanel)content));
-         		 //event.stopPropagation();
-         		 //event.preventDefault();
         	 }
         },KeyDownEvent.getType());
     }
     
     public void setName(String name) {
-        cap.name = name;
-        winLabel.setText(name);
+        label.setText(name);
     }
     
     public void close() { 
@@ -358,12 +287,9 @@ public class Window extends FocusPanel implements WindowInt {
     public void destroy() {
         cap = null;
         outer = null;
-        status = null;
-        fp = null;
+        bottom = null;
         close = null;
         content = null;
-        message = null;
-
     }
         
     public void setMessagePopup(ArrayList<LocalizedException> exceptions, String style) {
@@ -373,12 +299,12 @@ public class Window extends FocusPanel implements WindowInt {
         for (LocalizedException exception : exceptions) {
             HorizontalPanel hp = new HorizontalPanel();
             if(exception instanceof Warning) {
-                hp.add(new Image("Images/bullet_yellow.png"));
-                hp.setStyleName("warnPopupLabel");
+                hp.add(new Image(OpenELISResources.INSTANCE.warn()));
+                hp.setStyleName(css.warnPopupLabel());
             }else{
-                hp.add(new Image("Images/bullet_red.png"));
-                hp.setStyleName("errorPopupLabel");
-                style = "InputError";
+                hp.add(new Image(OpenELISResources.INSTANCE.error()));
+                hp.setStyleName(css.errorPopupLabel());
+                style = css.InputError();
             }
             hp.add(new Label(exception.getMessage()));
             messagePanel.add(hp);
@@ -391,17 +317,15 @@ public class Window extends FocusPanel implements WindowInt {
     }
     
     public void setStatus(String text, String style){
-        if(message != null){
-            message.setText(text);
-            statusImg.setStyleName(style);
-        }
+    	bottom.setText(0, 1, text);
+        statusImg.setStyleName(style);
         unlockWindow();
     }
     
     public void lockWindow() {
         if(glass == null) {
             glass = new AbsolutePanel();
-            glass.setStyleName("GlassPanel");
+            glass.setStyleName(css.GlassPanel());
             glass.setHeight(content.getOffsetHeight()+"px");
             glass.setWidth(content.getOffsetWidth()+"px");
             RootPanel.get().add(glass, content.getAbsoluteLeft(),content.getAbsoluteTop());
@@ -416,13 +340,13 @@ public class Window extends FocusPanel implements WindowInt {
     }
     
     public void setBusy() {
-        setStatus("","spinnerIcon");
+        setStatus("",css.spinnerIcon());
         lockWindow();
 
     }
     
     public void setBusy(String message) {
-        setStatus(message,"spinnerIcon");
+        setStatus(message,css.spinnerIcon());
         lockWindow();
     }
     
@@ -439,7 +363,7 @@ public class Window extends FocusPanel implements WindowInt {
     
     public void setError(String message) {
         clearMessagePopup(message);
-        setStatus(message,"ErrorPanel");
+        setStatus(message,css.ErrorPanel());
         unlockWindow();
     }
 
@@ -448,6 +372,20 @@ public class Window extends FocusPanel implements WindowInt {
             unlockWindow();
             lockWindow();
         }
+    }
+    
+    public void setCSS(WindowNoImageCSS css) {
+    	this.css = css;
+    	css.ensureInjected();
+    	top.setStyleName(css.top());
+    	cap.setStyleName(css.Caption());
+    	label.setStyleName(css.ScreenWindowLabel());
+    	close.setStyleName(css.CloseButton());
+    	collapse.setStyleName(css.MinimizeButton());
+    	bottom.setStyleName(css.StatusBar());
+    	bottom.getCellFormatter().setStyleName(0,1,css.ScreenWindowLabel());
+    	body.setStyleName(css.WindowBody());
+    	outer.setStyleName(css.WindowPanel());
     }
 
     public HandlerRegistration addCloseHandler(CloseHandler<WindowInt> handler) {
@@ -465,16 +403,8 @@ public class Window extends FocusPanel implements WindowInt {
          }
 
     }
-    
-    public void setProgress(int percent) {
-        if(percent > 0){
-            progressBar.setVisible(true);
-            progressBar.setProgress(percent);
-        }else
-            progressBar.setVisible(false);
-    }
-    
-    protected void makeDragable(DragController controller) {
+        
+    public void makeDragable(DragController controller) {
     	controller.makeDraggable(this,cap);
     }
     
@@ -483,10 +413,9 @@ public class Window extends FocusPanel implements WindowInt {
      * @author tschmidt
      *
      */
-    private class Caption extends HorizontalPanel implements HasAllMouseHandlers { 
-    	
-    	public String name;
+    protected class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
 
+    	
         public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
             return addDomHandler(handler, MouseDownEvent.getType());
         }
@@ -511,33 +440,5 @@ public class Window extends FocusPanel implements WindowInt {
 			return addDomHandler(handler, MouseWheelEvent.getType());
 		}
     }
-    
-    private class ProgressBar extends AbsolutePanel {
-        
-        AbsolutePanel prog = new AbsolutePanel();
-        Label pct = new Label();
-        
-        public ProgressBar() {
-            setSize("75px","12px");
-            add(prog,0,0);
-            add(pct,30,0);
-            setStyleName("ProgressBarOuter");
-            prog.setHeight("100%");
-            prog.setWidth("0%");
-            setWidgetPosition(prog, 0, 0);
-            prog.setStyleName("ProgressBar");
-            pct.setStyleName("ProgressBarPct");
-            DOM.setStyleAttribute(pct.getElement(), "zIndex","1000");
-            
-        }
-        
-        public void setProgress(int percent) {
-            prog.setWidth(percent+"%");
-            pct.setText(percent+"%");
-        }
-        
-    }
-    
-
 
 }

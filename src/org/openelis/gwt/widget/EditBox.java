@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
@@ -92,7 +93,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     /**
      * Exceptions list
      */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+    protected Exceptions                           exceptions;
     
     
     /**
@@ -110,7 +111,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     	
     	textbox = new TextBase();
     	
-    	button = new Button(null,"...",false);
+    	button = new Button(null,"...");
     	
     	display.setWidget(0, 0, textbox);
     	display.setWidget(0, 1, button);
@@ -175,6 +176,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
 			}
 		});
     	
+    	exceptions = new Exceptions();
     }
 
     private void showPopup() {
@@ -275,7 +277,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
     				textbox.setText("");
     			}
     		
-    			validateExceptions = null;
+    			clearValidateExceptions();
         
     			try {
     				setValue(helper.getValue(text), true);
@@ -294,7 +296,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
      */
     public void validateQuery() {
         try {
-            validateExceptions = null;
+            clearValidateExceptions();
             helper.validateQuery(textbox.getText());
         } catch (LocalizedException e) {
             addValidateException(e);
@@ -363,7 +365,7 @@ public class EditBox extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
-    	if(validateExceptions != null)
+    	if(getValidateExceptions() != null)
     		return true;
     	  
     	if (required && getValue() == null) {
@@ -371,68 +373,69 @@ public class EditBox extends Composite implements ScreenWidgetInt,
             ExceptionHelper.checkExceptionHandlers(this);
     	}
     	  
-    	return endUserExceptions != null || validateExceptions != null;
+    	return getEndUserExceptions() != null || getValidateExceptions() != null;
     }
 
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
-    }
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
 
-    /**
-     * Combines both exceptions list into a single list to be displayed on the
-     * screen.
-     */
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        return validateExceptions;
-    }
+	}
 
-    public ArrayList<LocalizedException> getEndUserExceptions() {
-        return endUserExceptions;
-    }
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return exceptions.getValidateExceptions();
+	}
 
-    /**
-     * Clears all manual and validate exceptions from the widget.
-     */
-    public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        ExceptionHelper.clearExceptionHandlers(this);
-    }
-    
-    public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return exceptions.getEndUserExceptions();
+	}
+
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
+	public void clearExceptions() {
+		exceptions.clearExceptions();
+		removeExceptionStyle();
+		ExceptionHelper.clearExceptionHandlers(this);
+	}
+
+	public void clearEndUserExceptions() {
+		exceptions.clearEndUserExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	public void clearValidateExceptions() {
+		exceptions.clearValidateExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
     
     /**
      * Will add the style to the widget.
      */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName("InputWarning");
+    	else
+    		addStyleName("InputError");
     }
 
     /**
      * will remove the style from the widget
      */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName("InputError");
+        removeStyleName("InputWarning");
     }
 
     // ************* Implementation of Focusable ******************

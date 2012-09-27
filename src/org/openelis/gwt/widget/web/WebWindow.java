@@ -33,6 +33,7 @@ import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.Confirm;
 import org.openelis.gwt.widget.WindowInt;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -223,5 +224,17 @@ public class WebWindow extends FocusPanel implements WindowInt {
 	public HandlerRegistration addCloseHandler(CloseHandler<WindowInt> handler) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void makeDragable(DragController controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void positionGlass() {
+		// TODO Auto-generated method stub
+		
 	}
 }

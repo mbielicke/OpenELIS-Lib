@@ -57,7 +57,7 @@ public class ButtonScreen extends Screen {
 		icon.setEnabled(true);
 		icon.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setIcon(event.getValue());
+				test.setLeftIcon(event.getValue());
 			}
 		});
 		
@@ -66,7 +66,7 @@ public class ButtonScreen extends Screen {
 		wrap.setValue("Y");
 		wrap.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setWrap("Y".equals(event.getValue()));
+				//test.setWrap("Y".equals(event.getValue()));
 			}
 		});
 		

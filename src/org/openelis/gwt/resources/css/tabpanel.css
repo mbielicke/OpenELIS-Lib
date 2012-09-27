@@ -1,0 +1,11 @@
+@sprite .TabError {
+	gwt-image:'exclamation';
+	width:16px;
+	height:16px;
+}
+
+@sprite .TabData {
+	gwt-image:'data';
+	width:16px;
+	height:16px;
+}

@@ -320,7 +320,7 @@ public class TableScreen extends Screen {
 				model.add(new Item<String>("3","Option 3"));
 				sel.setModel(model);
 				column.setCellRenderer(new DropdownCell(sel));
-				sel.setMultiSelect(true);
+				//sel.setMultiSelect(true);
 			}
 			column.setFilterable("Y".equals(row.getCell(3)));
 			column.setSortable("Y".equals(row.getCell(4)));

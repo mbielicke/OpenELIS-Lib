@@ -2,8 +2,13 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.GeneralCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TextCSS;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -41,7 +46,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	/**
 	 * Exceptions list
 	 */
-	protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+	protected Exceptions                            exceptions;
 
 	/**
 	 * Data moved from Field to the widget
@@ -54,9 +59,11 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * This class replaces the functionality that Field used to provide but now
 	 * in a static way.
 	 */
-	protected WidgetHelper<String>                       helper    = new StringHelper();
+	protected WidgetHelper<String>                  helper    = new StringHelper();
 
-	protected PassWordTextBox                            source = this;
+	protected PassWordTextBox                       source = this;
+	
+	protected TextCSS                               css;
 
 	/**
 	 * The Constructor now sets the wrapped GWT TextBox as the element widget of
@@ -68,13 +75,16 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	}
 
 	public void init() {
+		css = OpenELISResources.INSTANCE.text();
+		css.ensureInjected();
+		
 		textbox = new PasswordTextBox();
 
 		setEnabled(false);
 
 		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
-				textbox.addStyleName("Focus");
+				textbox.addStyleName(css.Focus());
 				if(isEnabled())
 					textbox.selectAll();
 			}
@@ -82,7 +92,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 
 		addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				textbox.removeStyleName("Focus");
+				textbox.removeStyleName(css.Focus());
 				textbox.setSelectionRange(0, 0);
 
 				if(isEnabled()) 
@@ -91,6 +101,8 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 		});
 
 		initWidget(textbox);
+		
+		exceptions = new Exceptions();
 	}
 
 	public String getText() {
@@ -208,12 +220,12 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 
 		text = textbox.getText();
 
-		validateExceptions = null;
+		clearValidateExceptions();
 
 		try {
 			setValue(helper.getValue(text), true);
 			if (required && getValue() == null) 
-				throw new LocalizedException("exc.fieldRequiredException");
+				throw new LocalizedException(Constants.get().fieldRequired());
 		} catch (LocalizedException e) {
 			addValidateException(e);
 		}
@@ -225,7 +237,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 */
 	public void validateQuery() {
 		try {
-			validateExceptions = null;
+			clearValidateExceptions();
 			helper.validateQuery(textbox.getText());
 		} catch (LocalizedException e) {
 			addValidateException(e);
@@ -242,31 +254,28 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * @return
 	 */
 	public boolean hasExceptions() {
-		if(validateExceptions != null)
+		if(getValidateExceptions() != null)
 			return true;
 
 		if (required && getValue() == null) {
-			addValidateException(new LocalizedException("exc.fieldRequiredException"));
+			addValidateException(new LocalizedException(Constants.get().fieldRequired()));
 			ExceptionHelper.checkExceptionHandlers(this);
 		}
 
-		return endUserExceptions != null || validateExceptions != null;
+		return getEndUserExceptions() != null || getValidateExceptions() != null;
 	}
 
 	/**
 	 * Adds a manual Exception to the widgets exception list.
 	 */
 	public void addException(LocalizedException error) {
-		if (endUserExceptions == null)
-			endUserExceptions = new ArrayList<LocalizedException>();
-		endUserExceptions.add(error);
+		exceptions.addException(error);
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
 	protected void addValidateException(LocalizedException error) {
-		if (validateExceptions == null)
-			validateExceptions = new ArrayList<LocalizedException>();
-		validateExceptions.add(error);
+		exceptions.addValidateException(error);
+
 	}
 
 	/**
@@ -274,29 +283,29 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 * screen.
 	 */
 	public ArrayList<LocalizedException> getValidateExceptions() {
-		return validateExceptions;
+		return exceptions.getValidateExceptions();
 	}
 
 	public ArrayList<LocalizedException> getEndUserExceptions() {
-		return endUserExceptions;
+		return exceptions.getEndUserExceptions();
 	}
 
 	/**
 	 * Clears all manual and validate exceptions from the widget.
 	 */
 	public void clearExceptions() {
-		endUserExceptions = null;
-		validateExceptions = null;
+		exceptions.clearExceptions();
+		removeExceptionStyle();
 		ExceptionHelper.clearExceptionHandlers(this);
 	}
 
 	public void clearEndUserExceptions() {
-		endUserExceptions = null;
+		exceptions.clearEndUserExceptions();
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
 	public void clearValidateExceptions() {
-		validateExceptions = null;
+		exceptions.clearValidateExceptions();
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
@@ -304,15 +313,19 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	/**
 	 * Will add the style to the widget.
 	 */
-	public void addExceptionStyle(String style) {
-		addStyleName(style);
+	public void addExceptionStyle() {
+		if(ExceptionHelper.isWarning(this))
+			addStyleName(css.InputWarning());
+		else
+			addStyleName(css.InputError());
 	}
 
 	/**
 	 * will remove the style from the widget
 	 */
-	public void removeExceptionStyle(String style) {
-		removeStyleName(style);
+	public void removeExceptionStyle() {
+		removeStyleName(css.InputError());
+		removeStyleName(css.InputWarning());
 	}
 
 	// ************* Implementation of Focusable ******************

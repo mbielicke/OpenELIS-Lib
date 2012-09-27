@@ -33,7 +33,6 @@ import org.openelis.util.SessionManager;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.SerializationPolicy;
-import com.ibm.icu.util.Calendar;
 
 /**
  * This class extends RemoteServiceServlet from GWT and adds

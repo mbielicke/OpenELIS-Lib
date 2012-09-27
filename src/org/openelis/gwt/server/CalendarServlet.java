@@ -26,12 +26,13 @@
 package org.openelis.gwt.server;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.screen.CalendarServiceInt;
 
 /**
  * This class provides a service to the client to pull the current time from the server.
  *
  */
-public class CalendarService {
+public class CalendarServlet extends AppServlet implements CalendarServiceInt {
 
     private static final long serialVersionUID = 1L;
     

@@ -30,9 +30,6 @@ import java.util.Comparator;
 import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -85,7 +82,7 @@ public class Column extends AbsolutePanel implements ColumnInt {
     /**
      * Boolean flags used by column
      */
-    protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, isFilterable, required;
+    protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, isFilterable, required, display;
 
 
     protected String style;
@@ -96,7 +93,7 @@ public class Column extends AbsolutePanel implements ColumnInt {
     	int width,minWidth = 15;
     	boolean enabled = true,
     	        resizable = true,
-    	        isSortable, isFilterable, required;
+    	        isSortable, isFilterable, required,display = true;
     	CellRenderer renderer;
     	
     	public Builder(int width) {
@@ -153,6 +150,11 @@ public class Column extends AbsolutePanel implements ColumnInt {
     		return this;
     	}
     	
+    	public Builder display(boolean display) {
+    		this.display = display;
+    		return this;
+    	}
+    	
     	public Column build() {
     		return new Column(this);
     	}
@@ -169,6 +171,7 @@ public class Column extends AbsolutePanel implements ColumnInt {
         isSortable = builder.isSortable;
         isFilterable = builder.isFilterable;
         required = builder.required;
+        this.display = builder.display;
         if(builder.renderer != null)
         	setCellRenderer(builder.renderer);
         //setVisible(false);
@@ -498,6 +501,15 @@ public class Column extends AbsolutePanel implements ColumnInt {
 
     public boolean hasEditor() {
         return editor != null;
+    }
+    
+    public boolean isDisplayed() {
+    	return display;
+    }
+    
+    public void setDisplay(boolean display) {
+    	this.display = display;
+    	table.layout();
     }
 
 	@Override

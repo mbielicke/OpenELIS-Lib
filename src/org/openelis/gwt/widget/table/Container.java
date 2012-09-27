@@ -25,10 +25,12 @@
 */
 package org.openelis.gwt.widget.table;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,8 +42,13 @@ public class Container extends AbsolutePanel {
     protected Widget editor;
     protected Table table;
     
+    protected TableCSS css;
+    
     public Container() {
-        setStyleName("CellContainer");
+    	css = OpenELISResources.INSTANCE.table();
+    	css.ensureInjected();
+    	
+        setStyleName(css.CellContainer());
         command = new Command() {
             public void execute() {
                 ((Focusable)editor).setFocus(true);

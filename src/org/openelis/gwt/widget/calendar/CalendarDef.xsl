@@ -40,31 +40,23 @@ UIRF Software License are applicable instead of those above.
     <xsl:variable name="constants" select="resource:getBundle(string('org.openelis.gwt.constants.LibraryConstants'),locale:new(string($language)))" />
     <screen name="Calendar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <FocusPanel key="CalFocus">
-        <VerticalPanel style="CalendarWidget">
+        <VerticalPanel class="libRes.calendar.CalendarWidget">
           <widget halign="center">
-            <HorizontalPanel key="TimeBar" style="TimeBar" width="100%">
+            <HorizontalPanel key="TimeBar" class="libRes.calendar.TimeBar" width="100%">
               <widget halign="center">
                 <textbox begin="3" end="5" field="Date" key="time" pattern="HH:mm" width="45px" />
               </widget>
             </HorizontalPanel>
           </widget>
-          <HorizontalPanel style="MonthBar">
-            <button action="prevMonth" key="prevMonth" style="Button">
-              <AbsolutePanel style="PreviousMonth" />
-            </button>
-            <label key="MonthDisplay" style="MonthDisplay"></label>
-            <button action="monthSelect" key="monthSelect" style="Button">
-              <AbsolutePanel style="MonthSelect" />
-            </button>
-            <button action="nextMonth" key="nextMonth" style="Button">
-              <AbsolutePanel style="NextMonth" />
-            </button>
+          <HorizontalPanel class="libRes.calendar.MonthBar">
+            <button action="prevMonth" key="prevMonth" icon="libRes.calendar.PreviousMonth"/>
+            <label key="MonthDisplay" class="libRes.calendar.MonthDisplay"></label>
+            <button action="monthSelect" key="monthSelect" icon="libRes.calendar.MonthSelect"/>
+            <button action="nextMonth" key="nextMonth" icon="libRes.calendar.NextMonth"/>
           </HorizontalPanel>
           <VerticalPanel key="calContainer" width="100%"></VerticalPanel>
-          <AbsolutePanel halign="center" style="TodayBar" width="100%">
-            <button action="today" key="today" style="Button" width="75px">
-              <text>Today</text>
-            </button>
+          <AbsolutePanel halign="center" class="libRes.calendar.TodayBar" width="100%">
+            <button action="today" key="today" text="Today" width="75px"/>
           </AbsolutePanel>
           <AbsolutePanel visible="false">
             <label key="month0" text="{resource:getString($constants,'cal.month0')}" />
@@ -82,6 +74,7 @@ UIRF Software License are applicable instead of those above.
           </AbsolutePanel>
         </VerticalPanel>
       </FocusPanel>
+      <Resource field="libRes" source="org.openelis.gwt.resources.OpenELISResources"/>
     </screen>
   </xsl:template>
 </xsl:stylesheet>

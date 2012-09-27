@@ -30,7 +30,8 @@ UIRF Software License are applicable instead of those above.
 	<inherits name="com.google.gwt.activity.Activity"/>
 	<inherits name="com.google.gwt.xml.XML"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
-        <inherits name="org.openelis.gwt.Common"/>
+    <inherits name="com.google.gwt.resources.Resources" />
+    <inherits name="org.openelis.gwt.Common"/>
     <inherits name="org.openelis.gwt.Screen"/>
     <inherits name="com.google.gwt.logging.Logging"/>
     <inherits name="com.allen_sauer.gwt.dnd.gwt-dnd"/> 
@@ -38,7 +39,9 @@ UIRF Software License are applicable instead of those above.
   <!-- Load dinamically predefined styles in the library when the application starts -->
   <source path="widget"/>
   <source path="common"/>
-  
+  <source path="resources"/>
+  <source path="constants"/>
+    
   <replace-with class="org.openelis.gwt.widget.fileupload.FileLoadButton.FileLoadButtonImplClick">
     <when-type-is class="org.openelis.gwt.widget.fileupload.FileLoadButton.FileLoadButtonImpl"/>
     <any>

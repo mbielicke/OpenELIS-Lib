@@ -46,129 +46,122 @@ UIRF Software License are applicable instead of those above.
     </xsl:variable>
     <xsl:variable name="constants" select="resource:getBundle('org.openelis.gwt.constants..LibraryConstants',locale:new(string($language)))" />
     <screen name="MonthYear" serviceUrl="ElisService" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <VerticalPanel style="CalendarWidget">
-        <HorizontalPanel style="Calendar" width="100%">
+      <VerticalPanel class="libRes.calendar.CalendarWidget">
+        <HorizontalPanel class="libRes.calendar.Calendar" width="100%">
           <AbsolutePanel>
             <TablePanel padding="0" spacing="0" width="100%">
               <row>
-                <button key="month0" style="Button" toggle="true">
+                <button key="month0" toggle="true">
                   <label key="month0Text" text="{resource:getString($constants,'cal.abrvMonth0')}" wordwrap="true" />
                 </button>
-                <button key="month6" style="Button" toggle="true">
+                <button key="month6" toggle="true">
                   <label key="month6Text" text="{resource:getString($constants,'cal.abrvMonth6')}" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="month1" style="Button" toggle="true">
+                <button key="month1" toggle="true">
                   <label key="month1Text" text="{resource:getString($constants,'cal.abrvMonth1')}" wordwrap="true" />
                 </button>
-                <button key="month7" style="Button" toggle="true">
+                <button key="month7" toggle="true">
                   <label key="month7Text" text="{resource:getString($constants,'cal.abrvMonth7')}" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="month2" style="Button" toggle="true">
+                <button key="month2" toggle="true">
                   <label key="month2Text" text="{resource:getString($constants,'cal.abrvMonth2')}" wordwrap="true" />
                 </button>
-                <button key="month8" style="Button" toggle="true">
+                <button key="month8" toggle="true">
                   <label key="month8Text" text="{resource:getString($constants,'cal.abrvMonth8')}" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="month3" style="Button" toggle="true">
+                <button key="month3" toggle="true">
                   <label key="month3Text" text="{resource:getString($constants,'cal.abrvMonth3')}" wordwrap="true" />
                 </button>
-                <button key="month9" style="Button" toggle="true">
+                <button key="month9" toggle="true">
                   <label key="month9Text" text="{resource:getString($constants,'cal.abrvMonth9')}" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="month4" style="Button" toggle="true">
+                <button key="month4" toggle="true">
                   <label key="month4Text" text="{resource:getString($constants,'cal.abrvMonth4')}" wordwrap="true" />
                 </button>
-                <button key="month10" style="Button" toggle="true">
+                <button key="month10" toggle="true">
                   <label key="month10Text" text="{resource:getString($constants,'cal.abrvMonth10')}" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="month5" style="Button" toggle="true">
+                <button key="month5" toggle="true">
                   <label key="month5Text" text="{resource:getString($constants,'cal.abrvMonth5')}" wordwrap="true" />
                 </button>
-                <button key="month11" style="Button" toggle="true">
+                <button key="month11" toggle="true">
                   <label key="month11Text" text="{resource:getString($constants,'cal.abrvMonth11')}" wordwrap="true" />
                 </button>
               </row>
             </TablePanel>
           </AbsolutePanel>
-          <AbsolutePanel style="Divider"></AbsolutePanel>
+          <AbsolutePanel class="libRes.calendar.Divider"></AbsolutePanel>
           <AbsolutePanel>
             <TablePanel padding="0" spacing="0" width="100%">
               <row>
                 <widget>
-                  <button key="prevDecade" style="Button">
-                    <AbsolutePanel style="prevNavIndex" />
-                  </button>
+                  <button key="prevDecade" icon="libRes.calendar.prevNavIndex"/>
                 </widget>
                 <widget>
-                  <button key="nextDecade" style="Button">
-                    <AbsolutePanel style="nextNavIndex" />
-                  </button>
+                  <button key="nextDecade" icon="libRes.calendar.nextNavIndex"/>
                 </widget>
               </row>
               <row>
-                <button key="year0" style="Button" toggle="true">
+                <button key="year0" toggle="true">
                   <label key="year0Text" wordwrap="true" />
                 </button>
-                <button key="year5" style="Button" toggle="true">
+                <button key="year5" toggle="true">
                   <label key="year5Text" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="year1" style="Button" toggle="true">
+                <button key="year1" toggle="true">
                   <label key="year1Text" wordwrap="true" />
                 </button>
-                <button key="year6" style="Button" toggle="true">
+                <button key="year6" toggle="true">
                   <label key="year6Text" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="year2" style="Button" toggle="true">
+                <button key="year2" toggle="true">
                   <label key="year2Text" wordwrap="true" />
                 </button>
-                <button key="year7" style="Button" toggle="true">
+                <button key="year7" toggle="true">
                   <label key="year7Text" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="year3" style="Button" toggle="true">
+                <button key="year3" toggle="true">
                   <label key="year3Text" wordwrap="true" />
                 </button>
-                <button key="year8" style="Button" toggle="true">
+                <button key="year8" toggle="true">
                   <label key="year8Text" wordwrap="true" />
                 </button>
               </row>
               <row>
-                <button key="year4" style="Button" toggle="true">
+                <button key="year4" toggle="true">
                   <label key="year4Text" wordwrap="true" />
                 </button>
-                <button key="year9" style="Button" toggle="true">
+                <button key="year9" toggle="true">
                   <label key="year9Text" wordwrap="true" />
                 </button>
               </row>
             </TablePanel>
           </AbsolutePanel>
         </HorizontalPanel>
-        <AbsolutePanel halign="center" layout="absolute" style="SelectBar">
+        <AbsolutePanel halign="center" layout="absolute" class="libRes.calendar.SelectBar">
           <HorizontalPanel layout="horizontal">
-            <button action="ok" key="ok" style="Button">
-              <text>OK</text>
-            </button>
-            <button action="cancel" align="left" key="cancel" style="Button">
-              <text>CANCEL</text>
-            </button>
+            <button action="ok" key="ok" text="OK"/>
+            <button action="cancel" align="left" key="cancel" text="CANCEL"/>
           </HorizontalPanel>
         </AbsolutePanel>
       </VerticalPanel>
+      <Resource field="libRes" source="org.openelis.gwt.resources.OpenELISResources"/>
     </screen>
   </xsl:template>
 </xsl:stylesheet>

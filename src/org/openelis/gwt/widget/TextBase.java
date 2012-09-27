@@ -1,5 +1,8 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TextCSS;
+
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -30,6 +33,11 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     protected String                                picture,mask;
     
     protected TextBase                              source = this;
+    
+    protected static TextCSS                        css = OpenELISResources.INSTANCE.text();
+    {
+    	css.ensureInjected();
+    }
     
     /**
      * This method is overwritten to implement case management. Use the
@@ -73,16 +81,16 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     	
         switch (textCase) {
             case UPPER:
-                addStyleName("Upper");
-                removeStyleName("Lower");
+                addStyleName(css.Upper());
+                removeStyleName(css.Lower());
                 break;
             case LOWER:
-                addStyleName("Lower");
-                removeStyleName("Upper");
+                addStyleName(css.Lower());
+                removeStyleName(css.Upper());
                 break;
             default:
-                removeStyleName("Upper");
-                removeStyleName("Lower");
+                removeStyleName(css.Upper());
+                removeStyleName(css.Lower());
         }
     }
 

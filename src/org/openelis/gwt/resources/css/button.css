@@ -1,0 +1,58 @@
+
+.Button{
+	border:1px solid #7293be;
+	border-radius : 3px;
+}
+
+@if user.agent gecko1_8 {
+	.Button {
+		background-image: -moz-linear-gradient(top,#ffffff,#dddfe2);
+		-moz-border-radius : 3px;
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.Button {
+		background-image: -ms-linear-gradient(top,#ffffff,#dddfe2);
+	}
+}@elif user.agent safari {
+	.Button {
+		background-image: -webkit-linear-gradient(top,#ffffff,#dddfe2);
+	}
+}
+
+.Hover{}
+
+@if user.agent gecko1_8 {
+	.Hover{
+		background-image: -moz-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.Hover {
+		background-image: -ms-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}	
+}@elif user.agent safari {
+	.Hover {
+		background-image: -webkit-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}
+}
+
+.Pressed{}
+
+@if user.agent gecko1_8 {
+	.Pressed {
+		background-image:-moz-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.Pressed {
+		background-image:-ms-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}@elif user.agent safari {
+	.Pressed {
+		background-image:-webkit-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}
+
+.Disabled{
+	color:gray;
+}
+
+

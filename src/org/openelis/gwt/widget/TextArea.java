@@ -2,8 +2,12 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.TextCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -46,7 +50,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
     /**
      * Exceptions list
      */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+    protected Exceptions                           exceptions;
 
     /**
      * Data moved from Field to the widget
@@ -58,7 +62,9 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      * This class replaces the functionality that Field used to provide but now
      * in a static way.
      */
-    protected WidgetHelper<String>                     helper = new StringHelper();
+    protected WidgetHelper<String>                   helper = new StringHelper();
+    
+    protected TextCSS                             css;
 
     /**
      * The Constructor now sets the wrapped GWT TextBox as the element widget of
@@ -70,13 +76,16 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
     }
     
     public void init() {
+    	css = OpenELISResources.INSTANCE.text();
+    	css.ensureInjected();
+    	
         textarea = new com.google.gwt.user.client.ui.TextArea();
         	
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
         		if(isEnabled()) {
         			textarea.selectAll();
-        			addStyleName("Focus");
+        			addStyleName(css.Focus());
         		}
         	}
         });
@@ -85,13 +94,17 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
 			@Override
 			public void onBlur(BlurEvent event) {
 				textarea.setSelectionRange(0,0);
-				removeStyleName("Focus");
+				removeStyleName(css.Focus());
 				finishEditing();
             }
 
         });
        
         initWidget(textarea);
+        
+        textarea.setStyleName(css.ScreenTextArea());
+        
+        exceptions = new Exceptions();
     }
 
     // ************** Methods for TextBox attributes ***********************
@@ -170,7 +183,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      * @param fireEvents
      */
     public void finishEditing() {
-        validateExceptions = null;
+    	exceptions.clearValidateExceptions();
         
         if(isEnabled()) {
         	if(queryMode)
@@ -180,7 +193,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
         		try {
         			setValue(helper.getValue(textarea.getText()), true);
         			if(required && value == null)
-        				addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        				addValidateException(new LocalizedException(Constants.get().fieldRequired()));
         		} catch (LocalizedException e) {
         			addValidateException(e);
         		}
@@ -194,7 +207,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      */
     protected void validateQuery() {
         try {
-            validateExceptions = null;
+            exceptions.clearValidateExceptions();
             helper.validateQuery(textarea.getText());
         } catch (LocalizedException e) {
             addValidateException(e);
@@ -216,76 +229,77 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      * @return
      */
     public boolean hasExceptions() {
-    	if(validateExceptions != null)
+    	if(exceptions.getValidateExceptions() != null)
     		return true;
     	  
     	if (required && getValue() == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            addValidateException(new LocalizedException(Constants.get().fieldRequired()));
             ExceptionHelper.checkExceptionHandlers(this);
     	}
     	  
-    	return endUserExceptions != null || validateExceptions != null;
+    	return getEndUserExceptions() != null || getValidateExceptions() != null;
     }
 
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
-    }
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
 
-    /**
-     * Combines both exceptions list into a single list to be displayed on the
-     * screen.
-     */
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        return validateExceptions;
-    }
+	}
 
-    public ArrayList<LocalizedException> getEndUserExceptions() {
-        return endUserExceptions;
-    }
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return exceptions.getValidateExceptions();
+	}
 
-    /**
-     * Clears all manual and validate exceptions from the widget.
-     */
-    public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        ExceptionHelper.clearExceptionHandlers(this);
-    }
-    
-    public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return exceptions.getEndUserExceptions();
+	}
+
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
+	public void clearExceptions() {
+		exceptions.clearExceptions();
+		removeExceptionStyle();
+		ExceptionHelper.clearExceptionHandlers(this);
+	}
+
+	public void clearEndUserExceptions() {
+		exceptions.clearEndUserExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	public void clearValidateExceptions() {
+		exceptions.clearValidateExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
     /**
      * Will add the style to the widget.
      */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName(css.InputWarning());
+    	else
+    		addStyleName(css.InputError());
     }
 
     /**
      * will remove the style from the widget
      */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName(css.InputError());
+        removeStyleName(css.InputWarning());
     }
 
     // ************** Implementation of HasValue<T> interface ***************

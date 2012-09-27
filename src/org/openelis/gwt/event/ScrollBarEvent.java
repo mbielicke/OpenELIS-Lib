@@ -34,15 +34,17 @@ import com.google.gwt.event.shared.GwtEvent;
 public class ScrollBarEvent extends GwtEvent<ScrollBarHandler>{
     
     private static Type<ScrollBarHandler> TYPE;
+    int pos;
     
-    public static void fire(HasScrollBarHandlers source) {
+    public static void fire(HasScrollBarHandlers source,int pos) {
         if (TYPE != null) {
-            ScrollBarEvent event = new ScrollBarEvent();
+            ScrollBarEvent event = new ScrollBarEvent(pos);
             source.fireEvent(event);
         }
     }
     
-    private ScrollBarEvent() {
+    private ScrollBarEvent(int pos) {
+    	this.pos = pos;
     }
 
     @Override
@@ -61,6 +63,10 @@ public class ScrollBarEvent extends GwtEvent<ScrollBarHandler>{
           TYPE = new Type<ScrollBarHandler>();
         }
         return TYPE;
+    }
+    
+    public int getPosition() {
+    	return pos;
     }
     
 }

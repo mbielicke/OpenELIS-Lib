@@ -25,9 +25,6 @@
 */
 package org.openelis.gwt.widget.table;
 
-import java.util.ArrayList;
-
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.event.shared.GwtEvent;

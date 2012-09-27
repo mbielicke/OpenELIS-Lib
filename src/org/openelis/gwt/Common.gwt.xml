@@ -39,12 +39,8 @@ UIRF Software License are applicable instead of those above.
  
  Copyright (C) The University of Iowa.  All Rights Reserved.
 -->
-<module>
+<module rename-to="lib">
 	<source path="common"/>
 	<source path="services"/>
-    <public path="public"/>
-    <stylesheet src="CSS/Table.css"/>
-    <stylesheet src="CSS/calendar.css"/>    
-    <stylesheet src="CSS/popwindow.css"/>
-    <stylesheet src="CSS/menu.css"/>
+
 </module>

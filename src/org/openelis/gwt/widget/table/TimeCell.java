@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -19,11 +22,16 @@ public class TimeCell implements CellRenderer, CellEditor {
 	private TextBox<String> editor;
 	private ColumnInt       column;
     private boolean         query;
+    
+    protected TableCSS      css;
 	
 	public TimeCell() {
+		css = OpenELISResources.INSTANCE.table();
+		css.ensureInjected();
+		
 		editor = new TextBox<String>();
 		editor.setEnabled(true);
-		editor.setStyleName("TableTextBox");
+		editor.setStyleName(css.TableTextBox());
 		editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
@@ -67,7 +75,7 @@ public class TimeCell implements CellRenderer, CellEditor {
 		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
 		
 		if(validate != null && !(validate instanceof Double))
-			exceptions.add(new LocalizedException("exc.InvalidNumeric"));
+			exceptions.add(new LocalizedException(Constants.get().invalidNumeric()));
 		
 		return exceptions;
 			

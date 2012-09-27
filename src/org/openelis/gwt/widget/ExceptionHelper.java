@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
+import org.openelis.gwt.resources.DialogCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.WindowCSS;
+import org.openelis.gwt.resources.WindowNoImageCSS;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -13,6 +17,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.core.java.util.Collections;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -32,7 +37,7 @@ public class ExceptionHelper {
      * Final widgets used for displaying Exceptions in Popup
      */
     protected static final VerticalPanel                                exceptionPanel;
-    protected static final DecoratorPanel                               dp;
+    protected static final org.openelis.gwt.widget.Window            window;
     protected static final PopupPanel                                   popPanel;
     protected static final HashMap<HasExceptions,HandlerRegistration>   overHandlers;
     protected static final HashMap<HasExceptions,HandlerRegistration>   outHandlers;
@@ -40,22 +45,24 @@ public class ExceptionHelper {
     
     protected static final ExceptionHandlers                            handlers;
 
+    protected static final DialogCSS                                    css;                                       
     /**
      * Private constructor used to delay creating final widgets until needed
      */
     static {
+    	css = OpenELISResources.INSTANCE.dialog();
         // Creation of final widgets
         exceptionPanel = new VerticalPanel();
         popPanel       = new PopupPanel(true);
-        dp             = new DecoratorPanel();
+        window         = new org.openelis.gwt.widget.Window();
         overHandlers   = new HashMap<HasExceptions,HandlerRegistration>();
         outHandlers    = new HashMap<HasExceptions,HandlerRegistration>();
  
-        dp.setStyleName("ErrorWindow");
-        dp.add(exceptionPanel);
-        dp.setVisible(true);
+        window.setCSS(css);
+        window.setName("Errors");
+        window.setContent(exceptionPanel);
 
-        popPanel.setWidget(dp);
+        popPanel.setWidget(window);
         popPanel.setStyleName("");
         
         timer = new Timer() {
@@ -73,16 +80,15 @@ public class ExceptionHelper {
      * @param widget
      */
     private static void clearExceptionStyle(HasExceptions widget) {
-        widget.removeExceptionStyle("InputError");
-        widget.removeExceptionStyle("InputWarning");
+        widget.removeExceptionStyle();
     }
     
     /**
-     * Checks the exceptions on the widget and sets the appropiate style
+     * Checks the exceptions on the widget and sets the appropriate style
      * 
      * @param widget
      */
-    private static void setExceptionStyle(HasExceptions widget) {
+    public static boolean isWarning(HasExceptions widget) {
         ArrayList<LocalizedException> exceptions = null;
     
         for (int i = 0; i < 2; i++ ) {
@@ -107,14 +113,12 @@ public class ExceptionHelper {
             }
 
             for (LocalizedException exception : exceptions) {
-                if(!(exception instanceof Warning)){
-                    widget.addExceptionStyle("InputError");
-                    return;
-                }
+                if(!(exception instanceof Warning))
+                    return false;
             }
         }
         
-        widget.addExceptionStyle("InputWarning");
+        return true;
     }
     
     
@@ -124,12 +128,12 @@ public class ExceptionHelper {
      */
     public static void checkExceptionHandlers(HasExceptions widget) {
         clearExceptionStyle(widget);
-        if (widget.hasExceptions()) {
+        if (widget.getEndUserExceptions() != null || widget.getValidateExceptions() != null) {
             if (!overHandlers.containsKey(widget)) { 
                 overHandlers.put(widget, widget.addMouseOverHandler(handlers));
                 outHandlers.put(widget, widget.addMouseOutHandler(handlers));
             }
-            setExceptionStyle(widget);
+            widget.addExceptionStyle();
         } else {
             if (overHandlers.containsKey(widget)){ 
                 overHandlers.remove(widget).removeHandler();
@@ -184,11 +188,11 @@ public class ExceptionHelper {
             for (LocalizedException exception : exceptions) {
                 grid.insertRow(0);
                 if (exception instanceof Warning) {
-                    grid.getCellFormatter().setStyleName(0, 0, "WarnIcon");
-                    grid.getCellFormatter().setStyleName(0,1,"warnPopupLabel");
+                    grid.getCellFormatter().setStyleName(0, 0, css.WarnIcon());
+                    grid.getCellFormatter().setStyleName(0,1,css.warnPopupLabel());
                 } else {
-                    grid.getCellFormatter().setStyleName(0, 0, "ErrorIcon");
-                    grid.getCellFormatter().setStyleName(0,1,"errorPopupLabel");
+                    grid.getCellFormatter().setStyleName(0, 0, css.ErrorIcon());
+                    grid.getCellFormatter().setStyleName(0,1,css.errorPopupLabel());
                 }
                 grid.setText(0, 1, exception.getMessage());
             }

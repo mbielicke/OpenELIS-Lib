@@ -25,13 +25,17 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.WindowCSS;
+import org.openelis.gwt.resources.WindowNoImageCSS;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ModalWindow extends Window {
+public class ModalWindow extends org.openelis.gwt.widget.Window {
     
     private AbsolutePanel modalPanel;
     private AbsolutePanel modalGlass;
@@ -39,17 +43,22 @@ public class ModalWindow extends Window {
     private AbsolutePositionDropController dropController;
     public static final int position=100;
     
+    protected WindowNoImageCSS css;
+    
     public ModalWindow() {
         super();
+        css = OpenELISResources.INSTANCE.window();
+        css.ensureInjected();
+        
         modalGlass = new AbsolutePanel();
-        modalGlass.setStyleName("GlassPanel");
+        modalGlass.setStyleName(css.GlassPanel());
         modalGlass.setHeight(com.google.gwt.user.client.Window.getClientHeight()+"px");
         modalGlass.setWidth(com.google.gwt.user.client.Window.getClientWidth()+"px");
         
         RootPanel.get().add(modalGlass);
         RootPanel.get().setWidgetPosition(modalGlass, 0, 0);
         modalPanel = new AbsolutePanel();
-        modalPanel.setStyleName("ModalPanel");
+        modalPanel.setStyleName(css.ModalPanel());
         modalPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight()+"px");
         modalPanel.setWidth(com.google.gwt.user.client.Window.getClientWidth()+"px");
         modalPanel.add(this,position,position);

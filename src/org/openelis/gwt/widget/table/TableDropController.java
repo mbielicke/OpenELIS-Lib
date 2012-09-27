@@ -10,6 +10,8 @@ import org.openelis.gwt.event.HasBeforeDropHandlers;
 import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
 import org.openelis.gwt.event.DropEnterEvent.DropPosition;
+import org.openelis.gwt.resources.DragDropCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.DragItem;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -31,11 +33,6 @@ public final class TableDropController extends SimpleDropController implements
                                                                    HasBeforeDropHandlers<DragItem>,
                                                                    HasDropHandlers<DragItem>,
                                                                    HasDropEnterHandlers<DragItem> {
-
-    /**
-     * String representing CSS class used for positioner
-     */
-    protected static final String CSS_DROP_POSITIONER = "DropPositioner";
 
     /**
      * Table that this controller is setup for
@@ -76,6 +73,8 @@ public final class TableDropController extends SimpleDropController implements
      * Number of rows and direction to scroll
      */
     protected int                 scrollRows;
+    
+    protected DragDropCSS         css;
 
     /**
      * Constructor that takes the Table widget to be used by this controller
@@ -86,6 +85,9 @@ public final class TableDropController extends SimpleDropController implements
         /* Pass the Drop area to the base class */
         super(tbl.view);
         this.table = tbl;
+        
+        css = OpenELISResources.INSTANCE.dragDrop();
+        css.ensureInjected();
 
         /*
          * Timer used to keep scrolling the table until the user lets up the
@@ -105,7 +107,7 @@ public final class TableDropController extends SimpleDropController implements
          * will occur
          */
         positioner = new AbsolutePanel();
-        positioner.addStyleName(CSS_DROP_POSITIONER);
+        positioner.addStyleName(css.DropPositioner());
         DOM.setStyleAttribute(positioner.getElement(), "zIndex", "1000");
     }
 

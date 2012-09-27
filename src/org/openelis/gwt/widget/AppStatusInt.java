@@ -24,9 +24,6 @@ public interface AppStatusInt {
 	
 	public void setDone(String message);
 	
-	public void setError(String message);
-	
-	public void setProgress(int percent);
-	
+	public void setError(String message);	
 
 }

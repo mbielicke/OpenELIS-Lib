@@ -1,0 +1,12 @@
+@sprite .SelectButton {
+	gwt-image:'selectArrow';
+}
+
+@sprite .CloseButton {
+	gwt-image:'closeButton';
+    width:20px;
+    height:20px;
+    cursor:pointer;
+}
+
+.ScreenLabel{}

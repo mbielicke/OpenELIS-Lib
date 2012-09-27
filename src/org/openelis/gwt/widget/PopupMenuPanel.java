@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.PopupCSS;
+
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -79,11 +82,16 @@ public class PopupMenuPanel extends PopupPanel {
      */
     protected enum SCROLL_DIR {UP,DOWN};
     
+    protected PopupCSS css;
+    
     /**
      * No-Arg constructor
      */
     public PopupMenuPanel() {
         super(true);
+        
+        css = OpenELISResources.INSTANCE.popup();
+        css.ensureInjected();
        
         VerticalPanel outer;
         
@@ -101,8 +109,8 @@ public class PopupMenuPanel extends PopupPanel {
                 upTimer.cancel();
             }
         });
-        up.setStyleName("MenuUp");
-        up.addStyleName("MenuDisabled");
+        up.setStyleName(css.MenuUp());
+        up.addStyleName(css.MenuDisabled());
         up.setVisible(false);
         outer.add(up);
         
@@ -125,17 +133,24 @@ public class PopupMenuPanel extends PopupPanel {
                 downTimer.cancel();
             }
         });
-        down.setStyleName("MenuDown");
+        down.setStyleName(css.MenuDown());
         down.setVisible(false);
         outer.add(down);
-        setWidget(outer);
+        
+        AbsolutePanel ap1 = new AbsolutePanel();
+        AbsolutePanel divider = new AbsolutePanel();
+        DOM.setStyleAttribute(divider.getElement(), "position", "absolute");
+        divider.setStyleName(css.divider());
+        ap1.add(outer);
+        ap1.add(divider);
+        setWidget(ap1);
        
         /* Add MouseWheel scrolling to menu */
         addDomHandler(new MouseWheelHandler() {
             public void onMouseWheel(MouseWheelEvent event) {
-                if(event.isSouth() && down.getStyleName().indexOf("MenuDisabled") == -1)
+                if(event.isSouth() && down.getStyleName().indexOf(css.MenuDisabled()) == -1)
                   scroll(SCROLL_DIR.DOWN);
-                if(event.isNorth() && up.getStyleName().indexOf("MenuDisabled") == -1)
+                if(event.isNorth() && up.getStyleName().indexOf(css.MenuDisabled()) == -1)
                   scroll(SCROLL_DIR.UP);
             }
         },MouseWheelEvent.getType());
@@ -255,22 +270,22 @@ public class PopupMenuPanel extends PopupPanel {
      * @param dir
      */
     private void scroll(SCROLL_DIR dir) {
-        if(dir == SCROLL_DIR.DOWN && down.getStyleName().indexOf("MenuDisabled") == -1){
+        if(dir == SCROLL_DIR.DOWN && down.getStyleName().indexOf(css.MenuDisabled()) == -1){
             if(ap.getWidgetTop(panel) <= ap.getOffsetHeight() - panel.getOffsetHeight()){
-                down.addStyleName("MenuDisabled");
+                down.addStyleName(css.MenuDisabled());
                 downTimer.cancel();
             }else{
                 ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)-10);
-                up.removeStyleName("MenuDisabled");
+                up.removeStyleName(css.MenuDisabled());
             }
         }
-        if(dir == SCROLL_DIR.UP && up.getStyleName().indexOf("MenuDisabled") == -1){
+        if(dir == SCROLL_DIR.UP && up.getStyleName().indexOf(css.MenuDisabled()) == -1){
             if(ap.getWidgetTop(panel) >= 0){
-                up.addStyleName("MenuDisabled");
+                up.addStyleName(css.MenuDisabled());
                 upTimer.cancel();
             }else{
                 ap.setWidgetPosition(panel, 0, ap.getWidgetTop(panel)+10);
-                down.removeStyleName("MenuDisabled");
+                down.removeStyleName(css.MenuDisabled());
             }
         }
     }

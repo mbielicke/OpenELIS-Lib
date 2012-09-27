@@ -35,6 +35,9 @@ import java.util.logging.Logger;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.Queryable;
@@ -173,11 +176,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	protected View view;
 
 	/**
-	 * Primary CSS style to be applied to this table.
-	 */
-	protected String TABLE_STYLE = "Table";
-
-	/**
 	 * Arrays for determining relative X positions for columns
 	 */
 	protected short[] xForColumn, columnForX;
@@ -252,8 +250,13 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			return new Table(this);
 		}
 	}
+	
+	protected TableCSS                      css;
 		
 	public Table(Builder builder) {
+		css = OpenELISResources.INSTANCE.table();
+		css.ensureInjected();
+		
 		rowHeight = builder.rowHeight;
 		visibleRows = builder.visibleRows;
 		multiSelect = builder.multiSelect;
@@ -307,7 +310,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 								}
 
 							}
-							if (startEditing(row, col)){
+							if (startEditing(row, col, event)){
 								event.preventDefault();
 								event.stopPropagation();
 								break;
@@ -324,7 +327,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 									break;
 								}
 							}
-							if (startEditing(row, col)){
+							if (startEditing(row, col, event)){
 								event.preventDefault();
 								event.stopPropagation();
 								break;
@@ -343,7 +346,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 								row++;
 								if (row >= getRowCount())
 									break;
-								if (selectRowAt(row))
+								
+								selectRowAt(row,event);
+								
+								if(isRowSelected(row))
 									break;
 							}
 						}
@@ -355,7 +361,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						row++;
 						if (row >= getRowCount())
 							break;
-						if (startEditing(row, col))
+						if (startEditing(row, col, event))
 							break;
 					}
 					break;
@@ -369,7 +375,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 								row--;
 								if (row < 0)
 									break;
-								if (selectRowAt(row))
+								
+								selectRowAt(row,event);
+								
+								if(isRowSelected(row))
 									break;
 							}
 						}
@@ -381,7 +390,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						row--;
 						if (row < 0)
 							break;
-						if (startEditing(row, col))
+						if (startEditing(row, col, event))
 							break;
 					}
 					break;
@@ -400,7 +409,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 						row = getSelectedRow();
 					col = 0;
 					while (col < getColumnCount()) {
-						if (startEditing(row, col))
+						if (startEditing(row, col, event))
 							break;
 						col++;
 					}
@@ -409,7 +418,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			}
 		}, KeyDownEvent.getType());
 		
-		setStyleName("ScreenTable");
 		
 		addDomHandler(new BlurHandler() {
 			@Override
@@ -479,7 +487,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	@SuppressWarnings("unchecked")
 	public void setModel(ArrayList<? extends Row> model) {
 		finishEditing();
-		clearRowSelection();
+		unselectAll();
 		this.model = (ArrayList<Row>) model;
 		modelView = this.model;
 		rowIndex = null;
@@ -818,15 +826,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	protected int getTotalColumnWidth() {
 		return totalColumnWidth;
-	}
-
-	/**
-	 * Sets the Primary CSS style to be used by this table
-	 * 
-	 * @param style
-	 */
-	public void setTableStyle(String style) {
-		TABLE_STYLE = style;
 	}
 
 	/**
@@ -1183,7 +1182,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 */
 	public void removeAllRows() {
 		finishEditing();
-		clearRowSelection();
+		unselectAll();
 		model = null;
 		modelView = null;
 		rowIndex = null;
@@ -1220,41 +1219,97 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * 
 	 * @param index
 	 */
-	public boolean selectRowAt(int index) {
-		return selectRowAt(index, false);
+	public void selectRowAt(int index) {
+		selectRowAt(index, null);
 	}
 
+	
 	/**
 	 * Selects the row at the passed index. Selection can be canceled by a
 	 * BeforeSelecionHandler. If selection is allowed, then a SelectionEvent
 	 * will be fired to all registered handlers, and the selected row will be
-	 * scrolled in the visible view. If addTo is passed as true and the table
-	 * allows multiple selection the row will be added to the current list of
-	 * selections.
+	 * scrolled in the visible view. If the table allows multiple selection 
+	 * the row will be added to the current list of selections.
 	 * 
 	 * @param index
 	 */
-	public boolean selectRowAt(int index, boolean addTo) {
-		if (!multiSelect || (multiSelect && !addTo))
-			clearRowSelection();
+	protected void selectRowAt(int row, GwtEvent event) {
+		boolean ctrlKey, shiftKey, selected = false;
+		int startSelect, endSelect, minSelected,maxSelected, i;
+		
+		startSelect = row;
+		endSelect = row;
 
-		if (index > -1 && index < getRowCount()) {
-			if (!selections.contains(index)) {
-				if (!fireBeforeSelectionEvent(index))
-					return false;
+		/*
+		 * If multiple selection is allowed check event for ctrl or shift keys.
+		 * If none apply the logic will fall throw to normal selection.
+		 */
+		if (isMultipleSelectionAllowed()) {
+			if(event != null && event instanceof ClickEvent) {
+				ctrlKey = ((ClickEvent) event).getNativeEvent().getCtrlKey();
+				shiftKey = ((ClickEvent) event).getNativeEvent().getShiftKey();
 
-				finishEditing();
-				selections.add(index);
-				scrollToVisible(index);
-				view.applySelectionStyle(index);
+				if (ctrlKey) {
+					if (isRowSelected(row)) {
+						unselectRowAt(row,event);
+						return;
+					}
+				}else if (shiftKey) {
+					if (!isAnyRowSelected()) {
+						startSelect = 0;
+						endSelect = row;
+					} else {
+						Collections.sort(selections);
+						minSelected = Collections.min(selections);
+						maxSelected = Collections.max(selections);
+						if (minSelected > row) {
+							startSelect = row;
+							endSelect = minSelected;
+						} else if (row > maxSelected) {
+							startSelect = maxSelected;
+							endSelect = row;
+						} else {
+							i = 0;
+							while (selections.get(i + 1) < row)
+								i++;
+							startSelect = selections.get(i);
+							endSelect = row;
+						}
+					}
+					unselectAll(event);
+				}
+			}
+		}else {
+			unselectAll(event);
+		}
 
-				fireSelectionEvent(index);
+		for(i = startSelect; i <= endSelect && i > -1; i++) {			
+			if (!selections.contains(i)) {
+				if (event == null || fireBeforeSelectionEvent(i)) {
+					
+					selected = true;
+					
+					finishEditing();
+					
+					selections.add(i);
 
+					view.applySelectionStyle(i);
+
+					if(event != null)
+						fireSelectionEvent(i);
+				}
 			}
 		}
-		return true;
+		
+		if(selected) 
+			scrollToVisible(endSelect);		
+		
 	}
 	
+	/**
+	 * This method will select all rows in the table if the table allows 
+	 * Multiple Selection at the time it is called.  No selections events will be fired.
+	 */
 	public void selectAll() {
 		if(isMultipleSelectionAllowed()) {
 			selections = new ArrayList<Integer>();
@@ -1267,20 +1322,45 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	/**
 	 * Unselects the row from the selection list. This method does nothing if
 	 * the passed index is not currently a selected row, otherwise the row will
+	 * be unselected.
+	 * 
+	 * @param index
+	 */
+	public void unselectRowAt(int index) {
+		unselectRowAt(index,null);
+	}
+	
+	/**
+	 * Unselects the row from the selection list. This method does nothing if
+	 * the passed index is not currently a selected row, otherwise the row will
 	 * be unselected and an UnselectEvent will be fired to all registered
 	 * handlers
 	 * 
 	 * @param index
 	 */
-	public void unselectRowAt(int index) {
-		Integer i;
-		i = new Integer(index);
-		if (selections.contains(i)) {
+	protected void unselectRowAt(int index,GwtEvent event) {
+
+		if (selections.contains(index)) {
 			finishEditing();
-			fireUnselectEvent(index);
-			selections.remove(i);
+			if(event != null)
+				fireUnselectEvent(index);
+			selections.remove(new Integer(index));
 			view.applyUnselectionStyle(index);
 		}
+	}
+	
+	public void unselectAll() {
+		unselectAll(null);
+	}
+	
+	/**
+	 * Clears all selections from the table.
+	 */
+	protected void unselectAll(GwtEvent event) {
+
+		for (int i = 0; i < selections.size(); i++) 
+			unselectRowAt(selections.get(i),event);
+		
 	}
 
 	/**
@@ -1312,28 +1392,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		return selections.size() > 0;
 	}
 
-	/**
-	 * Clears all selections from the table.
-	 */
-	public void clearRowSelection() {
-		int index;
 
-		if (!isAnyRowSelected())
-			return;
-
-		finishEditing();
-
-		index = selections.get(0);
-		if (isMultipleRowsSelected())
-			index = -1;
-
-		fireUnselectEvent(index);
-
-		for (int i = 0; i < selections.size(); i++)
-			view.applyUnselectionStyle(selections.get(i));
-
-		selections.clear();
-	}
 
 	// ********* Event Firing Methods ********************
 
@@ -1375,7 +1434,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param index
 	 * @return
 	 */
-	public void fireUnselectEvent(int index) {
+	private void fireUnselectEvent(int index) {
 	
 		if (!queryMode)
 			UnselectionEvent.fire(this, index);
@@ -1528,7 +1587,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		exceptions = column.getCellRenderer().validate(value);
 		
 		if(column.isRequired() && value == null)
-			exceptions.add(new LocalizedException("exc.fieldRequired"));
+			exceptions.add(new LocalizedException(Constants.get().fieldRequired()));
 		
 		setValidateException(row,col,exceptions);
 		
@@ -1582,10 +1641,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	protected boolean startEditing(final int row, final int col,
-			final GwtEvent event) {
-		boolean willScroll, ctrlKey, shiftKey;
-		int startSelect, endSelect, maxSelected, minSelected, i;
+	protected boolean startEditing(final int row, final int col,final GwtEvent event) {
 
 		/*
 		 * Return out if the table is not enable or the passed cell is already
@@ -1596,60 +1652,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 		finishEditing();
 
-		//willScroll = view.isRowVisible(row);
-
-		/*
-		 * If multiple selection is allowed check event for ctrl or shift keys.
-		 * If none apply the logic will fall throw to normal start editing.
-		 */
-		if (isMultipleSelectionAllowed()) {
-			if (event != null && event instanceof ClickEvent) {
-				ctrlKey = ((ClickEvent) event).getNativeEvent().getCtrlKey();
-				shiftKey = ((ClickEvent) event).getNativeEvent().getShiftKey();
-
-				if (ctrlKey) {
-					if (isRowSelected(row)) {
-						unselectRowAt(row);
-						return false;
-					}
-					selectRowAt(row, true);
-					return true;
-				}
-
-				if (shiftKey) {
-					if (!isAnyRowSelected()) {
-						startSelect = 0;
-						endSelect = row;
-					} else {
-						Collections.sort(selections);
-						minSelected = Collections.min(selections);
-						maxSelected = Collections.max(selections);
-						if (minSelected > row) {
-							startSelect = row;
-							endSelect = minSelected;
-						} else if (row > maxSelected) {
-							startSelect = maxSelected;
-							endSelect = row;
-						} else {
-							i = 0;
-							while (selections.get(i + 1) < row)
-								i++;
-							startSelect = selections.get(i);
-							endSelect = row;
-						}
-					}
-					clearRowSelection();
-					for (i = startSelect; i <= endSelect; i++)
-						selectRowAt(i, true);
-					return true;
-				}
-			}
-		}
-
-		// Check if row is already selected and if not go ahead and select it
-		if (!isRowSelected(row)) {
-			selectRowAt(row);
-		}
+		selectRowAt(row,event);
 
 		// Check if the row was able to be selected, if not return.
 		if (!isRowSelected(row))
@@ -1670,23 +1673,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		editingCol = col;
 		editing = true;
 
-		/*
-		 * Make sure the row is in the current view before start editing
-		 */
-		willScroll = view.scrollToVisible(row);
-		if (!willScroll)
-			view.startEditing(row, col, getValueAt(row, col), event);
-		else {
-			/*
-			 * Call start editing in Deferred Command to make sure the table is
-			 * scrolled before setting the cell into edit mode
-			 */
-			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-				public void execute() {
-					view.startEditing(row, col, getValueAt(row, col), event);
-				}
-			});
-		}
+		view.startEditing(row, col, getValueAt(row, col), event);
+
 		return true;
 	}
 	
@@ -1815,7 +1803,6 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * @param endR
 	 */
 	protected void renderView(int startR, int endR) {
-		view.setVisibleChanged(true);
 		view.adjustScrollBarHeight();
 		view.renderView(startR, endR);
 	}
@@ -1831,20 +1818,26 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// compute total width
 		//
 		totalColumnWidth = 0;
+		int xmark = 0;
 		xForColumn = new short[getColumnCount()];
 		for (int i = 0; i < getColumnCount(); i++) {
-			xForColumn[i] = (short) totalColumnWidth;
+			if(getColumnAt(i).isDisplayed()) {
+				xForColumn[i] = (short) xmark;
+				xmark += getColumnAt(i).getWidth();
+			}
 			totalColumnWidth += getColumnAt(i).getWidth();
 		}
 		//
 		// mark the array
 		//
 		from = 0;
-		columnForX = new short[totalColumnWidth];
+		columnForX = new short[xmark];
 		for (int i = 0; i < getColumnCount(); i++) {
-			to = from + getColumnAt(i).getWidth();
-			while (from < to && from + 1 < totalColumnWidth)
-				columnForX[from++] = (short) i;
+			if(getColumnAt(i).isDisplayed()) {
+				to = from + getColumnAt(i).getWidth();
+				while (from < to && from + 1 < xmark)
+					columnForX[from++] = (short) i;
+			}
 		}
 	}
 
@@ -2426,7 +2419,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				for (int row = 0; row < getRowCount(); row++) {
 					if (getValueAt(row, col) == null) { 
 				        exceptions = getValidateExceptionList(row, col);
-				        exceptions.add(new LocalizedException("fieldRequired"));
+				        exceptions.add(new LocalizedException(Constants.get().fieldRequired()));
 				        setValidateException(row, col, exceptions);
 						render = true;
 					}
@@ -2476,7 +2469,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 
 	}
 
-	public void addExceptionStyle(String style) {
+	public void addExceptionStyle() {
 
 	}
 
@@ -2494,7 +2487,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 				|| (validateExceptions != null && !validateExceptions.isEmpty());
 	}
 
-	public void removeExceptionStyle(String style) {
+	public void removeExceptionStyle() {
 
 	}
 	
@@ -2635,7 +2628,5 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// TODO Auto-generated method stub
 		
 	}
-	
-
 
 }

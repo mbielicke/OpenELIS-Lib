@@ -1,6 +1,9 @@
 package org.openelis.gwt.widget.calendar;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.CalendarCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,7 +14,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 /**
  * This class is composite widget that displays a Calendar month.  
@@ -34,48 +36,53 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
      */
     protected int selectedRow, selectedCol;
     
+    protected CalendarCSS css;
+    
     /**
      * Default no-arg constructor
      */
     public CalendarTable() {
+    	css = OpenELISResources.INSTANCE.calendar();
+    	css.ensureInjected();
+    	
         /*
          * Final reference to this widget used in anon handlers
          */
     	final CalendarTable source = this;
     	
     	table = new Grid(7,7);
-        table.getRowFormatter().setStyleName(0,"DayBar");
+        table.getRowFormatter().setStyleName(0,css.DayBar());
 
         /*
          * Set the Week header bar
          */
-        table.setWidget(0, 0, new Label("S"));
-        table.getCellFormatter().setStyleName(0,0,"DayCell");
-        table.getWidget(0, 0).setStyleName("DayText");
+        table.setWidget(0, 0, new Label(Constants.get().day0()));
+        table.getCellFormatter().setStyleName(0,0,css.DayCell());
+        table.getWidget(0, 0).setStyleName(css.DayText());
 
-        table.setWidget(0, 1, new Label("M"));
-        table.getCellFormatter().setStyleName(0,1,"DayCell");
-        table.getWidget(0, 1).setStyleName("DayText");
+        table.setWidget(0, 1, new Label(Constants.get().day1()));
+        table.getCellFormatter().setStyleName(0,1,css.DayCell());
+        table.getWidget(0, 1).setStyleName(css.DayText());
 
-        table.setWidget(0, 2, new Label("T"));
-        table.getCellFormatter().setStyleName(0,2,"DayCell");
-        table.getWidget(0, 2).setStyleName("DayText");
+        table.setWidget(0, 2, new Label(Constants.get().day2()));
+        table.getCellFormatter().setStyleName(0,2,css.DayCell());
+        table.getWidget(0, 2).setStyleName(css.DayText());
         
-        table.setWidget(0, 3, new Label("W"));
-        table.getCellFormatter().setStyleName(0,3,"DayCell");
-        table.getWidget(0, 3).setStyleName("DayText");
+        table.setWidget(0, 3, new Label(Constants.get().day3()));
+        table.getCellFormatter().setStyleName(0,3,css.DayCell());
+        table.getWidget(0, 3).setStyleName(css.DayText());
         
-        table.setWidget(0, 4, new Label("T"));
-        table.getCellFormatter().setStyleName(0,4,"DayCell");
-        table.getWidget(0, 4).setStyleName("DayText");
+        table.setWidget(0, 4, new Label(Constants.get().day4()));
+        table.getCellFormatter().setStyleName(0,4,css.DayCell());
+        table.getWidget(0, 4).setStyleName(css.DayText());
         
-        table.setWidget(0, 5, new Label("F"));
-        table.getCellFormatter().setStyleName(0,5,"DayCell");
-        table.getWidget(0, 5).setStyleName("DayText");
+        table.setWidget(0, 5, new Label(Constants.get().day5()));
+        table.getCellFormatter().setStyleName(0,5,css.DayCell());
+        table.getWidget(0, 5).setStyleName(css.DayText());
         
-        table.setWidget(0, 6, new Label("S"));
-        table.getCellFormatter().setStyleName(0,6,"DayCell");
-        table.getWidget(0, 6).setStyleName("DayText");
+        table.setWidget(0, 6, new Label(Constants.get().day6()));
+        table.getCellFormatter().setStyleName(0,6,css.DayCell());
+        table.getWidget(0, 6).setStyleName(css.DayText());
         
         /*
          * Set the base formatting for each cell.
@@ -83,13 +90,13 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
         for(int i = 1; i < 7; i++) {
             for(int j = 0; j < 7; j++) {
                 table.setWidget(i, j, new Label(""));
-                table.getCellFormatter().setStyleName(i, j, "DateCell");
-                table.getWidget(i, j).setStyleName("DateText");       
+                table.getCellFormatter().setStyleName(i, j, css.DateCell());
+                table.getWidget(i, j).setStyleName(css.DateText());       
             }
         }
         
         initWidget(table);
-        setStyleName("Calendar");
+        setStyleName(css.Calendar());
         setWidth("100%");
         table.setCellPadding(0);
         table.setCellSpacing(0);
@@ -152,19 +159,19 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
                 cell.setText(String.valueOf(cal.get(CalendarImpl.DATE)));
                 
                 if(cal.get(CalendarImpl.MONTH) != month)
-                    cell.addStyleName("offMonth");
+                    cell.addStyleName(css.OffMonth());
                 else
-                    cell.removeStyleName("offMonth");
+                    cell.removeStyleName(css.OffMonth());
                 
                 if(dates[i][j].equals(current))
-                    cell.addStyleName("current");
+                    cell.addStyleName(css.Current());
                 else
-                    cell.removeStyleName("current");
+                    cell.removeStyleName(css.Current());
                 
                 if(dates[i][j].equals(selected))
                     select(i+1,j);
                 else 
-                    cell.removeStyleName("selected");
+                    cell.removeStyleName(css.selected());
                 
                 cal.add(CalendarImpl.DATE,1);
             }
@@ -190,9 +197,9 @@ public class CalendarTable extends Composite implements HasSelectionHandlers<Dat
      */
     public Datetime select(int row, int col) {
         if(selectedRow > -1)
-            table.getWidget(selectedRow, selectedCol).removeStyleName("selected");
+            table.getWidget(selectedRow, selectedCol).removeStyleName(css.selected());
         
-        table.getWidget(row, col).addStyleName("selected");
+        table.getWidget(row, col).addStyleName(css.selected());
         
         selectedRow = row;
         selectedCol = col;

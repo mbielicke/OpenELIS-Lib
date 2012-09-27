@@ -1,0 +1,35 @@
+.SelectBox {
+    border:1px solid #d8d8d8;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:20px;
+    cursor:default;
+    table-layout : fixed;
+}
+
+.Focus {
+	 border:1px solid #63b159;
+}
+
+.SelectBox td {
+	text-overflow : ellipsis;
+	overflow : hidden;
+	white-space : nowrap;
+}
+
+
+.Popup {
+    overflow:hidden;
+    background:#FFFFFF;
+    border: 1px solid #7eadd9;
+}
+
+.InputError {
+	border-bottom:1px dashed red;
+}
+
+.InputWarning {
+	border-bottom:1px dashed #f5d852;
+}

@@ -27,20 +27,25 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.LibraryConstants;
 import org.openelis.gwt.event.BeforeGetMatchesEvent;
 import org.openelis.gwt.event.BeforeGetMatchesHandler;
 import org.openelis.gwt.event.GetMatchesEvent;
 import org.openelis.gwt.event.GetMatchesHandler;
 import org.openelis.gwt.event.HasBeforeGetMatchesHandlers;
 import org.openelis.gwt.event.HasGetMatchesHandlers;
+import org.openelis.gwt.resources.AutoCompleteCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.event.CellClickedEvent;
 import org.openelis.gwt.widget.table.event.CellClickedHandler;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -118,23 +123,19 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     /**
      * Exceptions list
      */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+    protected Exceptions                           exceptions;
 
     /**
      * Instance of the Renderer interface. Initially set to the DefaultRenderer
      * implementation.
      */
-    protected Renderer                              renderer   = new DefaultRenderer();
-
-    /**
-     * Public Interface used to provide rendering logic for the Dropdown display
-     * 
-     */
-    public interface Renderer {
-        public String getDisplay(Row row);
-    }
+    protected Renderer                              renderer  = new DefaultRenderer();
     
-    protected WidgetHelper<String> helper = new StringHelper();
+    protected WidgetHelper<String>                  helper    = new StringHelper();
+    
+    protected LibraryConstants                      consts    = GWT.create(LibraryConstants.class);
+    
+    protected AutoCompleteCSS                       css       = OpenELISResources.INSTANCE.autocomplete();
 
     /**
      * Default no-arg constructor
@@ -148,10 +149,10 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     }
 
     /**
-     * Init() method overrriden from TextBox to draw the Dropdown correctly.
-     * Also set up handlers for click and key handling
+     * Sets the display of the widget and handlers for click and key handling
      */
     public void init() {
+    	css.ensureInjected();
         /*
          * Final instance of the private class KeyboardHandler
          */
@@ -171,8 +172,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          */
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName("AutoDropdownButton");
-        button.setDisplay(image, false);
+        image.setStyleName(css.AutoDropdownButton());
+        button.setWidget(image);
 
         display.setWidget(0,0,textbox);
         display.setWidget(0,1,button);
@@ -186,8 +187,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         outer.add(display);
         initWidget(outer);
 
-        display.setStyleName("SelectBox");
-        textbox.setStyleName("TextboxUnselected");
+        display.setStyleName(css.SelectBox());
+        textbox.setStyleName(css.AutoBox());
 
 
         /*
@@ -195,7 +196,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          */
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
-        		display.addStyleName("Focus");
+        		display.addStyleName(css.Focus());
         		if(isEnabled()) 
         			selectAll();
         	}
@@ -206,7 +207,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          */
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
-        		display.removeStyleName("Focus");
+        		display.removeStyleName(css.Focus());
         		textbox.setSelectionRange(0, 0);
         		finishEditing();
         	}
@@ -282,6 +283,11 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         addHandler(keyHandler, KeyDownEvent.getType());
         addHandler(keyHandler, KeyUpEvent.getType());
         
+        /*
+         * Timer is defined here once and scheduled to run when needed.  The timer is used to try and not 
+         * make the query request for suggestions until the user has stopped typing to avoid firing multiple
+         * request that will not be used
+         */
         timer = new Timer() {
             public void run() {
             	BeforeGetMatchesEvent bgme;
@@ -305,6 +311,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
                 
             }
         };
+        
+        exceptions = new Exceptions();
     }
 
     /**
@@ -317,7 +325,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     	showingOptions = true;
         if (popup == null) {
             popup = new PopupPanel(true);
-            popup.setStyleName("DropdownPopup");
+            popup.setStyleName(css.Popup());
             popup.setWidget(table);
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
@@ -372,6 +380,10 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         button.setHeight(height);
     }
     
+    /**
+     * Method sets the number of suggestions to show at once before scrolling.
+     * @param itemCount
+     */
     public void setVisibleItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
@@ -397,7 +409,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      */
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-        table.setTableStyle("DropdownTable");
+        //table.setStyleName(css.DropdownTable());
         table.setFixScrollbar(false);
         table.setRowHeight(16);
         table.setEnabled(true);
@@ -599,7 +611,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      */
     public void finishEditing() {
         Item<Integer> item;
-        validateExceptions = null;
+        clearValidateExceptions();
         
         if(isEnabled()) {
         	if(queryMode)
@@ -610,27 +622,11 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         			setValue(new AutoCompleteValue(item.key, renderer.getDisplay(item)),true);
         		
         		if (required && value == null) 
-        			addValidateException(new LocalizedException("exc.fieldRequiredException"));
+        			addValidateException(new LocalizedException(consts.fieldRequired()));
         		
         		ExceptionHelper.checkExceptionHandlers(this);
         	}
         }
-    }
-
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
     }
     
     /**
@@ -646,7 +642,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          * user has moved on from the widget so the first entry in the results
          * will be selected and displayed
          */
-        if (textbox.getStyleName().indexOf("Focus") > -1 && model != null && model.size() > 0)
+        if (textbox.getStyleName().indexOf(css.Focus()) > -1 && model != null && model.size() > 0)
             showPopup();
         else  if(popup != null) 
         	popup.hide();
@@ -784,16 +780,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 
     }
 
-    /**
-     * Private Default implementation of the Renderer interface.
-     * 
-     */
-    protected class DefaultRenderer implements Renderer {
-        public String getDisplay(Row row) {
-            return row.getCells().get(0).toString();
-        }
-    }
-
 	@Override
 	public AutoCompleteValue getValue() {
 		return value;
@@ -814,62 +800,81 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 		return addDomHandler(handler, MouseOutEvent.getType());
 	}
 
-    /**
-     * Convenience method to check if a widget has exceptions so we do not need
-     * to go through the cost of merging the logical and validation exceptions
-     * in the getExceptions method.
-     * 
-     * @return
-     */
-    public boolean hasExceptions() {
-    	if(validateExceptions != null)
-    		return true;
-    	  
-    	if (!queryMode && required && getValue() == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
-            ExceptionHelper.checkExceptionHandlers(this);
-    	}
-    	  
-    	return endUserExceptions != null || validateExceptions != null;
-    }
+	// ********** Implementation of HasException interface ***************
+	/**
+	 * Convenience method to check if a widget has exceptions so we do not need
+	 * to go through the cost of merging the logical and validation exceptions
+	 * in the getExceptions method.
+	 * 
+	 * @return
+	 */
+	public boolean hasExceptions() {
+		if (getValidateExceptions() != null)
+			return true;
 
-	@Override
-	public ArrayList<LocalizedException> getEndUserExceptions() {
-		return endUserExceptions;
+		if (!queryMode && required && getValue() == null) {
+			addValidateException(new LocalizedException(consts.fieldRequired()));
+			ExceptionHelper.checkExceptionHandlers(this);
+		}
+
+		return getEndUserExceptions() != null || getValidateExceptions() != null;
 	}
 
-	@Override
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
+
+	}
+
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
 	public ArrayList<LocalizedException> getValidateExceptions() {
-		return validateExceptions;
+		return exceptions.getValidateExceptions();
 	}
 
-	@Override
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return exceptions.getEndUserExceptions();
+	}
+
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
 	public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        ExceptionHelper.clearExceptionHandlers(this);
+		exceptions.clearExceptions();
+		removeExceptionStyle();
+		ExceptionHelper.clearExceptionHandlers(this);
 	}
 
-	@Override
 	public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+		exceptions.clearEndUserExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
-	@Override
 	public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
+		exceptions.clearValidateExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+	@Override
+	public void addExceptionStyle() {
+		if(ExceptionHelper.isWarning(this))
+			addStyleName(css.InputWarning());
+		else
+			addStyleName(css.InputError());
 	}
 
 	@Override
-	public void addExceptionStyle(String style) {
-    	addStyleName(style);
-	}
-
-	@Override
-	public void removeExceptionStyle(String style) {
-    	removeStyleName(style);
+	public void removeExceptionStyle() {
+    	removeStyleName(css.InputError());
+    	removeStyleName(css.InputWarning());
 	}
 
 	@Override
@@ -937,7 +942,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      */
     public void validateQuery() {
         try {
-            validateExceptions = null;
+            clearValidateExceptions();
             helper.validateQuery(textbox.getText());
         } catch (LocalizedException e) {
             addValidateException(e);
@@ -974,6 +979,24 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     
     public void setRequired(boolean required) {
     	this.required = required;
+    }
+    
+    /**
+     * Public Interface used to provide rendering logic for the Dropdown display
+     * 
+     */
+    public interface Renderer {
+        public String getDisplay(Row row);
+    }
+    
+    /**
+     * Private Default implementation of the Renderer interface.
+     * 
+     */
+    protected class DefaultRenderer implements Renderer {
+        public String getDisplay(Row row) {
+            return row.getCells().get(0).toString();
+        }
     }
 
 }

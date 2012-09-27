@@ -27,6 +27,10 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.MenuCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.CheckMenuItem;
 import org.openelis.gwt.widget.MenuItem;
 import org.openelis.gwt.widget.PopupMenuPanel;
@@ -48,7 +52,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -97,6 +100,9 @@ public class Header extends FocusPanel {
      * Reference to this object to be used in anonymous handlers
      */
     protected Header     source = this;
+    
+    protected TableCSS   css;
+    protected MenuCSS    menuCss;
 
     /**
      * Constructor that takes the containing table as a parameter
@@ -104,9 +110,15 @@ public class Header extends FocusPanel {
      * @param table
      */
     public Header(final Table table) {
+    	css = OpenELISResources.INSTANCE.table();
+    	css.ensureInjected();
+    	
+    	menuCss = OpenELISResources.INSTANCE.menuCss();
+    	menuCss.ensureInjected();
+    	
         this.table = table;
         flexTable = new FlexTable();
-        flexTable.setStyleName("Header");
+        flexTable.setStyleName(css.Header());
         setWidget(flexTable);
 
         /*
@@ -233,7 +245,7 @@ public class Header extends FocusPanel {
         flexTable.setWidth(table.getTotalColumnWidth() + "px");
         flexTable.getCellFormatter().setHeight(0, 0, table.getRowHeight()+"px");
         
-        flexTable.getCellFormatter().addStyleName(0, 0, "First");
+        flexTable.getCellFormatter().addStyleName(0, 0, css.First());
     }
     
     /**
@@ -261,16 +273,17 @@ public class Header extends FocusPanel {
             flexTable.setHTML(0, i, header);
             flexTable.getColumnFormatter().setWidth(i, column.getWidth() + "px");
             flexTable.getCellFormatter().setVerticalAlignment(0, i, HasVerticalAlignment.ALIGN_BOTTOM);
+            flexTable.getCellFormatter().setVisible(0,i,column.isDisplayed());
             
             if(column.isFiltered())
-                flexTable.getCellFormatter().addStyleName(0,i,"Filtered");
+                flexTable.getCellFormatter().addStyleName(0,i,css.Filtered());
             else
-                flexTable.getCellFormatter().removeStyleName(0, i, "Filtered");
+                flexTable.getCellFormatter().removeStyleName(0, i, css.Filtered());
             
             if(column.isSorted()) 
-                flexTable.getCellFormatter().addStyleName(0,i,"Sorted");
+                flexTable.getCellFormatter().addStyleName(0,i,css.Sorted());
             else
-                flexTable.getCellFormatter().removeStyleName(0, i, "Sorted");
+                flexTable.getCellFormatter().removeStyleName(0, i, css.Sorted());
         }
         
         while(flexTable.getCellCount(0) > table.getColumnCount())
@@ -333,7 +346,7 @@ public class Header extends FocusPanel {
                 popFilter = new PopupPanel(true);
                 popFilter.setWidth("16px");
                 filterButton = new FocusPanel();
-                filterButton.setStyleName("FilterButton");
+                filterButton.setStyleName(css.FilterButton());
                 
                 /*
                  * Show filter menu relative to filterButton if clicked
@@ -405,9 +418,9 @@ public class Header extends FocusPanel {
 
         if (col1 != col2 && col1 >= 0) {
             if (table.getColumnAt(col1).isResizable()) {
-                flexTable.getCellFormatter().addStyleName(0, col1, "ResizeCol");
+                flexTable.getCellFormatter().addStyleName(0, col1, css.ResizeCol());
                 if(col2 > -1)
-                	flexTable.getCellFormatter().addStyleName(0, col2, "ResizeCol");
+                	flexTable.getCellFormatter().addStyleName(0, col2, css.ResizeCol());
                 resizeColStyle = true;
                 resizeColumn = col1;
                 sinkEvents(Event.ONMOUSEDOWN);
@@ -418,8 +431,8 @@ public class Header extends FocusPanel {
         }
 
         if (resizeColStyle) {
-            flexTable.getCellFormatter().removeStyleName(0, col1, "ResizeCol");
-            flexTable.getCellFormatter().removeStyleName(0, col2, "ResizeCol");
+            flexTable.getCellFormatter().removeStyleName(0, col1, css.ResizeCol());
+            flexTable.getCellFormatter().removeStyleName(0, col2, css.ResizeCol());
             resizeColStyle = false;
             unsinkEvents(Event.ONMOUSEDOWN);
         }
@@ -440,7 +453,7 @@ public class Header extends FocusPanel {
         Filter filter;
                
         panel = new PopupMenuPanel();
-        panel.setStyleName("MenuPanel");
+        panel.setStyleName(menuCss.MenuPanel());
         
         column = table.getColumnAt(col);
         /*
@@ -450,7 +463,7 @@ public class Header extends FocusPanel {
             /*
              * Create Item for Ascending sort.  
              */
-            item = new MenuItem("Ascending", "Ascending","");
+            item = new MenuItem(menuCss.Ascending(), Constants.get().ascending(),"");
             item.addCommand(new Command() {
                 public void execute() {
                     doSort(col,Table.SORT_ASCENDING);
@@ -462,7 +475,7 @@ public class Header extends FocusPanel {
             /*
              * Create Sort Descending menu Item. 
              */
-            item = new MenuItem("Descending", "Descending", "");
+            item = new MenuItem(menuCss.Descending(), Constants.get().descending(), "");
             item.addCommand(new Command() {
                 public void execute() {
                     doSort(col,Table.SORT_DESCENDING);

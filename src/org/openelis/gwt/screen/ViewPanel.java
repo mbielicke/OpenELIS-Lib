@@ -55,19 +55,24 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  *  This class holds all widgets for a screen into a single panel and has logic to handle
  *  set focus to widgets and well as keyboard shortcuts to widgets.
  */
-public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, ScreenViewInt {
+public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, ScreenViewInt, HasResizeHandlers {
 	
 	Focusable focused;
+	private int width,height;
 	
 	public ViewPanel() {
 		addDomHandler(new KeyDownHandler() {
@@ -135,6 +140,46 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
 			}
 		},KeyDownEvent.getType());
 		
+	}
+	
+	public void setWidth(int width) {
+		int diff;
+		
+		diff = width - this.width;
+		this.width = width;
+		super.setWidth(width+"px");
+		if(diff != 0)
+			ResizeEvent.fire(this, diff, 0);
+	}
+	
+	public void setHeight(int height) {
+		int diff;
+		
+		diff = height - this.height;
+		this.height = height;
+		super.setHeight(height+"px");
+		if(diff != 0)
+			ResizeEvent.fire(this,0,diff);
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	@Override
+	public void setWidth(String width) {
+		this.width = Integer.parseInt(width.replace("px",""));
+		super.setWidth(width);
+	}
+	
+	@Override
+	public void setHeight(String height) {
+		this.height = Integer.parseInt(height.replace("px",""));
+		super.setHeight(height);
 	}
 	
 	public void onFocus(FocusEvent event) {
@@ -263,6 +308,10 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
      */
     public HandlerRegistration addStateChangeHandler(StateChangeHandler handler) {
         return addHandler(handler, StateChangeEvent.getType());
+    }
+    
+    public HandlerRegistration addResizeHandler(ResizeHandler handler) {
+    	return addHandler(handler,ResizeEvent.getType());
     }
 
 

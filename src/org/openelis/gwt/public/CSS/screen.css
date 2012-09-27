@@ -1539,8 +1539,7 @@ tr .DropOnRow{
 .Form {
     font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
     font-size:11px;
-        margin:4px 8px ;
-       /* background:#FBFBFB;*/
+    margin:4px 8px ;
 }
 
 .subform{

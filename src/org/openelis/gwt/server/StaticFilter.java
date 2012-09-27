@@ -127,7 +127,7 @@ public abstract class StaticFilter implements Filter {
         //
         if (hreq.getParameter("locale") != null)
             hreq.getSession().setAttribute("locale", req.getParameter("locale"));
-
+        
         //
         // check to see if we are coming from login screen
         //
@@ -155,7 +155,7 @@ public abstract class StaticFilter implements Filter {
 
             doc = XMLUtil.createNew("login");
             action = doc.createElement("action");
-            action.appendChild(doc.createTextNode(loginHTML));
+            action.appendChild(doc.createTextNode(loginHTML+"?"+hreq.getQueryString()));
             doc.getDocumentElement().appendChild(action);
             if (error) {
                 Element errorEL = doc.createElement("error");

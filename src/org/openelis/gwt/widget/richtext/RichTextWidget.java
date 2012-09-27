@@ -314,15 +314,19 @@ public class RichTextWidget extends Composite implements ScreenWidgetInt, Focusa
     /**
      * Will add the style to the widget.
      */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName("InputWarning");
+    	else
+    		addStyleName("InputError");
     }
 
     /**
      * will remove the style from the widget
      */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName("InputWarning");
+        removeStyleName("InputError");
     }
 
     

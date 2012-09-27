@@ -29,7 +29,10 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.resources.CheckboxCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.CheckBox;
+import org.openelis.gwt.widget.Checkbox;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -56,6 +59,8 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     private boolean   query;
     private ColumnInt column;
     
+    protected CheckboxCSS css;
+    
     /**
      * Constructor that takes the editor to be used for the cell.
      * 
@@ -63,6 +68,10 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
      */
     public CheckBoxCell(CheckBox editor) {
         this.editor = editor;
+        
+        css = OpenELISResources.INSTANCE.checkbox();
+        css.ensureInjected();
+        
         editor.setEnabled(true);
         editor.addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
@@ -94,7 +103,8 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
         editor.setQueryMode(false);
         editor.setValue((String)value);
         if(event instanceof ClickEvent)
-            editor.changeValue();
+        	ClickEvent.fireNativeEvent(((ClickEvent) event).getNativeEvent(), editor);
+            //editor.changeValue();
         container.setEditor(editor);
         DOM.setStyleAttribute(container.getElement(), "align", "center");  
     }
@@ -105,7 +115,8 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
         editor.setQueryMode(true);
         editor.setQuery(qd);
         if(event instanceof ClickEvent)
-            editor.changeValue();
+        	ClickEvent.fireNativeEvent(((ClickEvent) event).getNativeEvent(), editor);
+            //editor.changeValue();
         container.setEditor(editor);
         DOM.setStyleAttribute(container.getElement(), "align", "center");          
     }
@@ -114,18 +125,14 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
      * Gets Formatted value from editor and sets it as the cells display
      */
     public void render(HTMLTable table, int row, int col, Object value) {
-        String style;
-        AbsolutePanel div;
         
         query = false;
         editor.setQueryMode(false);
-        if(editor.getMode() == CheckBox.Mode.TWO_STATE && value == null)
+        
+        if(editor.getMode() == Checkbox.Mode.TWO_STATE && value == null)
         	value = "N";
-        style = CheckBox.Value.getValue((String)value).getStyle();
-        div = new AbsolutePanel();
-        div.setStyleName(style);
-        table.setWidget(row, col, div);
-        table.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
+        
+        render((String)value,table,row,col);
     }
     
     public String display(Object value) {
@@ -137,16 +144,17 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
      * text
      */
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
-        String style;
-        AbsolutePanel div;
+        String value;
         
         query = true;
         editor.setQueryMode(true);
-        style = CheckBox.Value.getValue(qd!=null?qd.getQuery():null).getStyle();
-        div = new AbsolutePanel();
-        div.setStyleName(style);
-        table.setWidget(row, col, div);
-        table.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
+        
+        if(qd == null)
+        	value = null;
+        else 
+        	value = qd.getQuery();
+        
+        render(value,table,row,col);
     }
 
     public boolean ignoreKey(int keyCode) {
@@ -165,6 +173,23 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
 	@Override
 	public void setColumn(ColumnInt col) {
 		this.column = col;
+	}
+	
+	private void render(String value, HTMLTable table, int row, int col) {
+		String style;
+		AbsolutePanel div;
+		
+        if(value == null)
+        	style = css.Unknown();
+        else if("Y".equals(value))
+        	style = css.Checked();
+        else
+        	style = css.Unchecked();
+        	
+        div = new AbsolutePanel();
+        div.setStyleName(style);
+        table.setWidget(row, col, div);
+        table.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
 	}
   
 

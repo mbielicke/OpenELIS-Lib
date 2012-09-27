@@ -1,0 +1,5 @@
+@external ScreenLabel; 
+.ScreenLabel{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+}

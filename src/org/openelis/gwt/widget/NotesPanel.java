@@ -1,6 +1,9 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.NoteCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -14,14 +17,20 @@ public class NotesPanel extends Composite {
     private String        width;
     private DateHelper    headerDate;
     
+    protected NoteCSS css;
+    
     public NotesPanel() {
+    	
+    	css = OpenELISResources.INSTANCE.note();
+    	css.ensureInjected();
+    	
         scroll = new ScrollPanel();
         notes  = new VerticalPanel();
 
         headerDate = new DateHelper();
         headerDate.setBegin(Datetime.YEAR);
         headerDate.setEnd(Datetime.SECOND);
-        headerDate.setPattern("yyyy-MM-dd HH:mm");
+        headerDate.setPattern(Constants.get().dateTimePattern());
         
         initWidget(scroll);
         scroll.setWidget(notes);
@@ -46,20 +55,20 @@ public class NotesPanel extends Composite {
         
         note = new VerticalPanel();
         note.setWidth(width);
-        note.addStyleName("noteTableRow");
+        note.addStyleName(css.noteTableRow());
 
         if (subject != null) {
             subjectText = new Label<String>(subject);
-            subjectText.setStyleName("noteSubjectText");
+            subjectText.setStyleName(css.noteSubjectText());
             note.add(subjectText);
 
             userDateText = new Label<String>("by " + userName + " on " + headerDate.format(time));
-            userDateText.setStyleName("noteAuthorText");
+            userDateText.setStyleName(css.noteAuthorText());
             note.add(userDateText);
         }
         if (text != null) {
             bodyText = new HTML("<pre>"+encode(text)+"</pre>");
-            bodyText.setStyleName("noteBodyText");
+            bodyText.setStyleName(css.noteBodyText());
             note.add(bodyText);
         }
         notes.add(note);

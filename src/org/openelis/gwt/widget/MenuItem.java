@@ -27,6 +27,9 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.resources.MenuCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -38,6 +41,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 
@@ -51,7 +55,10 @@ public class MenuItem extends Composite {
      * Flags to determine if the MenuItem should autoClose all menus and 
      * if the menuItem is enabled.
      */
-    protected boolean autoClose, enabled;
+
+	protected boolean autoClose, enabled;
+	
+	protected MenuCSS css;
     
     /**
      * Constructor that will create a MenuItem that will autoClose by default.
@@ -75,14 +82,18 @@ public class MenuItem extends Composite {
     	this.display = display;
     	this.description = description;
     	
+    	css = OpenELISResources.INSTANCE.menuCss();
+    	css.ensureInjected();
+    	
         Grid grid = new Grid(2,2);
-        grid.setStyleName("TopMenuRowContainer");
+        grid.setStyleName(css.TopMenuRowContainer());
         grid.setCellPadding(0);
         grid.setCellSpacing(0);
         
-        grid.getCellFormatter().setStylePrimaryName(0,0,"topMenuIcon");
+        grid.getCellFormatter().setStylePrimaryName(0,0,css.topMenuIcon());
+        grid.getCellFormatter().setStylePrimaryName(1,0,css.topMenuIcon());
         grid.setText(0, 0, "");
-        grid.getCellFormatter().setStylePrimaryName(0,1,"topMenuItemMiddle");
+        grid.getCellFormatter().setStylePrimaryName(0,1,css.topMenuItemMiddle());
         
         if(!"".equals(icon))
             grid.getCellFormatter().addStyleName(0, 0, icon);
@@ -90,34 +101,36 @@ public class MenuItem extends Composite {
         	grid.getCellFormatter().setVisible(0, 0, false);
         
         grid.setText(0,1,display);
-        grid.getCellFormatter().addStyleName(0,1,"topMenuItemTitle");
-        grid.getCellFormatter().addStyleName(0,1,"locked");
+        grid.getCellFormatter().addStyleName(0,1,css.topMenuItemTitle());
+        grid.getCellFormatter().addStyleName(0,1,css.locked());
         
         if("".equals(description))
             grid.removeRow(1);
         else{
             grid.setText(1,1,description);
-            grid.getCellFormatter().setStylePrimaryName(1,1,"topMenuItemMiddle");
-            grid.getCellFormatter().addStyleName(1,1,"topMenuItemDesc");
+            grid.getCellFormatter().setStylePrimaryName(1,1,css.topMenuItemMiddle());
+            grid.getCellFormatter().addStyleName(1,1,css.topMenuItemDesc());
         }
        
+
         initWidget(grid);
+        
         
         addHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                addStyleName("Hover");
+                addStyleName(css.Hover());
             }
         },MouseOverEvent.getType());
         
         addHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
-                removeStyleName("Hover");
+                removeStyleName(css.Hover());
             }
         },MouseOutEvent.getType());
         
         addHandler(new MouseDownHandler() {
         	public void onMouseDown(MouseDownEvent event) {
-        		removeStyleName("Hover");
+        		removeStyleName(css.Hover());
         	}
         },MouseDownEvent.getType());
                 
@@ -134,10 +147,10 @@ public class MenuItem extends Composite {
         this.enabled = enabled;
         if(!enabled) {
             unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
-            addStyleName("disabled");
+            addStyleName(css.disabled());
         }else{
             sinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
-            removeStyleName("disabled");
+            removeStyleName(css.disabled());
         }
     }
     
@@ -163,7 +176,7 @@ public class MenuItem extends Composite {
     }
     
     public void execute() {
-    	removeStyleName("Hover");
+    	removeStyleName(css.Hover());
 		for(Command comm : commands) 
 			comm.execute();
     }

@@ -1,0 +1,274 @@
+.CalendarWidget {
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 14px; 
+    font-weight: normal;
+    padding:0px;
+    background-color:white;
+    border:1px solid #718bb7;
+}
+
+.CalendarWidget .navbar {
+    width: 100%;
+    background-color: #fff;
+}
+
+.CalendarWidget .navbar {
+
+
+}
+
+.TimeBar .ScreenTextBox {
+    text-align:center;
+}
+.CalendarWidget .table {
+    width:100%;
+    text-align: center;
+}
+
+.CalendarWidget .weekheader {
+    background-color: #e6eaf6;
+}
+
+.CalendarWidget .weekheader .days {
+    padding:2px;
+}
+
+.CalendarWidget .cell {
+    cursor:pointer;
+    padding:0;
+}
+
+.CalendarWidget .cell  {
+    padding:1px;
+}
+
+.CalendarWidget .cell span {
+}
+
+.CalendarWidget .selected{
+	border :1px solid red;
+}
+
+.CalendarWidget .selectedRow .cell{
+	border-top:1px solid red;
+	border-bottom:1px solid red;
+}
+
+.CalendarWidget .calinactive{
+	border:1px solid grey;
+}
+
+.CalendarWidget .today  {
+    background-color: #C3D9FF;
+}
+
+.CalendarWidget .weekend {
+    background-color: #f0f1f6;
+}
+
+.CalendarWidget .day  {
+} 
+
+
+.DateCell {
+}
+
+.MyCell {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.MonthBar {
+    background:#FBFBFB;
+}
+
+.Current{
+
+}
+
+.Button{
+	padding:0;
+}
+.MonthBar .Hover .ButtonContent, .Pressed .ButtonContent {
+
+}
+
+.MonthBar .disabled .ButtonContent{
+    background-image:-moz-linear-gradient(top,#ffffff,#dddfe2);
+}
+
+.MonthBar .disabled .ScreenLabel{
+	color:gray;
+}
+
+.PreviousMonth, .MonthSelect, .NextMonth{
+	margin-top:5px;
+    width:7px;
+    height:7px;
+}
+@sprite .PreviousMonth{
+	gwt-image:'previousMonth';
+}
+@sprite .Hover .PreviousMonth{
+	gwt-image:'previousMonthHover';
+}
+@sprtie .MonthSelect{
+	gwt-image:'monthSelect';
+}
+@sprite .Hover .MonthSelect{
+	gwt-image:'monthSelectHover';
+}
+@sprite .NextMonth{
+	gwt-image:'nextMonth';
+}
+@sprite .Hover .NextMonth{
+	gwt-image:'nextMonthHover';
+}
+ 
+/*******End Calendar Button Class***********/
+@sprite .TimeBar{
+	padding:2px;
+	gwt-image:'todayBar';	
+}
+@sprite .TodayBar{
+    padding-top:1px;
+	gwt-image:'todayBar';
+}
+.DateText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+	padding-top:2px;
+	text-align : right;
+	padding-right : 8px;
+}
+@sprite .Hover .DateText {
+	gwt-image:'dateCell';
+	cursor:pointer;
+}
+.MYText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.MonthDisplay {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    padding:5px 0 0 0;
+    color:#333;
+    width:98px;
+}
+@sprite .SelectBar{
+    padding-top:1px;
+	gwt-image:'todayBar';
+}
+.DayText {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    color:#233D6D;
+}
+
+@sprite .DayBar {
+    height:18px;
+	gwt-image:'dayBar';
+}
+
+.Calendar {
+   background:white;
+   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+   font-weight: normal;
+   font-size: 11px;
+   height: 16px;
+   cursor: default;
+   border: none;
+   tex-overflow: ellipsis;
+}
+
+.DateCell, .MYCell{
+}
+.Hover .DateCell {
+    background:#ddecfe;
+    cursor:pointer;
+}
+
+.MYCell .Hover {
+    background:#ddecfe;
+    cursor:pointer;
+}
+
+@sprite .DateCell .Current {/*
+   border:1px solid #8b0000;*/
+	gwt-image:'dateCell';
+}
+
+@sprite .MYCell .Current {
+	gwt-image:'dateCell';
+    border:1px solid #8db2e3;
+}
+
+.DateCell .Current .DateText {
+    border:1px solid red;
+}
+
+.MYCell .Current .MYText {
+    border:1px solid red;
+}
+ 
+.OffMonth {
+    color:gray;
+}
+
+@sprite .CalendarButton{
+	width:14px;
+	height:19px;
+	border-bottom: 1px solid #d8d8d8;
+	gwt-image:'calendarButton';
+}
+
+.DayCell{}
+
+.TextboxUnselected {
+    border:1px solid #d8d8d8;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:16px;
+    cursor:default;
+    text-overflow  : ellipsis;
+}
+
+.prevNavIndex {
+	width: 16px;
+	height: 16px;
+	background: url('../Images/previous.gif') no-repeat center center;
+}
+
+.disabled .prevNavIndex {
+	background: url('../Images/previousdisabled.gif') no-repeat center
+		center;
+	cursor: default;
+}
+
+.nextNavIndex {
+	width: 16px;
+	height: 16px;
+	background: url('../Images/next.gif') no-repeat center center;
+}
+
+.disabled .nextNavIndex {
+	background: url('../Images/nextdisabled.gif') no-repeat center center;
+	cursor: default;
+}
+
+.Divider{
+	background:#fbfbfb;
+	width:8px;
+}

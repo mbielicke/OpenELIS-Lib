@@ -1,6 +1,8 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.gwt.common.Util;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TabBarScrollerCSS;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,12 +28,17 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 	private int intWidth = 0;
 	private Timer timer;
 	private TabBar bar;
+	
+	protected TabBarScrollerCSS css;
 
 	public TabBarScroller(TabBar bar) {
+		css = OpenELISResources.INSTANCE.tabBarScroller();
+		css.ensureInjected();
+		
 		this.bar = bar;
 		hp = new Grid(1,3);
-		leftArrow = new IconContainer("MoveLeft");
-		rightArrow = new IconContainer("MoveRight");
+		leftArrow = new IconContainer(css.MoveLeft());
+		rightArrow = new IconContainer(css.MoveRight());
 		leftArrow.addClickHandler(this);
 		rightArrow.addClickHandler(this); 
 		leftArrow.addMouseDownHandler(this);
@@ -124,15 +131,15 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 			hp.getCellFormatter().setVisible(0, 0, true);
 			hp.getCellFormatter().setVisible(0, 2, true);
 			  if(ap.getWidgetLeft(bar) >= 0){
-				  if(leftArrow.getStyleName().indexOf("inactive") == -1 )
-					  leftArrow.addStyleName("inactive");
+				  if(leftArrow.getStyleName().indexOf(css.inactive()) == -1 )
+					  leftArrow.addStyleName(css.inactive());
 			  }else
-				  leftArrow.removeStyleName("inactive");
+				  leftArrow.removeStyleName(css.inactive());
 			  if(ap.getWidgetLeft(bar) <= -(bar.getOffsetWidth()-(ap.getOffsetWidth()+3))){
-				  if(rightArrow.getStyleName().indexOf("inactive") == -1)
-					  rightArrow.addStyleName("inactive");
+				  if(rightArrow.getStyleName().indexOf(css.inactive()) == -1)
+					  rightArrow.addStyleName(css.inactive());
 			  }else
-				  rightArrow.removeStyleName("inactive");
+				  rightArrow.removeStyleName(css.inactive());
 		}else{
 			ap.setWidth(intWidth+"px");
 			hp.getCellFormatter().setVisible(0, 0, false);

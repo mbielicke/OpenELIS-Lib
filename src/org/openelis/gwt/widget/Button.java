@@ -25,6 +25,9 @@
  */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.ButtonCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,13 +38,10 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This widget class implements a Button on the screen. We have not used or
@@ -59,14 +59,13 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     /*
      * State variables for the button.
      */
-    private boolean toggles, enabled, pressed, locked,wrapped;
-    private String  action,text,icon;
+    private boolean toggles, enabled, pressed, locked,wrapped = true;
+    private String  action,text,leftIcon,rightIcon;
+    private ButtonCSS css;
+    int eventsToSink;
     
-    /*
-     * Default styles used for the button
-     */
-    protected String HOVER = "Hover",PRESSED = "Pressed", DISABLED = "Disabled";
-    
+    private Grid grid,wrapper;
+       
 
     /**
      * Default no-arg constructor
@@ -76,13 +75,16 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     }
     
     public Button(String icon,String label) {
-    	this(icon,label,true);
+    	this(icon,label,"");
+    }
+    
+    public Button(String leftIcon,String label,String rightIcon) {
+    	init();
+    	setDisplay(leftIcon,label,rightIcon);
+    	setCSS(css);
     }
 
-    public Button(String icon,String label,boolean wrap) {
-    	init();
-    	setDisplay(icon,label,wrap);
-    }
+
     /**
      * Sets up event handling for the button.
      */
@@ -94,7 +96,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
          */
         addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                addStyleName(HOVER);
+           		addStyleName(css.Hover());
             }
         });
 
@@ -103,7 +105,8 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
          */
         addMouseOutHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
-                removeStyleName(HOVER);
+           		removeStyleName(css.Hover());
+                
             }
         });
 
@@ -113,8 +116,8 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
          */
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                if (toggles)
-                    setPressed( !pressed);
+           		if (toggles)
+           			setPressed( !pressed);
             }
         });
 
@@ -123,80 +126,54 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
          */
         addKeyDownHandler(new KeyDownHandler() {
             public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    NativeEvent clickEvent = com.google.gwt.dom.client.Document.get()
-                                                                               .createClickEvent(
-                                                                                                 0,
-                                                                                                 getAbsoluteLeft(),
-                                                                                                 getAbsoluteTop(),
-                                                                                                 -1,
-                                                                                                 -1,
-                                                                                                 event.isControlKeyDown(),
-                                                                                                 event.isAltKeyDown(),
-                                                                                                 event.isShiftKeyDown(),
-                                                                                                 event.isMetaKeyDown());
-
-                    ClickEvent.fireNativeEvent(clickEvent, source);
-                    event.stopPropagation();
-                }
+           		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+           			NativeEvent clickEvent = com.google.gwt.dom.client.Document.get()
+           					.createClickEvent(
+           							0,
+           							getAbsoluteLeft(),
+           							getAbsoluteTop(),
+           							-1,
+          							-1,
+           							event.isControlKeyDown(),
+           							event.isAltKeyDown(),
+           							event.isShiftKeyDown(),
+           							event.isMetaKeyDown());
+            			ClickEvent.fireNativeEvent(clickEvent, source);
+            			event.stopPropagation();
+           		}
             }
         });
         
+        css = OpenELISResources.INSTANCE.button();
+        css.ensureInjected();
+        
     }
     
-    public void setDisplay(String icon,String label,boolean wrap) {   
-    	Grid grid;
-    	
-    	this.icon    = icon;
-    	this.text    = label;
-    	this.wrapped = wrap;
-    	
-   		grid = new Grid(1,2);
-    	grid.setCellPadding(0);
-    	grid.setCellSpacing(0);
-   		grid.getCellFormatter().setStyleName(0, 0, icon);
-    	grid.setText(0,0,"");
-    	grid.setText(0, 1, label); 
-    	grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel");
-    	//DOM.setStyleAttribute(grid.getCellFormatter().getElement(0,1),"paddingBottom","3px");
-    	setDisplay(grid,wrap);
-    }
-
     /**
-     * Can be used to set the look of the Button on the screen.
-     * 
-     * @param widget
-     *        UI widget used for the display of this button
-     */
-    public void setDisplay(Widget widget) {
-        setDisplay(widget, true);
-    }
-
-    /**
-     * This method will set the display of the button.  If the wrap parameter 
-     * is passed true then the passed widget will be wrapped in the button border
-     * styling, if false the passed widget is the only thing set as the display. 
-     * @param widget
+     * Method to create a Button using a Grid that will display text and icon 
+     * @param icon
+     *        CSS style name to reference of image to display
+     * @param label
+     *        The text to display for the button
      * @param wrap
+     *        Boolean switch to wrap button with borders
      */
-    public void setDisplay(Widget widget, boolean wrap) {
-        if (wrap) {
-            AbsolutePanel content = new AbsolutePanel();
-            content.add(widget);
-            content.addStyleName("ButtonContent");
-            HorizontalPanel hp = new HorizontalPanel();
-            hp.add(new AbsolutePanel());
-            hp.getWidget(0).addStyleName("ButtonLeftSide");
-            hp.add(content);
-            hp.add(new AbsolutePanel());
-            hp.getWidget(2).addStyleName("ButtonRightSide");
-            
-            FocusPanel classPanel = new FocusPanel();
-            classPanel.add(hp);
-            setWidget(classPanel);
-        } else
-            setWidget(widget);
-
+    public void setDisplay(String leftIcon,String label,String rightIcon) {   
+    	AbsolutePanel ap;
+    	
+    	this.leftIcon = leftIcon;
+    	this.rightIcon = rightIcon;
+    	this.text     = label;
+    	
+   		grid = new Grid(1,3);
+    	grid.setCellPadding(0);
+    	grid.setCellSpacing(1);
+   		grid.getCellFormatter().setStyleName(0,0,leftIcon);
+    	grid.setText(0,0,"");
+    	grid.setText(0, 1, label);
+    	grid.getCellFormatter().setStyleName(0,2,rightIcon);
+    	
+    	setWidget(grid);
     }
 
     /**
@@ -217,9 +194,9 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 
         this.pressed = pressed;
         if (pressed)
-            addStyleName(PRESSED);
+            addStyleName(css.Pressed());
         else
-            removeStyleName(PRESSED);
+            removeStyleName(css.Pressed());
     }
 
     /**
@@ -227,7 +204,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * styling but removes functionality.
      */
     public void lock() {
-        removeStyleName(HOVER);
+        removeStyleName(css.Hover());
         unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
         locked = true;
     }
@@ -248,13 +225,15 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        
         setPressed(false);
+        
         if (enabled) {
             unlock();
-            removeStyleName(DISABLED);
+            removeStyleName(css.Disabled());
         } else {
             lock();
-            addStyleName(DISABLED);
+            addStyleName(css.Disabled());
         }
     }
 
@@ -295,40 +274,16 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * Method to add a focus style to the button.
      */
     public void addFocusStyle(String style) {
-       addStyleName(HOVER);
+       addStyleName(css.Hover());
     }
 
     /**
      * Method remove a focus style from the button.
      */
     public void removeFocusStyle(String style) {
-       removeStyleName(HOVER);
+       removeStyleName(css.Hover());
     }
-    
-    /**
-     * Method used to set the style class to be used for Hovering over the button
-     * @param style
-     */
-    public void setHoverStyle(String style) {
-        HOVER = style;
-    }
-    
-    /**
-     * Method used to set the style class to be used for a Pressed button.
-     * @param style
-     */
-    public void setPressedStyle(String style) {
-        PRESSED = style;
-    }
-    
-    /**
-     * Method used to set the style class to be used for a disabled button.
-     * @param style
-     */
-    public void setDisabledStyle(String style) {
-        DISABLED = style;
-    }
-    
+        
     /**
      * This a string value that can be set to the button.  Used mostly for 
      * query strings and useful for distinguishing buttons used in ButtonGroup 
@@ -347,16 +302,24 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         return action;
     }
     
+    /**
+     * Method will change the text of a button
+     * @param text
+     */
     public void setText(String text) {
-    	setDisplay(icon,text,wrapped);
+    	setDisplay(leftIcon,text,rightIcon);
     }
     
-    public void setIcon(String icon) {
-    	setDisplay(icon,text,wrapped);
+    /**
+     * Method will change the icon of a button
+     * @param icon
+     */
+    public void setLeftIcon(String icon) {
+    	setDisplay(icon,text,rightIcon);
     }
     
-    public void setWrap(boolean wrap) {
-    	setDisplay(icon,text,wrap);
+    public void setRightIcon(String icon) {
+    	setDisplay(leftIcon,text,icon);
     }
 
 	@Override
@@ -364,8 +327,52 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void setCSS(ButtonCSS css) {
+		if(!isEnabled())
+			removeStyleName(this.css.Disabled());
+		
+		if(pressed)
+			removeStyleName(this.css.Pressed());
+		
+		this.css = css;
+		css.ensureInjected();
+		setStyleName(css.Button());
+	   	grid.getCellFormatter().setStyleName(0, 1, css.ScreenLabel());
+	   	
+	   	if(!isEnabled())
+	   		addStyleName(css.Disabled());
+	   	
+	   	if(pressed)
+	   		addStyleName(css.Pressed());
+	   		
+	}
+	
+	/**
+	 * These methods were added to ensure the button will be properly enabled or disabled 
+	 * when it is first drawn.
+	 */
+	@Override
+	public void sinkEvents(int eventBitsToAdd) {
+		if(isOrWasAttached())
+			super.sinkEvents(eventBitsToAdd);
+		else
+			eventsToSink |= eventBitsToAdd;
+	}
     
+	@Override
+	public void unsinkEvents(int eventBitsToRemove) {
+		if(isOrWasAttached())
+			super.unsinkEvents(eventBitsToRemove);
+		else
+			eventsToSink &= ~eventBitsToRemove;
+	}
     
+	@Override
+	protected void onAttach() {
+		super.onAttach();
+		super.sinkEvents(eventsToSink);
+	}
     
     
 }

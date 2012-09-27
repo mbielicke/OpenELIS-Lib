@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.CollapseCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -49,27 +52,28 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     private HorizontalPanel content = new HorizontalPanel();
     private FocusPanel arrow = new FocusPanel();
     public boolean isOpen;
+    protected CollapseCSS css = OpenELISResources.INSTANCE.collapse();
     
     public CollapsePanel(boolean open){
-        
+        css.ensureInjected();
         initWidget(panel);
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
       
         panel.setWidth("100%");
-        panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
-        arrow.setStyleName("LeftMenuPanePanelDiv");
+        panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
+        arrow.setStyleName(css.LeftMenuPanePanelDiv());
         arrow.addClickHandler(this);
         arrow.addMouseOverHandler(new MouseOverHandler() {
         	public void onMouseOver(MouseOverEvent event) {
-        		arrow.addStyleName("Hover");
-                panel.getCellFormatter().addStyleName(0,1,"Hover");
+        		arrow.addStyleName(css.Hover());
+                panel.getCellFormatter().addStyleName(0,1,css.Hover());
         	}
         });
         arrow.addMouseOutHandler(new MouseOutHandler() {
         	public void onMouseOut(MouseOutEvent event) {
                 arrow.removeStyleName("Hover");
-                panel.getCellFormatter().removeStyleName(0,1,"Hover");
+                panel.getCellFormatter().removeStyleName(0,1,css.Hover());
         	}
         });
         panel.setWidget(0, 0, content);
@@ -97,7 +101,7 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     public void open() {
         if(!isOpen){
             content.setVisible(true);
-            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelOpen");
+            panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelOpen());
             arrow.setFocus(false);
             isOpen = true;
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
@@ -107,7 +111,7 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     public void close(){
         if(isOpen){
             content.setVisible(false);
-            panel.getCellFormatter().setStyleName(0,1,"LeftMenuPanePanelClosed");
+            panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
             arrow.setFocus(false);
             isOpen = false;       
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());

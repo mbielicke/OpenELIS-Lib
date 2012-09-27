@@ -25,6 +25,9 @@
  */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TreeCSS;
+
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -82,15 +85,20 @@ public class Header extends FocusPanel {
      */
     protected Header     source = this;
 
+    protected TreeCSS    css;
+    
     /**
      * Constructor that takes the containing table as a parameter
      * 
      * @param table
      */
     public Header(final Tree tree) {
+    	css = OpenELISResources.INSTANCE.tree();
+    	css.ensureInjected();
+    	
         this.tree = tree;
         flexTable = new FlexTable();
-        flexTable.setStyleName("Header");
+        flexTable.setStyleName(css.Header());
         setWidget(flexTable);
 
         /*
@@ -385,9 +393,9 @@ public class Header extends FocusPanel {
 
         if (col1 != col2 && col1 >= 0) {
             if (tree.getColumnAt(col1).isResizable()) {
-                flexTable.getCellFormatter().addStyleName(0, col1, "ResizeCol");
+                flexTable.getCellFormatter().addStyleName(0, col1, css.ResizeCol());
                 if(col2 > -1)
-                	flexTable.getCellFormatter().addStyleName(0, col2, "ResizeCol");
+                	flexTable.getCellFormatter().addStyleName(0, col2, css.ResizeCol());
                 resizeColStyle = true;
                 resizeColumn = col1;
                 sinkEvents(Event.ONMOUSEDOWN);
@@ -398,8 +406,8 @@ public class Header extends FocusPanel {
         }
 
         if (resizeColStyle) {
-            flexTable.getCellFormatter().removeStyleName(0, col1, "ResizeCol");
-            flexTable.getCellFormatter().removeStyleName(0, col2, "ResizeCol");
+            flexTable.getCellFormatter().removeStyleName(0, col1, css.ResizeCol());
+            flexTable.getCellFormatter().removeStyleName(0, col2, css.ResizeCol());
             resizeColStyle = false;
             unsinkEvents(Event.ONMOUSEDOWN);
         }

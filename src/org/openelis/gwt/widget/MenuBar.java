@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.MenuCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
@@ -48,12 +51,17 @@ public class MenuBar extends Composite {
      */
     protected PopupMenuPanel popMenu;
     
+    protected MenuCSS css;
+    
     /**
      * No-Arg constructor 
      */
     public MenuBar() {
         AbsolutePanel ap;
        
+        css = OpenELISResources.INSTANCE.menuCss();
+        css.ensureInjected();
+        
         panel = new HorizontalPanel();
         
         /* Add empty div and set to 100% width so items added before will align to the right */
@@ -63,7 +71,7 @@ public class MenuBar extends Composite {
         
         initWidget(panel);
         
-        setStyleName("topMenuBar");
+        setStyleName(css.topMenuBar());
     }
 
     /**
@@ -72,7 +80,7 @@ public class MenuBar extends Composite {
      */
     public void addMenu(final Menu menu) {
         panel.insert(menu,panel.getWidgetCount()-1);
-        menu.setStyleName("topMenuBarItem");
+        menu.setStyleName(css.topMenuBarItem());
         menu.showBelow(true);
         menu.hideArrow();
        
@@ -84,7 +92,7 @@ public class MenuBar extends Composite {
         
         menu.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                menu.addStyleName("Hover");
+                menu.addStyleName(css.Hover());
                 if(popMenu != null && popMenu.isShowing()) {
                     popMenu.hide();
                     popMenu = menu.showSubMenu();

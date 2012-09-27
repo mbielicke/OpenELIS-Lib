@@ -1,0 +1,232 @@
+
+.Button {
+	padding-top:2px;
+	border:1px solid transparent;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+	
+.ButtonPanelContainer {
+	height: 26px;
+	background-color:#d8e4f2;
+	border-bottom:1px solid #a9bfd3;
+}
+
+.BottomButtonPanelContainer {
+	height: 26px;
+	background-color:#d0def0;
+	border-bottom:1px solid #a9bfd3;
+}
+
+@Sprite .ButtonDivider {
+	width: 2px;
+	height: 13px;
+	margin: 6px 2px 0 2px;
+	gwt-image: 'buttonDivider';
+}
+
+.Hover {
+	border:1px solid #7293be;
+}
+
+@if user.agent gecko1_8 {
+	.Hover{
+		background-image: -moz-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.Hover {
+		background-image: -ms-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}	
+}@elif user.agent safari {
+	.Hover {
+		background-image: -webkit-linear-gradient(top,#b4c9e2,#e7f0f7);
+	}
+}
+
+.Pressed {
+	border:1px solid #7293be;
+}
+
+@if user.agent gecko1_8 {
+	.Pressed {
+		background-image:-moz-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.Pressed {
+		background-image:-ms-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}@elif user.agent safari {
+	.Pressed {
+		background-image:-webkit-linear-gradient(top,#8dc0f5,#c9ddf6);
+	}
+}
+
+.Disabled {
+	color : gray;
+}
+
+.Disabled.Hover {
+	border:1px solid transparent;
+	background:none;
+}
+
+@sprite .addTestButtonImage {
+	gwt-image:'calculatorAdd';
+}
+
+@sprite .Disabled .addTestButtonImage {
+	gwt-image:'calculatorAddDisabled';
+}
+
+@sprite .cancelTestButtonImage {
+	gwt-image:'calculatorDelete';
+}
+
+@sprite .Disabled .cancelTestButtonImage {
+	gwt-image: 'calculatorDeleteDisabled';
+}
+
+@sprite .expandButtonImage {
+	gwt-image:'arrowOut';
+}
+
+@sprite .Disabled .expandButtonImage {
+	gwt-image:'arrowOutDisabled';
+}
+
+@sprite .collapseButtonImage {
+	gwt-image:'arrowIn';
+}
+
+@sprite .Disabled .collapseButtonImage {
+	gwt-image:'arrowInDisabled';
+}
+
+@sprite .similarButtonImage {
+	gwt-image: 'find';
+}
+
+@sprite .Disabled .similarButtonImage {
+	gwt-image: 'findDisabled';
+}
+
+@sprite .privateWellWaterSampleLoginIcon {
+	gwt-image: 'house';
+}
+
+@sprite .QueryButtonImage {
+	gwt-image:'query';
+}
+
+@sprite .Disabled .QueryButtonImage {
+	gwt-image:'queryDisabled';
+}
+
+@sprite .Pressed .QueryButtonImage {
+	gwt-image: 'query';
+}
+
+@sprite .PreviousButtonImage {
+	gwt-image:'previous';
+}
+
+@sprite .Disabled .PreviousButtonImage {
+	gwt-image:'previousDisabled';
+}
+
+@sprite .NextButtonImage {
+	gwt-image: 'next';
+}
+
+@sprite .Disabled .NextButtonImage {
+	gwt-image:'nextDisabled';
+}
+
+@sprite .AddButtonImage {
+	gwt-image:'add';
+}
+
+@sprite .Disabled .AddButtonImage {
+	gwt-image:'addDisabled';
+}
+
+@sprite .Pressed .AddButtonImage {
+	gwt-image:'add';
+}
+
+@sprite .AddButtonIcon {
+	gwt-image:'addButton';
+}
+
+@sprite .Disabled .AddButtonIcon {
+	gwt-image:'addButtonDisabled';
+}
+
+@sprite .UpdateButtonImage {
+	gwt-image:'update';
+}
+
+@sprite .Disabled .UpdateButtonImage {
+	gwt-image:'updateDisabled';
+}
+
+@sprite .Pressed .UpdateButtonImage {
+	gwt-image:'update';
+}
+
+@sprite .DeleteButtonImage {
+	gwt-image:'delete';
+}
+
+@sprite .Disabled .DeleteButtonImage {
+	gwt-image:'deleteDisabled';
+}
+
+@sprite .DeleteButtonIcon {
+
+	gwt-image:'deleteIcon';
+}
+
+@sprite .Disabled .DeleteButtonIcon {
+	gwt-image:'deleteIconDisabled';
+}
+
+@sprite .CommitButtonImage {
+	gwt-image:'commit';
+}
+
+@sprite .Disabled .CommitButtonImage {
+	gwt-image:'commitDisabled';
+}
+
+@sprite .ProcessButtonImage {
+	gwt-image:'process';
+}
+
+@sprite .Disabled .ProcessButtonImage {
+	gwt-image:'processDisabled';
+}
+
+@sprite .AbortButtonImage {
+	gwt-image:'abort';
+}
+
+@sprite .Disabled .AbortButtonImage {
+	gwt-image:'abortDisabled';
+}
+
+@sprite .OptionsButtonImage {
+	gwt-image:'menuDown';
+}
+
+@sprite .Disabled .OptionsButtonImage {
+	gwt-image:'menuDown';
+}
+
+@sprite .duplicateRecordIcon {
+	gwt-image:'duplicate';
+}
+
+@sprite .historyIcon {
+	gwt-image:'history';
+}

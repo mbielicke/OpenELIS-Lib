@@ -30,9 +30,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.DropdownCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.table.CheckBoxCell;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.Row;
@@ -108,21 +112,19 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	protected Table                 				table;
 	protected PopupPanel      					    popup;
 	protected int                   			    cellHeight = 19, itemCount = 10, width, maxDisplay = 3;
-	protected boolean 					            required,queryMode,showingOptions,multiSelect,enabled;
-	protected ArrayList<T>          				value;
+	protected boolean 					            required,queryMode,showingOptions,enabled;
+	protected T                      				value;
 
 	/**
 	 * Sorted list of display values for search
 	 */
 	protected ArrayList<SearchPair> 				searchText;
-	protected HashMap<T, Integer>					searchHash;
-
 	protected SearchPair 							searchPair;
 
 	/**
 	 * Exceptions list
 	 */
-	protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+	protected Exceptions                            exceptions;
 
 	/**
 	 * HashMap to set selections by key;
@@ -135,15 +137,13 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 	protected Renderer              			    renderer  = new DefaultRenderer();
 	
-	protected WidgetHelper<T>                       helper;
-
 	/**
-	 * Public Interface used to provide rendering logic for the Selection display
-	 * 
+	 * Helper was added for compatibility when widget is used in a table.  Never used in the widget itself
 	 */
-	public interface Renderer {
-		public String getDisplay(Row row);
-	}
+	protected WidgetHelper<T>                       helper;
+	
+	
+	protected DropdownCSS                           css = OpenELISResources.INSTANCE.dropdown();
 
 	/**
 	 * Default no-arg constructor
@@ -153,10 +153,11 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	}
 
 	/**
-	 * Init() method overrriden from TextBox to draw the Selection correctly.
-	 * Also set up handlers for click and key handling
+	 *   Creates the display for the Dropdown and sets it as the Composite widget.  Sets all handlers 
+	 *   for user interaction.
 	 */
 	public void init() {
+		css.ensureInjected();
 		/*
 		 * Final instance used in Anonymous handlers.
 		 */
@@ -171,6 +172,10 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 * Focus Panel is used to catch Focus and blur events internal to the widget
 		 */
 		focus = new FocusPanel();
+		
+		/*
+		 * Structure of widget
+		 */
 		display = new Grid(1,2);
 		display.setCellPadding(0);
 		display.setCellSpacing(0);
@@ -180,9 +185,11 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 * passed style.
 		 */
 		button = new Button();
+		
+		/* Image must be in a div instead of adding the style to cell itself to display correctly */
 		AbsolutePanel image = new AbsolutePanel();
-		image.setStyleName("SelectButton");
-		button.setDisplay(image, false);
+		image.setStyleName(css.SelectButton());
+		button.setWidget(image);
 
 		display.setWidget(0,1,button);
 		display.getCellFormatter().setWidth(0,1,"16px");
@@ -197,15 +204,15 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		outer.add(focus);
 		initWidget(outer);
 
-		display.setStyleName("SelectBox");
+		display.setStyleName(css.SelectBox());
 
 		/*
 		 * Set the focus style when the Focus event is fired Externally
 		 */
 		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
-				if(enabled)
-					display.addStyleName("Focus");
+				if(isEnabled())
+					display.addStyleName(css.Focus());
 			}
 		});
 
@@ -214,11 +221,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 */
 		addBlurHandler(new BlurHandler() {
 			public void onBlur(BlurEvent event) {
-				
-				display.removeStyleName("Focus");
+				display.removeStyleName(css.Focus());
 				
 				finishEditing();
-
 			}
 		});
 
@@ -271,6 +276,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		addHandler(keyHandler, KeyDownEvent.getType());
 		addHandler(keyHandler, KeyPressEvent.getType());
 
+		exceptions = new Exceptions();
 	}
 
 
@@ -281,14 +287,20 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * is in the current table view.
 	 */
 	protected void showPopup() {
+		/* Set to true for button mouse down hack */
 		showingOptions = true;
+		
+		/* create a popup instance first time it is used */
 		if (popup == null) {
 			popup = new PopupPanel(true);
-			popup.setStyleName("DropdownPopup");
-			if(multiSelect) {
-				uncheckAll = new Button("Unchecked","All",false);
-				checkAll = new Button("Checked","All",false);
-				close = new Button("CloseButton","",false);
+			popup.setStyleName(css.Popup());
+			
+			/* Draw popup for Multiselect when set */
+			if(queryMode) {
+				uncheckAll = new Button(css.Unchecked(),Constants.get().all());
+				checkAll = new Button(css.Checked(),Constants.get().all());
+				close = new Button(css.CloseButton(),"");
+				
 				multiHeader = new Grid(1,3);
 				multiHeader.setCellSpacing(0);
 				multiHeader.setCellPadding(0);
@@ -302,6 +314,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				vp.add(multiHeader);
 				vp.add(table);
 				popup.setWidget(vp);
+				
+				/* Handler to select All items when checked */
 				checkAll.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						for(Item<T> item : getModel()) {
@@ -314,6 +328,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				});
 				checkAll.setEnabled(true);
 
+				/* Handler to unselect All items when Checked */
 				uncheckAll.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						for(Item<T> item : getModel())
@@ -324,6 +339,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				});
 				uncheckAll.setEnabled(true);
 
+				/* Handler to close the popup without affecting selection */
 				close.addClickHandler(new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						popup.hide();
@@ -332,12 +348,14 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				close.setEnabled(true);
 			}else
 				popup.setWidget(table);
+			
 			popup.setPreviewingAllNativeEvents(false);
+			
+			/* Handler for closing of popup to set focus back to false and reset showingOptions */
 			popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 				public void onClose(CloseEvent<PopupPanel> event) {
 					setFocus(true);
 					showingOptions = false;
-
 				}
 			});
 		}
@@ -363,25 +381,29 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		int selected = 0;
 
 		sb = new StringBuffer();
-		if(multiSelect) 
+		
+		if(queryMode) 
 			items = getModel();
-		else
-			items = getSelectedItems();
-		if(items != null) {
+		else {
+			items = new ArrayList<Item<T>>();
+			items.add(getSelectedItem());
+		}
+		
+		if (items != null) {
 			for (int i = 0; i < items.size(); i++ ) {
-				if(!multiSelect || (multiSelect && "Y".equals(items.get(i).getCell(0)))) {
+				if (!queryMode || (queryMode && "Y".equals(items.get(i).getCell(0)))) {
 					selected++;
 					if (sb.length() > 0)
 						sb.append(", ");
 					sb.append(renderer.getDisplay(items.get(i)));
 				}
 			}
+			
 			if(selected > maxDisplay)
-				sb = new StringBuffer().append(selected+" options selected");
+				sb = new StringBuffer().append(selected+" "+Constants.get().optionSelected());
 		}
 
 		display.setText(0, 0, sb.toString());
-		//label.setText(sb.toString());
 	}
 
 	@Override
@@ -442,14 +464,12 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 	/**
 	 * Sets the Table definition to be used as the PopupContext for this
-	 * Dropdown. Will set the isDropdown flag in the Table so the correct
-	 * styling is used.
+	 * Dropdown. 
 	 * 
-	 * @param tree
 	 */
 	public void setPopupContext(Table tableDef) {
 		this.table = tableDef;
-		table.setTableStyle("DropdownTable");
+		//table.setStyleName(css.DropdownTable());
 		table.setFixScrollbar(false);
 		table.setRowHeight(16);
 		table.setEnabled(true);
@@ -460,15 +480,12 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		table.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@SuppressWarnings("rawtypes")
 			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-				if (!((Item)table.getModel().get(event.getItem())).isEnabled()) {
-					event.cancel();
-					return;
-				}
+
 				/*
 				 * Never select the table row in Multiselect,  Switch the checkbox 
 				 * and move on.
 				 */
-				if(multiSelect) {
+				if(queryMode) {
 					if("Y".equals(table.getValueAt(event.getItem(), 0)))
 						table.setValueAt(event.getItem(),0,"N");
 					else
@@ -476,6 +493,10 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 					setDisplay();
 					event.cancel();
 				}
+				
+				if (!((Item)table.getModel().get(event.getItem())).isEnabled()) 
+					event.cancel();
+				
 			}
 		});
 
@@ -494,7 +515,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				/*
 				 * Keep options up if multiple selection occurs 
 				 */
-				if(multiSelect) 
+				if(queryMode) 
 					return;
 
 				popup.hide();
@@ -505,9 +526,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	/**
 	 * Method Returns the Table widget used to display the Select Options 
 	 */
-	public Table getPopupContext() {
-		return table;
-	}
+	//public Table getPopupContext() {
+	//	return table;
+	//}
 
 	/**
 	 * Sets the number of visible rows in the Table that shows the options
@@ -528,23 +549,11 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	public void setModel(ArrayList<Item<T>> model) {
 		assert table != null;
 
-		/*
-		 * If already in MultiSelect we need to add the check column
-		 * to the model.
-		 */
-		if(multiSelect) {
-			/*
-			 * Insert column for checkbox
-			 */
-			for(Item<T> item : model) 
-				item.getCells().add(0,null);
-		}
-
 		table.setModel(model);
 
-		if(model.size() < itemCount) {
+		if(model.size() < itemCount) 
 			table.setVisibleRows(model.size());
-		}else
+		else
 			table.setVisibleRows(itemCount);
 
 
@@ -565,27 +574,15 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 	/**
 	 * Sets the selected row using its overall index in the model. This method
-	 * will also cause a ValueChangeEvent to be fired.
+	 * will also not cause a ValueChangeEvent to be fired.
 	 * 
 	 * @param index
 	 */
 	public void setSelectedIndex(int index) {
-		if(multiSelect) {
-			clearSelections();
-
-			if(index > -1) 
-				getModel().get(index).setCell(0, "Y");
-
-			setDisplay();
-		}else {
-			if(index > -1) {
-				table.selectRowAt(index);
-				display.setText(0, 0, renderer.getDisplay(getSelectedItem()));
-			}else{
-				table.clearRowSelection();
-				display.setText(0, 0, "");
-			}
-		}
+		if (index > -1)
+			setValue(getModel().get(index).key);
+		else
+			setValue(null);
 	}
 
 	/**
@@ -613,51 +610,19 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * 
 	 * @return
 	 */
+	/*
 	public ArrayList<Item<T>> getSelectedItems() {
 		ArrayList<Item<T>> items = null;
 
-		if(!multiSelect && !table.isAnyRowSelected())
-			return null;
 
 		items = new ArrayList<Item<T>>();
-		if(multiSelect) {
-			for(Item<T> item : getModel()) {
-				if("Y".equals(item.getCell(0)))
-					items.add(item);
-			}
-		}else {
-			for(int i = 0; i < table.getSelectedRows().length; i++) 
-				items.add(getModel().get(table.getSelectedRows()[i]));
-		}
+
+		for(int i = 0; i < table.getSelectedRows().length; i++) 
+			items.add(getModel().get(table.getSelectedRows()[i]));
+
 		return items.size() > 0 ? items : null;
 	}
-
-	/**
-	 * Method will set the widget into MultiSelection mode
-	 * @param multi
-	 */
-	public void setMultiSelect(boolean multi) {
-		if(multiSelect != multi) {
-			multiSelect = multi;
-			popup = null;
-			if(multi){
-				/*
-				 * If switching to multi select and checkbox column at position 0
-				 * Table will add the value to te model correctly
-				 */
-				Column col = new Column.Builder(15).build();
-				col.setCellRenderer(new CheckBoxCell(new CheckBox()));
-				table.addColumnAt(0, col);
-			}else{
-				/*
-				 * Remove Checkbox column if switching to single select
-				 * The table will remove the column from the model
-				 */
-				table.removeColumnAt(0);
-				display.setText(0, 0, "");
-			}
-		}
-	}
+	*/
 
 	/**
 	 * Returns the string currently displayed in the textbox portion of the
@@ -677,9 +642,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 	@Override
 	public void setEnabled(boolean enabled) {
-		// if (isEnabled() == enabled)
-		//   return;
-
 		this.enabled = enabled;
 
 		button.setEnabled(enabled);
@@ -700,34 +662,16 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 	@Override
 	public void setValue(T value, boolean fireEvents) {
-		boolean validKey;
-		ArrayList<T> values;
+		Integer index;
 
-		if(!Util.isDifferent(this.value == null ? null : this.value.get(0), value)) 
+		if(!Util.isDifferent(this.value == null ? null : this.value, value)) 
 			return;
 
-		values = new ArrayList<T>();
-		values.add(value);
+		table.selectRowAt((index = keyHash.get(value)) != null ? index : -1);
+		
+		setDisplay();
 
-		if(multiSelect) {
-			setValues(values,fireEvents);
-			return;
-		}
-
-		if (value != null) {
-			validKey = keyHash.containsKey(value);
-			// assert validKey : "Key not found in Item list";
-			if(!validKey)
-				value = null;
-			table.selectRowAt(keyHash.get(value));
-
-			setDisplay();
-		} else {
-			table.selectRowAt( -1);
-			display.setText(0,0,"");
-		}
-
-		this.value = values;
+		this.value = value;
 
 		if (fireEvents) 
 			ValueChangeEvent.fire(this, value);
@@ -735,22 +679,20 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	};
 
 	/**
-	 * Check if the Dropdown is valid
+	 * Method is called when the dropdown is blurred.  It will validate and set the value 
+	 * of the widget.
 	 */
+	@Override
 	public void finishEditing() {
-		ArrayList<T> values;
-		
-		values = getValues();
-
-		if(multiSelect)
-			setValues(values, true);
+		if(table.isAnyRowSelected())
+			setValue(getModel().get(table.getSelectedRow()).key);
 		else
-			setValue(values != null ? values.get(0) : null,true);
+			setValue(null);
 
-		validateExceptions = null;
+		clearValidateExceptions();
 
 		if (required && value == null) 
-			addValidateException(new LocalizedException("exc.fieldRequiredException"));
+			addValidateException(new LocalizedException(Constants.get().fieldRequired()));
 		
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
@@ -759,27 +701,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * Method used to return the values of the Selection
 	 */
 	public T getValue() {
-		return value == null ? null : value.get(0);
+		return value;
 	}
 
-	/**
-	 * Method used to retrieve selected values when in MultiSelect mode
-	 * @return
-	 */
-	public ArrayList<T> getValues() {
-		ArrayList<T> values = null;
-
-		values = new ArrayList<T>();
-		if(multiSelect) {
-			for(Item<T> item : getModel())
-				if("Y".equals(item.getCell(0)))
-					values.add(item.getKey());
-		}else if(getSelectedItem() != null) 
-			values.add(getSelectedItem().key);
-
-
-		return values.size() > 0 ? values : null;
-	}
 
 	/**
 	 * Method used to set the value of the Selection
@@ -787,55 +711,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 	public void setValue(T value) {
 		setValue(value, false);
-	}
-
-	/**
-	 * Method used to set the selections when Multiple Selection is allowed
-	 * @param values
-	 */
-	public void setValues(ArrayList<T> values) {
-		setValues(values,false);
-	}
-
-	/**
-	 * Method used to set the selections when Multiple Selection is Allowed and can 
-	 * specify to fire ValueChangeEvent.
-	 * @param values
-	 * @param fireEvents
-	 */
-	public void setValues(ArrayList<T> values, boolean fireEvents) {
-		if(!Util.isDifferent(this.value, values)) { 
-			return;
-		}
-
-		clearSelections();
-
-		if (values != null) {
-
-			for(T key : values)
-				getModel().get(keyHash.get(key)).setCell(0, "Y");
-
-			setDisplay();
-		} else {
-			display.setText(0,0,"");
-		}
-
-		this.value = values;
-
-		if (fireEvents) 
-			ValueChangeEvent.fire(this, value != null ? value.get(0) : null);
-		
-	}
-
-	/**
-	 * Method used in MultiSelect to clear all checkboxes in MultiSelect mode
-	 */
-	protected void clearSelections() {
-		if(!multiSelect)
-			return;
-
-		for(Item<T> item : getModel())
-			item.setCell(0, null);
 	}
 
 	/**
@@ -854,8 +729,27 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	public void setQueryMode(boolean query) {
 		if (query == queryMode)
 			return;
+		
 		queryMode = query;
-		setMultiSelect(query);
+		
+		popup = null;
+		
+		if(queryMode){
+			/*
+			 * If switching to multi select and checkbox column at position 0
+			 * Table will add the value to te model correctly
+			 */
+			Column col = new Column.Builder(15).build();
+			col.setCellRenderer(new CheckBoxCell(new CheckBox()));
+			table.addColumnAt(0, col);
+		}else{
+			/*
+			 * Remove Checkbox column if switching to single select
+			 * The table will remove the column from the model
+			 */
+			table.removeColumnAt(0);
+			display.setText(0, 0, "");
+		}
 	}
 
 	/**
@@ -868,7 +762,14 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		StringBuffer sb;
 		ArrayList<T> values;
 
-		values = getValues();
+		if(!queryMode)
+			return null;
+		
+		values = new ArrayList<T>();
+		for(Item<T> item : getModel())
+			if("Y".equals(item.getCell(0)))
+				values.add(item.getKey());
+
 		/*
 		 * Return null if nothing selected
 		 */
@@ -911,13 +812,12 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 		if(!queryMode)
 			return;
-
-		setValues(null);
+		
+		table.unselectAll();
 
 		if(qd == null)
 			return;
-
-		table.clearRowSelection();
+		
 		if(qd.getQuery() != null && !qd.getQuery().equals("")) {
 			params = qd.getQuery().split(" \\| ");
 			for(int i = 0; i < params.length; i++) {
@@ -929,6 +829,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				getModel().get(keyHash.get(key)).setCell(0, "Y");
 			}
 		}
+		
 		setDisplay();
 
 		table.setModel(getModel());
@@ -950,31 +851,26 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		if (textValue.equals(""))
 			return -1;
 
+		/*
+		 * For first time search we need to setup the sorted array list for the binary search since
+		 * the display model may not in order.
+		 */
 		if (searchText == null) {
 			searchText = new ArrayList<SearchPair>();
-			searchHash = new HashMap<T,Integer>();
 			for (int i = 0; i < getModel().size(); i++ ) {
-				if (getModel().get(i).enabled) {
-					searchText.add(new SearchPair(i, renderer.getDisplay(getModel().get(i))
-							.toUpperCase()));
-				}
-
+				if (getModel().get(i).enabled) 
+					searchText.add(new SearchPair(i, renderer.getDisplay(getModel().get(i)).toUpperCase()));
 			}
 			Collections.sort(searchText);
-
-			for(int i = 0; i < searchText.size(); i++) 
-				searchHash.put(getModel().get(searchText.get(i).modelIndex).key, i);
-
 		}
 
-		index = Collections.binarySearch(searchText, new SearchPair( -1, textValue),
-				new MatchComparator());
+		index = Collections.binarySearch(searchText, new SearchPair( -1, textValue),new MatchComparator());
 
 		if (index < 0)
 			return -1;
 		else {
 			// we need to do a linear search backwards to find the first entry
-			// that matches our search
+			// that partial matches our search
 			index-- ;
 			while (index >= 0 &&
 					compareValue((String)searchText.get(index).display, textValue,textValue.length()) == 0)
@@ -985,14 +881,10 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 	}
 
-
-
-	public void closePopup() {
-		popup.hide();
-	}
-
 	/**
-	 * Compares two values by adjusting for length first.
+	 * Does a partial comparison of two values by adjusting for length first and returns
+	 * the lesser lexical value.
+	 * 
 	 * @param value
 	 * @param textValue
 	 * @param length
@@ -1019,22 +911,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		}
 	}
 
-	/**
-	 * Private Default implementation of the Renderer interface.
-	 * 
-	 */
-	protected class DefaultRenderer implements Renderer {
-		public String getDisplay(Row row) {
-			int index;
-
-			if(multiSelect)
-				index = 1;
-			else
-				index = 0;
-
-			return row != null && row.getCells().get(index) != null ? row.getCells().get(index).toString() : "";
-		}
-	}    
 
 	// ********** Table Keyboard Handling ****************************
 
@@ -1048,14 +924,13 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		public void onKeyDown(KeyDownEvent event) {
 
 			switch (event.getNativeKeyCode()) {
-			case KeyCodes.KEY_TAB:
-				if (popup != null && popup.isShowing())
-					popup.hide();
-				//event.stopPropagation();
-				break;
-			case KeyCodes.KEY_BACKSPACE :
-				this.searchString = "";
-				break;
+				case KeyCodes.KEY_TAB:
+					if (popup != null && popup.isShowing())
+						popup.hide();
+					break;
+				case KeyCodes.KEY_BACKSPACE :
+					this.searchString = "";
+					break;
 			}
 
 		}
@@ -1070,33 +945,33 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 			ch = event.getUnicodeCharCode() == 0 ? (char)event.getNativeEvent().getKeyCode() : event.getCharCode();
 			
 			switch (event.getNativeEvent().getKeyCode()) {
-			case KeyCodes.KEY_DOWN:
-				table.selectRowAt(findNextActive(table.getSelectedRow()));
-				break;
-			case KeyCodes.KEY_UP:
-				table.selectRowAt(findPrevActive(table.getSelectedRow()));
-				break;
-			case KeyCodes.KEY_ENTER:
-				if (popup == null || !popup.isShowing())
-					showPopup();
-				else
-					popup.hide();
-				event.stopPropagation();
-				break;
-			case KeyCodes.KEY_TAB:
-				break;
-			case KeyCodes.KEY_BACKSPACE:
-				setSelectedIndex(-1);
-				break;
-			default:
-				searchString += String.valueOf(ch);                    
+				case KeyCodes.KEY_DOWN:
+					table.selectRowAt(findNextActive(table.getSelectedRow()));
+					break;
+				case KeyCodes.KEY_UP:
+					table.selectRowAt(findPrevActive(table.getSelectedRow()));
+					break;
+				case KeyCodes.KEY_ENTER:
+					if (popup == null || !popup.isShowing())
+						showPopup();
+					else
+						popup.hide();
+					event.stopPropagation();
+					break;
+				case KeyCodes.KEY_TAB:
+					break;
+				case KeyCodes.KEY_BACKSPACE:
+					setSelectedIndex(-1);
+					break;
+				default:
+					searchString += String.valueOf(ch);             
+				
+					index = findIndexByTextValue(searchString);
 
-				index = findIndexByTextValue(searchString);
-
-				if (index > -1)
-					setSelectedIndex(index);
-				else
-					searchString = searchString.substring(0,searchString.length()-1);
+					if (index > -1)
+						setSelectedIndex(index);
+					else
+						searchString = searchString.substring(0,searchString.length()-1);
 			}
 		}
 
@@ -1110,6 +985,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		private int findNextActive(int index) {
 			int next;
 
+			/*
+			 * Iterate forward until the next enabled item is found
+			 */
 			next = index + 1;
 			while (next < table.getRowCount() && !((Item<T>)table.getModel().get(next)).isEnabled())
 				next++ ;
@@ -1131,6 +1009,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		private int findPrevActive(int index) {
 			int prev;
 
+			/*
+			 * Iterate backwards until the next enabled item is found
+			 */
 			prev = index - 1;
 			while (prev > -1 && !((Item<T>)table.getModel().get(prev)).isEnabled())
 				prev-- ;
@@ -1143,83 +1024,95 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	}
 
 	/**
-	 * Adds a manual Exception to the widgets exception list.
-	 */
-	public void addException(LocalizedException error) {
-		if (endUserExceptions == null)
-			endUserExceptions = new ArrayList<LocalizedException>();
-		endUserExceptions.add(error);
-		ExceptionHelper.checkExceptionHandlers(this);
-	}
-
-	protected void addValidateException(LocalizedException error) {
-		if (validateExceptions == null)
-			validateExceptions = new ArrayList<LocalizedException>();
-		validateExceptions.add(error);
-	}
-
-
-	/**
-	 * Convenience method to check if a widget has exceptions so we do not need
-	 * to go through the cost of merging the logical and validation exceptions
-	 * in the getExceptions method.
-	 * 
-	 * @return
+	 * Checks for the field required exception and will add that to the validate exceptions list.
+	 * Returns true if any validation or user exception has been added to the widget.
 	 */
 	public boolean hasExceptions() {
-    	if(validateExceptions != null)
+    	if(getValidateExceptions() != null)
     		return true;
     	  
     	if (!queryMode && required && getValue() == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
+            addValidateException(new LocalizedException(Constants.get().fieldRequired()));
             ExceptionHelper.checkExceptionHandlers(this);
     	}
     	  
-    	return endUserExceptions != null || validateExceptions != null;
+    	return getEndUserExceptions() != null || getValidateExceptions() != null;
 	}
 
 	/**
-	 * Combines both exceptions list into a single list to be displayed on the
-	 * screen.
+	 * Adds a manual Exception to the widgets exception list.
 	 */
-	public ArrayList<LocalizedException> getValidateExceptions() {
-		return validateExceptions;
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
+	/**
+	 * Adds a validation exception to this widget
+	 * @param error
+	 */
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
+
+	}
+
+	/**
+	 * Returns the list of Validate Exceptions for this widget.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return exceptions.getValidateExceptions();
+	}
+
+	/**
+	 * Returns the list of User Exceptions for this widget.
+	 */
 	public ArrayList<LocalizedException> getEndUserExceptions() {
-		return endUserExceptions;
+		return exceptions.getEndUserExceptions();
 	}
 
 	/**
 	 * Clears all manual and validate exceptions from the widget.
 	 */
 	public void clearExceptions() {
-		endUserExceptions = null;
-		validateExceptions = null;
-		removeExceptionStyle("InputError");
-		removeExceptionStyle("InputWarning");
+		exceptions.clearExceptions();
+		removeExceptionStyle();
 		ExceptionHelper.clearExceptionHandlers(this);
 	}
 
+	/**
+	 * Clears the list of User Exceptions for this widget.
+	 */
 	public void clearEndUserExceptions() {
-		endUserExceptions = null;
+		exceptions.clearEndUserExceptions();
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
+	/**
+	 * Clears the list of Validation Exceptions for this widget.
+	 */
 	public void clearValidateExceptions() {
-		validateExceptions = null;
+		exceptions.clearValidateExceptions();
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
 
 
-	public void addExceptionStyle(String style) {
-		display.addStyleName(style);
+	/**
+	 * Adds an exception CSS class to this widget.
+	 */
+	public void addExceptionStyle() {
+		if(ExceptionHelper.isWarning(this))
+			display.addStyleName(css.InputWarning());
+		else
+			display.addStyleName(css.InputError());
 	}
 
-	public void removeExceptionStyle(String style) {
-		display.removeStyleName(style);
+	/**
+	 * Removes an exception CSS class from this widget.
+	 */
+	public void removeExceptionStyle() {
+		display.removeStyleName(css.InputError());
+		display.removeStyleName(css.InputWarning());
 	}
-
 
 	/**
 	 * Method only implemented to satisfy Focusable interface.
@@ -1242,6 +1135,9 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 	}
 
+	/**
+	 * Sets/Loses focus to this widget based on the passed boolean.
+	 */
 	public void setFocus(boolean focused) {
 		focus.setFocus(focused);
 	}
@@ -1261,20 +1157,28 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	}
 
 	@Override
+	/**
+	 * Returns if widget is enabled for editing
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 	
+	/** 
+	 * Returns true if the passed value is a key of an item in the dropdown.
+	 * @param value
+	 * @return
+	 */
 	public boolean isValidKey(T value) {
 		return keyHash.containsKey(value);
 	}
 
+	/**
+	 * Returns true if this field is required to have a value before submission
+	 * @param required
+	 */
 	public void setRequired(boolean required) {
 		this.required = required;
-	}
-
-	public boolean isMultSelect() {
-		return multiSelect;
 	}
 
 	// ************ Handler Registration methods *********************
@@ -1314,16 +1218,47 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 		return addDomHandler(handler, MouseOutEvent.getType());
 	}
-
+	
 	@Override
+	/**
+	 * Sets the Helper to be used for this widget
+	 */
 	public void setHelper(WidgetHelper<T> helper) {
 		this.helper = helper;
 		
 	}
 
 	@Override
+	/**
+	 * Returns the Helper that is used for this widget
+	 */
 	public WidgetHelper<T> getHelper() {
 		return helper;
 	}
     
+	/**
+	 * Public Interface used to provide rendering logic for the Selection display
+	 * 
+	 */
+	public interface Renderer {
+		public String getDisplay(Row row);
+	}
+	
+	/**
+	 * Private Default implementation of the Renderer interface.
+	 * 
+	 */
+	protected class DefaultRenderer implements Renderer {
+		public String getDisplay(Row row) {
+			int index;
+
+			if(queryMode)
+				index = 1;
+			else
+				index = 0;
+
+			return row != null && row.getCells().get(index) != null ? row.getCells().get(index).toString() : "";
+		}
+	}    
+
 }

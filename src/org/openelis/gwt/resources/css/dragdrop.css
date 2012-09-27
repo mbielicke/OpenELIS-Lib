@@ -1,0 +1,105 @@
+.dragdrop_movable_panel .middleCenter{
+	background:white;
+	opacity:0.8;
+	border:1px solid #d8d8d8;
+	border-top:0;
+}
+.dragdrop_movable_panel {
+    width:176px;
+}
+.dragdrop_movable_panel .middle{
+    padding:0px;
+    border:0px;
+}
+.dragdrop_movable_panel .topRight {
+    width:6px;
+    height:6px;
+}
+.dragdrop_movable_panel .middleRight {
+    width:6px;
+    height:100%;
+}
+.dragdrop_movable_panel .middleRightInner{
+    background:none;
+    height:100%;
+    margin-top:6px;
+}
+.dragdrop_movable_panel .bottomRight {
+    width:6px;
+    height:6px;
+}
+.dragdrop_movable_panel .bottomCenter {
+    height:6px;
+}
+.dragdrop_movable_panel .bottomCenterInner {
+    height:6px;
+    margin-left:6px;
+}
+.dragdrop_movable_panel .bottomLeft {
+    width:6px;
+    height:6px;
+}
+.dragdrop_movable_panel .middleLeft {
+    width:6px;
+    height:100%;
+}
+.dragdrop_movable_panel .topLeft {
+    width:6px;
+    height:6px;
+}
+.dragdrop_movable_panel .topCenter{
+    background:none;
+    height:6px;
+}
+.dragdrop_movable_panel .topCenter .topCenterInner{
+    background:white;
+    height:5px;
+    border:1px solid #d8d8d8;
+    border-bottom:0;
+    opacity:0.8;
+}
+.DragProxy{
+ 	margin-top:_3;
+}
+
+.dragdrop_proxy{
+	background:none;
+	opacity:0.9;
+}
+
+tr .DropOnRow{
+	background:#defadc;
+}
+
+.dragdrop_proxy{
+	
+}	
+	
+.dragdrop_proxy .ScreenLabel{
+	border:1px solid #d8d8d8;
+	border-left:0;
+	background:white;
+	padding-right:4px;
+		}
+
+.DropPositioner {
+	border-top:1px dashed #63B159;}
+
+.DragSelector{
+    border:1px solid #99bbe8;
+    margin-right:8px;
+}
+
+.DragStatus{
+    width:20px;
+    height:18px;
+    margin:0 0 2 2;
+}
+@sprite .Drop{
+	gwt-image:'commitButton';
+}
+@sprite .NoDrop{
+	gwt-image:'stop';
+}
+
+.dragdrop_dragging {}

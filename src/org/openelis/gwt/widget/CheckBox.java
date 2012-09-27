@@ -27,22 +27,24 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.resources.CheckboxCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -58,67 +60,26 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
                                         HasValue<String>, HasExceptions {
 
     /*
-     * Enum to define checkbox modes.  This can be removed if it is decided that
-     * a chekbox can only have three states in query mode only and can do normal 
-     * input as a three state.
-     */
-    public enum Mode {
-        TWO_STATE, THREE_STATE
-    };
-
-    /*
-     * Enum to define possible check values and styles
-     */
-    public enum Value {
-        UNCHECKED("N", "Unchecked"), CHECKED("Y", "Checked"), UNKNOWN(null, "Unknown");
-
-        private String value;
-        private String style;
-
-        Value(String value, String style) {
-            this.value = value;
-            this.style = style;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public String getStyle() {
-            return style;
-        }
-
-        public static Value getValue(String value) {
-            if ("Y".equals(value))
-                return Value.CHECKED;
-            else if ("N".equals(value))
-                return Value.UNCHECKED;
-            else
-                return Value.UNKNOWN;
-        }
-    };
-
-    /*
-     * Fields for state and value
-     */
-    private Value                           value = Value.UNCHECKED;
-    private Mode                            mode  = Mode.TWO_STATE;
-
-    /*
      * Fields for query mode
      */
-    protected boolean                       queryMode, enabled;
+    protected boolean                       queryMode;
 
     /*
      * Fields used for Exceptions
      */
-    protected ArrayList<LocalizedException> endUserExceptions, validateExceptions;
+    protected Exceptions                     exceptions;
+    
+    protected Checkbox                       check;
+    
+    protected CheckBox                       source = this;
+    
+    protected CheckboxCSS                    css;
 
     /**
      * Default no-arg constructor
      */
     public CheckBox() {
-        init();
+    	init();
     }
 
     /**
@@ -126,52 +87,26 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @param mode
      */
-    public CheckBox(Mode mode) {
-        init();
-        setMode(mode);
+    public CheckBox(Checkbox.Mode mode) {
+    	init();
+        check.setMode(mode);
     }
 
-    /**
-     * This method will set the Checkbox display and set Event handlers
-     */
-    public void init() {
-        setValue(Value.UNCHECKED.getValue());
-
-        /**
-         * If clicked call changeValue to rotate the state of the checkbox based
-         * on its mode.
-         */
-        addHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                changeValue();
-            }
-        }, ClickEvent.getType());
-
-        /**
-         * If Enter key hit while focused call changeValue to rotate the state
-         * of the checkbox based on its mode.
-         */
-        addHandler(new KeyDownHandler() {
-            public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    changeValue();
-                    //event.stopPropagation();
-                }
-            }
-        }, KeyDownEvent.getType());
-    }
-
-    /**
-     * Changes the checkbox to be either TWO_STATE or THREE_STATE
-     * 
-     * @param type
-     */
-    public void setMode(Mode type) {
-        this.mode = type;
-        if (type == Mode.THREE_STATE)
-            setValue(Value.UNKNOWN.getValue());
-        else
-            setValue(Value.UNCHECKED.getValue());
+    protected void init() {
+    	check = new Checkbox();
+    	
+    	check.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+    		public void onValueChange(ValueChangeEvent<Boolean> event) {
+    			fireValueChange(event.getValue() != null ? ("Y".equals(event.getValue()) ? "Y" : "N") : null);
+    		}
+		});
+        
+    	setWidget(check);
+        
+        exceptions = new Exceptions();
+        
+        css = OpenELISResources.INSTANCE.checkbox();
+        css.ensureInjected();
     }
 
     /**
@@ -179,62 +114,25 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @return
      */
-    public Mode getMode() {
-        return mode;
+    public Checkbox.Mode getMode() {
+        return check.getMode();
     }
 
-    /**
-     * Method called form event handlers to switch the value of the checkbox
-     */
-    public void changeValue() {
-        switch (value) {
-            case CHECKED:
-                setValue(Value.UNCHECKED.getValue(), true);
-                break;
-            case UNCHECKED:
-                if (mode == Mode.THREE_STATE || queryMode)
-                    setValue(Value.UNKNOWN.getValue(), true);
-                else
-                    setValue(Value.CHECKED.getValue(), true);
-                break;
-            case UNKNOWN:
-                setValue(Value.CHECKED.getValue(), true);
-                break;
-        }
-        ;
-    }
+
 
     // ******** Implementation of ScreenWidgetInt ***********************
     /**
      * Method to enable/disable the checkbox
      */
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        if (enabled)
-            sinkEvents(Event.ONCLICK | Event.ONKEYDOWN);
-        else
-            unsinkEvents(Event.ONCLICK | Event.ONKEYDOWN);
+    	check.setEnabled(enabled);
     }
 
     /**
      * Method to determine if the checkbox is enabled
      */
     public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * Sets the focus stlye to this widget
-     */
-    public void addFocusStyle(String style) {
-        addStyleName(style);
-    }
-
-    /**
-     * Removes the focus style from the widget
-     */
-    public void removeFocusStyle(String style) {
-        removeStyleName(style);
+        return check.isEnabled();
     }
 
     // ********* Implementation of Queryable *****************
@@ -249,9 +147,9 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         queryMode = query;
         
         if(query)
-        	setMode(Mode.THREE_STATE);
+        	check.setMode(Checkbox.Mode.THREE_STATE);
         else
-        	setMode(Mode.TWO_STATE);
+        	check.setMode(Checkbox.Mode.TWO_STATE);
         	
     }
 
@@ -263,10 +161,10 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         if(!queryMode)
         	return null;
 
-        if (value == Value.UNKNOWN)
+        if (check.isUnknown())
             return null;
 
-        return new QueryData(QueryData.Type.STRING,value.getValue());
+        return new QueryData(QueryData.Type.STRING,check.isChecked() ? "Y" : "N");
     }
     
     /**
@@ -292,8 +190,14 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * Returns the current value for this widget
      */
     public String getValue() {
-        return value.getValue();
+        if(check.isChecked())
+        	return "Y";
+        if(check.isUnchecked())
+        	return "N";
+        
+        return null;
     }
+
 
     /**
      * Sets the value of this widget without firing value change event
@@ -301,6 +205,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     public void setValue(String value) {
         setValue(value, false);
     }
+    
 
     /**
      * Sets the value of this widget. Will fire a ValueChangeEvent if fireEvents
@@ -308,17 +213,21 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      */
     public void setValue(String value, boolean fireEvents) {
 
-        if(!Util.isDifferent(this.value, value))
+        if(!Util.isDifferent(value, getValue()))
             return;
         
-        if(value == null && mode == Mode.TWO_STATE)
-        	value = "N";
-        
-        this.value = Value.getValue(value);
-        setStylePrimaryName(this.value.getStyle());
+        if(value == null) {
+        	if(check.getMode() == Checkbox.Mode.TWO_STATE)
+               	check.uncheck();
+        	else
+        		check.unkown();
+        }else if("Y".equals(value))
+        	check.check();
+        else
+        	check.uncheck();
 
         if (fireEvents)
-            ValueChangeEvent.fire(this, this.value.getValue());
+            ValueChangeEvent.fire(this, value);
     }
 
     /**
@@ -328,87 +237,79 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
 
     }
 
-    // ***** Implementation of HasValueChangeHandler ***************
 
-    /**
-     * Register ValueChangeHandler
-     */
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<String> handler) {
-        return addHandler(handler, ValueChangeEvent.getType());
-    }
+	// ********** Implementation of HasException interface ***************
+	/**
+	 * Convenience method to check if a widget has exceptions so we do not need
+	 * to go through the cost of merging the logical and validation exceptions
+	 * in the getExceptions method.
+	 * 
+	 * @return
+	 */
+	public boolean hasExceptions() {
+		return exceptions.hasExceptions();
+	}
 
-    // ******** Implementation of HasExceptions ***************
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    /**
-     * Convenience method to check if a widget has exceptions so we do not need
-     * to go through the cost of merging the logical and validation exceptions
-     * in the getExceptions method.
-     * 
-     * @return
-     */
-    public boolean hasExceptions() {
-        return endUserExceptions != null || validateExceptions != null;
-    }
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
 
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	}
 
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
-    }
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return exceptions.getValidateExceptions();
+	}
 
-    /**
-     * Combines both exceptions list into a single list to be displayed on the
-     * screen.
-     */
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        return validateExceptions;
-    }
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return exceptions.getEndUserExceptions();
+	}
 
-    public ArrayList<LocalizedException> getEndUserExceptions() {
-        return endUserExceptions;
-    }
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
+	public void clearExceptions() {
+		exceptions.clearExceptions();
+		removeExceptionStyle();
+		ExceptionHelper.clearExceptionHandlers(this);
+	}
 
-    /**
-     * Clears all manual and validate exceptions from the widget.
-     */
-    public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	public void clearEndUserExceptions() {
+		exceptions.clearEndUserExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
+	public void clearValidateExceptions() {
+		exceptions.clearValidateExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
     /**
      * Will add the style to the widget.
      */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName(css.InputWarning());
+    	else
+    		addStyleName(css.InputError());
+    		
     }
 
     /**
      * will remove the style from the widget
      */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName(css.InputError());
+        removeStyleName(css.InputWarning());
     }
 
     public void validateQuery() {
@@ -420,6 +321,36 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
 	public void finishEditing() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void fireValueChange(String value) {
+		ValueChangeEvent.fire(this, value);
+	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return check.addMouseOverHandler(handler);
+	}
+
+	@Override
+	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+		return check.addMouseOutHandler(handler);
+	}
+
+	@Override
+	public HandlerRegistration addFocusHandler(FocusHandler handler) {
+		return check.addFocusHandler(handler);
+	}
+
+	@Override
+	public HandlerRegistration addBlurHandler(BlurHandler handler) {
+		return check.addBlurHandler(handler);
+	}
+
+	@Override
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
 }

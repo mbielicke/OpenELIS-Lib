@@ -28,9 +28,13 @@ package org.openelis.gwt.widget.calendar;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.CalendarCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.ExceptionHelper;
@@ -110,7 +114,9 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     /**
      * Exceptions list
      */
-    protected ArrayList<LocalizedException>         endUserExceptions, validateExceptions;
+    protected Exceptions                            exceptions;
+    
+    protected CalendarCSS                           css;
     
     /**
      * Default no-arg constructor
@@ -125,6 +131,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * Handlers
      */
     public void init() {
+    	css = OpenELISResources.INSTANCE.calendar();
+    	css.ensureInjected();
     	
         /*
          * Final instance of the private class KeyboardHandler
@@ -139,8 +147,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
         button = new Button();
         AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName("CalendarButton");
-        button.setDisplay(image, false);
+        image.setStyleName(css.CalendarButton());
+        button.setWidget(image);
 
         display.setWidget(0,0,textbox);
         display.setWidget(0,1,button);
@@ -148,8 +156,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         
         initWidget(display);
 
-        display.setStyleName("SelectBox");
-        textbox.setStyleName("TextboxUnselected");
+        display.setStyleName(css.SelectBox());
+        textbox.setStyleName(css.Calendar());
 
         
         /*
@@ -158,7 +166,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         addFocusHandler(new FocusHandler() {
         	public void onFocus(FocusEvent event) {
         		if(isEnabled())
-        			display.addStyleName("Focus");
+        			display.addStyleName(css.Focus());
         	}
         });
 
@@ -167,7 +175,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
          */
         addBlurHandler(new BlurHandler() {
         	public void onBlur(BlurEvent event) {
-        		display.removeStyleName("Focus");
+        		display.removeStyleName(css.Focus());
         		finishEditing(true);
         	}
         });
@@ -205,6 +213,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 				showingCalendar = true;
 			}
 		});
+        
+        exceptions = new Exceptions();
 
         /*
          * Registers the keyboard handling this widget
@@ -232,11 +242,13 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     	showingCalendar = true;
         if (popup == null) {
             popup = new PopupPanel(true);
-            popup.setStyleName("DropdownPopup");
+            popup.setStyleName(css.Popup());
             popup.setPreviewingAllNativeEvents(false);
             popup.addCloseHandler(new CloseHandler<PopupPanel>() {
                 public void onClose(CloseEvent<PopupPanel> event) {
                 	showingCalendar = false;
+                	if(event.isAutoClosed())
+                		display.removeStyleName(css.Focus());
                 }
             });
         }
@@ -310,7 +322,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
          */
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
-				 ((FocusPanel)calendar.getDefinition().getWidget("CalFocus")).setFocus(true);
+				 ((FocusPanel)calendar.def.getWidget("CalFocus")).setFocus(true);
 			}
 		});
     }
@@ -376,16 +388,20 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * Overridden method from TextBox for setting the Exception style.
      */
     @Override
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName(css.InputWarning());
+    	else
+    		addStyleName(css.InputError());
     }
 
     /**
      * Overridden method from TextBox for removing the Exception style.
      */
     @Override
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName(css.InputError());
+        removeStyleName(css.InputWarning());
     }
     
     @Override
@@ -418,11 +434,11 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     	 * xsl, but defaults are provided if none set.
     	 */
     	if(dh.getBegin() > Datetime.DAY) {
-    		textbox.setMask("99:99");
+    		textbox.setMask(Constants.get().timeMask());
     	} else if (dh.getEnd() < Datetime.HOUR){
-    		textbox.setMask("9999-99-99");
+    		textbox.setMask(Constants.get().dateMask());
     	} else {
-    		textbox.setMask("9999-99-99 99:99");
+    		textbox.setMask(Constants.get().dateTimeMask());
     	}
     }
 
@@ -492,12 +508,12 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     			
     			text = textbox.getText();
     		
-    			validateExceptions = null;
+    			clearValidateExceptions();
         
     			try {
     				setValue(helper.getValue(text), fireEvents);
     				if (required && value == null) 
-    					addValidateException(new LocalizedException("exc.fieldRequiredException"));
+    					addValidateException(new LocalizedException(Constants.get().fieldRequired()));
     			} catch (LocalizedException e) {
     				addValidateException(e);
     			}
@@ -511,7 +527,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      */
     public void validateQuery() {
         try {
-            validateExceptions = null;
+            getValidateExceptions();
             helper.validateQuery(textbox.getText());
         } catch (LocalizedException e) {
             addValidateException(e);
@@ -519,73 +535,69 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         ExceptionHelper.checkExceptionHandlers(this);
     }
     
-    // ********** Implementation of HasException interface ***************
-    /**
-     * Convenience method to check if a widget has exceptions so we do not need
-     * to go through the cost of merging the logical and validation exceptions
-     * in the getExceptions method.
-     * 
-     * @return
-     */
-    public boolean hasExceptions() {
-    	if(validateExceptions != null)
-    		return true;
-    	  
-    	if (!queryMode && required && getValue() == null) {
-            addValidateException(new LocalizedException("exc.fieldRequiredException"));
-            ExceptionHelper.checkExceptionHandlers(this);
-    	}
-    	
-        return endUserExceptions != null || validateExceptions != null;
-    }
+	// ********** Implementation of HasException interface ***************
+	/**
+	 * Convenience method to check if a widget has exceptions so we do not need
+	 * to go through the cost of merging the logical and validation exceptions
+	 * in the getExceptions method.
+	 * 
+	 * @return
+	 */
+	public boolean hasExceptions() {
+		if (getValidateExceptions() != null)
+			return true;
 
-    /**
-     * Adds a manual Exception to the widgets exception list.
-     */
-    public void addException(LocalizedException error) {
-        if (endUserExceptions == null)
-            endUserExceptions = new ArrayList<LocalizedException>();
-        endUserExceptions.add(error);
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+		if (!queryMode && required && getValue() == null) {
+			addValidateException(new LocalizedException(Constants.get().fieldRequired()));
+			ExceptionHelper.checkExceptionHandlers(this);
+		}
 
-    protected void addValidateException(LocalizedException error) {
-        if (validateExceptions == null)
-            validateExceptions = new ArrayList<LocalizedException>();
-        validateExceptions.add(error);
-    }
+		return getEndUserExceptions() != null || getValidateExceptions() != null;
+	}
 
-    /**
-     * Combines both exceptions list into a single list to be displayed on the
-     * screen.
-     */
-    public ArrayList<LocalizedException> getValidateExceptions() {
-        return validateExceptions;
-    }
+	/**
+	 * Adds a manual Exception to the widgets exception list.
+	 */
+	public void addException(LocalizedException error) {
+		exceptions.addException(error);
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
 
-    public ArrayList<LocalizedException> getEndUserExceptions() {
-        return endUserExceptions;
-    }
+	protected void addValidateException(LocalizedException error) {
+		exceptions.addValidateException(error);
 
-    /**
-     * Clears all manual and validate exceptions from the widget.
-     */
-    public void clearExceptions() {
-        endUserExceptions = null;
-        validateExceptions = null;
-        ExceptionHelper.clearExceptionHandlers(this);
-    }
-    
-    public void clearEndUserExceptions() {
-        endUserExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
-    
-    public void clearValidateExceptions() {
-        validateExceptions = null;
-        ExceptionHelper.checkExceptionHandlers(this);
-    }
+	}
 
+	/**
+	 * Combines both exceptions list into a single list to be displayed on the
+	 * screen.
+	 */
+	public ArrayList<LocalizedException> getValidateExceptions() {
+		return exceptions.getValidateExceptions();
+	}
+
+	public ArrayList<LocalizedException> getEndUserExceptions() {
+		return exceptions.getEndUserExceptions();
+	}
+
+	/**
+	 * Clears all manual and validate exceptions from the widget.
+	 */
+	public void clearExceptions() {
+		exceptions.clearExceptions();
+		removeExceptionStyle();
+		ExceptionHelper.clearExceptionHandlers(this);
+	}
+
+	public void clearEndUserExceptions() {
+		exceptions.clearEndUserExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
+
+	public void clearValidateExceptions() {
+		exceptions.clearValidateExceptions();
+		ExceptionHelper.checkExceptionHandlers(this);
+	}
     // ************* Implementation of Focusable ******************
 
     /**

@@ -1,7 +1,7 @@
 package org.openelis.gwt.widget.calendar;
 
-import org.openelis.gwt.screen.ScreenDefInt;
+import org.openelis.gwt.screen.ScreenViewInt;
 
-public interface MonthYearDef extends ScreenDefInt {
+public interface MonthYearDef extends ScreenViewInt {
 
 }

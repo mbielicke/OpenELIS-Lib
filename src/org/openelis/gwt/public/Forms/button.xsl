@@ -45,57 +45,57 @@ version="1.0">
 
 <!-- query button template -->
 <xsl:template name="queryButton">
-	<button key="query" icon="QueryButtonImage" text="{resource:getString($constants,'btn.query')}" action="query" toggle="true" style="ButtonPanelButton" shortcut="ctrl+q"/>	
+	<button css="libRes.buttonPanel" key="query" icon="libRes.buttonPanel.QueryButtonImage" text="{resource:getString($constants,'btn.query')}" action="query" toggle="true" shortcut="ctrl+q"/>	
 </xsl:template>
 
 <!-- previous button template -->
 <xsl:template name="previousButton">
-	<button key="previous" icon="PreviousButtonImage" text="{resource:getString($constants,'btn.previous')}" action="previous" style="ButtonPanelButton" shortcut="ctrl+p"/>
+	<button key="previous" icon="libRes.buttonPanel.PreviousButtonImage" text="{resource:getString($constants,'btn.previous')}" action="previous" css="libRes.buttonPanel" shortcut="ctrl+p"/>
 </xsl:template>
 
 <!-- next button template -->
 <xsl:template name="nextButton">
-	<button key="next" icon="NextButtonImage" text="{resource:getString($constants,'btn.next')}" action="next" style="ButtonPanelButton" shortcut="ctrl+n"/>
+	<button key="next" icon="libRes.buttonPanel.NextButtonImage" text="{resource:getString($constants,'btn.next')}" action="next" css="libRes.buttonPanel" shortcut="ctrl+n"/>
 </xsl:template>
 
 <!-- update button template -->
 <xsl:template name="updateButton">
-	<button key="update" icon="UpdateButtonImage" text="{resource:getString($constants,'btn.update')}" action="update" toggle="true" style="ButtonPanelButton" shortcut="ctrl+u"/>
+	<button key="update" icon="libRes.buttonPanel.UpdateButtonImage" text="{resource:getString($constants,'btn.update')}" action="update" toggle="true" css="libRes.buttonPanel" shortcut="ctrl+u"/>
 </xsl:template>
 
 <!-- add button template -->
 <xsl:template name="addButton">
-	<button key="add" icon="AddButtonImage" text="{resource:getString($constants,'btn.add')}" action="add" toggle="true" style="ButtonPanelButton" shortcut="ctrl+a"/>
+	<button key="add" icon="libRes.buttonPanel.AddButtonImage" text="{resource:getString($constants,'btn.add')}" action="add" toggle="true" css="libRes.buttonPanel" shortcut="ctrl+a"/>
 </xsl:template>
 
 <!-- delete button template -->
 <xsl:template name="deleteButton">
-	<button key="delete" icon="DeleteButtonImage" text="{resource:getString($constants,'btn.delete')}" action="delete" toggle="true" style="ButtonPanelButton" shortcut="ctrl+d"/>
+	<button key="delete" icon="libRes.buttonPanel.DeleteButtonImage" text="{resource:getString($constants,'btn.delete')}" action="delete" toggle="true" css="libRes.buttonPanel" shortcut="ctrl+d"/>
 </xsl:template>
 
 <!-- commit button template -->
 <xsl:template name="commitButton">
-    <button key="commit" icon="CommitButtonImage" text="{resource:getString($constants,'btn.commit')}" action="commit" style="ButtonPanelButton" shortcut="ctrl+m"/>
+    <button key="commit" icon="libRes.buttonPanel.CommitButtonImage" text="{resource:getString($constants,'btn.commit')}" action="commit" css="libRes.buttonPanel" shortcut="ctrl+m"/>
 </xsl:template>
 
 <!-- process button template -->
 <xsl:template name="processButton">
-    <button key="process" icon="ProcessButtonImage" text="{resource:getString($constants,'btn.process')}" action="add" style="ButtonPanelButton" shortcut="ctrl+a"/>
+    <button key="process" icon="libRes.buttonPanel.ProcessButtonImage" text="{resource:getString($constants,'btn.process')}" action="add" css="libRes.buttonPanel" shortcut="ctrl+a"/>
 </xsl:template>
 
 <!-- abort button template -->
 <xsl:template name="abortButton">
-	<button key="abort" icon="AbortButtonImage" text="{resource:getString($constants,'btn.abort')}" action="abort" style="ButtonPanelButton" shortcut="ctrl+o"/>
+	<button key="abort" icon="libRes.buttonPanel.AbortButtonImage" text="{resource:getString($constants,'btn.abort')}" action="abort" css="libRes.buttonPanel" shortcut="ctrl+o"/>
 </xsl:template>
 
 <!-- ok button template -->
 <xsl:template name="okButton">
-	<button key="ok" icon="CommitButtonImage" text="{resource:getString($constants,'btn.ok')}" action="ok" style="ButtonPanelButton"/>
+	<button key="ok" icon="libRes.buttonPanel.CommitButtonImage" text="{resource:getString($constants,'btn.ok')}" action="ok" css="libRes.buttonPanel"/>
 </xsl:template>
 
 <!-- cancel button template -->
 <xsl:template name="cancelButton">
-	<button key="cancel" icon="AbortButtonImage" text="{resource:getString($constants,'btn.cancel')}" action="cancel" style="ButtonPanelButton"/>
+	<button key="cancel" icon="libRes.buttonPanel.AbortButtonImage" text="{resource:getString($constants,'btn.cancel')}" action="cancel" css="libRes.buttonPanel"/>
 </xsl:template>
 
 <!-- duplicate menu item-->
@@ -118,22 +118,22 @@ version="1.0">
 
 <!-- popup transfer button template -->
 <xsl:template name="popupTransferButton">
-   <button key="popupTransfer" icon="CommitButtonImage" text="{resource:getString($constants,'btn.transfer')}" action="commit" style="Button"/>
+   <button key="popupTransfer" icon="libRes.buttonPanel.CommitButtonImage" text="{resource:getString($constants,'btn.transfer')}" action="commit"/>
 </xsl:template>
 
 <!-- select button template -->
 <xsl:template name="selectButton">
-	<button key="select" icon="CommitButtonImage" text="{resource:getString($constants,'btn.select')}" action="select" style="ButtonPanelButton" />
+	<button key="select" icon="libRes.buttonPanel.CommitButtonImage" text="{resource:getString($constants,'btn.select')}" action="select" css="libRes.buttonPanel" />
 </xsl:template>
 
 <!-- print button template -->
 <xsl:template name="printButton">
-	<button key="print" icon="PrintButtonImage" text="{resource:getString($constants,'btn.print')}" action="print" style="ButtonPanelButton"/>
+	<button key="print" icon="libRes.buttonPanel.PrintButtonImage" text="{resource:getString($constants,'btn.print')}" action="print" css="libRes.buttonPanel"/>
 </xsl:template>
 
 <!-- buttonpanel divider template -->
 <xsl:template name="buttonPanelDivider">
-	<AbsolutePanel style="ButtonDivider"/>
+	<AbsolutePanel class="libRes.buttonPanel.ButtonDivider"/>
 </xsl:template>
 
 <!-- A to Z buttons template -->
@@ -150,7 +150,7 @@ version="1.0">
     <xsl:param name="enabled"/>
     <xsl:variable name="descrip"><xsl:value-of select="$label"/>Description</xsl:variable>
   	<menuItem key="{$key}" style="TopMenuRowContainer" enabled="{$enabled}"  
-	          icon="{$label}Icon"
+	          icon="libRes.buttonPanel.{$label}Icon"
 	   		  display="{resource:getString($constants,$label)}"
 	          description="{resource:getString($constants,$descrip)}"/>
   </xsl:template>

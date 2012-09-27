@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
@@ -63,7 +64,7 @@ public class LongHelper implements WidgetHelper<Long> {
 					// Do nothing to Fall through and throw the exception.
 				}
 			}
-			throw new LocalizedException("exc.invalidNumeric");
+			throw new LocalizedException(Constants.get().invalidNumeric());
 		}
 	}
 
@@ -119,7 +120,7 @@ public class LongHelper implements WidgetHelper<Long> {
 		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
 		
 		if(!isCorrectType(value)) 
-			exceptions.add(new LocalizedException("exc.invalidNumeric"));
+			exceptions.add(new LocalizedException(Constants.get().invalidNumeric()));
 		
 		return exceptions;
 	}

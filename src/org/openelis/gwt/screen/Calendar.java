@@ -26,17 +26,30 @@
 package org.openelis.gwt.screen;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.services.ScreenService;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * This class provides date and calendar functionality for front end screens
  *
  */
-public class Calendar {
+public class Calendar implements CalendarServiceInt, CalendarServiceIntAsync {
 	
-	private static ScreenService service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
+	private CalendarServiceIntAsync service;
+ 
+	private static Calendar instance;
+	
+	public static Calendar get() {
+		if(instance == null)
+			instance = new Calendar();
+		
+		return instance;
+	}
+	
+	private Calendar() {
+		service = (CalendarServiceIntAsync)GWT.create(CalendarServiceInt.class);
+	}
 
 	/**
 	 * This method makes a Synchronous call to the server to fetch the current Datetime at the precision passed in the params
@@ -46,8 +59,12 @@ public class Calendar {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Datetime getCurrentDatetime(byte begin, byte end) throws Exception {
-		return service.callDatetime("getCurrentDatetime", begin, end);
+	public Datetime getCurrentDatetime(byte begin, byte end) throws Exception {
+		Callback<Datetime> callback;
+		
+		callback = new Callback<Datetime>();
+		service.getCurrentDatetime(begin, end, callback);
+		return callback.getResult();
 	}
 	
 	/**
@@ -57,7 +74,7 @@ public class Calendar {
 	 * @param end
 	 * @param callback
 	 */
-	public static void getCurrentDatetime(byte begin, byte end, AsyncCallback<Datetime> callback) {
-		service.callDatetime("getCurrentDatetime",begin,end,callback);
+	public void getCurrentDatetime(byte begin, byte end, AsyncCallback<Datetime> callback) {
+		service.getCurrentDatetime(begin,end,callback);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
 
 /**
  * This class is used by ScreenWidgets that implement HasValue<String> to
@@ -87,7 +88,7 @@ public class StringHelper implements WidgetHelper<String> {
 		ArrayList<LocalizedException> exceptions = new ArrayList<LocalizedException>();
 		
 		if(!isCorrectType(value))
-			exceptions.add(new LocalizedException("exc.invalidType"));
+			exceptions.add(new LocalizedException(Constants.get().invalidType()));
 		
 		return exceptions;
 	}

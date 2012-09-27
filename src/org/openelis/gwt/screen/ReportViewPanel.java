@@ -36,6 +36,7 @@ import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.ReportStatus;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.widget.AppStatusInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
@@ -84,15 +85,13 @@ public class ReportViewPanel extends ViewPanel {
 	protected static String defaultPrinter, defaultBarcodePrinter;
 	
 	protected WindowInt window;
-	protected HashMap<String,String> consts;
 	protected ReportService  service;
 	
 	protected HashMap<String,Widget> widgets;
 	
 	
-	protected ReportViewPanel(String url, WindowInt window, HashMap<String,String> consts) throws Exception {
+	protected ReportViewPanel(String url, WindowInt window) throws Exception {
 		this.window = window;
-		this.consts = consts;
 		widgets = new HashMap<String,Widget>();
 		service = new ReportService(url);
 		
@@ -167,7 +166,7 @@ public class ReportViewPanel extends ViewPanel {
 					public void onSuccess(ArrayList<Prompt> result) {
 						reportParameters = result;
 						createReportWindow();
-						window.setDone(consts.get("loadCompleteMessage"));
+						window.setDone(Constants.get().done());
 					}
 
 					public void onFailure(Throwable caught) {
@@ -254,7 +253,7 @@ public class ReportViewPanel extends ViewPanel {
 		main.add(hp);
 
 		hp = new HorizontalPanel();
-		runReportButton = createButton(consts.get("btn.runReport"));
+		runReportButton = createButton(Constants.get().runReport());
 		runReportButton.setEnabled(true);
 		hp.add(runReportButton);
 		widgets.put("run",runReportButton);
@@ -265,7 +264,7 @@ public class ReportViewPanel extends ViewPanel {
 			}
 		});
 
-		resetButton = createButton(consts.get("btn.reset"));
+		resetButton = createButton(Constants.get().reset());
 		resetButton.setEnabled(true);
 		hp.add(resetButton);
 		widgets.put("reset",resetButton);
@@ -297,7 +296,7 @@ public class ReportViewPanel extends ViewPanel {
 		Query query;
 
 		if (!validate()) {
-			window.setError(consts.get("correctErrors"));
+			window.setError(Constants.get().correctErrors());
 			return;
 		}
 
@@ -311,7 +310,7 @@ public class ReportViewPanel extends ViewPanel {
      * implementing ReportScreen can utilize this functionality too
      */
     public void runReport(RPC rpc) {
-        window.setBusy(consts.get("genReportMessage"));
+        window.setBusy(Constants.get().generatingReport());
 
         service.runReport((Query)rpc, new AsyncCallback<ReportStatus>() {
             public void onSuccess(ReportStatus status) {

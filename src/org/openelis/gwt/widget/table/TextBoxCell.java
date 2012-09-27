@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -56,15 +58,19 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     private boolean     query;
 
     private ColumnInt   column;
+    
+    protected TableCSS  css;
     /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor
      */
     public TextBoxCell(final TextBox editor) {
+    	css = OpenELISResources.INSTANCE.table();
+    	css.ensureInjected();
         this.editor = editor;
         editor.setEnabled(true);
-        editor.setStyleName("TableTextBox");
+        editor.setStyleName(css.TableTextBox());
         editor.addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {

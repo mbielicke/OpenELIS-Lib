@@ -6,6 +6,8 @@ import org.openelis.gwt.event.DragStartEvent;
 import org.openelis.gwt.event.DragStartHandler;
 import org.openelis.gwt.event.HasBeforeDragStartHandlers;
 import org.openelis.gwt.event.HasDragStartHandlers;
+import org.openelis.gwt.resources.DragDropCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.DragItem;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -54,6 +56,8 @@ public class TableDragController extends PickupDragController implements
      * Used to fire events to registered handlers
      */
     private HandlerManager    handlerManager;
+    
+    protected DragDropCSS     css;
 
     /**
      * Constructor that takes the Table used by this controller and a panel used
@@ -64,11 +68,15 @@ public class TableDragController extends PickupDragController implements
      */
     public TableDragController(Table table, AbsolutePanel boundaryPanel) {
         super(boundaryPanel, false);
+        
         this.table = table;
         setBehaviorDragProxy(true);
 
         /* Drag will not start until mouse moved 5 pixels */
         setBehaviorDragStartSensitivity(5);
+        
+        css = OpenELISResources.INSTANCE.dragDrop();
+        css.ensureInjected();
     }
 
     /**
@@ -81,7 +89,9 @@ public class TableDragController extends PickupDragController implements
         BeforeDragStartEvent<DragItem> event;
 
         /* Select row before drag start and cancel drag if not selectable */
-        if ( !table.selectRowAt(table.view.lastRow))
+        table.selectRowAt(table.view.lastRow);
+        
+        if (!table.isRowSelected(table.view.lastRow))
             throw new VetoDragException();
 
         /* Set the index of row being dragged into the DragItem */
@@ -120,7 +130,7 @@ public class TableDragController extends PickupDragController implements
     @Override
     public void dragStart() {
         super.dragStart();
-        ((DragItem)context.draggable).removeStyleName("dragdrop-dragging");
+        ((DragItem)context.draggable).removeStyleName(css.dragdrop_dragging());
 
         DragStartEvent.fire(this, (DragItem)context.draggable);
     }
@@ -140,15 +150,16 @@ public class TableDragController extends PickupDragController implements
             dragContainer = new DecoratorPanel();
             hp = new HorizontalPanel();
             dropIndicator = new AbsolutePanel();
-            dropIndicator.setStyleName("DragStatus NoDrop");
+            dropIndicator.setStyleName(css.DragStatus());
+            dropIndicator.addStyleName(css.NoDrop());
             hp.add(dropIndicator);
             proxyContainer = new AbsolutePanel();
             proxyContainer.setWidth("100%");
             hp.add(proxyContainer);
-            hp.setStyleName("DragProxy");
+            hp.setStyleName(css.DragProxy());
             dragContainer.add(hp);
             proxyLabel = new Label();
-            proxyLabel.setStyleName("ScreenLabel");
+            proxyLabel.setStyleName(css.ScreenLabel());
         }
 
         proxyContainer.clear();
@@ -178,9 +189,11 @@ public class TableDragController extends PickupDragController implements
      */
     public void setDropIndicator(boolean drop) {
         if (drop)
-            dropIndicator.setStyleName("DragStatus Drop");
+            dropIndicator.setStyleName(css.Drop());
         else
-            dropIndicator.setStyleName("DragStatus NoDrop");
+            dropIndicator.setStyleName(css.NoDrop());
+        
+        dropIndicator.setStylePrimaryName(css.DragStatus());
     }
 
     // ******* Handler code ***************

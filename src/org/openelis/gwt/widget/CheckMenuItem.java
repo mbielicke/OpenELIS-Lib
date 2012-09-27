@@ -25,6 +25,9 @@
 */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.CheckboxCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -35,7 +38,6 @@ import com.google.gwt.user.client.ui.Grid;
 /**
  * This class is used to draw a FilterMenItem to be used in the Popup menu of a table
  * header cell to apply filters to columns of a table. 
- * @author tschmidt
  *
  */
 public class CheckMenuItem extends MenuItem implements HasValueChangeHandlers<Boolean> {
@@ -45,13 +47,16 @@ public class CheckMenuItem extends MenuItem implements HasValueChangeHandlers<Bo
      */
     protected boolean checked;
     protected Grid grid;
-    
+    protected static CheckboxCSS css  = OpenELISResources.INSTANCE.checkbox(); 
+    {
+    	css.ensureInjected();
+    }
     /**
      * Constructor that accepts a String for the display of the item
      * @param text
      */
     public CheckMenuItem(String display, String description, boolean autoClose) {
-        super("Unchecked",display,description,autoClose);
+        super(css.Unchecked(),display,description,autoClose);
         final CheckMenuItem source = this;
         grid = (Grid)getWidget();
         
@@ -73,11 +78,11 @@ public class CheckMenuItem extends MenuItem implements HasValueChangeHandlers<Bo
     public void setCheck(boolean checked) {
         this.checked = checked;
         if(checked){
-            grid.getCellFormatter().removeStyleName(0,0,"Unchecked");
-            grid.getCellFormatter().addStyleName(0, 0, "Checked");
+            grid.getCellFormatter().removeStyleName(0,0,css.Unchecked());
+            grid.getCellFormatter().addStyleName(0, 0, css.Checked());
         }else{
-            grid.getCellFormatter().removeStyleName(0,0,"Checked");
-            grid.getCellFormatter().addStyleName(0, 0, "Unchecked");
+            grid.getCellFormatter().removeStyleName(0,0,css.Checked());
+            grid.getCellFormatter().addStyleName(0, 0, css.Unchecked());
         }
     }
     

@@ -1,5 +1,9 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.ConfirmCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.core.client.Scheduler;
@@ -27,10 +31,10 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -43,11 +47,8 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
+public class Confirm extends Window implements HasSelectionHandlers<Integer>, ClickHandler, NativePreviewHandler {
 
-    DecoratorPanel dp = new DecoratorPanel();
-    AbsolutePanel modalGlass;
-    AbsolutePanel modalPanel;
     int active = -1;
     HorizontalPanel bp;
     HandlerRegistration keyHandler;
@@ -55,77 +56,47 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     private int width = 400,height = -1,top = -1, left = -1;
     private PickupDragController dragController;
     private AbsolutePositionDropController dropController;
-    Caption cap = new Caption();
-    
-    private class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
-
-    	public String name;
-
-    	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-    		return addDomHandler(handler, MouseDownEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-    		return addDomHandler(handler,MouseUpEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-    		return addDomHandler(handler,MouseOutEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-    		return addDomHandler(handler,MouseOverEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-    		return addDomHandler(handler,MouseMoveEvent.getType());
-    	}
-
-    	public HandlerRegistration addMouseWheelHandler(
-    			MouseWheelHandler handler) {
-    		return addDomHandler(handler,MouseWheelEvent.getType());
-    	}
-    }
-    
+    protected AbsolutePanel modalGlass,modalPanel;
+    ConfirmCSS css; 
+        
     public Confirm(Type type, String caption, String message, String... buttons) {
+    	super();
+    	
+    	css = OpenELISResources.INSTANCE.confirm();
+    	css.ensureInjected();
+    	
+    	
     	VerticalPanel vp = new VerticalPanel();
-    	cap.name = caption;
-    	cap.setStyleName("ConfirmCaption");
     	AbsolutePanel ap = new AbsolutePanel();
     	HorizontalPanel hp = new HorizontalPanel();
+    	
     	switch(type) {
     		case WARN : {
-    			ap.setStyleName("largeWarnIcon");
+    			ap.setStyleName(css.largeWarnIcon());
     			if(caption == null || caption.equals(""))
-    				cap.name = "Warning";
+    				label.setText(Constants.get().warning());
     			break;
     		}
     		case ERROR : {
-        		ap.setStyleName("largeErrorIcon");
+        		ap.setStyleName(css.largeErrorIcon());
         		if(caption == null || caption.equals(""))
-        			cap.name = "Error";
+        			label.setText(Constants.get().error());
         		break;
         	}
     		case QUESTION : {
-        		ap.setStyleName("largeQuestionIcon");
+        		ap.setStyleName(css.largeQuestionIcon());
         		if(caption == null || caption.equals(""))
-        			cap.name = "Question";
+        			label.setText(Constants.get().question());
         		break;
         	}
     		case BUSY : {
-    			ap.setStyleName("spinnerIcon");
+    			ap.setStyleName(css.spinnerIcon());
     			if(caption == null || caption.equals(""))
-    				cap.name = "Busy";
+    				label.setText(Constants.get().busy());
     			break;
     		}
     	}
    	    
-        Label<String> winLabel = new Label<String>();
-        winLabel.setStyleName("ConfirmCaptionLabel");
-        winLabel.setText(cap.name);
-        cap.add(winLabel);
-        cap.setWidth("100%");
-    	vp.add(cap);
     	hp.add(ap);
     	hp.setCellVerticalAlignment(ap, HasAlignment.ALIGN_MIDDLE);
     	Label<String> lb = new Label<String>();
@@ -139,10 +110,7 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     		vp.add(bp);
     		vp.setCellHorizontalAlignment(bp, HasAlignment.ALIGN_CENTER);
     	}
-    	dp.add(vp);
-    	dp.setStyleName("ConfirmWindow");
-    	dp.setVisible(false);
-    	setWidget(dp);
+    	setContent(vp);
     }
     
     public void hide() {
@@ -151,10 +119,9 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	dragController = null;
     	dropController = null;
     	removeFromParent();
-    	modalPanel.removeFromParent();
-    	modalGlass.removeFromParent();
+    	unlockWindow();
     	keyHandler.removeHandler();
-    	dp.setVisible(false);
+    	setVisible(false);
     }
     
     public void show(int left, int top) {
@@ -168,17 +135,17 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     	if(height > -1)
     		setHeight(height+"px");
         modalGlass = new AbsolutePanel();
-        modalGlass.setStyleName("GlassPanel");
-        modalGlass.setHeight(Window.getClientHeight()+"px");
-        modalGlass.setWidth(Window.getClientWidth()+"px");
+        modalGlass.setStyleName(css.GlassPanel());
+        modalGlass.setHeight(com.google.gwt.user.client.Window.getClientHeight()+"px");
+        modalGlass.setWidth(com.google.gwt.user.client.Window.getClientWidth()+"px");
         RootPanel.get().add(modalGlass, 0, 0);
         DOM.setStyleAttribute(modalGlass.getElement(), "zIndex","1000");
         modalPanel = new AbsolutePanel();
-        modalPanel.setStyleName("ModalPanel");
-        modalPanel.setHeight(Window.getClientHeight()+"px");
-        modalPanel.setWidth(Window.getClientWidth()+"px");
-        modalPanel.add(this, left > -1 ? left : Window.getClientWidth()/2 - 400/2,
-        		             top > -1 ? top : Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+        modalPanel.setStyleName(css.ModalPanel());
+        modalPanel.setHeight(com.google.gwt.user.client.Window.getClientHeight()+"px");
+        modalPanel.setWidth(com.google.gwt.user.client.Window.getClientWidth()+"px");
+        modalPanel.add(this, left > -1 ? left : com.google.gwt.user.client.Window.getClientWidth()/2 - 400/2,
+        		             top > -1 ? top : com.google.gwt.user.client.Window.getClientHeight()/2 - this.getOffsetHeight()/2);
         RootPanel.get().add(modalPanel,0,0); 
         DOM.setStyleAttribute(modalPanel.getElement(),"zIndex","1001");
 
@@ -206,13 +173,13 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     }
     
     private void size() {
-    	dp.setVisible(true);
+    	setVisible(true);
     	if(bp != null) {
     		if(bp.getOffsetWidth() > width)
     			setWidth((bp.getOffsetWidth()+50)+"px");
     	}
-    	modalPanel.setWidgetPosition(this, left > -1 ? left : Window.getClientWidth()/2 - this.getOffsetWidth()/2,
-    									   top > -1 ? top :  Window.getClientHeight()/2 - this.getOffsetHeight()/2);
+    	modalPanel.setWidgetPosition(this, left > -1 ? left : com.google.gwt.user.client.Window.getClientWidth()/2 - this.getOffsetWidth()/2,
+    									   top > -1 ? top :  com.google.gwt.user.client.Window.getClientHeight()/2 - this.getOffsetHeight()/2);
     	
     }
     
@@ -222,9 +189,8 @@ public class Confirm extends FocusPanel implements HasSelectionHandlers<Integer>
     		Button ab = new Button();
     		ab.setAction(String.valueOf(i));
     		Label<String> bl = new Label<String>(buttons[i]);
-    		bl.setStyleName("ScreenLabel");
+    		bl.setStyleName(css.ScreenLabel());
     		ab.setWidget(bl);
-    		ab.setStyleName("Button");
     		ab.setEnabled(true);
     		bp.add(ab);
     		ab.addClickHandler(this);

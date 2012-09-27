@@ -68,13 +68,13 @@ public interface HasExceptions extends HasMouseOverHandlers, HasMouseOutHandlers
      * 
      * @param style
      */
-    public void addExceptionStyle(String style);
+    public void addExceptionStyle();
 
     /**
      * Removes the exception style from the widget.
      * 
      * @param style
      */
-    public void removeExceptionStyle(String style);
+    public void removeExceptionStyle();
 
 }

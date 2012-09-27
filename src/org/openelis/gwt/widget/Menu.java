@@ -25,6 +25,9 @@
  */
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.MenuCSS;
+import org.openelis.gwt.resources.OpenELISResources;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -36,6 +39,7 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -63,26 +67,32 @@ public class Menu extends Composite {
      * Reference to Parent Menu
      */
     protected Menu           parent;
+    
+    protected MenuCSS        css;
+    
+    protected Grid           grid;
 
     /**
      * No-Arg constructor that sets up Hovering
      */
     public Menu() {
+    	css = OpenELISResources.INSTANCE.menuCss();
+    	css.ensureInjected();
     	
         panel = new PopupMenuPanel();
-        panel.addStyleName("MenuPanel");
+        panel.addStyleName(css.MenuPanel());
 		panel.setVisible(false);
 		
         addHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                addStyleName("Hover");
+                addStyleName(css.Hover());
             }
         }, MouseOverEvent.getType());
 
         addHandler(new MouseOutHandler() {
             public void onMouseOut(MouseOutEvent event) {
             	if(!panel.isShowing())
-            		removeStyleName("Hover");
+            		removeStyleName(css.Hover());
             }
         }, MouseOutEvent.getType());
         
@@ -98,7 +108,7 @@ public class Menu extends Composite {
         Label<String> label;
 
         label = new Label<String>(display);
-        label.setStyleName("ScreenLabel");
+        label.setStyleName(css.ScreenLabel());
         label.setWordWrap(false);
         initWidget(label);
         setEnabled(true);
@@ -113,14 +123,16 @@ public class Menu extends Composite {
      */
     public Menu(String icon, String display, String description) {
         this();
-        Grid grid = new Grid(2, 3);
+        grid = new Grid(2, 3);
         grid.setCellPadding(0);
         grid.setCellSpacing(0);
-        grid.setStyleName("TopMenuRowContainer");
+        grid.setStyleName(css.TopMenuRowContainer());
 
-        grid.getCellFormatter().setStylePrimaryName(0, 0, "topMenuIcon");
+        grid.getCellFormatter().setStylePrimaryName(0, 0, css.topMenuIcon());
+        grid.getCellFormatter().setStylePrimaryName(1, 0, css.topMenuIcon());
         grid.setText(0, 0, "");
-        grid.getCellFormatter().setStylePrimaryName(0, 1, "topMenuItemMiddle");
+        grid.setText(1, 0, " ");
+        grid.getCellFormatter().setStylePrimaryName(0, 1, css.topMenuItemMiddle());
         grid.getCellFormatter().setWordWrap(0, 1, false);
 
         if ( !"".equals(icon))
@@ -129,18 +141,18 @@ public class Menu extends Composite {
         	grid.getCellFormatter().setVisible(0, 0, false);
 
         grid.setText(0, 1, display);
-        grid.getCellFormatter().addStyleName(0, 1, "topMenuItemTitle");
-        grid.getCellFormatter().addStyleName(0, 1, "locked");
+        grid.getCellFormatter().addStyleName(0, 1, css.topMenuItemTitle());
+        grid.getCellFormatter().addStyleName(0, 1, css.locked());
 
         if ("".equals(description))
             grid.removeRow(1);
         else {
             grid.setText(1, 1, description);
-            grid.getCellFormatter().setStylePrimaryName(1, 1, "topMenuItemMiddle");
-            grid.getCellFormatter().addStyleName(1, 1, "topMenuItemDesc");
+            grid.getCellFormatter().setStylePrimaryName(1, 1, css.topMenuItemMiddle());
+            grid.getCellFormatter().addStyleName(1, 1, css.topMenuItemDesc());
         }
 
-        grid.getCellFormatter().setStyleName(0, 2, "MenuArrow");
+        grid.getCellFormatter().setStyleName(0, 2, css.MenuArrow());
         grid.setText(0,2,"");
 
         initWidget(grid);
@@ -149,7 +161,7 @@ public class Menu extends Composite {
         
         panel.addCloseHandler(new CloseHandler<PopupPanel>() {
 			public void onClose(CloseEvent<PopupPanel> event) {
-				removeStyleName("Hover");
+				removeStyleName(css.Hover());
 			}
 		});
 		
@@ -196,10 +208,10 @@ public class Menu extends Composite {
         this.enabled = enabled;
         if ( !enabled) {
             unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
-            addStyleName("disabled");
+            addStyleName(css.disabled());
         } else {
             sinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
-            removeStyleName("disabled");
+            removeStyleName(css.disabled());
         }
     }
     
@@ -321,10 +333,10 @@ public class Menu extends Composite {
     }
     
     public void hideArrow() {
-    	((Grid)getWidget()).getCellFormatter().setVisible(0, 2, false);
+    	grid.getCellFormatter().setVisible(0, 2, false);
     }
 
     public void showArrow() {
-    	((Grid)getWidget()).getCellFormatter().setVisible(0, 2, true);
+    	grid.getCellFormatter().setVisible(0, 2, true);
     }
 }

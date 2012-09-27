@@ -162,15 +162,19 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
     /**
      * Will add the style to the widget.
      */
-    public void addExceptionStyle(String style) {
-        addStyleName(style);
+    public void addExceptionStyle() {
+    	if(ExceptionHelper.isWarning(this))
+    		addStyleName("InputError");
+    	else
+    		addStyleName("InputWarning");
     }
 
     /**
      * will remove the style from the widget
      */
-    public void removeExceptionStyle(String style) {
-        removeStyleName(style);
+    public void removeExceptionStyle() {
+        removeStyleName("InputError");
+        removeStyleName("InputWarning");
     }
 
 }

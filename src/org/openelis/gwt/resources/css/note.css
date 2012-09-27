@@ -1,0 +1,22 @@
+.noteSubjectText{
+	color:#486095;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight:bold;
+}	
+.noteAuthorText{
+	color:gray;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+    padding:2px;
+    background: #f8f8f9;
+}
+.noteBodyText{
+	color:black;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    padding:4px;
+    background:white;
+}
+.noteTableRow {
+}

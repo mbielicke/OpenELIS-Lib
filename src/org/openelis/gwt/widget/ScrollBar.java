@@ -74,7 +74,7 @@ public class ScrollBar extends ScrollPanel implements HasScrollBarHandlers {
         setWidget(ap);
         addScrollHandler(new ScrollHandler() {
             public void onScroll(ScrollEvent event) {
-                ScrollBarEvent.fire(source);
+                ScrollBarEvent.fire(source,getVerticalScrollPosition());
             }
         });
         scrollMax = -1;

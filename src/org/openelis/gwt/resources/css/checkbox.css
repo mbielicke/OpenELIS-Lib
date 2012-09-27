@@ -1,0 +1,29 @@
+@sprite .Checked {
+    height:13px;
+    width:13px;
+	gwt-image:'apply';
+    cursor:pointer;
+    border:1px solid white;
+}
+@sprite .Unchecked {
+    height:13px;
+    width:13px;
+	gwt-image:'unapply';
+    cursor:pointer;
+    border:1px solid white;
+}
+@sprite .Unknown {
+    height:13px;
+    width:13px;
+	gwt-image:'unknown';
+    cursor:pointer;
+    border:1px solid white;
+}
+
+.InputError {
+	border-bottom:1px dashed red;
+}
+
+.InputWarning {
+	border-bottom:1px dashed #f5d852;
+}

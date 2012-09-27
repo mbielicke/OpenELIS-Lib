@@ -10,6 +10,8 @@ import org.openelis.gwt.event.DropHandler;
 import org.openelis.gwt.event.HasBeforeDropHandlers;
 import org.openelis.gwt.event.HasDropEnterHandlers;
 import org.openelis.gwt.event.HasDropHandlers;
+import org.openelis.gwt.resources.DragDropCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.DragItem;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -32,11 +34,6 @@ public final class TreeDropController extends SimpleDropController implements
                                                                    HasBeforeDropHandlers<DragItem>,
                                                                    HasDropHandlers<DragItem>,
                                                                    HasDropEnterHandlers<DragItem> {
-
-    /**
-     * String representing CSS class used for positioner
-     */
-    protected static final String CSS_DROP_POSITIONER = "DropPositioner";
 
     /**
      * Table that this controller is setup for
@@ -77,6 +74,8 @@ public final class TreeDropController extends SimpleDropController implements
      * Number of rows and direction to scroll
      */
     protected int                 scrollRows;
+    
+    protected DragDropCSS         css;
 
     /**
      * Constructor that takes the Table widget to be used by this controller
@@ -100,13 +99,16 @@ public final class TreeDropController extends SimpleDropController implements
             }
 
         };
+        
+        css = OpenELISResources.INSTANCE.dragDrop();
+        css.ensureInjected();
 
         /*
          * Set up the positioner widget used to let the user know where the drop
          * will occur
          */
         positioner = new AbsolutePanel();
-        positioner.addStyleName(CSS_DROP_POSITIONER);
+        positioner.addStyleName(css.DropPositioner());
         DOM.setStyleAttribute(positioner.getElement(), "zIndex", "1000");
     }
 
@@ -142,7 +144,7 @@ public final class TreeDropController extends SimpleDropController implements
 
         dragItem = (DragItem)context.draggable;
 
-        tree.view.flexTable.getRowFormatter().removeStyleName(targetRow, "DropOnRow");
+        tree.view.flexTable.getRowFormatter().removeStyleName(targetRow, css.DropOnRow());
         
         super.onDrop(context);
 
@@ -187,7 +189,7 @@ public final class TreeDropController extends SimpleDropController implements
          */
         adjY = context.mouseY - tree.view.flexTable.getAbsoluteTop();
         if(targetRow > -1){
-            tree.view.flexTable.getRowFormatter().removeStyleName(targetRow, "DropOnRow");
+            tree.view.flexTable.getRowFormatter().removeStyleName(targetRow, css.DropOnRow());
             positioner.removeFromParent();
         }
         /*
@@ -238,7 +240,7 @@ public final class TreeDropController extends SimpleDropController implements
                 }else {
                 	positioner.removeFromParent();
                 	((TreeDragController)context.dragController).setDropIndicator(true);
-                    tree.view.flexTable.getRowFormatter().addStyleName(targetRow, "DropOnRow");
+                    tree.view.flexTable.getRowFormatter().addStyleName(targetRow, css.DropOnRow());
                 }
                     
                 

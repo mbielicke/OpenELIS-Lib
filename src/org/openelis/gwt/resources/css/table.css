@@ -1,0 +1,251 @@
+.Table {
+	background: #d8d8d8;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	table-layout: fixed;
+	spacing: 0px;
+	padding: 0px;
+	border-collapse: collapse;
+	border: 0px solid white;
+}
+
+.Table tr {
+	background: white;
+}
+
+.Table td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border-color: #FFFFFF #EDEDED #EDEDED;
+	border-style: solid;
+	border-width: 0px 1px 1px 0px;
+	color: black;
+	cursor: pointer;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	padding: 0px 2px 0px 2px;
+}
+
+.Table td.InputError {
+	border-bottom: 1px red dashed;
+}
+
+.Table td.InputWarning {
+	border-bottom: 1px #f5d852 dashed;
+}
+
+.Table tr.Selection td.InputError {
+	border-bottom: 1px red dashed;
+}
+
+.Table tr.Selection {
+	background-color:#d8e4f2;
+}
+
+.Table tr.Selection td {
+	border-color: #FFFFFF #A9BFD3 #A9BFD3;
+	border-style: solid;
+	border-width: 0px 1px 0px 0px;
+}
+
+.Table tr.SubHeader td {
+	border: 1px solid #B5B8C8;
+	border-right: 1px solid grey;
+	border-width: 1 1 1 0;
+	background: #B5B8C8;
+	color: white;
+}
+
+.Header {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	table-layout: fixed;
+	spacing: 0px;
+	padding: 0;
+	border-collapse: collapse;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.Header tr {
+	
+}
+
+.Header td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border-color: #B5B8C8;
+	border-style: solid;
+	border-width: 0px 0px 1px 1px;
+	padding: 0px 2px 2px 2px;
+	background-color: #f1f2f4;
+	color: grey;
+	cursor: pointer;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.Header td.First {
+	border-width: 0px 0px 1px 0px;
+	border-color: #B5B8C8;
+}
+
+.Header td.Filtered {
+	text-decoration: underline;
+}
+
+.Header td.Sorted {
+	font-style: italic;
+}
+
+.Header td.ResizeCol {
+	cursor: col-resize;
+}
+
+.DropdownTable {
+	background: #d8d8d8;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	table-layout: fixed;
+	spacing: 1px;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+.DropdownTable tr {
+	background: white;
+}
+
+.DropdownTable tr.Disabled td {
+	color: grey;
+}
+
+.DropdownTable tr.Selection {
+	background: #f0f0f0;
+}
+
+.DropdownTable td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: black;
+	cursor: pointer;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	padding: 1px 1px 0px;
+}
+
+.CellContainer {
+	border: 1px solid #63B159;
+	padding: 0px 0px 0px 0px;
+	margin-left: -2px;
+}
+
+.TableTextBox {
+	border: none;
+	cursor: default;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	outline: none;
+	padding-top: 3px;
+}
+
+.TableTextBox.Focus {
+	border: none;
+}
+
+@sprite .FilterButton {
+	width: 16px;
+	height: 19px;
+	border-bottom: 1px solid #d8d8d8;
+	gwt-image: 'trigger';
+}
+
+.DropdownPopup {
+	overflow: hidden;
+	margin-left: 0;
+}
+
+.TableDropdown {
+	spacing: 0;
+	padding: 0px;
+	margin-left: -2px;
+}
+
+@sprite .TableDropdown .AutoDropdownButton {
+	width: 16px;
+	gwt-image: 'trigger';
+	margin-left: -2px;
+}
+
+.TableDropdown .TextboxSelected {
+	border: none;
+	color: #000000;
+	background: #ffffff;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 10px;
+	cursor: default;
+}
+
+.TableDropdown .TextboxUnselected {
+	border: none;
+	color: #000000;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 10px;
+	cursor: default;
+}
+
+.TableCalendar {
+	spacing: 0;
+	padding: 0px;
+	margin-left: -2px;
+}
+
+@
+sprtite .TableCalendar .CalendarButton {
+	width: 14px;
+	gwt-image: 'dateTrigger';
+}
+
+.TableCalendar .TextboxSelected {
+	border: none;
+	color: #000000;
+	background: #ffffff;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 10px;
+	cursor: default;
+}
+
+.TableCalendar .TextboxUnselected {
+	border: none;
+	color: #000000;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 10px;
+	cursor: default;
+}
+
+@sprite .WarnIcon {
+	width: 16px;
+	height: 17px;
+	gwt-image: 'iconWarning';
+}
+
+@sprite .ErrorIcon {
+	width: 16px;
+	height: 17px;
+	gwt-image: 'iconError';
+}
+
+.ScreenTableWithSides{
+    border:1px solid #D8D8D8;
+    border-width:1px;
+    background:white;
+}

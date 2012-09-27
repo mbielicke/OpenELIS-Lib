@@ -153,6 +153,12 @@ public class ViewGenerator extends Generator {
 		
 
 		sw.println("private void createPanel() {");
+		
+		try {
+			createResources();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	    
 		try {
 	    	count = 0;
@@ -201,6 +207,22 @@ public class ViewGenerator extends Generator {
 		context.commit(logger, printWriter);
 		
 	}
+	
+	public void createResources() throws Exception {
+		NodeList resources;
+		
+		resources = doc.getElementsByTagName("Resource");
+		
+		for(int i = 0; i < resources.getLength(); i++) {
+			String source,field;
+			
+			field = getAttribute(resources.item(i),"field");
+			source = getAttribute(resources.item(i),"source");
+			
+			sw.println(source+" "+field+" = "+source+".INSTANCE;");
+		}
+		
+	}
 
      
     public void createWidgets() throws Exception{
@@ -232,8 +254,11 @@ public class ViewGenerator extends Generator {
                 
                 key = (attrib = widget.getAttributes().getNamedItem("key")) != null ? attrib.getNodeValue() : null;
                 
-                if(key != null)
-                	sw.println("setWidget(wid0, \""+key+"\");");
+                if(key != null) {
+                	sw.println("widgets.put(\""+key+"\",wid0);");
+                	if(keyToField.containsKey(key))
+                		sw.println(keyToField.get(key)+"_def = wid0;");
+                }
                 
                 sw.println("add(wid0);");
                 break;
@@ -314,8 +339,8 @@ public class ViewGenerator extends Generator {
     
     private void setDefaults(Node node, String wid) {
     	String style,css;
-    	String[] styles;
-    	String width,height,tip,visible,id;
+    	String[] styles,resource;
+    	String width,height,tip,visible,id,clss;
     	Node attrib;
     	
     	style = getAttribute(node,"style");
@@ -325,6 +350,20 @@ public class ViewGenerator extends Generator {
     	visible = getAttribute(node,"visible","true");
     	css = getAttribute(node,"css");
     	id = getAttribute(node,"id");
+    	clss = getAttribute(node,"class");
+    	
+        if(clss != null) {
+        	sw.print(wid+".setStyleName(");
+        	resource = clss.split("\\.");
+        	for(int i = 0; i < resource.length; i++) {
+        		if(i > 0)
+        			sw.print(".");
+        		sw.print(resource[i]);
+        		if(i > 0)
+        			sw.print("()");
+        	}
+        	sw.println(");");
+        }
 
     	
         if (style != null){
@@ -525,7 +564,7 @@ public class ViewGenerator extends Generator {
     			
     			sw.println("Browser wid"+id+" = (Browser)GWT.create(Browser.class);");
     			sw.println("wid"+id+".init("+sizeToWindow+","+limit+");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
+    	        //sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
     	        setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
@@ -535,21 +574,33 @@ public class ViewGenerator extends Generator {
     	
     	factoryMap.put("button", new Factory() {
     		public void getNewInstance(Node node, int id) {    			
-    			String toggle,action,enabled,wrap,icon,text;
+    			String toggle,action,enabled,icon,text,css;
     			NodeList widgets;
     			Node widget;
     			
     			toggle = getAttribute(node,"toggle","false");
     			action = getAttribute(node,"action");
-    			wrap = getAttribute(node,"wrap","true");
+    			//wrap = getAttribute(node,"wrap","true");
     			enabled = getAttribute(node,"enabled");
     			icon = getAttribute(node,"icon","");
     			text = getAttribute(node,"text","");
+    			css = getAttribute(node,"css");
+    			
+    			if(icon.indexOf(".") > 0) {
+    	        	String[] resource = icon.split("\\.");
+    	        	icon  = resource[0];
+    	        	for(int i = 1; i < resource.length; i++) 
+    	        		icon += "."+resource[i] + "()";
+    			}
     			
     			if(text.equals("") && icon.equals(""))
     				sw.println("Button wid"+id+" = new Button();");
     			else
-    				sw.println("Button wid"+id+" = new Button(\""+icon+"\",\""+text+"\");");
+    				if(icon.indexOf(".") > 0)
+    					sw.println("Button wid"+id+" = new Button("+icon+",\""+text+"\");");
+    				else
+    					sw.println("Button wid"+id+" = new Button(\""+icon+"\",\""+text+"\");");
+    			
 
     			
 				if(node.getAttributes().getNamedItem("tab") != null) 
@@ -572,12 +623,29 @@ public class ViewGenerator extends Generator {
     	            		count--;
      	            	    continue;
      	                }
-   	            		sw.println("wid"+id+".setDisplay(wid"+child+","+wrap+");");
+   	            		sw.println("wid"+id+".setWidget(wid"+child+");");
     	            }
+    	        }
+    	        
+    	        if(css != null){
+    	        	String[] resource;
+    	        	resource = css.split("\\.");
+    	        	sw.println("wid"+id+".setCSS(");
+    	        	for(int i = 0; i < resource.length; i++) {
+    	        		if(i > 0)
+    	        			sw.print(".");
+    	        		sw.print(resource[i]);
+    	        		if(i > 0)
+    	        			sw.print("()");
+    	        	}
+    	        	sw.println(");");
     	        }
 
     	        if(enabled != null)
     	        	sw.println("wid"+id+".setEnabled("+enabled+");");
+    	        
+
+    	        	
     	        
     	        setDefaults(node, "wid"+id);
     		}
@@ -713,6 +781,7 @@ public class ViewGenerator extends Generator {
     		}
     	});
     	
+    	
         factoryMap.put("Date", new Factory() {
             public void getNewInstance(Node node, int id){
             	String begin,end,pattern;
@@ -740,6 +809,7 @@ public class ViewGenerator extends Generator {
     			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
     	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
 
+    
     	        decks = ((Element)node).getElementsByTagName("deck");
     	        for (int k = 0; k < decks.getLength(); k++) {
     	        	deck = decks.item(k);
@@ -1175,7 +1245,7 @@ public class ViewGenerator extends Generator {
 						sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign.toUpperCase()+");");
     				}
     			}
-    			sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
+    			//sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
     			setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
@@ -1439,7 +1509,17 @@ public class ViewGenerator extends Generator {
     			shortcut = getAttribute(node,"shortcut");
     			autoClose = getAttribute(node,"autoClose","true");
     			
-    			sw.println("MenuItem wid"+id+"= new MenuItem(\""+icon+"\",\""+display+"\",\""+description+"\","+autoClose+");");
+    			if(icon.indexOf(".") > 0) {
+    				String[] resource = icon.split("\\.");
+    				icon = resource[0];
+    				for(int i = 1; i < resource.length; i++)
+    					icon += "."+resource[i]+"()";
+    			}
+    			
+    			if(icon.indexOf(".") > 0)
+        			sw.println("MenuItem wid"+id+"= new MenuItem("+icon+",\""+display+"\",\""+description+"\","+autoClose+");");
+    			else
+    				sw.println("MenuItem wid"+id+"= new MenuItem(\""+icon+"\",\""+display+"\",\""+description+"\","+autoClose+");");
     			
     			if(enabled != null) 
     				sw.println("wid"+id+".setEnabled("+enabled+");");
@@ -1550,10 +1630,12 @@ public class ViewGenerator extends Generator {
     		public void getNewInstance(Node node, int id) {
     			NodeList widgets;
     			Node widget;			
-    			String width,height;
+    			//String width,height;
     			
-    			//width = getAttribute(node,"width");
-    			//height = getAttribute(node,"height");
+    			/*
+    			width = getAttribute(node,"width");
+    			height = getAttribute(node,"height");
+    			*/
     			
     			sw.println("OpenELISLayout wid"+id+" = new OpenELISLayout();");
     			
@@ -1572,7 +1654,9 @@ public class ViewGenerator extends Generator {
                         else if(widget.getNodeName().equals("Left"))
                         	sw.println("wid"+id+".addLeft(wid"+child+");");
                     }
-                }    			
+                }    		
+                
+                sw.println("wid"+id+".setViewPanel(this);");
                 
                 //sw.println("wid"+id+".setWidth("+width+");");
                 //sw.println("wid"+id+".setHeight("+height+");");
@@ -1665,6 +1749,25 @@ public class ViewGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.PercentBar");
     		}
     	});
+    	
+    	factoryMap.put("Resource",new Factory() {
+    		@Override
+    		public void getNewInstance(Node node, int id) {
+    			String source,field;
+    			
+    			field = getAttribute(node,"field");
+    			source = getAttribute(node,"source");
+    			
+    			sw.println(source+" "+field+" = "+source+".INSTANCE;");
+    			
+    		}
+    		@Override
+    		public void addImport() {
+    			// TODO Auto-generated method stub
+    			
+    		}
+    	});
+
     	
     	factoryMap.put("richtext", new Factory() {
     		public void getNewInstance(Node node, int id) {
@@ -1870,7 +1973,7 @@ public class ViewGenerator extends Generator {
     	
     	factoryMap.put("table", new Factory() {
      	   public void getNewInstance(Node node, int id) {
-     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,multiSelect,fixScroll;
+     		   String key,rows,width,hscroll,vscroll,header,minWidth,name,field,rowHeight,filter,sort,multiSelect,fixScroll,display;
      		   Node col;
      		   NodeList cols,editor;
      		   
@@ -1910,6 +2013,7 @@ public class ViewGenerator extends Generator {
                     minWidth = getAttribute(col,"minWidth");
                     filter = getAttribute(col,"filter");
                     sort = getAttribute(col,"sort");
+                    display = getAttribute(col,"display");
                     
                     sw.println("Column.Builder colBuilder"+id+"_"+i+" = new Column.Builder("+width+");");
                     
@@ -1931,7 +2035,9 @@ public class ViewGenerator extends Generator {
                     if(filter != null)
                  	   sw.println("colBuilder"+id+"_"+i+".filterable("+filter+");");
                     
-                                       
+                    if(display != null)
+                    	sw.println("colBuilder"+id+"_"+i+".display("+display+");");
+                    
                     editor = col.getChildNodes();
                     for(int j = 0; j < editor.getLength(); j++){
                         if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
@@ -2006,7 +2112,7 @@ public class ViewGenerator extends Generator {
     			width = getAttribute(node,"width");
     			height = getAttribute(node,"height");
     			
-    			sw.println("TabPanel wid"+id+" = new TabPanel();");
+    			sw.println("TabPanel wid"+id+" = new TabPanel(this);");
     	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
     	        if(width != null)
     	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
@@ -2117,7 +2223,7 @@ public class ViewGenerator extends Generator {
     	
     	factoryMap.put("TablePanel", new Factory() {
     		public void getNewInstance(Node node, int id) {
-    			String spacing,padding,colSpan,rowSpan,align,valign,style,text,height,width;
+    			String spacing,padding,colSpan,rowSpan,align,valign,style,text,height,width,clss;
     			NodeList rows,widgets;
     			Node attrib,widget;
     			String[] styles;
@@ -2147,13 +2253,29 @@ public class ViewGenerator extends Generator {
     	                    if(widget.getNodeName().equals("text")) {
     	                    	styles = getAttribute(widget,"style","").split(",");
     	                    	text = (attrib = widget.getFirstChild()) != null ? attrib.getNodeValue().trim() : null;
+    	                    	clss = getAttribute(widget,"class");
     	                    	
+    	                        if(clss != null) {
+    	                        	sw.print("wid"+id+".getCellFormatter().setStyleName("+k+","+w+",");
+    	                        	String[] resources = clss.split("\\.");
+    	                        	for(int i = 0; i < resources.length; i++) {
+    	                        		if(i > 0)
+    	                        			sw.print(".");
+    	                        		sw.print(resources[i]);
+    	                        		if(i > 0)
+    	                        			sw.print("()");
+    	                        	}
+    	                        	sw.println(");");
+    	                        }
+    	                    	
+    	                        /*
     	                    	 if (styles != null){
     	                             sw.println("wid"+id+".getCellFormatter().setStyleName("+k+","+w+","+"\""+styles[0]+"\");");
     	                             for(int i = 1; i < styles.length; i++){
     	                            	 sw.println("wid"+id+".getCellFormatter().addStyleName("+k+","+w+","+"\""+styles[i]+"\");");
     	                             }
     	                         }
+    	                         */
     	                    	
     	                    	if(text != null && !text.equals(""))
     	                    		sw.println("wid"+id+".setText("+k+","+w+",\""+text+"\");");
@@ -2246,8 +2368,6 @@ public class ViewGenerator extends Generator {
 
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
-			    
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTextArea\");");
     	        
     	        setDefaults(node, "wid"+id);
     	        
@@ -2289,8 +2409,6 @@ public class ViewGenerator extends Generator {
 
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node,"wid"+id);
-				
-				sw.println("wid"+id+".setStyleName(\"ScreenTextBox\");");
 				
 				sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");
 
@@ -2591,7 +2709,7 @@ public class ViewGenerator extends Generator {
    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+width+"\");");
     	            }
     	        }
-    	        sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
+    	        //sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
     	        setDefaults(node,"wid"+id);
     		}
     		public void addImport() {

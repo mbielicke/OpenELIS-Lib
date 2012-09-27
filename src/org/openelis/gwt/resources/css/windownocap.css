@@ -1,0 +1,104 @@
+@def borderWidth 5px;
+@def winColor #c4d3e5;
+@def topColor #edf2f4;
+
+.top {
+	display:none;
+}
+.Caption{
+	display:none;
+}
+.StatusBar {
+	display:none;
+}
+
+.unfocused .Caption{
+	display:none;
+}
+.unfocused .StatusBar {
+	display:none;
+}
+
+.errorPopupLabel, .warnPopupLabel{
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    padding:0 4px 2px 0;
+}
+
+@sprite .CloseButton {
+	gwt-image: 'closeButton';
+	width:20px;
+    height:20px;
+    cursor:pointer;
+}
+
+@sprite .MinimizeButton {
+   padding-top:5px;
+   gwt-image: 'minimizeButton';
+   width:20px;
+   height:20px;
+   cursor:pointer;
+}
+
+.WindowBody{
+}
+
+.WindowPanel{
+	 box-shadow: 4px 4px 5px 3px #000055;
+}
+
+.ScreenLoad{
+  cursor:wait;
+}
+
+@sprite .GlassPanel{
+    gwt-image:'glass';
+}
+
+@sprite .spinnerIcon {
+	width:16px; 
+	height:16px;
+	gwt-image:'spinner';
+}
+
+@sprite .ErrorPanel {
+    width:16px;
+    height:16px;
+    gwt-image:'exclamation';
+}
+
+.ScreenWindowLabel{
+    color:#486095;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:12px;
+    font-weight:bold;    
+    padding-left:6px;
+    padding-top:2px;
+    -moz-user-select: none;
+}
+
+@sprite .ModalPanel{
+	gwt-image:'modal';
+	opacity:0.50;
+}
+
+@sprite .WarnIcon {
+	width : 16px;
+	height : 17px;
+	gwt-image:'warn';
+}
+
+@sprite .ErrorIcon {
+	width : 16px;
+	height : 17px;
+	gwt-image:'error';
+}
+
+.InputError {
+	border-bottom:1px dashed red;
+}
+
+.InputWarning {
+	border-bottom:1px dashed #f5d852;
+}
+	

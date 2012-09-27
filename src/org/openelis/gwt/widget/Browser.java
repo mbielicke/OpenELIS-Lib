@@ -27,6 +27,10 @@ package org.openelis.gwt.widget;
 
 import java.util.HashMap;
 
+import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.WindowCSS;
+import org.openelis.gwt.resources.WindowNoImageCSS;
 import org.openelis.gwt.screen.Screen;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -38,14 +42,11 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -71,8 +72,8 @@ public class Browser extends Composite {
     /*
      * Hash of all currently displayed windows
      */
-    protected HashMap<Window,WindowValues> windows;
-    protected HashMap<String,Window> windowsByKey;
+    protected HashMap<WindowInt,WindowValues> windows;
+    protected HashMap<String,WindowInt> windowsByKey;
     
     /*
      * Integers for current zIndex and limit of windows shown
@@ -88,11 +89,13 @@ public class Browser extends Composite {
     /*
      * Reference to the currently focused window
      */
-    protected FocusPanel focusedWindow;
+    protected WindowInt focusedWindow;
+        
+    protected WindowNoImageCSS css = OpenELISResources.INSTANCE.window(); 
     
     public Browser() {
-    	
-    }
+
+    };
     
     /**
      * Constructor that takes an arguments if the browser should auto-size to the window,
@@ -105,10 +108,13 @@ public class Browser extends Composite {
     }
     
     public void init(boolean size, int limit) {
+    	css.ensureInjected();
         browser = new AbsolutePanel();
+        browser.setWidth("100%");
+        browser.setHeight("100%");
         fp = new FocusPanel();
-        windows = new HashMap<Window, WindowValues>();
-        windowsByKey = new HashMap<String,Window>();
+        windows = new HashMap<WindowInt, WindowValues>();
+        windowsByKey = new HashMap<String,WindowInt>();
         
         dragController = new PickupDragController(browser,true);
         
@@ -116,7 +122,7 @@ public class Browser extends Composite {
             @Override
             public void onDrop(DragContext context) {
                 super.onDrop(context);
-                ((Window)context.draggable).positionGlass();
+                ((WindowInt)context.draggable).positionGlass();
             }
         };
         
@@ -130,6 +136,7 @@ public class Browser extends Composite {
         DOM.setStyleAttribute(browser.getElement(),
                               "overflow",
                               "auto");
+        
         if(size){
             com.google.gwt.user.client.Window.addResizeHandler(new ResizeHandler() {
 
@@ -146,6 +153,7 @@ public class Browser extends Composite {
 			});
         }
         
+        
         setKeyHandling();
     }
     
@@ -155,10 +163,7 @@ public class Browser extends Composite {
          */
         addDomHandler(new KeyDownHandler() {
         	public void onKeyDown(KeyDownEvent event) {
-   				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);
-   				//event.stopPropagation();
-   				//event.preventDefault();
-        		
+   				KeyDownEvent.fireNativeEvent(event.getNativeEvent(), focusedWindow);        		
         	}
         },KeyDownEvent.getType());
         
@@ -185,7 +190,7 @@ public class Browser extends Composite {
            key = screen.getClass().getName();
         
         if(windows.size() == limit){
-            com.google.gwt.user.client.Window.alert("Please close at least one window before opening another.");
+            com.google.gwt.user.client.Window.alert(Constants.get().tooManyWindows());
             return;
         }
         
@@ -200,13 +205,13 @@ public class Browser extends Composite {
         /*
          * Sets cursor to loading
          */
-        RootPanel.get().addStyleName("ScreenLoad");
+        RootPanel.get().addStyleName(css.ScreenLoad());
      
         /*
          * Create a ScreenWindow and add the passed Screen to it to be added to the
          * browser.
          */
-        Window window = (Window)GWT.create(Window.class);
+        WindowInt window = (WindowInt)GWT.create(org.openelis.gwt.widget.Window.class);
         window.setContent(screen);
         screen.setWindow(window);
         addWindow(window,key);
@@ -217,11 +222,11 @@ public class Browser extends Composite {
      * @param window
      * @param key
      */
-    public void addWindow(Window window, String key) {
+    public void addWindow(WindowInt window, String key) {
         WindowValues wv;
         
     	index++;
-    	browser.add(window,(windows.size()*25),(windows.size()*25));
+    	browser.add(window.asWidget(),(windows.size()*25),(windows.size()*25));
     	wv = new WindowValues();
     	wv.key = key;
     	wv.zIndex = index;
@@ -251,7 +256,7 @@ public class Browser extends Composite {
      * @return
      */
     public boolean selectScreen(String key) {
-        Window wid;
+        WindowInt wid;
         WindowValues wv;
         
     	if (windowsByKey.containsKey(key)) {
@@ -261,8 +266,8 @@ public class Browser extends Composite {
     		if(index != wv.zIndex){
     			index++;
     			wv.zIndex = index;
-    			int top = browser.getWidgetTop(wid);
-    			int left = browser.getWidgetLeft(wid);
+    			int top = browser.getWidgetTop(wid.asWidget());
+    			int left = browser.getWidgetLeft(wid.asWidget());
   				browser.add(wid, left, top);
     			setFocusedWindow();
     		}
@@ -275,9 +280,9 @@ public class Browser extends Composite {
      * This method will size the browser to the the size of the window containing it. 
      */
     public void resize() {
-        if (browser.isVisible()) {
-            browser.setHeight((com.google.gwt.user.client.Window.getClientHeight() - browser.getAbsoluteTop()) + "px");
-            browser.setWidth((com.google.gwt.user.client.Window.getClientWidth() - browser.getAbsoluteLeft())+ "px");
+        if (isVisible()) {
+            setHeight((com.google.gwt.user.client.Window.getClientHeight() - getAbsoluteTop()) + "px");
+            setWidth((com.google.gwt.user.client.Window.getClientWidth() - getAbsoluteLeft())+ "px");
         }
     }
     
@@ -286,13 +291,13 @@ public class Browser extends Composite {
      * top and focused.
      */
     public void setFocusedWindow() {
-    	for(Window wid : windowsByKey.values()) {
+    	for(WindowInt wid : windowsByKey.values()) {
     		if(windows.get(wid).zIndex != index){
-    			if(wid.getStyleName().indexOf("unfocused") < 0){	
-    				wid.addStyleName("unfocused");
+    			if(wid.asWidget().getStyleName().indexOf(css.unfocused()) < 0){	
+    				wid.asWidget().addStyleName(css.unfocused());
     			}
     		}else{
-    			wid.removeStyleName("unfocused");
+    			wid.asWidget().removeStyleName(css.unfocused());
     			focusedWindow = wid;
     			wid.setFocus(true);
     		}
@@ -304,7 +309,7 @@ public class Browser extends Composite {
      * @param key
      * @return
      */
-    public Window getScreenByKey(String key) {
+    public WindowInt getScreenByKey(String key) {
     	return windowsByKey.get(key);
     }
     

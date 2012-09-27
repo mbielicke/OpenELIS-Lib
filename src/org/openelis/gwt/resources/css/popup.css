@@ -1,0 +1,30 @@
+@sprite .MenuUp {
+   height:8px;
+   width:100%;
+   border:1px solid gray;
+   gwt-image:'menuUp';
+   cursor:pointer;
+}
+ 
+@sprite .MenuDown {
+   height:8px;
+   width:100%;
+   border:1px solid gray;
+   gwt-image:'menuDown';
+   cursor:pointer;
+}
+
+.MenuDisabled {
+   border:none;
+   margin:1px;
+   background:none;
+}
+
+.divider {
+	position:absolute;
+	left:25px;
+	top:0px;
+	width : 1px;
+	height : 100%;
+	background-color : lightgray;
+}

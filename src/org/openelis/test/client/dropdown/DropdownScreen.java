@@ -57,9 +57,11 @@ public class DropdownScreen extends Screen {
 			public void onValueChange(ValueChangeEvent event) {
 				if(event.getValue() == null)
 					value.setValue("");
+				/*
 				else if(test.isMultSelect()) {
 					value.setValue(test.getValues().toString());
-				}else if(event.getValue() != null)
+				*/
+				else if(event.getValue() != null)
 						value.setValue(event.getValue().toString());
 			}
 		});
@@ -74,14 +76,14 @@ public class DropdownScreen extends Screen {
 				ArrayList list = new ArrayList();
 				String val = value.getValue();
 				String[] vals;
-				
+				/*
 				if(!test.isMultSelect()) {
 					test.setValue(val);
 					return;
 				}
-
+				*/
 				if(val == null || val.equals("") || val.equals("[]"))
-					test.setValues(null);
+					//test.setValues(null);
 				
 				if(val.startsWith("["))
 					val = val.substring(1,val.length()-1);
@@ -126,7 +128,7 @@ public class DropdownScreen extends Screen {
 		multi.setEnabled(true);
 		multi.addValueChangeHandler(new ValueChangeHandler<String>()  {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setMultiSelect("Y".equals(event.getValue()));
+				//test.setMultiSelect("Y".equals(event.getValue()));
 			}
 		});
 		
