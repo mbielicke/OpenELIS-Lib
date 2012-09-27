@@ -5,9 +5,7 @@ import java.util.Date;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.data.QueryData;
 
-import com.google.gwt.dom.client.NativeEvent;
-
-public class TextBoxTest extends UnitTest {
+public class TextBoxInteg extends IntegrationTest {
 
 	
 	@Override
@@ -277,7 +275,7 @@ public class TextBoxTest extends UnitTest {
 		pressKey(test.textbox,KeyCodes.KEY_BACKSPACE);
 		assertEquals("",test.textbox.getText());
 		
-		test.validateValue();
+		blur(test);
 		
 		assertEquals(null, test.getValue());
 		

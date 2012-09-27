@@ -19,7 +19,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class UnitTest extends GWTTestCase {
+public abstract class IntegrationTest extends GWTTestCase {
 
 	@Ignore
 	public void blur(HasBlurHandlers source) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.openelis.gwt.widget.IntegerHelper;
 import org.openelis.gwt.widget.TextBox;
-import org.openelis.gwt.widget.UnitTest;
+import org.openelis.gwt.widget.IntegrationTest;
 import org.openelis.gwt.widget.table.Column;
 import org.openelis.gwt.widget.table.Row;
 import org.openelis.gwt.widget.table.Table;
@@ -12,7 +12,7 @@ import org.openelis.gwt.widget.table.TextBoxCell;
 
 import com.google.gwt.event.dom.client.KeyCodes;
 
-public class TableTest extends UnitTest {
+public class TableTestInteg extends IntegrationTest {
 	
 	Table test;
 	
@@ -25,21 +25,21 @@ public class TableTest extends UnitTest {
 	protected void gwtSetUp() throws Exception {
 		super.gwtSetUp();
 		
-		test = new Table();
-		Column col = test.addColumn();
-		col.setWidth(100);
-		TextBox<String> textbox = new TextBox<String>();
-		col.setCellRenderer(new TextBoxCell(textbox));
 		TextBox<Integer> integer = new TextBox<Integer>();
 		integer.setHelper(new IntegerHelper());
-		col = test.addColumn();
-		col.setWidth(100);
-		col.setCellRenderer(new TextBoxCell(integer));
-		textbox = new TextBox<String>();
-		col = test.addColumn();
-		col.setWidth(100);
-		col.setCellRenderer(new TextBoxCell(textbox));
-		test.setVisibleRows(10);
+		
+		test = new Table.Builder(10)
+		                .column(new Column.Builder(100)
+		                                  .renderer(new TextBoxCell(new TextBox<String>()))
+		                                  .build())
+		                .column(new Column.Builder(100)
+		                                  .renderer(new TextBoxCell(integer))
+		                                  .build())
+		                .column(new Column.Builder(100)
+		                                  .renderer(new TextBoxCell(new TextBox<String>()))
+		                                  .build())
+		                .build();
+		
 		test.setEnabled(true);
 	}
 	
