@@ -34,12 +34,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
 
@@ -59,12 +54,12 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     /*
      * State variables for the button.
      */
-    private boolean toggles, enabled, pressed, locked,wrapped = true;
+    private boolean toggles, enabled, pressed, locked;
     private String  action,text,leftIcon,rightIcon;
     private ButtonCSS css;
     int eventsToSink;
     
-    private Grid grid,wrapper;
+    private Grid grid;
        
 
     /**
@@ -81,7 +76,6 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     public Button(String leftIcon,String label,String rightIcon) {
     	init();
     	setDisplay(leftIcon,label,rightIcon);
-    	setCSS(css);
     }
 
 
@@ -92,32 +86,13 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         final Button source = this;
 
         /**
-         * MouseOverHandler to add the Hover Style.
-         */
-        addMouseOverHandler(new MouseOverHandler() {
-            public void onMouseOver(MouseOverEvent event) {
-           		addStyleName(css.Hover());
-            }
-        });
-
-        /**
-         * MouseOutHandler to remove the HoverStyle.
-         */
-        addMouseOutHandler(new MouseOutHandler() {
-            public void onMouseOut(MouseOutEvent event) {
-           		removeStyleName(css.Hover());
-                
-            }
-        });
-
-        /**
          * Click Handler to check if the button toggles and to set the 
          * Pressed Style.
          */
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
            		if (toggles)
-           			setPressed( !pressed);
+           			setPressed(!pressed);
             }
         });
 
@@ -159,7 +134,6 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      *        Boolean switch to wrap button with borders
      */
     public void setDisplay(String leftIcon,String label,String rightIcon) {   
-    	AbsolutePanel ap;
     	
     	this.leftIcon = leftIcon;
     	this.rightIcon = rightIcon;
@@ -174,6 +148,8 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
     	grid.getCellFormatter().setStyleName(0,2,rightIcon);
     	
     	setWidget(grid);
+    	
+    	setCSS(css);
     }
 
     /**
@@ -193,10 +169,11 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
             return;
 
         this.pressed = pressed;
-        if (pressed)
+        if (pressed){
             addStyleName(css.Pressed());
-        else
+        }else {
             removeStyleName(css.Pressed());
+        }
     }
 
     /**
@@ -204,8 +181,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * styling but removes functionality.
      */
     public void lock() {
-        removeStyleName(css.Hover());
-        unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+        unsinkEvents(Event.ONCLICK | Event.ONKEYDOWN);
         locked = true;
     }
 
@@ -214,7 +190,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * current state styling.
      */
     public void unlock() {
-        sinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+        sinkEvents(Event.ONCLICK | Event.ONKEYDOWN);
         locked = false;
     }
 
@@ -225,9 +201,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        
-        setPressed(false);
-        
+              
         if (enabled) {
             unlock();
             removeStyleName(css.Disabled());
@@ -274,14 +248,14 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * Method to add a focus style to the button.
      */
     public void addFocusStyle(String style) {
-       addStyleName(css.Hover());
+       //addStyleName(css.Hover());
     }
 
     /**
      * Method remove a focus style from the button.
      */
     public void removeFocusStyle(String style) {
-       removeStyleName(css.Hover());
+       //removeStyleName(css.Hover());
     }
         
     /**
@@ -349,7 +323,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 	}
 	
 	/**
-	 * These methods were added to ensure the button will be properly enabled or disabled 
+	 * These methods were added to ensure the button will be correctly enabled or disabled 
 	 * when it is first drawn.
 	 */
 	@Override

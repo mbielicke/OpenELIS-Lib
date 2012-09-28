@@ -85,7 +85,7 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 		addFocusHandler(new FocusHandler() {
 			public void onFocus(FocusEvent event) {
 				textbox.addStyleName(css.Focus());
-				if(isEnabled())
+				if(isEnabled());
 					textbox.selectAll();
 			}
 		});

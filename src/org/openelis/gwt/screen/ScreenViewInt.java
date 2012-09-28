@@ -7,7 +7,7 @@ import org.openelis.gwt.common.ValidationErrorsList;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.event.HasStateChangeHandlers;
-import org.openelis.gwt.widget.AppStatusInt;
+import org.openelis.gwt.widget.WindowInt;
 
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -24,9 +24,9 @@ public interface ScreenViewInt extends IsWidget,HasDataChangeHandlers,HasStateCh
     
     public boolean validate();
     
-    public void showErrors(ValidationErrorsList list,AppStatusInt window);
+    public void showErrors(ValidationErrorsList list,WindowInt window);
     
-    public void clearErrors(AppStatusInt window);
+    public void clearErrors(WindowInt window);
     
     public ArrayList<QueryData> getQueryFields();
     

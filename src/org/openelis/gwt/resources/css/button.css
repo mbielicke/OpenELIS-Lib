@@ -19,18 +19,18 @@
 	}
 }
 
-.Hover{}
+.Button:hover{}
 
 @if user.agent gecko1_8 {
-	.Hover{
+	.Button:hover{
 		background-image: -moz-linear-gradient(top,#b4c9e2,#e7f0f7);
 	}
 }@elif user.agent ie6 ie8 ie9 {
-	.Hover {
+	.Button:hover {
 		background-image: -ms-linear-gradient(top,#b4c9e2,#e7f0f7);
 	}	
 }@elif user.agent safari {
-	.Hover {
+	.Button:hover {
 		background-image: -webkit-linear-gradient(top,#b4c9e2,#e7f0f7);
 	}
 }

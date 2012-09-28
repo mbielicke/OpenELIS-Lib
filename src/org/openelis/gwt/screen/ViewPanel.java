@@ -38,11 +38,11 @@ import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
-import org.openelis.gwt.widget.AppStatusInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.Queryable;
 import org.openelis.gwt.widget.ScreenWidgetInt;
+import org.openelis.gwt.widget.WindowInt;
 import org.openelis.gwt.widget.table.Table;
 
 import com.google.gwt.core.client.Scheduler;
@@ -62,7 +62,6 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -79,14 +78,20 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TAB && focused != null) {
+					
+					if(focused instanceof ScreenWidgetInt && !((ScreenWidgetInt)focused).isEnabled()) {
+						event.preventDefault();
+						event.stopPropagation();
+						return;
+					}
+					
 					Focusable next = focused;
 					do{
 						next = tab(next,event.isShiftKeyDown());
 					}while(next != null && !((ScreenWidgetInt)next).isEnabled());
 					if(next != null)
 						next.setFocus(true);
-					event.preventDefault();
-					event.stopPropagation();
+					
 					return;
 				}
 				
@@ -204,7 +209,7 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
         return valid;
     }
     
-    public void showErrors(ValidationErrorsList errors, AppStatusInt window) {
+    public void showErrors(ValidationErrorsList errors, WindowInt window) {
         ArrayList<LocalizedException> formErrors;
         TableFieldErrorException tableE;
         FormErrorException formE;
@@ -243,7 +248,7 @@ public abstract class ViewPanel extends AbsolutePanel implements FocusHandler, S
         }
     }
     
-    public void clearErrors(AppStatusInt window) {
+    public void clearErrors(WindowInt window) {
         for (Widget wid : getWidgets().values()) {
             if (wid instanceof HasExceptions)
                 ((HasExceptions)wid).clearExceptions();

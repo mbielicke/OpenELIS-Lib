@@ -37,7 +37,6 @@ import org.openelis.gwt.common.ReportStatus;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.constants.Constants;
-import org.openelis.gwt.widget.AppStatusInt;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.DateHelper;
