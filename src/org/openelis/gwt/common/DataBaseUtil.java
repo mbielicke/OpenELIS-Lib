@@ -260,40 +260,42 @@ public class DataBaseUtil {
      * Convenience methods to unwrap and merge error lists
      */
     public static void mergeException(ValidationErrorsList list, Exception e) {
-        if (e instanceof ValidationErrorsList) {
-            int i;
-            ArrayList<Exception> el;
+        int i;
+        ArrayList<Exception> el;
+        FieldErrorException fe;
 
+        if (e instanceof ValidationErrorsList) {
             el = ((ValidationErrorsList)e).getErrorList();
             for (i = 0; i < el.size(); i++ )
                 mergeException(list, el.get(i));
         } else if (e instanceof FieldErrorException) {
-            FieldErrorException fe;
-
             fe = (FieldErrorException)e;
             if (! isEmpty(fe.getFieldName()))
                 list.add(fe);
             else
                 list.add(new FormErrorException(fe.getKey(), fe.getParams()));
+        } else if (e instanceof FormErrorException) {
+            list.add(e);
         } else {
             list.add(new DatabaseException(e.getMessage()));
         }
     }
 
     public static void mergeException(ValidationErrorsList list, Exception e, String table, int row) {
-        if (e instanceof ValidationErrorsList) {
-            int i;
-            ArrayList<Exception> el;
+        int i;
+        ArrayList<Exception> el;
+        FieldErrorException fe;
 
+        if (e instanceof ValidationErrorsList) {
             el = ((ValidationErrorsList)e).getErrorList();
             for (i = 0; i < el.size(); i++ )
                 mergeException(list, el.get(i), table, row);
         } else if (e instanceof FieldErrorException) {
-            FieldErrorException fe;
-
             fe = (FieldErrorException)e;
             list.add(new TableFieldErrorException(fe.getKey(), row, fe.getFieldName(), table,
                                                   fe.getParams()));
+        } else if (e instanceof FormErrorException) {
+            list.add(e);
         } else {
             list.add(new DatabaseException(e.getMessage()));
         }
@@ -301,19 +303,20 @@ public class DataBaseUtil {
 
     public static void mergeException(ValidationErrorsList list, Exception e, String table,
                                       int key1, int key2) {
-        if (e instanceof ValidationErrorsList) {
-            int i;
-            ArrayList<Exception> el;
+        int i;
+        ArrayList<Exception> el;
+        FieldErrorException fe;
 
+        if (e instanceof ValidationErrorsList) {
             el = ((ValidationErrorsList)e).getErrorList();
             for (i = 0; i < el.size(); i++ )
                 mergeException(list, el.get(i), table, key1, key2);
         } else if (e instanceof FieldErrorException) {
-            FieldErrorException fe;
-
             fe = (FieldErrorException)e;
             list.add(new GridFieldErrorException(fe.getKey(), key1, key2, fe.getFieldName(), table,
                                                  fe.getParams()));
+        } else if (e instanceof FormErrorException) {
+            list.add(e);
         } else {
             list.add(new DatabaseException(e.getMessage()));
         }
