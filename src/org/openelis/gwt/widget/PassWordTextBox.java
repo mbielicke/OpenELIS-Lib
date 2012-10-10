@@ -75,8 +75,6 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	}
 
 	public void init() {
-		css = OpenELISResources.INSTANCE.text();
-		css.ensureInjected();
 		
 		textbox = new PasswordTextBox();
 
@@ -103,6 +101,9 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 		initWidget(textbox);
 		
 		exceptions = new Exceptions();
+		
+		setCSS(OpenELISResources.INSTANCE.text());
+
 	}
 
 	public String getText() {
@@ -416,5 +417,11 @@ public class PassWordTextBox extends Composite implements ScreenWidgetInt,
 	 */
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 		return addDomHandler(handler, MouseOutEvent.getType());
+	}
+	
+	public void setCSS(TextCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		textbox.setStyleName(css.ScreenTextBox());
 	}
 }

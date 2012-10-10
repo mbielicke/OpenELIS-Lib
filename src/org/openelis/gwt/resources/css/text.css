@@ -21,6 +21,11 @@
 	outline : none;
 }
 
+.ScreenLabel {
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+
 .InputError {
 	border-bottom: 1px dashed red;
 }

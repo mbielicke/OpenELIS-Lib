@@ -91,7 +91,7 @@ public class Browser extends Composite {
      */
     protected WindowInt focusedWindow;
         
-    protected WindowNoImageCSS css = OpenELISResources.INSTANCE.window(); 
+    protected WindowNoImageCSS css;
     
     public Browser() {
 
@@ -108,8 +108,8 @@ public class Browser extends Composite {
     }
     
     public void init(boolean size, int limit) {
-    	css.ensureInjected();
-        browser = new AbsolutePanel();
+        
+    	browser = new AbsolutePanel();
         browser.setWidth("100%");
         browser.setHeight("100%");
         fp = new FocusPanel();
@@ -155,6 +155,8 @@ public class Browser extends Composite {
         
         
         setKeyHandling();
+        
+        setCSS(OpenELISResources.INSTANCE.window());
     }
     
     public void setKeyHandling() {
@@ -316,6 +318,12 @@ public class Browser extends Composite {
     private class WindowValues {
         protected String key;
         protected int zIndex;
+    }
+    
+    public void setCSS(WindowNoImageCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+    	
     }
 	
 }

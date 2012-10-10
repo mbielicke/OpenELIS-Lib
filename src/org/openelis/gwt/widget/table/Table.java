@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openelis.gwt.common.LocalizedException;
@@ -37,7 +36,6 @@ import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.resources.OpenELISResources;
-import org.openelis.gwt.resources.TableCSS;
 import org.openelis.gwt.widget.ExceptionHelper;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.Queryable;
@@ -71,7 +69,6 @@ import org.openelis.gwt.widget.table.event.UnselectionEvent;
 import org.openelis.gwt.widget.table.event.UnselectionHandler;
 
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -92,8 +89,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
@@ -251,11 +246,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}
 	}
 	
-	protected TableCSS                      css;
 		
 	public Table(Builder builder) {
-		css = OpenELISResources.INSTANCE.table();
-		css.ensureInjected();
 		
 		rowHeight = builder.rowHeight;
 		visibleRows = builder.visibleRows;

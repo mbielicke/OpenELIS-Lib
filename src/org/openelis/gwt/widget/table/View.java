@@ -120,6 +120,7 @@ public class View extends Composite {
     
     protected TableCSS        css;
 
+    protected View            source = this;
     /**
      * Constructor that takes a reference to the table that will use this view
      * 
@@ -150,6 +151,7 @@ public class View extends Composite {
         outer.add(scrollView);
 
         flexTable = new FlexTable();
+        
 
         /*
          * The FlexTable is placed in a FocusPanel to provide MouseMove events
@@ -212,6 +214,8 @@ public class View extends Composite {
         };
         
         container = new Container();
+        
+        setCSS(css);
     }
 
     /**
@@ -244,111 +248,115 @@ public class View extends Composite {
         	});
         	return;
         }
+        
+        //Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 
-        flexTable.setStyleName(css.Table());
-        flexTable.removeAllRows();
-        for (int c = 0; c < table.getColumnCount(); c++ ) {
-            flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
-            if(table.getColumnAt(c).getStyle() != null)
-            	flexTable.getColumnFormatter().setStyleName(c, table.getColumnAt(c).getStyle());
-        }
-        
-        flexTable.setWidth(table.getTotalColumnWidth() + "px");
+        	//@Override
+        	//public void execute() {
+        		flexTable.removeAllRows();
+        		for (int c = 0; c < table.getColumnCount(); c++ ) {
+        			flexTable.getColumnFormatter().setWidth(c, table.getColumnAt(c).getWidth() + "px");
+        			if(table.getColumnAt(c).getStyle() != null)
+        				flexTable.getColumnFormatter().setStyleName(c, table.getColumnAt(c).getStyle());
+        		}
 
-        // ********** Create and attach Header **************
-        if (table.hasHeader() && header == null) {
-            header = new Header(table);
-            inner.insert(header, 0);
-        } else if ( !table.hasHeader() && header != null) {
-            inner.remove(0);
-            header = null;
-        } else if( table.hasHeader() && header != null)
-        	header.layout();
+        		flexTable.setWidth(table.getTotalColumnWidth() + "px");
 
-        DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
-        
-        /*
-         * This code is executed the first time the Table is attached
-         */
-        if (firstAttach) {
+        		// ********** Create and attach Header **************
+        		if (table.hasHeader() && header == null) {
+        			header = new Header(table);
+        			inner.insert(header, 0);
+        		} else if ( !table.hasHeader() && header != null) {
+        			inner.remove(0);
+        			header = null;
+        		} else if( table.hasHeader() && header != null)
+        			header.layout();
 
-            firstAttach = false;
-           
-            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
-            
-            scrollView.setWidth("100%");
-            
-            flexTable.removeAllRows();
-            for (int i = 0; i < table.getVisibleRows(); i++ )
-                createRow(i);
+        		DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
 
-            rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
-            
-            scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
-                        
-            if(table.viewWidth == -1)
-            	table.viewWidth = scrollView.getOffsetWidth();
-            
-            for (int i = 0; i < table.getVisibleRows(); i++ )
-                flexTable.removeRow(0);
-        }
-        
-        scrollView.setWidth(table.viewWidth+"px");
-        
-        //visibleChanged = true;
-        
-        // **** Vertical ScrollBar **************
-        if (table.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {
-            vertScrollBar = new VerticalScrollbar();
-            vertScrollBar.setFireThreshold(rowHeight);
-            vertScrollBar.addScrollHandler(new ScrollHandler() {
-                public void onScroll(ScrollEvent event) {
-               		//visibleChanged = true;
-               		renderView( -1, -1);
-                }
-            });
-            vertScrollBar.addMouseWheelHandler(this, rowHeight);
-            outer.add(vertScrollBar);
-            
-        } else if (table.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
-            outer.remove(1);
-            vertScrollBar = null;
-        } else if (table.getVerticalScroll() == Scrolling.ALWAYS) 
-        	vertScrollBar.setVisible(true);
-        
-        // *** Horizontal ScrollBar *****************
-        if (table.getHorizontalScroll() == Scrolling.NEVER)
-            DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
-            if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
-            else
-                DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
-        }else if(table.getHorizontalScroll() == Scrolling.ALWAYS)
-        	DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
-        
-        if (table.getFixScrollbar())
-        	scrollView.setHeight((table.getVisibleRows()*rowHeight)+
-        			             (table.hasHeader() ? header.getOffsetHeight() : 0) + 
-        		                 (table.getHorizontalScroll() == Scrolling.ALWAYS ||
-        		                  (table.getHorizontalScroll() == Scrolling.AS_NEEDED && 
-        		                   table.getTotalColumnWidth() > table.getWidthWithoutScrollbar()) ? scrollBarHeight : 0) + "px");	 
-        else
-            scrollView.setHeight("100%");
-        
-        if (vertScrollBar != null) {
-            vertScrollBar.setHeight(table.getVisibleRows()*rowHeight+"px");
-            if (table.hasHeader) {
-                DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
-                                      header.getOffsetHeight() + "px");
-            }
-            DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
-            adjustScrollBarHeight();
-        }
-        
-        renderView( -1, -1);
+        		/*
+        		 * This code is executed the first time the Table is attached
+        		 */
+        		if (firstAttach) {
 
-        adjustScrollBarHeight();
+        			firstAttach = false;
+
+        			DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+
+        			scrollView.setWidth("100%");
+
+        			flexTable.removeAllRows();
+        			for (int i = 0; i < table.getVisibleRows(); i++ )
+        				createRow(i);
+
+        			rowHeight = flexTable.getOffsetHeight() / table.getVisibleRows();
+
+        			scrollBarHeight = scrollView.getOffsetHeight() - ((table.getVisibleRows()*rowHeight) + (table.hasHeader() ? header.getOffsetHeight() :0));
+
+        			if(table.viewWidth == -1)
+        				table.viewWidth = scrollView.getOffsetWidth();
+
+        			for (int i = 0; i < table.getVisibleRows(); i++ )
+        				flexTable.removeRow(0);
+        		}
+
+        		scrollView.setWidth(table.viewWidth+"px");
+
+
+        		// **** Vertical ScrollBar **************
+        		if (table.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {
+        			vertScrollBar = new VerticalScrollbar();
+        			vertScrollBar.setFireThreshold(rowHeight);
+        			vertScrollBar.addScrollHandler(new ScrollHandler() {
+        				public void onScroll(ScrollEvent event) {
+        					renderView( -1, -1);
+        				}
+        			});
+        			vertScrollBar.addMouseWheelHandler(source, rowHeight);
+        			outer.add(vertScrollBar);
+
+        		} else if (table.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
+        			outer.remove(1);
+        			vertScrollBar = null;
+        		} else if (table.getVerticalScroll() == Scrolling.ALWAYS) 
+        			vertScrollBar.setVisible(true);
+
+        		// *** Horizontal ScrollBar *****************
+        		if (table.getHorizontalScroll() == Scrolling.NEVER)
+        			DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        		else if (table.getHorizontalScroll() == Scrolling.AS_NEEDED) {
+        			if (table.getTotalColumnWidth() > table.getWidthWithoutScrollbar())
+        				DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+        			else
+        				DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "hidden");
+        		}else if(table.getHorizontalScroll() == Scrolling.ALWAYS)
+        			DOM.setStyleAttribute(scrollView.getElement(), "overflowX", "scroll");
+
+        		if (table.getFixScrollbar())
+        			scrollView.setHeight((table.getVisibleRows()*rowHeight)+
+        					(table.hasHeader() ? header.getOffsetHeight() : 0) + 
+        					(table.getHorizontalScroll() == Scrolling.ALWAYS ||
+        					(table.getHorizontalScroll() == Scrolling.AS_NEEDED && 
+        					table.getTotalColumnWidth() > table.getWidthWithoutScrollbar()) ? scrollBarHeight : 0) + "px");	 
+        		else
+        			scrollView.setHeight("100%");
+
+        		if (vertScrollBar != null) {
+        			vertScrollBar.setHeight(table.getVisibleRows()*rowHeight+"px");
+        			if (table.hasHeader) {
+        				DOM.setStyleAttribute(vertScrollBar.getElement(), "top",
+        						header.getOffsetHeight() + "px");
+        			}
+        			DOM.setStyleAttribute(vertScrollBar.getElement(), "left", "-2px");
+        			adjustScrollBarHeight();
+        		}
+
+        		renderView( -1, -1);
+
+        		adjustScrollBarHeight();
+
+        	//}
+        //});
 
     }
 
@@ -759,7 +767,7 @@ public class View extends Composite {
     @Override
     protected void onAttach() {
 
-        if ( !isAttached()) {
+        if ( !isOrWasAttached()) {
             attached = true;
             firstAttach = true;
             layout();
@@ -781,6 +789,32 @@ public class View extends Composite {
      */
     protected int getRowHeight() {
         return rowHeight;
+    }
+    
+    public void setCSS(TableCSS css) {
+    	css.ensureInjected();
+    	
+    	for(int i = 0; i < flexTable.getRowCount(); i++) {
+    		if(flexTable.getRowFormatter().getStyleName(i).contains(this.css.Selection())) {
+    			flexTable.getRowFormatter().removeStyleName(i, this.css.Selection());
+    			flexTable.getRowFormatter().addStyleName(i,css.Selection());
+    		}
+    		for(int j = 0; j < flexTable.getCellCount(i); j++) {
+    			if(flexTable.getCellFormatter().getStyleName(i, j).contains(this.css.InputError())) {
+    				flexTable.getCellFormatter().removeStyleName(i, j, this.css.InputError());
+    				flexTable.getCellFormatter().addStyleName(i,j, css.InputError());
+    			}
+    			if(flexTable.getCellFormatter().getStyleName(i, j).contains(this.css.InputWarning())) {
+    				flexTable.getCellFormatter().removeStyleName(i, j, this.css.InputWarning());
+    				flexTable.getCellFormatter().addStyleName(i,j, css.InputWarning());
+    			}
+    		}
+    	}
+    	
+    	this.css = css;
+    	
+    	flexTable.setStyleName(css.Table());
+    	
     }
 
 }

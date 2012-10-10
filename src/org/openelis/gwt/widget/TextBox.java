@@ -75,12 +75,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 	}
 
 	public void init() {
-		css = OpenELISResources.INSTANCE.text();
-		css.ensureInjected();
 		
 		textbox = new TextBase();
-		
-		textbox.setStyleName(css.ScreenTextBox());
 
 		setEnabled(false);
 
@@ -103,6 +99,8 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 		initWidget(textbox);
 		
 		exceptions = new Exceptions();
+		
+		setCSS(OpenELISResources.INSTANCE.text());
 	}
 
 	public String getText() {
@@ -455,6 +453,12 @@ public class TextBox<T> extends Composite implements ScreenWidgetInt,
 	 */
 	public void setFocus(boolean focused) {
 		textbox.setFocus(true);
+	}
+	
+	public void setCSS(TextCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		textbox.setStyleName(css.ScreenTextBox());
 	}
 
 	// ************ Handler Registration methods *********************

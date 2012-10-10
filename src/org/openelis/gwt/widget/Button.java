@@ -120,7 +120,6 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
         });
         
         css = OpenELISResources.INSTANCE.button();
-        css.ensureInjected();
         
     }
     
@@ -303,10 +302,10 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 	}
 	
 	public void setCSS(ButtonCSS css) {
-		if(!isEnabled())
+		if(!isEnabled() && this.css != null)
 			removeStyleName(this.css.Disabled());
 		
-		if(pressed)
+		if(pressed && this.css != null)
 			removeStyleName(this.css.Pressed());
 		
 		this.css = css;

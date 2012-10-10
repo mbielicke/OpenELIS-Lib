@@ -60,7 +60,7 @@ public class PopupMenuPanel extends PopupPanel {
     /**
      * Div used to scroll panel when height exceeds screen height
      */
-    protected AbsolutePanel ap;
+    protected AbsolutePanel ap,divider;
     
     /**
      * Panels used to scroll the menu up or down
@@ -89,9 +89,6 @@ public class PopupMenuPanel extends PopupPanel {
      */
     public PopupMenuPanel() {
         super(true);
-        
-        css = OpenELISResources.INSTANCE.popup();
-        css.ensureInjected();
        
         VerticalPanel outer;
         
@@ -109,8 +106,7 @@ public class PopupMenuPanel extends PopupPanel {
                 upTimer.cancel();
             }
         });
-        up.setStyleName(css.MenuUp());
-        up.addStyleName(css.MenuDisabled());
+
         up.setVisible(false);
         outer.add(up);
         
@@ -133,14 +129,14 @@ public class PopupMenuPanel extends PopupPanel {
                 downTimer.cancel();
             }
         });
-        down.setStyleName(css.MenuDown());
+
         down.setVisible(false);
         outer.add(down);
         
         AbsolutePanel ap1 = new AbsolutePanel();
-        AbsolutePanel divider = new AbsolutePanel();
+        divider = new AbsolutePanel();
         DOM.setStyleAttribute(divider.getElement(), "position", "absolute");
-        divider.setStyleName(css.divider());
+        
         ap1.add(outer);
         ap1.add(divider);
         setWidget(ap1);
@@ -178,6 +174,8 @@ public class PopupMenuPanel extends PopupPanel {
                     openChildMenu.hide();
             }
         });
+        
+        setCSS(OpenELISResources.INSTANCE.popup());
         
     }
     
@@ -288,6 +286,16 @@ public class PopupMenuPanel extends PopupPanel {
                 down.removeStyleName(css.MenuDisabled());
             }
         }
+    }
+    
+    public void setCSS(PopupCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+        up.setStyleName(css.MenuUp());
+        up.addStyleName(css.MenuDisabled());
+        down.setStyleName(css.MenuDown());
+        divider.setStyleName(css.divider());
+    	
     }
     
 }

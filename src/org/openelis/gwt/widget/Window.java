@@ -95,12 +95,10 @@ public class Window extends FocusPanel implements WindowInt {
            
     protected WindowNoImageCSS                      css;
     
-    protected Window                             source = this;
+    protected Window                                source = this;
     
     
     public Window() {
-    	css = OpenELISResources.INSTANCE.windowNoImage();
-    	css.ensureInjected();
         
     	/* Create container for Window elements */
     	outer =  new VerticalPanel() {
@@ -235,7 +233,7 @@ public class Window extends FocusPanel implements WindowInt {
         });
         
         /* Apply style to the window elements */
-        setCSS(css);
+        setCSS(OpenELISResources.INSTANCE.windowNoImage());
     }
 
     /**

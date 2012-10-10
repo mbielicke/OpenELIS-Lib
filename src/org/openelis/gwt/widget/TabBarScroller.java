@@ -31,14 +31,11 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 	
 	protected TabBarScrollerCSS css;
 
-	public TabBarScroller(TabBar bar) {
-		css = OpenELISResources.INSTANCE.tabBarScroller();
-		css.ensureInjected();
-		
+	public TabBarScroller(TabBar bar) {		
 		this.bar = bar;
 		hp = new Grid(1,3);
-		leftArrow = new IconContainer(css.MoveLeft());
-		rightArrow = new IconContainer(css.MoveRight());
+		leftArrow = new IconContainer();
+		rightArrow = new IconContainer();
 		leftArrow.addClickHandler(this);
 		rightArrow.addClickHandler(this); 
 		leftArrow.addMouseDownHandler(this);
@@ -63,6 +60,7 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 					checkScroll();
 			}
 		});
+		setCSS(OpenELISResources.INSTANCE.tabBarScroller());
 	}
 
 	public void onClick(ClickEvent event) {
@@ -152,19 +150,27 @@ public class TabBarScroller extends Composite implements ClickHandler, MouseDown
 		ap.setWidth(width+"px");
 	}
 	
-	  public void scrollToSelected() {
-		  Widget wid = (Widget)bar.getTab(bar.getSelectedTab());
-		  int left = wid.getAbsoluteLeft();
-		  int width = wid.getOffsetWidth();
-		  int barLeft = ap.getAbsoluteLeft();
-		  int barWidth = ap.getOffsetWidth();
-		  if(left+width > barLeft+barWidth) {
-			  ap.setWidgetPosition(bar,ap.getWidgetLeft(bar)-((left+width)-(barLeft+barWidth)) , 0);
-		  }else if(left < barLeft){
-			  ap.setWidgetPosition(bar,ap.getWidgetLeft(bar)+(barLeft-left) , 0);
-		  }
-		  checkScroll();
-	  }
+	public void scrollToSelected() {
+		Widget wid = (Widget)bar.getTab(bar.getSelectedTab());
+		int left = wid.getAbsoluteLeft();
+		int width = wid.getOffsetWidth();
+		int barLeft = ap.getAbsoluteLeft();
+		int barWidth = ap.getOffsetWidth();
+		if(left+width > barLeft+barWidth) {
+			ap.setWidgetPosition(bar,ap.getWidgetLeft(bar)-((left+width)-(barLeft+barWidth)) , 0);
+		}else if(left < barLeft){
+			ap.setWidgetPosition(bar,ap.getWidgetLeft(bar)+(barLeft-left) , 0);
+		}
+		checkScroll();
+	}
+	
+	public void setCSS(TabBarScrollerCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		leftArrow.setStyleName(css.MoveLeft());
+		rightArrow.setStyleName(css.MoveRight());
+	}
+	  
 	  
 	  
 }

@@ -13,7 +13,6 @@ public interface MenuCSS extends GeneralCSS {
 	String topMenuItemDesc();
 	String Ascending();
 	String Descending();
-	String Hover();
 	String locked();
 	String MenuArrow();
 	String disabled();

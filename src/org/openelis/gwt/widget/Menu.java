@@ -82,20 +82,6 @@ public class Menu extends Composite {
         panel = new PopupMenuPanel();
         panel.addStyleName(css.MenuPanel());
 		panel.setVisible(false);
-		
-        addHandler(new MouseOverHandler() {
-            public void onMouseOver(MouseOverEvent event) {
-                addStyleName(css.Hover());
-            }
-        }, MouseOverEvent.getType());
-
-        addHandler(new MouseOutHandler() {
-            public void onMouseOut(MouseOutEvent event) {
-            	if(!panel.isShowing())
-            		removeStyleName(css.Hover());
-            }
-        }, MouseOutEvent.getType());
-        
     }
 
     /**
@@ -157,14 +143,7 @@ public class Menu extends Composite {
 
         initWidget(grid);
         
-        setEnabled(true);
-        
-        panel.addCloseHandler(new CloseHandler<PopupPanel>() {
-			public void onClose(CloseEvent<PopupPanel> event) {
-				removeStyleName(css.Hover());
-			}
-		});
-		
+        setEnabled(true);		
     }
 
     /**

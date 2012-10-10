@@ -29,9 +29,6 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel  {
 	public TabPanel(ViewPanel viewPanel) {
 		super();
 		
-		css = OpenELISResources.INSTANCE.tabpanel();
-		css.ensureInjected();
-		
 		VerticalPanel panel = ((VerticalPanel)getWidget());
 		bar = (TabBar)panel.getWidget(0);
 		Widget deck = panel.getWidget(1);
@@ -51,6 +48,8 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel  {
 				}
 			}
 		});
+		
+		setCSS(OpenELISResources.INSTANCE.tabpanel());
 	}
 
 	public void add(Widget wid, String text, String tab) {
@@ -129,6 +128,13 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel  {
 	
 	public void remvoeTabHasData(int index) {
 		tabWidgets.get(index).getWidget(0,1).removeStyleName(css.TabData());
+	}
+	
+	public void setCSS(TabPanelCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		setStyleName(css.ScreenTab());
+		
 	}
 
 }

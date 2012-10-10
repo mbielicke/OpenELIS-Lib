@@ -32,16 +32,11 @@ import org.openelis.gwt.resources.OpenELISResources;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 
@@ -58,7 +53,11 @@ public class MenuItem extends Composite {
 
 	protected boolean autoClose, enabled;
 	
-	protected MenuCSS css;
+	protected MenuCSS css = OpenELISResources.INSTANCE.menuCss();
+	
+	protected int eventsToSink;
+	
+	protected Grid grid;
     
     /**
      * Constructor that will create a MenuItem that will autoClose by default.
@@ -81,19 +80,15 @@ public class MenuItem extends Composite {
     	this.icon = icon;
     	this.display = display;
     	this.description = description;
-    	
-    	css = OpenELISResources.INSTANCE.menuCss();
-    	css.ensureInjected();
-    	
-        Grid grid = new Grid(2,2);
-        grid.setStyleName(css.TopMenuRowContainer());
+    	    	
+        grid = new Grid(2,2);
+
         grid.setCellPadding(0);
         grid.setCellSpacing(0);
         
-        grid.getCellFormatter().setStylePrimaryName(0,0,css.topMenuIcon());
-        grid.getCellFormatter().setStylePrimaryName(1,0,css.topMenuIcon());
+
         grid.setText(0, 0, "");
-        grid.getCellFormatter().setStylePrimaryName(0,1,css.topMenuItemMiddle());
+
         
         if(!"".equals(icon))
             grid.getCellFormatter().addStyleName(0, 0, icon);
@@ -101,42 +96,20 @@ public class MenuItem extends Composite {
         	grid.getCellFormatter().setVisible(0, 0, false);
         
         grid.setText(0,1,display);
-        grid.getCellFormatter().addStyleName(0,1,css.topMenuItemTitle());
-        grid.getCellFormatter().addStyleName(0,1,css.locked());
+
         
         if("".equals(description))
             grid.removeRow(1);
-        else{
+        else
             grid.setText(1,1,description);
-            grid.getCellFormatter().setStylePrimaryName(1,1,css.topMenuItemMiddle());
-            grid.getCellFormatter().addStyleName(1,1,css.topMenuItemDesc());
-        }
-       
 
         initWidget(grid);
-        
-        
-        addHandler(new MouseOverHandler() {
-            public void onMouseOver(MouseOverEvent event) {
-                addStyleName(css.Hover());
-            }
-        },MouseOverEvent.getType());
-        
-        addHandler(new MouseOutHandler() {
-            public void onMouseOut(MouseOutEvent event) {
-                removeStyleName(css.Hover());
-            }
-        },MouseOutEvent.getType());
-        
-        addHandler(new MouseDownHandler() {
-        	public void onMouseDown(MouseDownEvent event) {
-        		removeStyleName(css.Hover());
-        	}
-        },MouseDownEvent.getType());
-                
+                        
         this.autoClose = autoClose;   
         
         setEnabled(true);
+        
+        setCSS(OpenELISResources.INSTANCE.menuCss());
     }
     
     /**
@@ -146,10 +119,10 @@ public class MenuItem extends Composite {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if(!enabled) {
-            unsinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+            unsinkEvents(Event.ONCLICK);
             addStyleName(css.disabled());
         }else{
-            sinkEvents(Event.ONCLICK | Event.ONMOUSEOUT | Event.ONMOUSEOVER);
+            sinkEvents(Event.ONCLICK);
             removeStyleName(css.disabled());
         }
     }
@@ -176,7 +149,6 @@ public class MenuItem extends Composite {
     }
     
     public void execute() {
-    	removeStyleName(css.Hover());
 		for(Command comm : commands) 
 			comm.execute();
     }
@@ -214,13 +186,52 @@ public class MenuItem extends Composite {
         return addHandler(handler,MouseOverEvent.getType());
     }
     
-    /**
-     * We override onAttach to call setEnabled() because of a bug in GWT that will not correctly
-     * sink or unsink the events until the widget is attached to the DOM.
-     */
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        setEnabled(enabled);
+    public void setCSS(MenuCSS css) {
+    	css.ensureInjected();
+    	
+    	if(!isEnabled()) {
+    		removeStyleName(this.css.disabled());
+    		addStyleName(css.disabled());
+    	}
+    	
+    	this.css = css;
+    	
+        grid.setStyleName(css.TopMenuRowContainer());
+        grid.getCellFormatter().setStylePrimaryName(0,0,css.topMenuIcon());
+        grid.getCellFormatter().setStylePrimaryName(0,1,css.topMenuItemMiddle());
+        grid.getCellFormatter().addStyleName(0,1,css.topMenuItemTitle());
+        grid.getCellFormatter().addStyleName(0,1,css.locked());
+        
+        if(grid.getRowCount() > 1) {
+        	grid.getCellFormatter().setStylePrimaryName(1,0,css.topMenuIcon());
+            grid.getCellFormatter().setStylePrimaryName(1,1,css.topMenuItemMiddle());
+            grid.getCellFormatter().addStyleName(1,1,css.topMenuItemDesc());
+        }
+    	
     }
+	/**
+	 * These methods were added to ensure the button will be correctly enabled or disabled 
+	 * when it is first drawn.
+	 */
+	@Override
+	public void sinkEvents(int eventBitsToAdd) {
+		if(isOrWasAttached())
+			super.sinkEvents(eventBitsToAdd);
+		else
+			eventsToSink |= eventBitsToAdd;
+	}
+    
+	@Override
+	public void unsinkEvents(int eventBitsToRemove) {
+		if(isOrWasAttached())
+			super.unsinkEvents(eventBitsToRemove);
+		else
+			eventsToSink &= ~eventBitsToRemove;
+	}
+    
+	@Override
+	protected void onAttach() {
+		super.onAttach();
+		super.sinkEvents(eventsToSink);
+	}
 }

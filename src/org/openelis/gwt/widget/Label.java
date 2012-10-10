@@ -3,6 +3,8 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 
 import org.openelis.gwt.common.LocalizedException;
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.TextCSS;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -27,6 +29,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
      * value and helper fields
      */
     protected T               value;
+    
     @SuppressWarnings("unchecked")
 	protected WidgetHelper<T> helper = (WidgetHelper<T>)new StringHelper();
 
@@ -34,12 +37,15 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
      * Exceptions list
      */
     protected ArrayList<LocalizedException> endUserExceptions, validateExceptions;
+    
+    protected TextCSS css;
 
     /**
      * Default no-arg constructor
      */
     public Label() {
         super();
+        setCSS(OpenELISResources.INSTANCE.text());
     }
 
     /**
@@ -50,6 +56,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
     public Label(T value) {
         super();
         setValue(value);
+        setCSS(OpenELISResources.INSTANCE.text());
     }
 
     // *********** Implementaton of HasValue<T> ************
@@ -164,17 +171,34 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
      */
     public void addExceptionStyle() {
     	if(ExceptionHelper.isWarning(this))
-    		addStyleName("InputError");
+    		addStyleName(css.InputError());
     	else
-    		addStyleName("InputWarning");
+    		addStyleName(css.InputWarning());
     }
 
     /**
      * will remove the style from the widget
      */
     public void removeExceptionStyle() {
-        removeStyleName("InputError");
-        removeStyleName("InputWarning");
+        removeStyleName(css.InputError());
+        removeStyleName(css.InputWarning());
+    }
+    
+    public void setCSS(TextCSS css) {
+    	css.ensureInjected();
+    	
+    	if(getStyleName().contains(css.InputError())) {
+    		removeStyleName(this.css.InputError());
+    		addStyleName(css.InputError());
+    	}
+    	if(getStyleName().contains(css.InputWarning())) {
+    		removeStyleName(this.css.InputWarning());
+    		addStyleName(css.InputWarning());
+    	}
+    	
+    	this.css = css;
+    	
+    	setStylePrimaryName(css.ScreenLabel());	
     }
 
 }

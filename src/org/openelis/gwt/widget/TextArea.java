@@ -76,8 +76,6 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
     }
     
     public void init() {
-    	css = OpenELISResources.INSTANCE.text();
-    	css.ensureInjected();
     	
         textarea = new com.google.gwt.user.client.ui.TextArea();
         	
@@ -102,7 +100,7 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
        
         initWidget(textarea);
         
-        textarea.setStyleName(css.ScreenTextArea());
+        setCSS(OpenELISResources.INSTANCE.text());
         
         exceptions = new Exceptions();
     }
@@ -409,5 +407,11 @@ public class TextArea  extends Composite implements ScreenWidgetInt,
      */
     public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
         return addDomHandler(handler, MouseOutEvent.getType());
+    }
+    
+    public void setCSS(TextCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+        textarea.setStyleName(css.ScreenTextArea());
     }
 }

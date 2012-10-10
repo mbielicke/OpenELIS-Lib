@@ -104,7 +104,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     /**
      * Used for AutoComplete display
      */
-	protected AbsolutePanel                         outer;
+	protected AbsolutePanel                         outer,image;
     protected Grid                                  display;
     protected Button                                button;
     protected Table                                 table;
@@ -135,7 +135,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     
     protected LibraryConstants                      consts    = GWT.create(LibraryConstants.class);
     
-    protected AutoCompleteCSS                       css       = OpenELISResources.INSTANCE.autocomplete();
+    protected AutoCompleteCSS                       css;
 
     /**
      * Default no-arg constructor
@@ -152,7 +152,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * Sets the display of the widget and handlers for click and key handling
      */
     public void init() {
-    	css.ensureInjected();
         /*
          * Final instance of the private class KeyboardHandler
          */
@@ -171,8 +170,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          * passed style.
          */
         button = new Button();
-        AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName(css.AutoDropdownButton());
+        image = new AbsolutePanel();
         button.setWidget(image);
 
         display.setWidget(0,0,textbox);
@@ -186,10 +184,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         outer = new AbsolutePanel();
         outer.add(display);
         initWidget(outer);
-
-        display.setStyleName(css.SelectBox());
-        textbox.setStyleName(css.AutoBox());
-
 
         /*
          * Set the focus style when the Focus event is fired Externally
@@ -313,6 +307,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         };
         
         exceptions = new Exceptions();
+        
+        setCSS(OpenELISResources.INSTANCE.autocomplete());
     }
 
     /**
@@ -997,6 +993,15 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         public String getDisplay(Row row) {
             return row.getCells().get(0).toString();
         }
+    }
+    
+    public void setCSS(AutoCompleteCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+    	
+        image.setStyleName(css.AutoDropdownButton());
+        display.setStyleName(css.SelectBox());
+        textbox.setStyleName(css.AutoBox());
     }
 
 }

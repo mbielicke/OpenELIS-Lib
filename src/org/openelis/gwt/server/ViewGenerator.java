@@ -442,7 +442,6 @@ public class ViewGenerator extends Generator {
     			align = getAttribute(node,"align");
     			
     			sw.println("AbsolutePanel wid"+id+" = new AbsolutePanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
     	        
     	        if(overflow != null)
     	            sw.println("DOM.setStyleAttribute(wid"+id+".getElement(),"+overflow+");");
@@ -580,7 +579,6 @@ public class ViewGenerator extends Generator {
     			
     			toggle = getAttribute(node,"toggle","false");
     			action = getAttribute(node,"action");
-    			//wrap = getAttribute(node,"wrap","true");
     			enabled = getAttribute(node,"enabled");
     			icon = getAttribute(node,"icon","");
     			text = getAttribute(node,"text","");
@@ -807,8 +805,6 @@ public class ViewGenerator extends Generator {
     			Node deck,widget;
     			
     			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
-
     
     	        decks = ((Element)node).getElementsByTagName("deck");
     	        for (int k = 0; k < decks.getLength(); k++) {
@@ -842,7 +838,6 @@ public class ViewGenerator extends Generator {
     			Node widget;
     			
     			sw.println("DecoratorPanel wid"+id+" = new DecoratorPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ConfirmWindow\");");
 
     	        widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
@@ -887,7 +882,6 @@ public class ViewGenerator extends Generator {
     			spacing = getAttribute(node,"spacing");
     			
     			sw.println("DockPanel wid"+id+" = new DockPanel();");
-    	        sw.println("wid"+id+".addStyleName(\"ScreenDock\");");
     	        
     	        if (spacing != null)
     	            sw.println("wid"+id+".setSpacing("+spacing+");");
@@ -1105,7 +1099,6 @@ public class ViewGenerator extends Generator {
             	Node widget;
             	
                 sw.println("FocusPanel wid"+id+" = new FocusPanel();");
-                sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
                 
                 widgets = node.getChildNodes();
                 for (int k = 0; k < widgets.getLength(); k++) {
@@ -1245,7 +1238,6 @@ public class ViewGenerator extends Generator {
 						sw.println("wid"+id+".setCellVerticalAlignment(wid"+child+", HasAlignment.ALIGN_"+valign.toUpperCase()+");");
     				}
     			}
-    			//sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
     			setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
@@ -1263,7 +1255,7 @@ public class ViewGenerator extends Generator {
     			splitPos = getAttribute(node,"splitpos");
     			
     			sw.println("HorizontalSplitPanel wid"+id+" = new HorizontalSplitPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
+
     	        sections = ((Element)node).getElementsByTagName("section");
     	        for (int k = 0; k < sections.getLength(); k++) {
     	        	section = sections.item(k);
@@ -1299,7 +1291,7 @@ public class ViewGenerator extends Generator {
     			sw.println("HTML wid"+id+" = new HTML();");
     	        if(node.getFirstChild() != null)
     	            sw.println("wid"+id+".setHTML(\""+node.getFirstChild().getNodeValue()+"\");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenHTML\");");
+
     	        setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
@@ -1388,7 +1380,6 @@ public class ViewGenerator extends Generator {
     	        
    	            sw.println("wid"+id+".setWordWrap("+wordwrap+");");
 
-    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
     	        setDefaults(node, "wid"+id);
     		}
     		public void addImport() {
@@ -1617,7 +1608,6 @@ public class ViewGenerator extends Generator {
     	factoryMap.put("notes", new Factory() {
     		public void getNewInstance(Node node, int id) {
     			sw.println("NotesPanel wid"+id+" = new NotesPanel();");
-    			sw.println("wid"+id+".setStyleName(\"ScreenTable\");");
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport(){
@@ -1789,7 +1779,6 @@ public class ViewGenerator extends Generator {
     	        sw.println("wid"+id+".init("+tools+");");
     	        sw.println("wid"+id+".area.setSize(\""+width+"\",\""+height+"\");");
     	        
-    	        sw.println("wid"+id+".area.setStyleName(\"ScreenTextArea\");");
     	        setDefaults(node, "wid"+id);
     	        if(enabled != null){
     	        	sw.println("wid"+id+".setEnabled("+enabled+");");
@@ -1809,7 +1798,6 @@ public class ViewGenerator extends Generator {
     			Node widget;
     			
     			sw.println("ScrollPanel wid"+id+" = new ScrollPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenAbsolute\");");
 
     	        widgets = node.getChildNodes();
     	        for (int k = 0; k < widgets.getLength(); k++) {
@@ -1879,39 +1867,6 @@ public class ViewGenerator extends Generator {
     		@Override
     		public void addImport() {
     			composer.addImport("com.google.gwt.user.client.ui.SplitLayoutPanel");
-    		}
-    	});
-    	
-    	factoryMap.put("StackPanel", new Factory(){
-    		public void getNewInstance(Node node, int id) {
-    			String text;
-    			Node stack,widget;
-    			NodeList stacks,widgets;
-    			
-    			sw.println("StackPanel wid"+id+" = new StackPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenStack\");");
-    	        stacks = ((Element)node).getElementsByTagName("stack");
-    	        for (int k = 0; k < stacks.getLength(); k++) {
-    	        	stack = stacks.item(k);
-    	            widgets = stack.getChildNodes();
-    	            for (int l = 0; l < widgets.getLength(); l++) {
-    	            	widget = widgets.item(l);
-    	                if (widget.getNodeType() == Node.ELEMENT_NODE) {
-    	                	int child = ++count;
-    	                	if(!loadWidget(widget,child)){
-    	                		count--;
-    	    	            	continue;
-    	    	            }
-    	                	text = getAttribute(stack,"text","");
-    	                    sw.println("wid"+id+".add(wid"+child+", \""+text+"\");");
-    	                }
-    	            }
-    	        }
-    	        sw.println("wid"+id+".showStack(0);");
-    	        setDefaults(node, "wid"+id);
-    		}
-    		public void addImport(){
-    			composer.addImport("org.openelis.gwt.widget.StackPanel");
     		}
     	});
     	
@@ -2113,7 +2068,7 @@ public class ViewGenerator extends Generator {
     			height = getAttribute(node,"height");
     			
     			sw.println("TabPanel wid"+id+" = new TabPanel(this);");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+
     	        if(width != null)
     	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
     	        if(height != null)
@@ -2171,7 +2126,7 @@ public class ViewGenerator extends Generator {
     			height = getAttribute(node,"height");
     			
     			sw.println("TabLayout wid"+id+" = new TabLayout(20);");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
+
     	        if(width != null)
     	        	sw.println("wid"+id+".setWidth(\""+width+"\");");
     	        if(height != null)
@@ -2345,7 +2300,6 @@ public class ViewGenerator extends Generator {
     			sw.println("Label wid"+id+" = new Label();");
   	            sw.println("wid"+id+".setWordWrap("+wordwrap+");");
   	            sw.println("wid"+id+".setText(\""+text+"\");");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenLabel\");");
 
     	        setDefaults(node, "wid"+id);
     		}
@@ -2709,7 +2663,7 @@ public class ViewGenerator extends Generator {
    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+width+"\");");
     	            }
     	        }
-    	        //sw.println("wid"+id+".setStyleName(\"ScreenPanel\");");
+
     	        setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
@@ -2725,7 +2679,7 @@ public class ViewGenerator extends Generator {
     			Node section, widget;
     			
     			sw.println("VerticalSplitPanel wid"+id+" = new VerticalSplitPanel();");
-    	        sw.println("wid"+id+".setStyleName(\"ScreenSplit\");");
+
     	        sections = ((Element)node).getElementsByTagName("section");
     	        for (int k = 0; k < sections.getLength(); k++) {
     	        	section = sections.item(k);

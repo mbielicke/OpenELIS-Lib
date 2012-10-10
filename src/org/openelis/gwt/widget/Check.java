@@ -15,7 +15,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
 
-public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boolean> {
+public class Check extends FocusPanel implements HasValueChangeHandlers<Boolean> {
 	
     /*
      * Enum to define checkbox modes.  This can be removed if it is decided that
@@ -40,10 +40,12 @@ public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boole
     
     protected Boolean                       value;
     
+    protected int                           eventsToSink;
+    
     /**
      * Default no-arg constructor
      */
-    public Checkbox() {
+    public Check() {
         init();
     }
 
@@ -52,7 +54,7 @@ public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boole
      * 
      * @param mode
      */
-    public Checkbox(Mode mode) {
+    public Check(Mode mode) {
         init();
         setMode(mode);
     }
@@ -61,9 +63,6 @@ public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boole
      * This method will set the Checkbox display and set Event handlers
      */
     public void init() {
-    	css = OpenELISResources.INSTANCE.checkbox();
-    	css.ensureInjected();
-
         /**
          * If clicked call changeValue to rotate the state of the checkbox based
          * on its mode.
@@ -84,6 +83,8 @@ public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boole
                     changeValue();
             }
         }, KeyDownEvent.getType());
+        
+        setCSS(OpenELISResources.INSTANCE.checkbox());
         
     }
 
@@ -188,7 +189,38 @@ public class Checkbox extends FocusPanel implements HasValueChangeHandlers<Boole
 	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Boolean> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
+	
+	public void setCSS(CheckboxCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		setStyle();
+	}
 
+	/**
+	 * These methods were added to ensure the button will be correctly enabled or disabled 
+	 * when it is first drawn.
+	 */
+	@Override
+	public void sinkEvents(int eventBitsToAdd) {
+		if(isOrWasAttached())
+			super.sinkEvents(eventBitsToAdd);
+		else
+			eventsToSink |= eventBitsToAdd;
+	}
+    
+	@Override
+	public void unsinkEvents(int eventBitsToRemove) {
+		if(isOrWasAttached())
+			super.unsinkEvents(eventBitsToRemove);
+		else
+			eventsToSink &= ~eventBitsToRemove;
+	}
+    
+	@Override
+	protected void onAttach() {
+		super.onAttach();
+		super.sinkEvents(eventsToSink);
+	}
 
 
 }

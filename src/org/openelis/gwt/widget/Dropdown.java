@@ -105,7 +105,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 
 	protected FocusPanel            				focus;
-	protected AbsolutePanel                         outer;
+	protected AbsolutePanel                         outer,image;
 	protected Grid 					                display,multiHeader;
 	protected VerticalPanel         				vp;
 	protected Button  					            button,checkAll,uncheckAll,close;
@@ -143,7 +143,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	protected WidgetHelper<T>                       helper;
 	
 	
-	protected DropdownCSS                           css = OpenELISResources.INSTANCE.dropdown();
+	protected DropdownCSS                           css;
 
 	/**
 	 * Default no-arg constructor
@@ -157,7 +157,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 *   for user interaction.
 	 */
 	public void init() {
-		css.ensureInjected();
 		/*
 		 * Final instance used in Anonymous handlers.
 		 */
@@ -187,8 +186,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		button = new Button();
 		
 		/* Image must be in a div instead of adding the style to cell itself to display correctly */
-		AbsolutePanel image = new AbsolutePanel();
-		image.setStyleName(css.SelectButton());
+		image = new AbsolutePanel();
+		
 		button.setWidget(image);
 
 		display.setWidget(0,1,button);
@@ -204,7 +203,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		outer.add(focus);
 		initWidget(outer);
 
-		display.setStyleName(css.SelectBox());
+		
 
 		/*
 		 * Set the focus style when the Focus event is fired Externally
@@ -277,6 +276,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		addHandler(keyHandler, KeyPressEvent.getType());
 
 		exceptions = new Exceptions();
+		
+		setCSS(OpenELISResources.INSTANCE.dropdown());
 	}
 
 
@@ -1259,6 +1260,13 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 			return row != null && row.getCells().get(index) != null ? row.getCells().get(index).toString() : "";
 		}
-	}    
+	}   
+	
+	public void setCSS(DropdownCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		image.setStyleName(css.SelectButton());
+		display.setStyleName(css.SelectBox());
+	}
 
 }

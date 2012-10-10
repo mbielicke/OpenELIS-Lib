@@ -31,7 +31,6 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.resources.CheckboxCSS;
 import org.openelis.gwt.resources.OpenELISResources;
-import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.Check;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -50,12 +49,12 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class CheckBoxCell implements CellEditor, CellRenderer {
+public class CheckCell implements CellEditor, CellRenderer {
 
     /**
      * Widget used to edit the cell
      */
-    private CheckBox  editor;
+    private Check     editor;
     private boolean   query;
     private ColumnInt column;
     
@@ -66,7 +65,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
      * 
      * @param editor
      */
-    public CheckBoxCell(CheckBox editor) {
+    public CheckCell(Check editor) {
         this.editor = editor;
         
         css = OpenELISResources.INSTANCE.checkbox();
@@ -81,17 +80,12 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     }
     
     public Object finishEditing() {
-        if(query){
-            return editor.getQuery();
-        }
-        return editor.getValue();
+
+        return editor.isUnknown() ? null : new Boolean(editor.isChecked());
     }
 
     public ArrayList<LocalizedException> validate(Object value) {
-        if (query){
-            return editor.getValidateExceptions();
-        }        
-        return editor.getValidateExceptions();
+        return null;
     }
     
     /**
@@ -100,11 +94,17 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     @SuppressWarnings("rawtypes")
 	public void startEditing(Object value, Container container, GwtEvent event) {
         query = false;
-        editor.setQueryMode(false);
-        editor.setValue((String)value);
+        
+        if(value == null)
+        	editor.uncheck();
+        else if(((Boolean)value) == true)
+        	editor.check();
+        else
+        	editor.uncheck();
+
         if(event instanceof ClickEvent)
         	ClickEvent.fireNativeEvent(((ClickEvent) event).getNativeEvent(), editor);
-            //editor.changeValue();
+
         container.setEditor(editor);
         DOM.setStyleAttribute(container.getElement(), "align", "center");  
     }
@@ -112,8 +112,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     @SuppressWarnings("rawtypes")
 	public void startEditingQuery(QueryData qd, Container container, GwtEvent event) {        
         query = true;
-        editor.setQueryMode(true);
-        editor.setQuery(qd);
+
         if(event instanceof ClickEvent)
         	ClickEvent.fireNativeEvent(((ClickEvent) event).getNativeEvent(), editor);
             //editor.changeValue();
@@ -127,12 +126,11 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     public void render(HTMLTable table, int row, int col, Object value) {
         
         query = false;
-        editor.setQueryMode(false);
         
         if(editor.getMode() == Check.Mode.TWO_STATE && value == null)
         	value = "N";
         
-        render((String)value,table,row,col);
+        render((Boolean)value,table,row,col);
     }
     
     public String display(Object value) {
@@ -144,17 +142,7 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
      * text
      */
     public void renderQuery(HTMLTable table, int row, int col, QueryData qd) {
-        String value;
-        
-        query = true;
-        editor.setQueryMode(true);
-        
-        if(qd == null)
-        	value = null;
-        else 
-        	value = qd.getQuery();
-        
-        render(value,table,row,col);
+     
     }
 
     public boolean ignoreKey(int keyCode) {
@@ -175,13 +163,13 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
 		this.column = col;
 	}
 	
-	private void render(String value, HTMLTable table, int row, int col) {
+	private void render(Boolean value, HTMLTable table, int row, int col) {
 		String style;
 		AbsolutePanel div;
 		
         if(value == null)
         	style = css.Unknown();
-        else if("Y".equals(value))
+        else if(value == true)
         	style = css.Checked();
         else
         	style = css.Unchecked();

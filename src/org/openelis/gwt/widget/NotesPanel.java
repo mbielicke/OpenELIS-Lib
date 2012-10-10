@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class NotesPanel extends Composite {
 
@@ -80,6 +81,16 @@ public class NotesPanel extends Composite {
     
     private String encode(String text) {
         return text.replaceAll("<", "&lt;");
+    }
+    
+    public void setCSS(NoteCSS css) {
+    	css.ensureInjected();
+    	for(Widget note : notes) {
+    		note.setStyleName(css.noteTableRow());
+    		for(int i = 0; i < ((VerticalPanel)note).getWidgetCount(); i++) {
+    			
+    		}
+    	}
     }
 
 }

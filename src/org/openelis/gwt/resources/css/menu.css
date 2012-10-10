@@ -71,7 +71,7 @@
 	cell-spacing: 0px;
 }
 
-.topMenuBarItem.Hover {
+.topMenuBarItem:hover {
 	color: black;
 	cursor: pointer;
 	padding: 3px;
@@ -131,7 +131,7 @@
 	height: 16;
 }
 
-.TopMenuRowContainer.Hover {
+.TopMenuRowContainer:hover {
 	cursor: pointer;
 	padding: 0;
 	border: 1px solid #aaccf6;
@@ -140,19 +140,19 @@
 }
 
 @if user.agent gecko1_8 {
-	.TopMenuRowContainer.Hover {
+	.TopMenuRowContainer:hover {
 		background-image: -moz-linear-gradient(top, #ebf3fd, #d9e8fb);
 	}
 }
 
 @elif user.agent ie6 ie8 ie9 {
-	.TopMenuRowContainer.Hover {
+	.TopMenuRowContainer:hover {
 		background-image: -ms-linear-gradient(top, #ebf3fd, #d9e8fb);
 	}
 }
 
 @elif user.agent safari {
-	.TopMenuRowContainer.Hover {
+	.TopMenuRowContainer:hover {
 		background-image: -webkit-linear-gradient(top, #ebf3fd, #d9e8fb);
 	}
 }

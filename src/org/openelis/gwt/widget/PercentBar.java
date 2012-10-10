@@ -1,5 +1,8 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.gwt.resources.OpenELISResources;
+import org.openelis.gwt.resources.PercentCSS;
+
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -26,6 +29,7 @@ public class PercentBar extends Composite {
 	 */
 	private ColorRange[] colors;
 	
+	protected PercentCSS css;
 	/**
 	 * No-Arg constructor
 	 */
@@ -40,7 +44,7 @@ public class PercentBar extends Composite {
 		grid.getCellFormatter().setWidth(0,0, "100%");
 		bar.setHeight("12px");
 		DOM.setStyleAttribute(bar.getElement(), "border", "1px solid black");
-		setStyleName("PercentBar");
+		setCSS(OpenELISResources.INSTANCE.percent());
 	}
 	
 	/**
@@ -80,7 +84,6 @@ public class PercentBar extends Composite {
 			color = colors[colors.length-1];
 		DOM.setStyleAttribute(panel.getElement(), "background", color.getColor());
 		grid.setText(0, 1, NumberFormat.getFormat("###0.0").format(percent)+"%");
-		grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel TableWidget");
 		grid.getCellFormatter().setHorizontalAlignment(0, 1, HasAlignment.ALIGN_RIGHT);
 		
 	}
@@ -99,6 +102,13 @@ public class PercentBar extends Composite {
 	 */
 	public ColorRange[] getColors() {
 		return colors;
+	}
+	
+	public void setCSS(PercentCSS css) {
+		css.ensureInjected();
+		this.css = css;
+		setStyleName(css.PercentBar());
+		grid.getCellFormatter().setStyleName(0, 1, "ScreenLabel TableWidget");
 	}
 		
 

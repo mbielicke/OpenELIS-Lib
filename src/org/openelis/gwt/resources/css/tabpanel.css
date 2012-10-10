@@ -1,3 +1,5 @@
+@external .gwt-TabBar,.gwt-TabBarFirst,.gwt-TabPanelBottom,.gwt-TabBarItem,.gwt-TabBarItem-selected,.gwt-TabBarText,.gwt-TabBarRest,.gwt-TabCloseButton;
+
 @sprite .TabError {
 	gwt-image:'exclamation';
 	width:16px;
@@ -8,4 +10,95 @@
 	gwt-image:'data';
 	width:16px;
 	height:16px;
+}
+
+.gwt-TabPanelBottom{
+    background:#fbfbfb;
+    border:1px solid #8db2e3;
+}
+
+.TabPanelBottom{
+    background:#fbfbfb;
+    border:1px solid #8db2e3;
+}
+
+.ScreenTab{
+    margin:4px;
+}
+
+.gwt-TabBar {
+    height:19px;
+}
+
+.None .gwt-TabBarFirst {
+	background:white;
+}
+
+.gwt-TabBar .gwt-TabBarItem {
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+    padding:0 8 0 4;
+    cursor:pointer;
+    border:1px solid #8db2e3;
+    border-radius : 5px 5px 0px 0px;
+}
+
+@if user.agent gecko1_8 {
+	.gwt-TabBar .gwt-TabBarItem {
+		background-image : -moz-linear-gradient(top,#ccdef6,#b9d0ee,#deecfd);
+		-moz-border-radius : 5px 5px 0px 0px;
+		-moz-user-select: none;
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.gwt-TabBar .gwt-TabBarItem {
+		background-image : -moz-linear-gradient(top,#ccdef6,#b9d0ee,#deecfd);
+	}
+}@elif user.agent safari {
+	.gwt-TabBar .gwt-TabBarItem {
+		background-image : -webkit-linear-gradient(top,#ccdef6,#b9d0ee,#deecfd);
+	}
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+    cursor:default;
+    border-top : 1px solid #8db2e3;
+    border-right : 1px solid #8db2e3;
+    height:19px;
+    border-radius : 5px 5px 0px 0px;
+}
+
+@if user.agent gecko1_8 {
+	.gwt-TabBar .gwt-TabBarItem-selected {
+		background-image: -moz-linear-gradient(top,#ffffff,#deecfd);
+		-moz-border-radius : 5px 5px 0px 0px;
+		-moz-user-select: none;
+	}
+}@elif user.agent ie6 ie8 ie9 {
+	.gwt-TabBar .gwt-TabBarItem-selected {
+		background-image: -ms-linear-gradient(top,#ffffff,#deecfd);
+	}
+}@elif user.agent safari {
+	.gwt-TabBar .gwt-TabBarItem-selected {
+	    background-image: -webkit-linear-gradient(top,#ffffff,#deecfd);
+	}
+}
+
+.gwt-TabBarText {
+	color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+}
+
+.gwt-TabBar .gwt-TabBarRest {
+    background:white;
+}
+
+@sprite .gwt-TabCloseButton {
+    gwt-image: 'closeButton';
+    width:19px;
+    height:19px;
+    cursor:pointer;
 }

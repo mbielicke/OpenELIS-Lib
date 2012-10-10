@@ -2,6 +2,7 @@ package org.openelis.gwt.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource.NotStrict;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
@@ -55,6 +56,7 @@ public interface OpenELISResources extends ClientBundle {
 	TabBarScrollerCSS tabBarScroller();
 	
 	@Source("css/tabpanel.css")
+	@NotStrict
 	TabPanelCSS tabpanel();
 	
 	@Source({"css/text.css","css/general.css"})
@@ -77,6 +79,9 @@ public interface OpenELISResources extends ClientBundle {
 	
 	@Source("css/progress.css")
 	ProgressCSS progress();
+	
+	@Source("css/percent.css")
+	PercentCSS percent();
 	
 	@Source("images/close.png")
 	ImageResource closeButton();
@@ -322,5 +327,15 @@ public interface OpenELISResources extends ClientBundle {
 	
 	@Source("images/closeleftbar.gif")
 	ImageResource closeLeftBar();
+	
+	@Source("images/tabfirst.gif")
+	ImageResource tabFirst();
+	
+	@Source("images/tab.gif")
+	ImageResource tab();
+	
+	@Source("images/selectedtab.gif")
+	ImageResource selectedTab();
+	
 	
 }

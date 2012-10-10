@@ -31,10 +31,6 @@ import org.openelis.gwt.resources.OpenELISResources;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -48,34 +44,26 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class CollapsePanel extends Composite implements ClickHandler, HasResizeHandlers {
     
-    private Grid panel = new Grid(1,2);
-    private HorizontalPanel content = new HorizontalPanel();
-    private FocusPanel arrow = new FocusPanel();
-    public boolean isOpen;
-    protected CollapseCSS css = OpenELISResources.INSTANCE.collapse();
+    private Grid 							panel;
+    private HorizontalPanel 				content;
+    private FocusPanel 						arrow;
+    public boolean 							isOpen;
+    protected CollapseCSS 					css;
     
     public CollapsePanel(boolean open){
-        css.ensureInjected();
+    	panel = new Grid(1,2);
+    	content = new HorizontalPanel();
+    	arrow = new FocusPanel();
+    	
         initWidget(panel);
         panel.setCellPadding(0);
         panel.setCellSpacing(0);
       
         panel.setWidth("100%");
-        panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
-        arrow.setStyleName(css.LeftMenuPanePanelDiv());
+
+       
         arrow.addClickHandler(this);
-        arrow.addMouseOverHandler(new MouseOverHandler() {
-        	public void onMouseOver(MouseOverEvent event) {
-        		arrow.addStyleName(css.Hover());
-                panel.getCellFormatter().addStyleName(0,1,css.Hover());
-        	}
-        });
-        arrow.addMouseOutHandler(new MouseOutHandler() {
-        	public void onMouseOut(MouseOutEvent event) {
-                arrow.removeStyleName("Hover");
-                panel.getCellFormatter().removeStyleName(0,1,css.Hover());
-        	}
-        });
+     
         panel.setWidget(0, 0, content);
         panel.setWidget(0,1,arrow);
         panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
@@ -85,6 +73,8 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
 					panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
 			}
 		});
+        
+        setCSS(OpenELISResources.INSTANCE.collapse());
         
         if(open)
         	open();
@@ -124,6 +114,18 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         }else{
             open();
         }       
+    }
+    
+    public void setCSS(CollapseCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+    	
+    	if(isOpen) 
+    		panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelOpen());
+    	else
+    		panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
+    	
+        arrow.setStyleName(css.LeftMenuPanePanelDiv());
     }
     
     @Override

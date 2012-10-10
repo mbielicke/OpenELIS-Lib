@@ -32,7 +32,6 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.resources.CheckboxCSS;
-import org.openelis.gwt.resources.OpenELISResources;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -44,7 +43,6 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasValue;
 
@@ -62,18 +60,17 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
     /*
      * Fields for query mode
      */
-    protected boolean                       queryMode;
+    protected boolean                        queryMode;
 
     /*
      * Fields used for Exceptions
      */
     protected Exceptions                     exceptions;
     
-    protected Checkbox                       check;
-    
+    protected Check                          check;
+     
     protected CheckBox                       source = this;
     
-    protected CheckboxCSS                    css;
 
     /**
      * Default no-arg constructor
@@ -87,13 +84,13 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @param mode
      */
-    public CheckBox(Checkbox.Mode mode) {
+    public CheckBox(Check.Mode mode) {
     	init();
         check.setMode(mode);
     }
 
     protected void init() {
-    	check = new Checkbox();
+    	check = new Check();
     	
     	check.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
     		public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -105,8 +102,6 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         
         exceptions = new Exceptions();
         
-        css = OpenELISResources.INSTANCE.checkbox();
-        css.ensureInjected();
     }
 
     /**
@@ -114,7 +109,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * 
      * @return
      */
-    public Checkbox.Mode getMode() {
+    public Check.Mode getMode() {
         return check.getMode();
     }
 
@@ -147,9 +142,9 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
         queryMode = query;
         
         if(query)
-        	check.setMode(Checkbox.Mode.THREE_STATE);
+        	check.setMode(Check.Mode.THREE_STATE);
         else
-        	check.setMode(Checkbox.Mode.TWO_STATE);
+        	check.setMode(Check.Mode.TWO_STATE);
         	
     }
 
@@ -217,7 +212,7 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
             return;
         
         if(value == null) {
-        	if(check.getMode() == Checkbox.Mode.TWO_STATE)
+        	if(check.getMode() == Check.Mode.TWO_STATE)
                	check.uncheck();
         	else
         		check.unkown();
@@ -298,9 +293,9 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      */
     public void addExceptionStyle() {
     	if(ExceptionHelper.isWarning(this))
-    		addStyleName(css.InputWarning());
+    		addStyleName(check.css.InputWarning());
     	else
-    		addStyleName(css.InputError());
+    		addStyleName(check.css.InputError());
     		
     }
 
@@ -308,8 +303,8 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
      * will remove the style from the widget
      */
     public void removeExceptionStyle() {
-        removeStyleName(css.InputError());
-        removeStyleName(css.InputWarning());
+        removeStyleName(check.css.InputError());
+        removeStyleName(check.css.InputWarning());
     }
 
     public void validateQuery() {
@@ -351,6 +346,10 @@ public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, 
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return addHandler(handler,ValueChangeEvent.getType());
+	}
+	
+	public void setCSS(CheckboxCSS css) {
+		check.setCSS(css);
 	}
 
 }

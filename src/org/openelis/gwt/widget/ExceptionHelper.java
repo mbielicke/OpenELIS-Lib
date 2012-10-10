@@ -7,8 +7,6 @@ import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Warning;
 import org.openelis.gwt.resources.DialogCSS;
 import org.openelis.gwt.resources.OpenELISResources;
-import org.openelis.gwt.resources.WindowCSS;
-import org.openelis.gwt.resources.WindowNoImageCSS;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -17,12 +15,10 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.core.java.util.Collections;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * This is a Singleton class that will handle displaying exceptions that have

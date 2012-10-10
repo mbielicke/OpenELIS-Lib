@@ -34,9 +34,11 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
     
     protected TextBase                              source = this;
     
-    protected static TextCSS                        css = OpenELISResources.INSTANCE.text();
-    {
-    	css.ensureInjected();
+    protected TextCSS                               css = OpenELISResources.INSTANCE.text();
+    
+    public TextBase() {
+    	super();
+    	setCSS(OpenELISResources.INSTANCE.text());
     }
     
     /**
@@ -74,6 +76,8 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
      * Set the text case for input.
      */
     public void setCase(Case textCase) {
+    	if(css == null)
+    		return;
     	if(textCase == null)
     		textCase = Case.MIXED;
     	
@@ -89,8 +93,8 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
                 removeStyleName(css.Upper());
                 break;
             default:
-                removeStyleName(css.Upper());
-                removeStyleName(css.Lower());
+           		removeStyleName(css.Upper());
+           		removeStyleName(css.Lower());
         }
     }
 
@@ -430,5 +434,10 @@ public class TextBase extends com.google.gwt.user.client.ui.TextBox {
 		event.preventDefault();
 		event.stopPropagation();
 	}
+    
+    public void setCSS(TextCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+    }
 
 }

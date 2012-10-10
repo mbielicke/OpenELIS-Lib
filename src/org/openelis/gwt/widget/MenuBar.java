@@ -92,7 +92,6 @@ public class MenuBar extends Composite {
         
         menu.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
-                menu.addStyleName(css.Hover());
                 if(popMenu != null && popMenu.isShowing()) {
                     popMenu.hide();
                     popMenu = menu.showSubMenu();
