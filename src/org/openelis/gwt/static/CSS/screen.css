@@ -1,0 +1,2063 @@
+html, body {
+   margin:0pt;
+   padding:0pt;
+   height:100%;
+}
+
+td {outline:0px;}
+
+div{outline:0px;}
+
+
+.Disabled{
+    cursor:default;
+}
+.tabbar{
+	margin-top:2px;
+    background:#fbfbfb;
+	border-top:1px solid #D8D8D8;
+	border-bottom:0;
+}
+
+.MoveRight{
+height:20px;
+width:18px;
+background:url("../Images/moveright.gif") no-repeat;
+border-right:1px solid #8DB2E3;
+cursor:pointer;
+}
+
+.MoveLeft{
+height:20px;
+width:18px;
+background:url("../Images/moveleft.gif") no-repeat -18px 0;
+border-left:1px solid #8DB2E3;
+cursor:pointer;
+}
+
+.DropdownPopup {
+border:1px solid #B5B8C8;
+background:white;
+}
+
+/****
+.ScreenPanel .ScreenWindowBrowser .unfocused *{
+background:#BAC8D9 none repeat scroll 0 0;
+color:gray;
+}
+****/
+
+.unfocused .WindowTR {
+    width:7px;
+    height:29px;
+    background: transparent url("../Images/unfocusedwindowtr.gif");
+}
+.unfocused .WindowTL {
+    width:7px;
+    height:29px;
+    background: url("../Images/unfocusedwindowtl.gif");
+}
+.unfocused .WindowBR {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbr.gif");
+}
+.unfocused .WindowBL {
+    width:7px;
+    height:28px;
+    background: url("../Images/unfocusedwindowbl.gif");
+}
+.unfocused .WindowLeft {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowleft.gif");
+}
+.unfocused .WindowRight {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/unfocusedwindowright.gif") repeat-y;
+}
+
+.unfocused .Caption{
+    background:url("../Images/unfocusedwindowheader.gif") repeat-x;
+    height:29px;
+}
+.unfocused .StatusBar {
+    background:url("../Images/unfocusedwindowfooter.gif") repeat-x;
+    height:28px;
+}
+
+.TableButtonFooter{
+	background:#FBFBFB;
+	width:100%;
+}
+.TreeButtonFooter{
+	background:#FBFBFB;
+	width:100%;
+}
+
+.errorPopupLabel, .warnPopupLabel{
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    padding:0 4px 2px 0;
+}
+/*******TOP MENU BAR CSS***********/
+.topMenuBar { 
+    height:30px;
+    width:100%;
+    margin-bottom:8px;
+    background:black url(../Images/topmenubg.gif) repeat-x;
+}
+.topMenuBarWeb { 
+    height:30px;
+    width:100%;
+    background:black url(../Images/topmenubg.gif) repeat-x;
+}
+
+.topMenuBarItem {
+    margin:3px 0 0 8px;
+    padding:4px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight : bold;
+    color:white;
+    cell-padding : 0px;
+    cell-spacing : 0px;
+}
+.topMenuBarItem.Hover, .Selected .topMenuBarItem{
+    color:black;
+    cursor:pointer;
+    padding:3px;
+    border:1px solid #333;
+    /*border-bottom:0;*/
+    background:#f0f0f0;
+}
+
+.topMenuContainer{
+    border:1px solid #333;
+    /*border-top:0;*/
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+}
+.buttonMenuContainer{
+   .spinnerIconLarge {width:50px; height:50px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+    border:1px solid #8DB2E3;
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+    margin-left:-4px;
+    margin-top:-2px;
+}
+
+.favoritesMenuContainer {
+	 background:#f0f0f0;
+	 position : relative;
+	 top : -7px;
+}
+
+.TopMenuRowContainer .topMenuItemMiddle{
+    padding:0 0 0 8px;
+    height : 16px;
+}
+
+.topMenuBarItem .topMenuItemMiddle {
+	padding: 0;
+	height :16px;
+}
+
+.topMenuItemTitle{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+}
+
+.disabled .topMenuItemTitle {
+	color:gray;
+}
+
+.topMenuItemDesc{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+    color:gray;
+}
+.topMenuIcon{
+    width:20px;
+}
+.TopMenuRowContainer{
+    width:200px;
+    padding:5px;
+}
+
+.Ascending{
+	background:url('../Images/go-up.png') no-repeat center center;
+	width:16;
+	height:16;
+}
+.Descending{
+	background:url('../Images/go-down.png') no-repeat center center;
+	width:16;
+	height:16;
+}
+
+.TopMenuRowContainer.Hover {
+    cursor:pointer;
+    padding:0;
+    background:url('../Images/white-top-bottom.gif') #d9e8fb repeat-x 0px 0px;
+    border:1px solid #aaccf6;
+    padding : 4px;
+}
+
+ .MenuArrow, .summaryIcon, .labelIcon, .EditSettings, .preferenceIcon, .favoritesMenuIcon, .logoutIcon, .fullLoginIcon, .quickEntryIcon, .secondEntryIcon, .trackingIcon, .projectIcon, .providerIcon, .organizationIcon, .worksheetCreationIcon,
+.worksheetCompletionIcon, .addOrCancelIcon, .toDoIcon, .labelForIcon, .storageIcon, .QCIcon, .internalOrderIcon, .vendorOrderIcon, .kitOrderIcon, .inventoryReceiptIcon, 
+.fillOrderIcon, .shippingIcon, .inventoryItemIcon, .instrumentIcon, .testIcon, .methodIcon, .errorIcon, .warnIcon,
+.panelIcon, .QAEventIcon, .labSectionIcon, .analyteIcon, .dictionaryIcon, .auxiliaryPromptIcon, .barcodeLabelIcon, .standardNoteIcon, .trailerForTestIcon, .storageUnitIcon, .storageLocationIcon,
+.systemVariableIcon, .scriptletIcon, .finalReportIcon, .sampleDataExportIcon, .loginLabelIcon, .referenceIcon, .arrowIcon, .pasteIcon, .copyIcon, .cutIcon, .applicationIcon, .systemUserIcon, .templateIcon {
+    width:20px;
+    height:20px;
+}
+
+.preferenceIcon{background:url('../Images/preferencebuttonimage.gif') no-repeat center;}
+.EditSettings{background:url('../Images/editsettingsbuttonimage.png') no-repeat center;}
+.favoritesMenuIcon{background:url('../Images/favoritesbuttonimage.gif') no-repeat center;}
+.logoutIcon{background:url('../Images/logoutbuttonimage.gif') no-repeat center;}
+.cutIcon{background:url('../Images/cutbuttonimage.gif') no-repeat center;}
+.copyIcon{background:url('../Images/copybuttonimage.gif') no-repeat center;}
+.pasteIcon{background:url('../Images/pastebuttonimage.gif') no-repeat center;}
+.fullLoginIcon{background:url('../Images/fullloginbuttonimage.gif') no-repeat center;}
+.quickEntryIcon{background:url('../Images/quickentrybuttonimage.gif') no-repeat center;}
+.secondEntryIcon{background:url('../Images/secondentrybuttonimage.gif') no-repeat center;}
+.trackingIcon{background:url('../Images/trackingbuttonimage.gif') no-repeat center;}
+.projectIcon{background:url('../Images/addbuttonimage.gif') no-repeat center;}
+.providerIcon{background:url('../Images/providerbuttonimage.gif') no-repeat center;}
+.organizationIcon{background:url('../Images/organizationbuttonimage.gif') no-repeat center;}
+.worksheetCreationIcon{background:url('../Images/worksheetcreationbuttonimage.gif') no-repeat center;}
+.worksheetCompletionIcon{background:url('../Images/worksheetcompletionbuttonimage.gif') no-repeat center;}
+.addOrCancelIcon{background:url('../Images/addorcancelIconbuttonimage.gif') no-repeat center;}
+.toDoIcon{background:url('../Images/todobuttonimage.gif') no-repeat center;}
+.labelForIcon{background:url('../Images/labelforbuttonimage.gif') no-repeat center;}
+.storageIcon{background:url('../Images/storagebuttonimage.gif') no-repeat center;}
+.QCIcon{background:url('../Images/qcbuttonimage.gif') no-repeat center;}
+.internalOrderIcon{background:url('../Images/orderbuttonimage.gif') no-repeat center;}
+.vendorOrderIcon{background:url('../Images/orderbuttonimage.gif') no-repeat center;}
+.kitOrderIcon{background:url('../Images/orderbuttonimage.gif') no-repeat center;}
+.fillOrderIcon{background:url('../Images/fillOrderButtonImage.gif') no-repeat center;}
+.shippingIcon{background:url('../Images/shippingButtonImage.gif') no-repeat center;}
+.inventoryReceiptIcon{background:url('../Images/inventoryReceiptButtonImage.gif') no-repeat center;}
+.inventoryItemIcon {background:transparent url(../Images/inventorybuttonimage.gif) no-repeat scroll center;}
+.instrumentIcon {background:transparent url(../Images/instrumentbuttonimage.gif) no-repeat scroll center;}
+.testIcon {background:transparent url(../Images/testbuttonimage.gif) no-repeat scroll center;}
+.methodIcon {background:transparent url(../Images/methodbuttonimage.gif) no-repeat scroll center;}
+
+.spinnerIcon {width:16px; height:16px;background:transparent url(../Images/OSXspinnerGIF.gif) no-repeat scroll center;}
+
+.errorIcon {background:transparent url(../Images/bullet_red.png) no-repeat scroll center;}
+.warnIcon {background:transparent url(../Images/bullet_yellow.png) no-repeat scroll center;}
+
+.labelIcon{
+	 background:url("../Images/inventoryReceiptButtonImage.gif") no-repeat;
+}
+.panelIcon{
+	 background:url("../Images/calculator_link.png") no-repeat;
+}
+.analyteIcon{
+	    background:url("../Images/map.png") no-repeat;
+}
+.labSectionIcon{
+	    background:url("../Images/group.png") no-repeat;
+}
+.QAEventIcon{
+	    background:url("../Images/tick.png") no-repeat;
+}
+.standardNoteIcon{
+	    background:url("../Images/note.gif") no-repeat;
+}
+.environmentalSampleLoginIcon{
+	    background:url("../Images/world_add.png") no-repeat;
+}
+.dictionaryIcon{
+	    background:url("../Images/dictionarybuttonimage.gif") no-repeat;
+}
+.auxiliaryPromptIcon{
+	background:url("../Images/lightbulb.png") no-repeat;
+}
+.barcodeLabelIcon{
+}
+.standardNoteIcon{
+}
+.trailerForTestIcon{
+	    background:url("../Images/page.png") no-repeat;
+}
+.storageUnitIcon{
+    background:url("../Images/package.png") no-repeat;
+}
+.storageLocationIcon{
+	background:url("../Images/basket.png") no-repeat;
+}
+.systemVariableIcon{
+		    background:url("../Images/brick.png") no-repeat;
+}
+.scriptletIcon{
+}
+.finalReportIcon{
+}
+.sampleDataExportIcon{
+}
+.loginLabelIcon{
+}
+.summaryIcon{
+    
+}
+
+.MenuArrow{
+	background:url('../Images/nextbuttonimage.gif') no-repeat;
+}
+.arrowIcon{
+   background:url('../Images/nextbuttonimage.gif') no-repeat center;
+}
+.systemUserIcon{background:url('../Images/systemuserbuttonimage.gif') no-repeat center;}
+.applicationIcon{background:url('../Images/applicationbuttonimage.gif') no-repeat center;}
+.templateIcon{background:url('../Images/templatebuttonimage.gif') no-repeat center;}
+/*******END TOP MENU BAR***********/
+
+.WhiteContentPanel{
+    background:white;
+    padding:4px;
+}
+
+.BlueContentPanel{
+    background:#D9E8FB;
+    padding:2px;
+}
+
+.LeftSidePanel{
+    background:white;
+}
+
+
+/*******lookupbutton Button Class***********/
+
+.LookupButton .ButtonContent{
+    margin:0;
+    padding:0;
+    height:20px;
+}
+
+.LookupButton .Hover .ButtonContent{
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:pointer;
+}
+
+.LookupButton .ButtonLeftSide{
+margin:0;
+width:0;
+}
+
+.LookupButton .ButtonRightSide{
+margin:0;
+width:0;
+}
+/*******General Button Class***********/
+
+.TableButtonFooter .Button{
+	padding:0;
+}
+
+.gwt-RichTextToolbar{
+    height:26px;
+    background:url("../Images/buttonbarbg.gif") repeat-x
+}
+
+.Button{
+   /* padding:2px;*/
+}
+
+.ButtonRightSide{
+    margin:2px 0 0 0 ;
+    width:2px;
+    height:21px;
+    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
+    cursor:default;
+}
+.disabled .ButtonRightSide{
+    background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
+}
+.hover .ButtonRightSide{
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
+}
+
+.ButtonLeftSide{
+    margin:2px 0 0 2px;
+    width:2px;    
+    height:21px;
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
+    cursor:default;
+}
+.disabled .ButtonLeftSide{
+    background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
+}
+
+.hover .ButtonLeftSide{
+    background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+
+.ButtonContent{
+    margin:2px 0 0 0;
+    padding: 2px 4px 0 4px;
+    height:21px;
+    cursor:default;
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+       -moz-user-select: none;
+}
+
+.disabled .ButtonContent{
+    cursor:default;
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
+.Hover .ButtonContent{
+    cursor:pointer;
+}
+
+.Pressed .ButtonContent {
+    background: url(../Images/screenbuttonpressed.gif) repeat-x;
+    cursor:default;
+}
+
+.selectIcon, .completeIcon, .reviewAndReleaseIcon, .unreleaseIcon, .PrintButtonImage, .EditMultipleButtonImage, .sdwisSampleLoginIcon, .DiscardButtonImage, .MoveStorageButtonImage, .upButtonImage, .downButtonImage, .refreshButtonImage, .popoutButtonImage, .analyteIcon, .AddTabButtonImage, .DictionaryButtonImage, .SaveButtonImage, .standardNoteIcon, .QAEventIcon,
+.AddRowButtonImage, .RemoveRowButtonImage, .DuplicateRowButtonImage, .ExitButtonImage, .labSectionIcon,
+.StandardNoteButtonImage, .groupRowButtonImage, .SelectAllButtonImage, .environmentalSampleLoginIcon,
+.ungroupRowButtonImage, .AddColumnButtonImage, .RemoveColumnButtonImage, .PickerButtonImage{
+    width:20px;
+    height:20px;
+}
+
+.unreleaseIcon{background:url('../Images/unrelease.png') no-repeat;}
+.disabled .unreleaseIcon{background:url('../Images/unreleasedisabled.png') no-repeat;}
+
+.selectIcon{background:url('../Images/select.png') no-repeat;}
+.disabled .selectIcon{background:url('../Images/selectdisabled.png') no-repeat;}
+
+.completeIcon{background:url('../Images/completebuttonimage.png') no-repeat;}
+.disabled .completeIcon{background:url('../Images/completebuttonimagedisabled.png') no-repeat;}
+
+.reviewAndReleaseIcon{background:url('../Images/reviewandreleasebuttonimage.gif') no-repeat;}
+.disabled .reviewAndReleaseIcon{background:url('../Images/reviewandreleasebuttonimagedisabled.gif') no-repeat;}
+
+.PrintButtonImage{background:url('../Images/printer.png') no-repeat;}
+.disabled .PrintButtonImage{background:url('../Images/printerdisabled.png') no-repeat;}
+
+.EditMultipleButtonImage{background:url('../Images/editmultiple.png') no-repeat;}
+.disabled .EditMultipleButtonImage{background:url('../Images/editmultipledisabled.png') no-repeat;}
+
+.sdwisSampleLoginIcon{background:url("../Images/cup.png") no-repeat;}
+
+.DiscardButtonImage{background:url("../Images/bin_closed.png") no-repeat;}
+.disabled .DiscardButtonImage{background:url("../Images/bin_closeddisabled.png") no-repeat;}
+
+.MoveStorageButtonImage{background:url("../Images/package_go.png") no-repeat;}
+.disabled .MoveStorageButtonImage{background:url("../Images/package_godisabled.png") no-repeat;}
+
+.upButtonImage{
+    background:url("../Images/arrow_up.png") no-repeat;
+}
+.disabled .upButtonImage{
+    background:url("../Images/arrow_updisabled.png") no-repeat;
+}
+.downButtonImage{
+    background:url("../Images/arrow_down.png") no-repeat;
+}
+.disabled .downButtonImage{
+    background:url("../Images/arrow_downdisabled.png") no-repeat;
+}
+.refreshButtonImage{
+    background:url("../Images/arrow_refresh.png") no-repeat;
+}
+.disabled .refreshButtonImage{
+    background:url("../Images/arrow_refreshdisabled.png") no-repeat;
+}
+.popoutButtonImage{
+	background:url("../Images/tablepopout.png") no-repeat;
+}
+.disabled .popoutButtonImage{
+	background:url("../Images/tablepopoutdisabled.png") no-repeat;
+}
+.SaveButtonImage{
+    background:url("../Images/savebuttonimage.gif") no-repeat;
+}
+.disabled .SaveButtonImage{
+    background:url("../Images/savebuttonimagedisabled.gif") no-repeat;
+}
+.SelectAllButtonImage{
+    background:url("../Images/selectallbuttonimage.png") no-repeat;
+}
+.disabled .SelecttAllButtonImage{
+    background:url("../Images/selectallbuttonimagedisabled.gif") no-repeat;
+}
+.ExitButtonImage{
+    background:url("../Images/logoutbuttonimage.gif") no-repeat;
+}
+.disabled .ExitButtonImage{
+    background:url("../Images/logoutbuttonimagedisabled.gif") no-repeat;
+}
+.AddTabButtonImage{
+    background:url("../Images/addtabbuttonimage.gif") no-repeat;
+}
+.disabled .AddtabButtonImage{
+    background:url("../Images/addtabbuttonimagedisabled.gif") no-repeat;
+}
+.DictionaryButtonImage{
+    background:url("../Images/dictionarybuttonimage.gif") no-repeat;
+}
+.disabled .DictionaryButtonImage{
+    background:url("../Images/dictionarybuttonimagedisabled.gif") no-repeat;
+}
+.groupRowButtonImage{
+    background:url("../Images/group.gif") no-repeat;
+}
+.disabled .groupRowButtonImage{
+    background:url("../Images/groupdisabled.gif") no-repeat;
+}
+.ungroupRowButtonImage{
+    background:url("../Images/ungroup.gif") no-repeat;
+}
+.disabled .ungroupRowButtonImage{
+    background:url("../Images/ungroupdisabled.gif") no-repeat;
+}
+.DuplicateRowButtonImage{
+    background:url("../Images/duplicaterowbuttonimage.gif") no-repeat;
+}
+.disabled .DuplicateRowButtonImage{
+    background:url("../Images/duplicaterowbuttonimagedisabled.gif") no-repeat;
+}
+.RemoveRowButtonImage{
+    background:url("../Images/removerowbuttonimage.gif") no-repeat;
+}
+.disabled .RemoveRowButtonImage{
+    background:url("../Images/removerowbuttonimagedisabled.gif") no-repeat;
+}
+.AddRowButtonImage{
+    background:url("../Images/addrowbuttonimage.gif") no-repeat;
+}
+.disabled .AddRowButtonImage{
+    background:url("../Images/addrowbuttonimagedisabled.gif") no-repeat;
+}
+.AddColumnButtonImage{
+    background:url("../Images/addcolumnbuttonimage.gif") no-repeat;
+}
+.disabled .AddColumnButtonImage{
+    background:url("../Images/addcolumnbuttonimagedisabled.gif") no-repeat;
+}
+.RemoveColumnButtonImage{
+    background:url("../Images/removecolumnbuttonimage.gif") no-repeat;
+}
+.disabled .RemoveColumnButtonImage{
+    background:url("../Images/removecolumnbuttonimagedisabled.gif") no-repeat;
+}
+
+.StandardNoteButtonImage{
+    background:url("../Images/note.gif") no-repeat;
+}
+.disabled .StandardNoteButtonImage{
+    background:url("../Images/standardnotebuttonimagedisabled.gif") no-repeat;
+}
+.PickerButtonImage{
+    background:url("../Images/fieldlookup.png") no-repeat;
+}
+.disabled .PickerButtonImage{
+    background:url("../Images/fieldlookupdisabled.png") no-repeat;
+}
+.FindButtonImage{
+    width:20px;
+    height:20px;
+}
+.FindButtonImage{
+    background:url("../Images/page_find.gif") no-repeat;
+}
+.disabled .FindButtonImage{
+    background:url("../Images/page_findDisabled.gif") no-repeat;
+}
+/*******End General Button Class***********/
+
+.LookupButtonImage{
+    background:url("../Images/fieldlookup.png") no-repeat center center;
+}
+.Hover .LookupButtonImage{
+    background:#d8d8d8 url("../Images/fieldlookup.png") no-repeat center center;
+}
+.disabled .LookupButtonImage{
+    background:url("../Images/fieldlookupdisabled.png") no-repeat center center;
+    cursor:default;
+}
+.CommentButtonImage{
+    background:url("../Images/fieldcomment.png") no-repeat center center;
+}
+.Hover .CommentButtonImage{
+    background:#d8d8d8 url("../Images/fieldcomment.png") no-repeat center center;
+}
+.disabled .CommentButtonImage{
+    background:url("../Images/fieldcommentdisabled.png") no-repeat center center;
+    cursor:default;
+}
+.AdvancedButtonImage{
+    background:url("../Images/fieldadvanced.png") no-repeat center center;
+}
+.Hover .AdvancedButtonImage{
+    background:#d8d8d8 url("../Images/fieldadvanced.png") no-repeat center center;
+}
+.disabled .AdvancedButtonImage{
+    background:url("../Images/fieldadvanceddisabled.png") no-repeat center center;
+    cursor:default;
+}
+
+.LookupButtonImage, .CommentButtonImage, .AdvancedButtonImage{
+    width:16px;
+    height:16px;
+    padding:1px;
+    cursor:pointer;
+    border:1px solid #D8D8D8;
+    border-left:none;
+}
+
+/*******Button Panel***********/
+
+.ButtonPanelContainer{
+    height:26px;
+    background:url("../Images/buttonbarbg.gif") repeat-x;
+}
+
+.BottomButtonPanelContainer{
+    height:26px;
+    background:url("../Images/bottombuttonbarbg.gif") repeat-x;
+}
+
+.ButtonDivider{
+    width:2px;
+    height:13px;
+    margin:6px 2px 0 2px;
+    background:url("../Images/buttondivider.gif") no-repeat;
+}
+
+.ButtonPanelButton .ButtonContent {
+    background:none;
+}
+
+.Hover .ButtonContent{
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:pointer;
+}
+.Current .ButtonContent{
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:default;
+}
+.Pressed .ButtonContent {
+    background:url("../Images/screenbuttonhover.gif") repeat-x;
+    cursor:default;
+}
+.disabled .ButtonContent{
+    cursor:default
+}
+.ButtonPanelButton .ButtonContent .ScreenLabel{
+    /*color:black;*/
+    background:none;
+}
+.disabled .ScreenLabel{
+    color:gray;
+}
+.disabled  .ButtonPanelButton .ButtonContent .ScreenLabel{
+    cursor:default;
+    color:gray;
+    background:none;
+}
+.pressed .ScreenLabel{
+    color:black;
+}
+
+.ButtonPanelButton .ButtonRightSide{
+	 width:2px;
+     background:none;
+}
+
+.Hover .ButtonPanelButton .ButtonRightSide,
+.Pressed .ButtonPanelButton .ButtonRightSide{
+	background:url("../Images/screenbuttonrs.gif") no-repeat;
+	cursor:pointer;
+}
+
+.Current .ButtonRightSide{
+    background:url("../Images/screenbuttonrs.gif") no-repeat;
+    cursor:default;
+}
+
+.Pressed .ButtonRightSide{
+	cursor:default;background:url("../Images/screenbuttonrs.gif") no-repeat;
+}
+
+.Hover .ButtonRightSide{
+	cursor:pointer;background:url("../Images/screenbuttonrs.gif") no-repeat;
+}
+
+.Disabled .ButtonPanelButton .ButtonRightSide{
+	background:none;
+    cursor:default;
+}
+
+.ButtonPanelButton .ButtonLeftSide{
+    background:none;
+}
+
+.Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
+	background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+
+.Current .ButtonLeftSide{
+	background:url("../Images/screenbuttonls.gif") no-repeat;
+    cursor:default;
+}
+.Pressed  .ButtonLeftSide{
+	cursor:default;background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+.Hover  .ButtonLeftSide{
+	cursor:pointer;background:url("../Images/screenbuttonls.gif") no-repeat;
+}
+.Disabled .ButtonPanelButton .ButtonLeftSide{
+	background:none;
+    cursor:default;
+}
+
+.ButtonAdj {
+	padding-bottom : 3px;
+}
+
+.addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage{
+    width:20px;
+    height:20px;
+    background:url("../Images/note.gif") no-repeat;
+}
+
+.addTestButtonImage{background:url("../Images/calculator_add.png") no-repeat;}
+.Disabled .addTestButtonImage{background:url("../Images/calculator_adddisabled.png") no-repeat;}
+
+.cancelTestButtonImage{background:url("../Images/calculator_delete.png") no-repeat;}
+.Disabled .cancelTestButtonImage{background:url("../Images/calculator_deletedisabled.png") no-repeat;}
+
+.expandButtonImage{background:url("../Images/arrow_out.png") no-repeat;}
+.Disabled .expandButtonImage{background:url("../Images/arrow_outdisabled.png") no-repeat;}
+
+.collapseButtonImage{background:url("../Images/arrow_in.png") no-repeat;}
+.Disabled .collapseButtonImage{background:url("../Images/arrow_indisabled.png") no-repeat;}
+
+.similarButtonImage{background:url("../Images/find.png") no-repeat;}
+.Disabled .similarButtonImage{background:url("../Images/finddisabled.png") no-repeat;}
+
+.privateWellWaterSampleLoginIcon{background:url("../Images/house.png") no-repeat;}
+
+.QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
+.Disabled .QueryButtonImage{background:url("../Images/querybuttonimagedisabled.gif") no-repeat;}
+.pressed .QueryButtonImage{background:url("../Images/querybuttonimage.gif") no-repeat;}
+
+.PreviousButtonImage{background:url("../Images/previousbuttonimage.gif") no-repeat;}
+.Disabled .PreviousButtonImage{background:url("../Images/previousbuttonimagedisabled.gif") no-repeat;}
+
+.NextButtonImage{background:url("../Images/nextbuttonimage.gif") no-repeat;}
+.Disabled .NextButtonImage{background:url("../Images/nextbuttonimagedisabled.gif") no-repeat;}
+
+.AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
+.Disabled .AddButtonImage{background:url("../Images/addbuttonimagedisabled.gif") no-repeat;}
+.pressed .AddButtonImage{background:url("../Images/addbuttonimage.gif") no-repeat;}
+
+.AddButtonIcon{background:url("../Images/addButtonIcon.png") no-repeat;}
+.Disabled .AddButtonIcon{background:url("../Images/addButtonIcondisabled.png") no-repeat;}
+
+.UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
+.Disabled .UpdateButtonImage{background:url("../Images/updatebuttonimagedisabled.gif") no-repeat;}
+.pressed .UpdateButtonImage{background:url("../Images/updatebuttonimage.gif") no-repeat;}
+
+.DeleteButtonImage{background:url("../Images/deletebuttonimage.gif") no-repeat;}
+.Disabled .DeleteButtonImage{background:url("../Images/deletebuttonimagedisabled.gif") no-repeat;}
+
+.DeleteButtonIcon{background:url("../Images/deleteButtonIcon.png") no-repeat;}
+.Disabled .DeleteButtonIcon{background:url("../Images/deleteButtonIcondisabled.png") no-repeat;}
+
+.CommitButtonImage{background:url("../Images/commitbuttonimage.gif") no-repeat;}
+.Disabled .CommitButtonImage{background:url("../Images/commitbuttonimagedisabled.gif") no-repeat;}
+
+.ProcessButtonImage{background:url("../Images/cart_go.png") no-repeat;}
+.Disabled .ProcessButtonImage{background:url("../Images/cart_godisabled.png") no-repeat;}
+
+.AbortButtonImage{background:url("../Images/abortbuttonimage.gif") no-repeat;}
+.Disabled .AbortButtonImage{background:url("../Images/abortbuttonimagedisabled.gif") no-repeat;}
+
+.OptionsButtonImage{background:url("../Images/menudown.gif") no-repeat center;width :20px;height : 20px;}
+.Disabled .OptionsButtonImage{background:url("../Images/menudown.gif.gif") no-repeat;}
+
+.duplicateRecordIcon{
+    width:16px;
+    height:16px;
+}
+.duplicateRecordIcon{background:url('../Images/quickentrybuttonimage.gif') no-repeat center;}
+
+.historyIcon{
+    width:16px;
+    height:16px;
+}
+.historyIcon{background:url('../Images/history.png') no-repeat center;}
+
+/********* end button panel **********/
+
+
+/************ AtoZ button ***************/
+.smallButton .ButtonContent {
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    width:1em;
+    height:16px;
+    text-align:center;
+    cursor:default;
+    background:none;
+}
+
+.AtoZ .Hover .ButtonContent, .AtoZ .Pressed .ButtonContent, .Hover .FavHeaderButton .ButtonContent {
+    cursor:pointer;
+    background:url("../Images/screenbuttonbgsmall.gif") repeat-x;
+}
+.Pressed .smallButton .ButtonContent{cursor:default;}
+
+.smallButton .ButtonRightSide, .FavHeaderButton .ButtonRightSide{
+    margin:0 0 0 0;
+    width:2px;
+    height:16px;
+    cursor:default;
+    background:none;
+}
+.smallButton .ButtonLeftSide, .FavHeaderButton .ButtonLeftSide{
+    margin:0 0 0 0;
+    width:2px;
+    height:16px;
+    cursor:default;
+    background:none;
+}
+.AtoZ .Hover .ButtonRightSide, .AtoZ .Pressed .ButtonRightSide, .AtoZ .Hover .FavHeaderButton .ButtonRightSide{
+    cursor:pointer;
+    background:url("../Images/screenbuttonrssmall.gif") no-repeat;
+}
+.Pressed .smallButton .ButtonRightSide, .Current .smallButton .ButtonRightSide{
+    cursor:default;
+}
+
+.AtoZ .Hover .ButtonLeftSide, .AtoZ .Pressed .ButtonLeftSide,
+.Hover .FavHeaderButton .ButtonLeftSide{
+    cursor:pointer;
+    background:url("../Images/screenbuttonlssmall.gif") no-repeat;
+}
+.Pressed .smallButton .ButtonLeftSide,  .Current .smallButton .ButtonLeftSide{cursor:default;}
+.disabled .smallButton .ButtonContent {    
+	background:none;
+	cursor:default;
+}
+
+/************ end AtoZ button ***************/
+
+/************ Window border ***************/
+.CloseButton {
+    background:url("../Images/close.png");
+    width:20px;
+    height:20px;
+    cursor:pointer;
+}
+
+.MinimizeButton {
+   padding-top:5px;
+   background:url("../Images/minimize.gif") no-repeat;
+   width:20px;
+   height:20px;
+   cursor:pointer;
+}
+
+.AppBackground {
+    background:#3D71B8 url(../Images/desktop.jpg) no-repeat scroll left top;
+}
+
+.WindowTR {
+    width:7px;
+    height:29px;
+    background: transparent url("../Images/windowtr.gif");
+}
+.WindowTL {
+    width:7px;
+    height:29px;
+    background: url("../Images/windowtl.gif");
+}
+.WindowBR {
+    width:7px;
+    height:28px;
+    background: url("../Images/windowbr.gif");
+}
+.WindowBL {
+    width:7px;
+    height:28px;
+    background: url("../Images/windowbl.gif");
+}
+.WindowLeft {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/windowleft.gif");
+}
+.WindowRight {
+    width:7px;
+    height:100%;
+    overflow:hidden;
+    background: url("../Images/windowright.gif") repeat-y;
+}
+
+.Caption{
+    background:url("../Images/windowheader.gif") repeat-x;
+    height:29px;
+    cursor:move;
+}
+.StatusBar {
+    background:url("../Images/windowfooter.gif") repeat-x;
+    height:28px;
+}
+
+.ErrorWindow .middle{
+    padding:0px;
+    border:0px;
+}
+.ErrorWindow .topRight {
+    width:8px;
+    height:8px;
+    background: transparent url("../Images/popuptr.png") no-repeat right top;
+}
+.ErrorWindow .middleRight {
+    width:8px;
+    height:100%;
+    background: transparent url("../Images/popupright.png") top no-repeat;
+}
+.ErrorWindow .middleRightInner{
+    background: transparent url("../Images/popupright-y.png") top repeat-y;
+    height:100%;
+    margin-top:8px;
+}
+.ErrorWindow .bottomRight {
+    background: transparent url("../Images/popupbr.png") no-repeat left bottom;
+    width:8px;
+    height:8px;
+}
+.ErrorWindow .bottomCenter {
+    background:url("../Images/popupbottom.png") left no-repeat;
+    height:8px;
+}
+.ErrorWindow .bottomCenterInner {
+    background:url("../Images/popupbottom-x.png") left;
+    height:8px;
+    margin-left:8px;
+}
+.ErrorWindow .bottomLeft {
+    width:8px;
+    height:8px;
+    background:url("../Images/popupbl.png") no-repeat left bottom;
+}
+.ErrorWindow .middleLeft {
+    width:8px;
+    height:100%;
+    background: url("../Images/popupleft.png") repeat-y left;
+}
+.ErrorWindow .topLeft {
+    width:8px;
+    height:8px;
+    background: url("../Images/popuptl.png") no-repeat left top;
+}
+.ErrorWindow .topCenter{
+    background:url("../Images/popuptop.png") repeat-x top;
+    height:8px;
+}
+
+/* Confirm PopUpPanel */
+.ConfirmWindow .middle{
+    padding:0px;
+    border:0px;
+}
+.ConfirmWindow .topRightInner {
+    width:8px;
+    height:8px;
+    background: transparent url("../Images/popuptr.png") no-repeat right top;
+}
+.ConfirmWindow .middleRight {
+    width:8px;
+    height:100%;
+    background: transparent url("../Images/popupright.png") top no-repeat;
+}
+.ConfirmWindow .middleRightInner{
+    background: transparent url("../Images/popupright-y.png") top repeat-y;
+    height:100%;
+    margin-top:8px;
+}
+.ConfirmWindow .bottomRightInner {
+    background: transparent url("../Images/popupbr.png") no-repeat left bottom;
+    width:8px;
+    height:8px;
+}
+.ConfirmWindow .bottomCenter {
+    background:url("../Images/popupbottom.png") left no-repeat;
+    height:8px;
+}
+.ConfirmWindow .bottomCenterInner {
+    background:url("../Images/popupbottom-x.png") left;
+    height:8px;
+    margin-left:8px;
+}
+.ConfirmWindow .bottomLeft {
+    width:8px;
+    height:8px;
+    background:url("../Images/popupbl.png") no-repeat left bottom;
+}
+.ConfirmWindow .middleLeft {
+    width:8px;
+    height:100%;
+    background: url("../Images/popupleft.png") repeat-y left;
+}
+.ConfirmWindow .topLeftInner {
+    width:8px;
+    height:8px;
+    background: url("../Images/popuptl.png") no-repeat left top;
+}
+.ConfirmWindow .topCenter{
+    background:url("../Images/popuptop.png") repeat-x top;
+    height:8px;
+}
+.ConfirmWindow .middleCenterInner{
+    padding:4px;
+    padding-top:0;
+    /*padding-left:20;*/}
+.ConfirmWindow .Button{
+    padding-top:16px;}
+.ConfirmWindow .ButtonLeftSide{
+    margin-left:16px;}
+.ConfirmWindow .ButtonContent{
+    width: 75px;
+    text-align:center}    
+    
+.largeWarnIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-warning.gif") no-repeat left top;
+}
+.largeErrorIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-error.gif") no-repeat left top;
+}
+.largeQuestionIcon{
+	height:32;
+	width:32;
+    background: url("../Images/icon-question.gif") no-repeat left top;
+}
+.ConfirmCaption{
+  padding:4;
+}
+.ConfirmCaptionLabel{
+	color:#486095;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+}
+/*ErrorWindow end*/
+.favorite .LeftMenuPanePanelClosed{
+    height:100%;
+    width:5px;
+    background: url("../Images/topmenubg.gif") repeat-x;
+}
+.favorite .LeftMenuPanePanelOpen{
+    height:100%;
+    background: url("../Images/topmenubg.gif") repeat-x #F0F0F0;
+    border-right: 1px solid black;
+}
+
+.LeftMenuPanePanelClosed {
+    height:100%;
+    width:5px;
+    background:white url("../Images/buttonbarbg.gif") repeat-x;
+}
+
+.LeftMenuPanePanelOpen {
+    height:100%;
+    background:white;
+    border-right: 1px solid #98c0f4;
+}
+
+.noButtons .LeftMenuPanePanelClosed {
+    height:100%;
+	position : absolute;
+	background : none;
+	left : 0px;
+}
+
+.noButtons .LeftMenuPanePanelOpen {
+    height:100%;
+    background:white;
+    border-right: 1px solid #98c0f4;
+}
+
+.LeftMenuPanePanelDiv{
+    width:6px;
+    height:100%;
+    cursor:pointer;
+}
+.LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
+    margin-right:1px;
+    background:url("../Images/openleftbar.gif") no-repeat center;
+}
+.LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
+    margin-left:1px;
+    background:url("../Images/closeleftbar.gif") no-repeat center;
+}
+
+.ScreenWindowLabel{
+    color:#486095;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:12px;
+    font-weight:bold;    
+    padding-left:6px;
+    padding-top:2px;
+       -moz-user-select: none;
+}
+
+.ScreenTable {
+    border:1px solid #D8D8D8;
+    border-width:1px 0px;
+    background:white;
+}
+
+.ScreenTableWithSides{
+    border:1px solid #D8D8D8;
+    border-width:1px;
+    background:white;
+}
+
+.atozTable {
+    border:1px solid #D8D8D8;
+    border-width:1px;
+    background:white;
+}
+
+/*******TAB PANEL CSS***********/
+.ScreenTab{
+    margin:4px;
+}
+
+.gwt-TabBar {
+    height:19px;
+}
+
+.None .gwt-TabBarFirst {
+	background:white;
+}
+
+.gwt-TabBarFirst{
+    background:url('../Images/tabfirst.gif') no-repeat;
+}   
+
+.gwt-TabBar .gwt-TabBarItem {
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+    padding:0 8 0 4;
+    cursor:pointer;
+    background:url('../Images/tab.gif') no-repeat right;
+       -moz-user-select: none;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+    cursor:default;
+    background:url('../Images/selectedtab.gif') no-repeat right;
+       -moz-user-select: none;
+}
+
+.gwt-TabBarText {
+	color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+}
+
+.gwt-TabPanelBottom{
+    background:#fbfbfb;
+    border:1px solid #8db2e3;
+   /* padding:4px;*/
+}
+.gwt-TabBar .gwt-TabBarRest {
+    background:white;
+}
+
+.gwt-TabCloseButton {
+    background:url("../Images/close.png");
+    width:19px;
+    height:19px;
+    cursor:pointer;
+}
+/*******END TAB PANEL CSS***********/
+
+/*******autodropdown css***********/
+.AutoDropdown{
+}
+.DropdownPopup .TableCell{
+    /*border:none;*/
+    overflow:hidden;
+}
+.AutoDropdownButton{
+    width:16px;
+    height:19px;
+    border-bottom: 1px solid #d8d8d8;
+    background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.TableDropdown .AutoDropdownButton{
+    width:16px;
+    height:17px;
+    border-bottom: 1px solid #d8d8d8;
+    background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.AutoDropdown .Hover .AutoDropdownButton{
+    cursor:pointer;
+    border-bottom: 1px solid  #7eadd9;
+    background: url(../Images/trigger.gif) -16px 0px no-repeat;
+}
+.AutoDropdown .Selected{
+    border-bottom: 1px solid  #7eadd9;
+    background: url(../Images/trigger.gif) -64px 0px no-repeat;
+}
+.AutoDropdown .Pressed{
+    border-bottom: 1px solid #d8d8d8;
+    background: url(../Images/trigger.gif) -48px 0px no-repeat;
+}
+.AutoCompletePopup{
+    background:#FFFFFF;
+    border: 1px solid #7eadd9;
+}
+
+.TextboxUnselected {
+    border:1px solid #d8d8d8;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:16px;
+    cursor:default;
+    text-overflow  : ellipsis;
+}
+
+.TableDropdown .AutoDropdown .TextboxSelected{
+    border:1px solid #63B159;
+    color:#000000;
+    background:#ffffff;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:18px;
+    cursor:default;
+}
+.TableDropdown .AutoDropdown .TextboxUnselected{
+    border:1px solid #d8d8d8;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:18px;
+    cursor:default;
+}
+
+.TableAutoDropdown .TextboxSelected{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    border: 0px;
+    cursor:default;
+}
+.TableAutoDropdown .TextboxUnselected{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    border: 0px;
+    cursor:default;
+}
+
+.TableAutoDropdownButton{
+width:16;
+height:17;
+border-bottom: 1px solid #d8d8d8;
+background: url(../Images/trigger.gif) 0px 0px no-repeat;
+}
+.TableAutoDropdown .Hover{
+cursor:pointer;
+background: url(../Images/trigger.gif) -16px 0px no-repeat;
+}
+.TableAutoDropdown .Selected{
+background: url(../Images/trigger.gif) -64px 0px no-repeat;
+}
+.TableAutoDropdown .Pressed{
+background: url(../Images/trigger.gif) -48px 0px no-repeat;
+}
+/*******end autodropdown css********/
+.ScreenSplit {
+    background:#383838;
+}
+
+.ScreenSplit .hsplitter{
+    width:3px;
+    background:#f0f1f6;
+    cursor:ew-resize;
+    height:100%
+}
+
+.ScreenSplit .vsplitter{
+    width:100%;
+    background:#f0f1f6;
+    cursor:s-resize;
+    height:3px;
+}
+
+/***************** Calendar *******************/
+.Calendar{
+	height:19px;
+}
+
+.CalendarButton{
+	width:14px;
+	height:19px;
+	border-bottom: 1px solid #d8d8d8;
+	background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
+}
+
+/************************ End Calendar ***************************/
+
+.locked{
+    -moz-user-select:none;
+}
+.WeekPicker{
+	padding:8px;
+	padding-bottom:0;
+}
+/************** Drag & Drop ************/
+.dragdrop-movable-panel .middleCenter{
+	background:white;
+	opacity:0.8;
+	border:1px solid #d8d8d8;
+	border-top:0;
+}
+.dragdrop-movable-panel {
+    width:176px;}
+.dragdrop-movable-panel .middle{
+    padding:0px;
+    border:0px;
+}
+.dragdrop-movable-panel .topRight {
+    width:6px;
+    height:6px;
+background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
+}
+.dragdrop-movable-panel .middleRight {
+    width:6px;
+    height:100%;
+    background: transparent url("../Images/shadow-lr.png") repeat-y -6px 0;
+}
+.dragdrop-movable-panel .middleRightInner{
+ /*   background: transparent url("../Images/popupright-y.png") top repeat-y;*/
+ background:none;
+    height:100%;
+    margin-top:6px;
+}
+.dragdrop-movable-panel .bottomRight {
+    background: transparent url("../Images/shadow.png") no-repeat 0 -6px;
+    width:6px;
+    height:6px;
+}
+.dragdrop-movable-panel .bottomCenter {
+    background:url("../Images/shadow.png") no-repeat 0 -36px;
+    height:6px;
+}
+.dragdrop-movable-panel .bottomCenterInner {
+    background:url("../Images/shadow.png") repeat-x 0 -36px;
+    height:6px;
+    margin-left:6px;
+}
+.dragdrop-movable-panel .bottomLeft {
+    width:6px;
+    height:6px;
+    background:url("../Images/shadow.png") no-repeat 0 -12px;
+}
+.dragdrop-movable-panel .middleLeft {
+    width:6px;
+    height:100%;
+    background: url("../Images/shadow-lr.png") repeat-y 0 0;
+}
+.dragdrop-movable-panel .topLeft {
+    width:6px;
+    height:6px;
+    background: url("../Images/shadow.png") no-repeat 0 0;
+}
+.dragdrop-movable-panel .topCenter{
+    background:none;
+    height:6px;
+}
+.dragdrop-movable-panel .topCenter .topCenterInner{
+    background:white;
+    height:5px;
+    border:1px solid #d8d8d8;
+    border-bottom:0;
+    opacity:0.8;
+}
+.DragProxy{
+ margin-top:-3;
+}
+
+.dragdrop-proxy{
+/**	border:1px solid #d8d8d8;**/
+	background:none;
+	opacity:0.9;
+}
+
+tr .DropOnRow{
+	background:#defadc;
+}
+
+.dragdrop-proxy{
+/**	border:1px solid #d8d8d8;**/
+}	
+	
+.dragdrop-proxy .ScreenLabel{
+	border:1px solid #d8d8d8;
+	border-left:0;
+	background:white;
+	padding-right:4px;
+		}
+
+.DropPositioner {
+		border-top:1px dashed #63B159;}
+
+.DragSelector{
+   border:1px solid #99bbe8;
+    margin-right:8px;
+}
+
+.AltTableRow .AltTableRow, .TableRow .TableRow{
+    padding:1px;
+    height:18px;
+    cursor:move;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    border:1px solid #99bbe8;
+    border-left:0;
+}
+.DragStatus{
+    width:20px;
+    height:18px;
+    margin:0 0 2 2;
+}
+.Drop{
+    background:url('../Images/commitbuttonimage.gif') no-repeat center;
+}
+.NoDrop{
+    background:url('../Images/stop.gif') no-repeat center;
+}
+
+
+/************** end drag & drop ************/
+
+.ScreenHTML img{
+    cursor:pointer;
+}
+
+.ScreenTextArea{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    border:1px solid #d8d8d8;
+    font-size:11px;
+    height:150px;
+}
+
+.ScreenTextBox{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:16px;
+    border:1px solid #d8d8d8;
+    cursor:default;
+    tex-overflow : ellipsis;
+   /* background:#FBFBFB;*/
+}
+
+.ScreenTextboxDisplayOnly{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:11px;
+    height:16px;
+    background-color:#EEEEEE;
+    border:1px solid #d8d8d8;
+    cursor:default;
+    text-overflow : ellipsis;
+}
+
+.ScreenStack {
+    width:100%;
+    background:#e6eaf6;
+}
+
+.gwt-button{
+	border:none;
+}
+
+.gwt-StackPanelItem {
+    font-family:Verdana;
+    font-size:12px;
+    cursor:pointer;
+    border-bottom:1px solid #73d216;
+    background:white;
+}
+.gwt-StackPanelItem-Selected {
+    background:#e6eaf6;
+}
+.ScreenLabel{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+.ScreenLabelLink{
+	color:blue;
+	text-decoration:underline;
+	cursor:pointer;
+}
+.StatusBar a.header{
+    text-decoration:none;
+}
+.StatusBar .ScreenWindowLabel {
+    color:#486095;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:12px;
+    font-weight:bold;    
+    text-align:left;
+}
+
+/********   End Input  Form ***********/
+.Form {
+    font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    margin:4px 8px ;
+}
+
+.subform{
+    border:1px solid #8DB2E3;
+    margin:4px 4px ;
+}
+
+.subformButtons{
+    text-align:right;
+}
+
+.subform .Form {
+	margin:0px;
+}
+
+.FormTitle{
+	-moz-user-select: none;
+    text-align:center;
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:18px;
+    background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
+}
+.Prompt {
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    -moz-user-select: none;
+	color:gray;
+	padding:2px 0 2px 2px;
+	text-align:right;
+	vertical-align:top;
+}
+.CondensedPrompt {
+   -moz-user-select: none;
+	color:gray;
+	text-align:right;
+	vertical-align:top;
+}
+
+.TopPrompt {
+  -moz-user-select:none;
+   color:gray;
+   vertical-align:top;
+}
+/********   End Input  Form ***********/
+fieldSet {
+    border:1px solid #b5b8c8;
+    padding: 2px;
+    margin:-1px 8px 8px 8px;
+    }
+
+legend {
+}
+
+.focused {
+	background:#fefefe;
+}
+.locked {
+	-moz-user-select:none;
+	user-select:none;
+}
+
+.ScreenTree {
+	border:1px solid #D8D8D8;
+	border-width:1px 0px;
+    width:100%;
+    background:white;
+}
+.ScreenTreeWithSides {
+	border:1px solid #D8D8D8;
+	border-width:1px;
+    width:100%
+    background:white;
+}
+.ScreenTree .gwt-TreeItem{
+    cursor:pointer;
+    font-family:Verdana;
+}
+.ScreenTree .gwt-TreeItem-selected{
+    background:#ffe290;
+}
+
+.Upper {
+  text-transform:uppercase;
+}
+.Lower {
+  text-transform:lowercase;
+}
+.Busy{
+cursor:wait;
+}
+
+.ErrorPanel {
+  width:16px;
+  height:16px;
+  background-image:url(../Images/exclamation.png);
+}
+
+.ErrorPanelHidden {
+  width:16px;
+  height:16px;
+}
+
+.BusyPanel {
+  width:16px;
+  height:16px;
+  background-image:url(../Images/OSXspinnerGray.gif);
+}
+
+.ErrorPopup {
+  padding:5px;
+  border:2px solid red;
+  background:white;
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  color: #003366;  
+  font-weight: bold;
+}
+
+.MessagePopup {
+  padding:5px;
+  border:2px solid red;
+  background:white;
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  color: #003366;  
+  font-weight: bold;
+}
+
+.ScreenLoad{
+  cursor:wait;
+}
+
+.NotesPanel{overflow-y: scroll;
+}
+
+.MenuUp {
+   height:8px;
+   width:100%;
+   border:1px solid gray;
+   background:#d8d8d8 url('../Images/menuup.gif') center center no-repeat;
+   cursor:pointer;
+}
+ 
+.MenuDown {
+   height:8px;
+   width:100%;
+   border:1px solid gray;
+   background:#d8d8d8 url('../Images/menudown.gif') center center no-repeat;
+   cursor:pointer;
+}
+
+.MenuDisabled {
+   border:none;
+   margin:1px;
+   background:none;
+}
+
+
+/*************** check box styles **************/
+.Checked {
+    height:13px;
+    width:13px;
+    background:url("../Images/apply.png") left center no-repeat;
+    cursor:pointer;
+    border:1px solid white;
+}
+.Unchecked {
+    height:13px;
+    width:13px;
+    background:url("../Images/unapply.png") left center no-repeat;
+    cursor:pointer;
+    border:1px solid white;
+}
+.Unknown {
+    height:13px;
+    width:13px;
+    background:url("../Images/unknow.png") left center no-repeat;
+    cursor:pointer;
+    border:1px solid white;
+}
+
+.DotsButton {
+	width:14px;
+	height:19px;
+	cursor:pointer;
+	background: url(../Images/dotdotdot.gif) 0px 0px no-repeat;
+}
+
+.GlassPanel{
+    background: url(../Images/trans.gif);
+}
+
+.ModalPanel{
+	    background: url(../Images/transgrey.png);
+	    filter:alpha(opacity=50),
+}.Italic {
+    width:20;
+    height:20;
+    background: url(../Images/italic.gif) no-repeat;
+}
+
+.Bold {
+    width:20;
+    height:20;
+    background: url(../Images/bold.png) no-repeat ;
+}
+
+.Underline{
+    width:20;
+    height:20;
+    background: url(../Images/underline.png) no-repeat ;
+}
+
+.Subscript{
+    width:20;
+    height:20;
+    background: url(../Images/subscript.png) no-repeat;
+}
+
+.Superscript{
+    width:20;
+    height:20;
+    background: url(../Images/superscript.png) no-repeat;
+}
+
+.JustifyLeft{
+    width:20;
+    height:20;
+    background: url(../Images/justifyLeft.gif) no-repeat;
+}
+
+.JustifyCenter{
+    width:20;
+    height:20;
+    background: url(../Images/justifyCenter.gif) no-repeat;
+}
+
+.JustifyRight{
+    width:20;
+    height:20;
+    background: url(../Images/justifyRight.gif) no-repeat;
+}
+
+.StrikeThrough{
+    width:20;
+    height:20;
+    background: url(../Images/strikeThrough.png) no-repeat;
+}
+
+.Indent{
+    width:20;
+    height:20;
+    background: url(../Images/indent.gif) no-repeat;
+}
+
+.Outdent{
+    width:20;
+    height:20;
+    background: url(../Images/outdent.gif) no-repeat;
+}
+
+.HR{
+    width:20;
+    height:20;
+    background: url(../Images/hr.gif) no-repeat;
+}
+
+.OL{
+    width:20;
+    height:20;
+    background: url(../Images/ol.png) no-repeat;
+}
+
+.UL{
+    width:20;
+    height:20;
+    background: url(../Images/ul.png) no-repeat;
+}
+
+.redo{
+    width:20;
+    height:20;
+    background: url(../Images/arrow_redo.png) no-repeat;
+}
+
+.undo{
+    width:20;
+    height:20;
+    background: url(../Images/arrow_undo.png) no-repeat;
+}
+
+.InsertImage{
+    width:20;
+    height:20;
+    background: url(../Images/insertImage.gif);
+}
+
+.CreateLink{
+    width:20;
+    height:20;
+    background: url(../Images/createLink.gif);
+}
+
+.RemoveLink{
+    width:20;
+    height:20;
+    background: url(../Images/removeLink.gif);
+}
+
+.RemoveFormat{
+    width:20;
+    height:20;
+    background: url(../Images/removeFormat.png) no-repeat;
+}
+
+.TableWidget, .TableWidget .TextboxUnselected, .TableWidget .TextboxSelected, .TableWidget .CalendarButton{
+   height:18px;
+}
+.TableWidget .CalendarButton, .TableWidget .DotsButton{
+   height:17px;
+}
+
+
+/*
+.HeaderBarPad {
+border-left:1px solid #b5b8c8;
+cursor:e-resize;
+height:19px;
+width:2px;
+}
+*/
+
+.middleCenter{
+background:#deecfd;
+		}
+
+
+.InputError .ScreenTextBox{
+	border-bottom:1px dashed red;
+}
+.InputError .TextboxUnselected{
+	border-bottom:1px dashed red;
+}
+.InputError .AutoDropDownButton{
+	border-bottom:1px dashed red;
+}
+.InputError, .InputError.SelectBox {
+	border-bottom:1px dashed red;
+}
+
+.InputWarning .ScreenTextBox{
+	border-bottom:1px dashed #f5d852;
+}
+.InputWarning .TextboxUnselected{
+	border-bottom:1px dashed #f5d852;
+}
+.InputWarning .AutoDropDownButton{
+	border-bottom:1px dashed #f5d852;
+}
+.InputWarning, .InputWarning.SelectBox {
+	border-bottom:1px dashed #f5d852;
+}
+.TableVertScroll{
+}
+.noteSubjectText{
+	color:#486095;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight:bold;
+}	
+.noteAuthorText{
+	color:gray;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:9px;
+    padding:2px;
+    background: #f8f8f9;
+}
+.noteBodyText{
+	color:black;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    padding:4px;
+    background:white;
+}
+
+.Focus {
+	border-style:solid;
+    border-color:#63b159;
+}
+.Focus .ScreenTextArea,
+.Focus .ScreenTextBox,
+.Focus .ScreenMaskedBox,
+.Focus .ScreenCheck,
+.Focus .SelectBox{
+    border:1px solid #63b159;
+}
+.TextboxUnselected-readonly{
+}
+.ProgressBarOuter {
+	border: 1px solid #99BBE8;
+}
+.ProgressBar {
+	background:#E9F3F5;
+}
+.ProgressBarPct {
+    color:#486095;
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+}
+.ProgressBarMessage {
+	    color:#486095;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:12px;
+    font-weight:bold;    
+    padding-left:6px;
+       -moz-user-select: none;
+}
+
+.SelectBox {
+    border:1px solid #d8d8d8;
+    color:#000000;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:10px;
+    height:16px;
+    cursor:default;
+    table-layout : fixed;
+}
+
+.SelectBox.Focus {
+	 border:1px solid #63b159;
+}
+
+.SelectBox td {
+	text-overflow : ellipsis;
+	overflow : hidden;
+	white-space : nowrap;
+}
+
+.SelectButton {
+	background:url("../Images/select-arrow.jpg") no-repeat center center;
+	width : 16px;
+	height : 16px;
+}
+
+.SelectBox .TextboxUnselected {
+	border : 0px;
+}
+
+.gwt-SplitLayoutPanel-HDragger {
+	background: url("../Images/windowright.gif") repeat-y scroll 0 0 transparent;
+    height: 100%;
+    overflow: hidden;
+    width: 7px;
+}
+
+.gwt-TabBar {
+    height:19px;
+}
+
+.None .gwt-TabBarFirst {
+	background:white;
+}
+
+.gwt-TabBarFirst{
+    background:url('../Images/tabfirst.gif') no-repeat;
+}   
+
+.gwt-TabBar .gwt-TabBarItem {
+    color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+    padding:0 8 0 4;
+    cursor:pointer;
+    background:url('../Images/tab.gif') no-repeat right;
+       -moz-user-select: none;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+    cursor:default;
+    background:url('../Images/selectedtab.gif') no-repeat right;
+       -moz-user-select: none;
+}
+
+.gwt-TabBarText {
+	color:#486095;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
+    height:19px;
+}
+
+.gwt-TabPanelBottom{
+    background:#fbfbfb;
+    border:1px solid #8db2e3;
+   /* padding:4px;*/
+}
+.gwt-TabBar .gwt-TabBarRest {
+    background:white;
+}
+
+.gwt-TabCloseButton {
+    background:url("../Images/close.png");
+    width:19px;
+    height:19px;
+    cursor:pointer;
+}
+
+.TabError {
+	background:url("../Images/exclamation.png");
+	width:16px;
+	height:16px;
+}
+
+.TabData {
+	background:url("../Images/fieldadvanced.png");
+	width:16px;
+	height:16px;
+}

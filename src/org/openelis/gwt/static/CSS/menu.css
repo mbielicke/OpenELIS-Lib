@@ -1,0 +1,74 @@
+.menuDiv {
+    background:#fcfcf9;
+    position:absolute;
+    overflow:auto;
+    width:auto;
+}
+.menuDiv div{
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    color:#333333;
+    font-size:11px;
+    line-height:15px;
+    width:93%; 
+    padding:1px;
+    padding-left:5px;
+    padding-right:5px;
+
+}
+.inactive div{
+     color:lightgrey;
+}
+
+.head{
+    cursor:pointer;
+}
+.colHeader{
+    cursor:pointer;
+}
+.otherMenu {
+	border:1px solid black;
+	background:url(/images/goldbarno.jpg);
+	position:absolute;
+    cursor:default;
+    overflow:auto;
+}
+
+.otherMenu td{
+	font-family: Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+	color:#39659c; 
+	font-weight: bold;
+}
+
+.MenuBar {
+    height:30px;
+    width:100%;
+    margin-bottom:8px;
+    background:black url(../Images/topmenubg.gif) repeat-x;
+}
+
+.MenuBarItem {
+    margin:3px 0 0 8px;
+    padding:4px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    font-weight : bold;
+    color:white;
+}
+
+.Hover .MenuBarItem, .Selected .MenuBarItem{
+    color:black;
+    cursor:pointer;
+    padding:3px;
+    border:1px solid #333;
+    /*border-bottom:0;*/
+    background:#f0f0f0;
+}
+
+.MenuPanel{
+    border:1px solid #333;
+    /*border-top:0;*/
+    background:#f0f0f0 url('../Images/menu.gif') repeat-y;
+    padding:4px;
+}
