@@ -27,7 +27,7 @@ package org.openelis.gwt.widget;
 
 import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.resources.WindowCSS;
-import org.openelis.gwt.resources.WindowNoImageCSS;
+import org.openelis.gwt.resources.WindowCSS;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
@@ -43,7 +43,7 @@ public class ModalWindow extends org.openelis.gwt.widget.Window {
     private AbsolutePositionDropController dropController;
     public static final int position=100;
     
-    protected WindowNoImageCSS css;
+    protected WindowCSS css;
     
     public ModalWindow() {
         super();

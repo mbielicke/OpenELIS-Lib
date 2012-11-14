@@ -3,12 +3,16 @@
     width:5px;
 	background-color:#d8e4f2;
 	border-bottom:1px solid #a9bfd3;
+	position:absolute;
+	display:table;
 }
 
 .LeftMenuPanePanelOpen {
-    height:100%;
+	height:100%;
     background:white;
     border-right: 1px solid #98c0f4;
+    position:absolute;
+    display:table;
 }
 
 .noButtons .LeftMenuPanePanelClosed {
@@ -24,16 +28,12 @@
     border-right: 1px solid #98c0f4;
 }
 
-.LeftMenuPanePanelDiv{
-    width:6px;
-    height:100%;
-    cursor:pointer;
-}
-@sprite .LeftMenuPanePanelClosed .LeftMenuPanePanelDiv{
+@sprite .ArrowOpen {
     margin-right:1px;
 	gwt-image:'openLeftBar';
 }
-@sprite .LeftMenuPanePanelOpen .LeftMenuPanePanelDiv{
+
+@sprite .ArrowClose {
     margin-left:1px;
 	gwt-image:'closeLeftBar';
 }

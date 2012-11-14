@@ -199,16 +199,25 @@ public abstract class StaticFilter implements Filter {
             parts = name + ";" + req.getSession().getId() + ";" + (locale == null ? "en" : locale);
 
             localctx = new InitialContext();
-            propFile = new File((String)localctx.lookup(serverJNDIProperties));
+            //propFile = new File((String)localctx.lookup(serverJNDIProperties));
             props = new Properties();
-            props.load(new FileInputStream(propFile));
-            props.setProperty(InitialContext.INITIAL_CONTEXT_FACTORY,
-                              "org.jboss.security.jndi.LoginInitialContextFactory");
-            props.setProperty(InitialContext.SECURITY_PROTOCOL, "jboss-standard");
-            props.setProperty(Context.SECURITY_PRINCIPAL, parts);
-            props.setProperty(InitialContext.SECURITY_CREDENTIALS, password);
+            //props.load(new FileInputStream(propFile));
+            //props.setProperty(InitialContext.INITIAL_CONTEXT_FACTORY,
+            //                  "org.jboss.security.jndi.LoginInitialContextFactory");
+            //props.setProperty(InitialContext.SECURITY_PROTOCOL, "jboss-standard");
+            //props.setProperty(Context.SECURITY_PRINCIPAL, parts);
+            //props.setProperty(InitialContext.SECURITY_CREDENTIALS, password);
 
-            login(props);       
+	        props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+	        props.put("jboss.naming.client.ejb.context", true);
+	        //props.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+	        props.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "false");
+	        //props.put(javax.naming.Context.PROVIDER_URL, "remote://127.0.0.1:4447");
+	        System.out.println("parts = "+parts);
+	        props.put(javax.naming.Context.SECURITY_PRINCIPAL, parts);
+	        props.put(javax.naming.Context.SECURITY_CREDENTIALS, password);
+            
+	        login(props);       
 
             req.getSession().setAttribute("jndiProps", props);
             req.getSession().setAttribute("USER_NAME", name);

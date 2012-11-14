@@ -1,0 +1,16 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+			 
+  <ui:with field="res" type="org.openelis.gwt.resources.OpenELISResources"/>
+  
+  <g:HTMLPanel>
+    <table>
+      <tr>
+        <td ui:field="leftIcon" style="display:none;"/>
+        <td ui:field="text" style="display:none;"/>
+        <td ui:field="rightIcon" style="display:none;"/>
+      </tr>
+    </table>    
+  </g:HTMLPanel>
+
+</ui:UiBinder>

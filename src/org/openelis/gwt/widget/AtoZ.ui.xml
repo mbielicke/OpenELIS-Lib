@@ -1,0 +1,37 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	         xmlns:w='urn:import:org.openelis.gwt.widget'>
+  
+  <ui:with type="org.openelis.gwt.resources.OpenELISResources" field="res"/>
+  
+    <g:VerticalPanel>
+      <w:Button text="*" action="*"  enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="A" action="A*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="B" action="B*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="C" action="C*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="D" action="D*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="E" action="E*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="F" action="F*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="G" action="G*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="H" action="H*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="I" action="I*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="J" action="J*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="K" action="K*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="L" action="L*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="M" action="M*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="N" action="N*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="O" action="O*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="P" action="P*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="Q" action="Q*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="R" action="R*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="S" action="S*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="T" action="T*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="U" action="U*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="V" action="V*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="W" action="W*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="X" action="X*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="Y" action="Y*" enabled="true" css="{res.buttonPanel}"/>
+      <w:Button text="Z" action="Z*" enabled="true" css="{res.buttonPanel}"/>
+    </g:VerticalPanel>
+
+</ui:UiBinder>

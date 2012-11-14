@@ -1,0 +1,168 @@
+
+<!--
+Exhibit A - UIRF Open-source Based Public Software License.
+  
+The contents of this file are subject to the UIRF Open-source Based
+Public Software License(the "License"); you may not use this file except
+in compliance with the License. You may obtain a copy of the License at
+openelis.uhl.uiowa.edu
+  
+Software distributed under the License is distributed on an "AS IS"
+basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+License for the specific language governing rights and limitations
+under the License.
+  
+The Original Code is OpenELIS code.
+  
+The Initial Developer of the Original Code is The University of Iowa.
+Portions created by The University of Iowa are Copyright 2006-2008. All
+Rights Reserved.
+  
+Contributor(s): ______________________________________.
+  
+Alternatively, the contents of this file marked
+"Separately-Licensed" may be used under the terms of a UIRF Software
+license ("UIRF Software License"), in which case the provisions of a
+UIRF Software License are applicable instead of those above. 
+  -->
+
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:shl="urn:import:org.openelis.gwt.widget">
+      
+      <ui:with field="res" type="org.openelis.gwt.resources.OpenELISResources"/>
+
+      <g:VerticalPanel styleName="{res.calendarui.MonthYearPanel}">
+        <g:HorizontalPanel styleName="{res.calendar.Calendar}" width="100%">
+          <g:AbsolutePanel>
+            <g:Grid cellPadding="0" cellSpacing="0" width="100%">
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month0" enabled="true" text="January" action="0" css="{res.calendarbutton}">
+                  	<ui:attribute name="text" key="month0Text" description="First Month"/>
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month6" text="July" action="6" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month6Text" description="Seventh Month"/>
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month1" text="February" action="1" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month1Text" description="Second Month"/>
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month7" text="August" action="7" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month7Text" description="Eighth Month"/>
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month2" text="March" action="2" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month2Text" description="Third Month" />
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month8" text="September" action="8" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month8Text" description="Ninth Month" />
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month3" text="April" action="3" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month3Text" description="Fourth Month" />
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month9" text="October" action="9" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month9Text" description="Tenth Month" />
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month4" text="May" action="4" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month4Text" description="Fifth Month" />
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month10" text="November" action="10" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month10Text" description="Elevebth Month" />
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="month5" text="June" action="5" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month5Text" description="Sixth Month" />
+                  </shl:Button>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="month11" text="December" action="11" enabled="true" css="{res.calendarbutton}">
+                    <ui:attribute name="text" key="month11Text" description="Twelfth Month" />
+                  </shl:Button>
+                </g:customCell>
+              </g:row>
+            </g:Grid>
+          </g:AbsolutePanel>
+          <g:AbsolutePanel styleName="{res.calendar.Divider}"/>
+          <g:AbsolutePanel>
+            <g:Grid cellPadding="0" cellSpacing="0" width="100%">
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="prevDecade" leftIcon="{res.calendar.prevNavIndex}" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="nextDecade" leftIcon="{res.calendar.nextNavIndex}" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year0" action="0" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="year5" action="5" enabled="true" css="{res.calendarbutton}"/>
+				</g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year1" action="1" enabled="true" css="{res.calendarbutton}"/>
+				</g:customCell>
+				<g:customCell>
+                  <shl:Button ui:field="year6" action="6" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year2" action="2" enabled="true" css="{res.calendarbutton}"/>
+				</g:customCell>
+				<g:customCell>
+                  <shl:Button ui:field="year7" action="7" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year3" action="3" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="year8" action="8" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year4" action="4" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="year9" action="9" enabled="true" css="{res.calendarbutton}"/>
+                </g:customCell>
+              </g:row>
+            </g:Grid>
+          </g:AbsolutePanel>
+        </g:HorizontalPanel>
+      </g:VerticalPanel>
+</ui:UiBinder>

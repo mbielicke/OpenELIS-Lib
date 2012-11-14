@@ -37,6 +37,8 @@ import org.openelis.gwt.common.ReportStatus;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.constants.Constants;
+import org.openelis.gwt.resources.GeneralCSS;
+import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.CheckBox;
 import org.openelis.gwt.widget.DateHelper;
@@ -88,6 +90,8 @@ public class ReportViewPanel extends ViewPanel {
 	
 	protected HashMap<String,Widget> widgets;
 	
+	protected GeneralCSS css;
+	
 	
 	protected ReportViewPanel(String url, WindowInt window) throws Exception {
 		this.window = window;
@@ -99,6 +103,9 @@ public class ReportViewPanel extends ViewPanel {
 		runReportInterface = "runReport";
 		promptsInterface = "getPrompts";
 		reportParameters = new ArrayList<Prompt>();
+	
+		css = OpenELISResources.INSTANCE.general();
+		css.ensureInjected();
 
 		initialize();
 
@@ -188,10 +195,10 @@ public class ReportViewPanel extends ViewPanel {
 		Widget w;
 
 		main = new VerticalPanel();
-		main.setStyleName("WhiteContentPanel");
+		main.setStyleName(css.WhiteContentPanel());
 		add(main);
 		tp = new FlexTable();
-		tp.setStyleName("Form");
+		tp.setStyleName(css.Form());
 		main.add(tp);
 
 		// for (Prompt p : reportParameters) {
@@ -520,7 +527,6 @@ public class ReportViewPanel extends ViewPanel {
 
 		t = new TextBox();
 		t.setRequired(p.isRequired());
-		t.setStyleName("ScreenTextBox");
 		t.setHelper(f);
 
 		if (p.getMask() != null)
@@ -557,7 +563,6 @@ public class ReportViewPanel extends ViewPanel {
 		c = new Calendar();
 		c.setHelper(h);
 
-		c.setStyleName("ScreenCalendar");
 		c.setRequired(p.isRequired());
 
 		if (p.getWidth() != null && p.getWidth() > 0)
@@ -593,7 +598,7 @@ public class ReportViewPanel extends ViewPanel {
 		//
 		if (!DataBaseUtil.isEmpty(p.getPrompt())) {
 			pr = new Label(p.getPrompt());
-			pr.setStyleName("Prompt");
+			pr.setStyleName(css.Prompt());
 			tp.setWidget(row, 0, pr);
 			hp = new HorizontalPanel();
 			hp.add(w);
@@ -655,5 +660,6 @@ public class ReportViewPanel extends ViewPanel {
 	public HashMap<String, Widget> getWidgets() {
 		return widgets;
 	}
+
 	
 }

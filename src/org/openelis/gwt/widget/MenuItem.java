@@ -30,19 +30,34 @@ import java.util.ArrayList;
 import org.openelis.gwt.resources.MenuCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 
-public class MenuItem extends Composite {
+public class MenuItem extends Composite implements HasMouseOverHandlers {
+	@UiTemplate("MenuItem.ui.xml")
+	interface MenuItemUiBinder extends UiBinder<HTML, MenuItem>{};
+	public static final MenuItemUiBinder uiBinder = GWT.create(MenuItemUiBinder.class);
 	
-	protected String icon,display,description;
+	@UiField
+	protected TableCellElement icon,display,description;
+	@UiField
+	protected TableRowElement bottomRow;
+	
+	protected MenuCSS css;
 	
 	protected ArrayList<Command> commands;
 
@@ -51,67 +66,31 @@ public class MenuItem extends Composite {
      * if the menuItem is enabled.
      */
 
-	protected boolean autoClose, enabled;
-	
-	protected MenuCSS css = OpenELISResources.INSTANCE.menuCss();
-	
+	protected boolean autoClose=true, enabled;
+		
 	protected int eventsToSink;
 	
-	protected Grid grid;
-    
-    /**
-     * Constructor that will create a MenuItem that will autoClose by default.
-     * @param icon
-     * @param display
-     * @param description
-     */
-    public MenuItem(String icon, String display, String description) {
-        this(icon,display,description,true);
-    }
-    
-    /**
-     * Constructor that will crate a MenuItem that wll autoClose by the param passed
-     * @param icon
-     * @param display
-     * @param description
-     * @param autoClose
-     */
-    public MenuItem(String icon, String display, String description, boolean autoClose) {
-    	this.icon = icon;
-    	this.display = display;
-    	this.description = description;
-    	    	
-        grid = new Grid(2,2);
-
-        grid.setCellPadding(0);
-        grid.setCellSpacing(0);
-        
-
-        grid.setText(0, 0, "");
-
-        
-        if(!"".equals(icon))
-            grid.getCellFormatter().addStyleName(0, 0, icon);
-        else
-        	grid.getCellFormatter().setVisible(0, 0, false);
-        
-        grid.setText(0,1,display);
-
-        
-        if("".equals(description))
-            grid.removeRow(1);
-        else
-            grid.setText(1,1,description);
-
-        initWidget(grid);
-                        
-        this.autoClose = autoClose;   
-        
+	public MenuItem() {
+		initWidget(uiBinder.createAndBindUi(this));    
+		css = OpenELISResources.INSTANCE.menuCss();
+		css.ensureInjected();
         setEnabled(true);
-        
-        setCSS(OpenELISResources.INSTANCE.menuCss());
     }
+	
+	public MenuItem(String icon, String display, String description) {
+		this();
+		setIcon(icon);
+		setDisplay(display);
+		setDescription(description);
+	}
     
+	public MenuItem(String icon, String display, String description,boolean autoClose) {
+		this();
+		setIcon(icon);
+		setDisplay(display);
+		setDescription(description);
+		this.autoClose = autoClose;
+	}
     /**
      * Method to enable/disable the MenuItem
      * @param enabled
@@ -164,51 +143,23 @@ public class MenuItem extends Composite {
     protected boolean autoClose() {
         return autoClose;
     }
-    
-    public String getIcon() {
-    	return icon;
-    }
-    
-    public String getDisplay() {
-    	return display;
-    }
-    
-    public String getDescription() {
-    	return description;
-    }
-    
-    /**
-     * Method used by containing widgets to register a MouseOverHandler to this MenuItem.
-     * @param handler
-     * @return
-     */
-    protected HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-        return addHandler(handler,MouseOverEvent.getType());
-    }
-    
-    public void setCSS(MenuCSS css) {
-    	css.ensureInjected();
-    	
-    	if(!isEnabled()) {
-    		removeStyleName(this.css.disabled());
-    		addStyleName(css.disabled());
-    	}
-    	
-    	this.css = css;
-    	
-        grid.setStyleName(css.TopMenuRowContainer());
-        grid.getCellFormatter().setStylePrimaryName(0,0,css.topMenuIcon());
-        grid.getCellFormatter().setStylePrimaryName(0,1,css.topMenuItemMiddle());
-        grid.getCellFormatter().addStyleName(0,1,css.topMenuItemTitle());
-        grid.getCellFormatter().addStyleName(0,1,css.locked());
         
-        if(grid.getRowCount() > 1) {
-        	grid.getCellFormatter().setStylePrimaryName(1,0,css.topMenuIcon());
-            grid.getCellFormatter().setStylePrimaryName(1,1,css.topMenuItemMiddle());
-            grid.getCellFormatter().addStyleName(1,1,css.topMenuItemDesc());
-        }
-    	
+    public void setIcon(String icon) {
+    	this.icon.setAttribute("class",icon);
     }
+    
+    public void setDisplay(String display) {
+    	this.display.setInnerText(display);
+    }
+    
+    public void setDescription(String description) {
+    	if(description != null || "".equals(description)){
+    		this.description.setInnerText(description);
+    		bottomRow.removeAttribute("style");
+    	}else
+    		bottomRow.setAttribute("style", "display:none;");
+    }
+    
 	/**
 	 * These methods were added to ensure the button will be correctly enabled or disabled 
 	 * when it is first drawn.
@@ -233,5 +184,10 @@ public class MenuItem extends Composite {
 	protected void onAttach() {
 		super.onAttach();
 		super.sinkEvents(eventsToSink);
+	}
+
+	@Override
+	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
+		return addDomHandler(handler,MouseOverEvent.getType());
 	}
 }

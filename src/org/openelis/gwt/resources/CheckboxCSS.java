@@ -1,6 +1,8 @@
 package org.openelis.gwt.resources;
 
-public interface CheckboxCSS extends GeneralCSS {
+import com.google.gwt.resources.client.CssResource;
+
+public interface CheckboxCSS extends CssResource{
 	
 	String Checked();
 	String Unchecked();

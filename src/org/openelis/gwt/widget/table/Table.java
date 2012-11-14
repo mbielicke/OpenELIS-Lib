@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.openelis.gwt.common.LocalizedException;
@@ -89,9 +90,14 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiChild;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -246,6 +252,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		}
 	}
 	
+	public Table() {
+		rowHeight = 20;
+		fixScrollBar = true;
+		multiSelect = false;
+		columns = new ArrayList<Column>(5);
+		view = new View(this);
+	    setWidget(view);
+	    setKeyHandling();
+	}
 		
 	public Table(Builder builder) {
 		
@@ -263,7 +278,10 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 			setWidth(builder.width.intValue());
 		
 		setColumns(builder.columns);
-		
+		setKeyHandling();
+	}
+	
+	private void setKeyHandling() {
 		/*
 		 * This Handler takes care of all key events on the table when editing
 		 * and when only selection is on
@@ -727,8 +745,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * 
 	 * @param verticalScroll
 	 */
-	public void setVerticalScroll(Scrolling verticalScroll) {
-		this.verticalScroll = verticalScroll;
+	public void setVerticalScroll(String verticalScroll) {
+		this.verticalScroll = Scrolling.valueOf(verticalScroll);
 		layout();
 		
 	}
@@ -747,8 +765,8 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	 * 
 	 * @param horizontalScroll
 	 */
-	public void setHorizontalScroll(Scrolling horizontalScroll) {
-		this.horizontalScroll = horizontalScroll;
+	public void setHorizontalScroll(String horizontalScroll) {
+		this.horizontalScroll = Scrolling.valueOf(horizontalScroll);
 		layout();
 	}
 
@@ -975,6 +993,7 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 	public Column addColumn() {
 		return addColumn("", "");
 	}
+
 
 	public void addColumn(Column col) {
 		addColumnAt(columns.size(),col);
@@ -2620,5 +2639,15 @@ public class Table extends FocusPanel implements ScreenWidgetInt, Queryable,
 		// TODO Auto-generated method stub
 		
 	}
+
+	
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof Column;
+
+		((Column)w).setTable(this);
+		addColumn((Column)w);	
+	}
+	
 
 }

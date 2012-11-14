@@ -93,11 +93,11 @@ public class ServiceUtils {
             l = doc.createElement("locale");
             l.appendChild(doc.createTextNode(locale));
             root.appendChild(l);
-
+            /*
             l = doc.createElement("props");
             l.appendChild(doc.createTextNode(props));
             root.appendChild(l);
-            
+            */
             output = new ByteArrayOutputStream();
             XMLUtil.transformXML(doc, new File(url), new StreamResult(output));
         

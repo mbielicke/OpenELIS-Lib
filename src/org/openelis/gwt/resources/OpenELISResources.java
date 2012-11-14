@@ -13,37 +13,34 @@ public interface OpenELISResources extends ClientBundle {
 	@Source("css/general.css")
 	GeneralCSS general();
 	
-	@Source({"css/button.css","css/general.css"})
+	@Source("css/button.css")
 	ButtonCSS button();
 	
-	@Source({"css/windownoimage.css","css/general.css"})
-	WindowNoImageCSS window();
+	@Source("css/window.css")
+	WindowCSS window();
 	
-	@Source({"css/windownoimage.css","css/general.css"})
-	WindowNoImageCSS windowNoImage();
-	
-	@Source({"css/windownocap.css","css/general.css"})
+	@Source("css/windownocap.css")
 	WindowNoCap windowNoCap();
 	
-	@Source({"css/dialog.css","css/general.css"})
+	@Source("css/dialog.css")
 	DialogCSS dialog();
 	
 	@Source({"css/autoComplete.css","css/select.css"})
 	AutoCompleteCSS autocomplete();
 	
-	@Source({"css/checkbox.css","css/general.css"})
+	@Source("css/checkbox.css")
 	CheckboxCSS checkbox();
 	
 	@Source("css/collapse.css")
 	CollapseCSS collapse();
 	
-	@Source({"css/confirm.css","css/windownoimage.css","css/general.css"})
+	@Source({"css/confirm.css","css/window.css"})
 	ConfirmCSS confirm();
 	
 	@Source({"css/dropdown.css","css/select.css","css/checkbox.css"})
 	DropdownCSS dropdown();
 	
-	@Source({"css/menu.css","css/general.css"})
+	@Source("css/menu.css")
 	MenuCSS menuCss();
 	
 	@Source("css/note.css")
@@ -59,22 +56,22 @@ public interface OpenELISResources extends ClientBundle {
 	@NotStrict
 	TabPanelCSS tabpanel();
 	
-	@Source({"css/text.css","css/general.css"})
+	@Source("css/text.css")
 	TextCSS text();
 	
 	@Source({"css/calendar.css","css/select.css"})
 	CalendarCSS calendar();
 	
-	@Source({"css/table.css","css/general.css"})
+	@Source("css/table.css")
 	TableCSS table();
 	
 	@Source("css/dragdrop.css")
 	DragDropCSS dragDrop();
 	
-	@Source({"css/tree.css","css/table.css","css/general.css"})
+	@Source({"css/tree.css","css/table.css"})
 	TreeCSS tree();
 	
-	@Source({"css/buttonpanel.css","css/general.css"})
+	@Source("css/buttonpanel.css")
 	ButtonPanelCSS buttonPanel();
 	
 	@Source("css/progress.css")
@@ -82,6 +79,12 @@ public interface OpenELISResources extends ClientBundle {
 	
 	@Source("css/percent.css")
 	PercentCSS percent();
+	
+	@Source("css/calendarui.css")
+	CalendarUICSS calendarui();
+	
+	@Source("css/calendarbutton.css")
+	ButtonCSS calendarbutton();
 	
 	@Source("images/close.png")
 	ImageResource closeButton();

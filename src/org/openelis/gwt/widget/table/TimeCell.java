@@ -15,9 +15,11 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TimeCell implements CellRenderer, CellEditor {
+public class TimeCell implements CellRenderer, CellEditor, IsWidget {
 
 	private TextBox<String> editor;
 	private ColumnInt       column;
@@ -184,6 +186,12 @@ public class TimeCell implements CellRenderer, CellEditor {
 	@Override
 	public void setColumn(ColumnInt col) {
 		this.column = col;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
     

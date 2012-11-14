@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+ 
+ <ui:style>
+   .cell {
+		display:table-cell;
+		vertical-align:middle;
+	}
+ </ui:style>
+ 
+  <g:HorizontalPanel>
+    <g:AbsolutePanel ui:field="content"/>
+    <g:AbsolutePanel ui:field="panel">
+      <g:AbsolutePanel styleName="{style.cell}">
+        <g:FocusPanel ui:field="arrow" width="6px"/>
+      </g:AbsolutePanel>
+    </g:AbsolutePanel>
+  </g:HorizontalPanel>
+
+</ui:UiBinder>

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class CalendarTable extends Composite implements HasSelectionHandlers<Datetime> {
     
+	
     /*
      * Wrapped table for displaying the date cells
      */

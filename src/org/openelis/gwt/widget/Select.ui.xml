@@ -1,0 +1,16 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:w="urn:import:org.openelis.gwt.widget">
+
+    <g:Grid cellPadding="0" cellSpacing="0" ui:field="display">
+      <g:row>
+        <g:customCell>
+          <w:TextBase ui:field="textbox"/>
+        </g:customCell>
+        <g:customCell>
+          <w:Button ui:field="button"/>
+        </g:customCell>
+      </g:row>
+    </g:Grid>
+
+</ui:UiBinder>

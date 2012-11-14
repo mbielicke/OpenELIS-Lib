@@ -3,12 +3,16 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.arjuna.ats.arjuna.coordinator.OnePhaseResource;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -17,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ButtonGroup extends Composite implements HasClickHandlers {
+public class ButtonGroup extends SimplePanel implements HasClickHandlers {
 
     private ArrayList<Button> buttons = new ArrayList<Button>();
 
@@ -30,7 +34,7 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
      * @param panel
      */
     public void setButtons(Panel panel) {
-        initWidget(panel);
+    	super.setWidget(panel);
         findButtons(panel);
     }
 
@@ -65,4 +69,15 @@ public class ButtonGroup extends Composite implements HasClickHandlers {
             button.setEnabled(enabled);
         }
     }
+
+	@Override
+	public void setWidget(IsWidget w) {
+		setButtons((Panel)w);
+	}
+	
+	@Override
+	public void setWidget(Widget w) {
+		setButtons((Panel)w);
+	}
+
 }

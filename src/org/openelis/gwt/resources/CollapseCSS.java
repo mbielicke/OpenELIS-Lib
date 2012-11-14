@@ -7,7 +7,8 @@ public interface CollapseCSS extends CssResource {
 	String LeftMenuPanePanelClosed();
 	String LeftMenuPanePanelOpen();
 	String noButtons();
-	String LeftMenuPanePanelDiv();
 	String LeftSidePanel();
+	String ArrowOpen();
+	String ArrowClose();
 
 }

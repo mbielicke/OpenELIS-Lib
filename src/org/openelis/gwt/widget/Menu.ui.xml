@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+  
+  <ui:with type="org.openelis.gwt.resources.OpenELISResources" field="res"/>
+  
+  <g:HTML>
+	<table class="{res.menuCss.TopMenuRowContainer}" cellSpacing="1" cellPadding="0">
+	  <tr>
+	    <td rowSpan="2" ui:field="icon" width="20px"/>
+	    <td ui:field="display" style="white-space:nowrap;" class="{res.menuCss.topMenuItemTitle}"/>
+	    <td ui:field="arrow" class="{res.menuCss.MenuArrow}"/>
+	  </tr>
+	  <tr ui:field="bottomRow" style="display:none;">
+	    <td ui:field="description" class="{res.menuCss.topMenuItemDesc}"/>
+	    <td/>
+	  </tr>
+	</table>  
+  </g:HTML>
+         
+</ui:UiBinder>

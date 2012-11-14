@@ -28,6 +28,7 @@ package org.openelis.gwt.widget;
 import org.openelis.gwt.resources.CollapseCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,42 +36,41 @@ import com.google.gwt.event.logical.shared.HasResizeHandlers;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiChild;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CollapsePanel extends Composite implements ClickHandler, HasResizeHandlers {
+	@UiTemplate("Collapse.ui.xml")
+	interface CollapseUiBinder extends UiBinder<Widget, CollapsePanel>{};
+	public static final CollapseUiBinder uiBinder = GWT.create(CollapseUiBinder.class);
     
-    private Grid 							panel;
-    private HorizontalPanel 				content;
-    private FocusPanel 						arrow;
-    public boolean 							isOpen;
+	@UiField
+    protected AbsolutePanel    				content,panel;
+	@UiField
+    protected FocusPanel 					arrow;
+    protected boolean 						isOpen;
     protected CollapseCSS 					css;
     
+    public CollapsePanel() {
+    	this(false);
+    }
+    
     public CollapsePanel(boolean open){
-    	panel = new Grid(1,2);
-    	content = new HorizontalPanel();
-    	arrow = new FocusPanel();
-    	
-        initWidget(panel);
-        panel.setCellPadding(0);
-        panel.setCellSpacing(0);
-      
-        panel.setWidth("100%");
+    	initWidget(uiBinder.createAndBindUi(this));
 
-       
-        arrow.addClickHandler(this);
-     
-        panel.setWidget(0, 0, content);
-        panel.setWidget(0,1,arrow);
-        panel.getCellFormatter().setVerticalAlignment(0,0,HasAlignment.ALIGN_TOP);
+    	content.setVisible(false);
+    	
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				if(isAttached())
-					panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+					panel.setHeight(getParent().getParent().getParent().getOffsetHeight()+"px");
 			}
 		});
         
@@ -80,18 +80,19 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         	open();
     }
     
+    @UiChild(limit=1,tagname="content")
     public void setContent(Widget wid){
         if(content.getWidgetCount() > 0)
             content.remove(0);
         content.add(wid);
-        content.setCellVerticalAlignment(wid,HasAlignment.ALIGN_TOP);
         content.setHeight("100%");
     }
     
     public void open() {
         if(!isOpen){
             content.setVisible(true);
-            panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelOpen());
+            panel.setStyleName(css.LeftMenuPanePanelOpen());
+            arrow.setStyleName(css.ArrowClose());
             arrow.setFocus(false);
             isOpen = true;
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
@@ -101,13 +102,22 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     public void close(){
         if(isOpen){
             content.setVisible(false);
-            panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
+            panel.setStyleName(css.LeftMenuPanePanelClosed());
+            arrow.setStyleName(css.ArrowOpen());
             arrow.setFocus(false);
             isOpen = false;       
             ResizeEvent.fire(this, content.getOffsetWidth(), content.getOffsetHeight());
         }
     }
 
+    public void setOpen(boolean open) {
+    	if(open)
+    		open();
+    	else
+    		close();
+    }
+    
+    @UiHandler("arrow")
     public void onClick(ClickEvent event) {
         if(content.isVisible()){
             close();
@@ -120,12 +130,14 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
     	css.ensureInjected();
     	this.css = css;
     	
-    	if(isOpen) 
-    		panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelOpen());
-    	else
-    		panel.getCellFormatter().setStyleName(0,1,css.LeftMenuPanePanelClosed());
+    	if(isOpen) {
+    		panel.setStylePrimaryName(css.LeftMenuPanePanelOpen());
+    		arrow.setStyleName(css.ArrowClose());
+    	}else{
+    		panel.setStylePrimaryName(css.LeftMenuPanePanelClosed());
+    		arrow.setStyleName(css.ArrowOpen());
+    	}
     	
-        arrow.setStyleName(css.LeftMenuPanePanelDiv());
     }
     
     @Override
@@ -133,17 +145,20 @@ public class CollapsePanel extends Composite implements ClickHandler, HasResizeH
         boolean firstAttach = !isOrWasAttached();
         super.onAttach();
         
-        panel.setHeight(panel.getParent().getParent().getParent().getOffsetHeight()+"px");
+        panel.setHeight(getParent().getParent().getParent().getOffsetHeight()+"px");
         
         if(firstAttach) 
             content.setVisible(false);   
-        
      
+    }
+    
+    @Override
+    public boolean isVisible() {
+    	return content.isVisible();
     }
     
 	public HandlerRegistration addResizeHandler(ResizeHandler handler) {
 		return addHandler(handler,ResizeEvent.getType());
 	}
-    
 
 }

@@ -1,0 +1,24 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:table="urn:import:org.openelis.gwt.widget.table"
+             xmlns:shl="urn:import:org.openelis.gwt.widget">
+
+  <!-- Outer Panel that holds Table ScrollView and VerticalScrollBar side-by-side -->             
+  <g:HorizontalPanel ui:field="outer">
+    <!-- The ScrollView of the table that allows the Table to be scrolled horizontally -->
+    <g:ScrollPanel ui:field="scrollView">
+      <!-- Inner Panel to hold Header above the the table rows -->
+  	  <g:VerticalPanel ui:field="inner">
+  	    <!-- Header row initially invisible until set by code -->
+  	    <table:Header ui:field="header" visible="false"/>
+  	    <!--  The Table is placed inside FocusPanel to catch MouseMove and click Events over the table -->
+  	    <g:FocusPanel ui:field="fp">
+  	      <g:FlexTable ui:field="flexTable"/>
+  	  	</g:FocusPanel>  
+  	  </g:VerticalPanel>
+  	</g:ScrollPanel>
+  	<!-- Vertical scrollbar initially invisible until set by code -->
+  	<shl:VerticalScrollbar ui:field="vertScrollBar" visible="false"/>
+  </g:HorizontalPanel>
+
+</ui:UiBinder>

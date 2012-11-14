@@ -1,6 +1,8 @@
 package org.openelis.gwt.resources;
 
-public interface TextCSS extends GeneralCSS {
+import com.google.gwt.resources.client.CssResource;
+
+public interface TextCSS extends CssResource {
 	String Upper();
 	String Lower();
 	String Focus();
@@ -8,5 +10,6 @@ public interface TextCSS extends GeneralCSS {
 	String InputWarning();
 	String ScreenTextBox();
 	String ScreenTextArea();
+	String ScreenLabel();
 
 }

@@ -6,7 +6,6 @@ import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.Util;
 import org.openelis.gwt.constants.Constants;
-import org.openelis.gwt.resources.GeneralCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.resources.TextCSS;
 

@@ -151,7 +151,7 @@ public class TableScreen extends Screen {
 		vscroll.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setVerticalScroll(Table.Scrolling.valueOf(event.getValue()));
+				test.setVerticalScroll(event.getValue());
 			}
 		});
 
@@ -161,7 +161,7 @@ public class TableScreen extends Screen {
 		hscroll.addValueChangeHandler(new ValueChangeHandler<String>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setHorizontalScroll(Table.Scrolling.valueOf(event.getValue()));
+				test.setHorizontalScroll(event.getValue());
 			}
 		});
 		

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.Exceptions;
 import org.openelis.gwt.common.LocalizedException;
@@ -44,6 +45,7 @@ import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.event.CellClickedEvent;
 import org.openelis.gwt.widget.table.event.CellClickedHandler;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -72,6 +74,11 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiChild;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -80,8 +87,10 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by OpenELIS Screens to display and input values in forms
@@ -99,22 +108,33 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 													  HasValue<T>, 
 													  HasHelper<T>,
 													  HasExceptions {
+	
+	@UiTemplate("Select.ui.xml")
+	interface DropdownUiBinder extends UiBinder<Widget, Dropdown>{};
+	public static final DropdownUiBinder uiBinder = GWT.create(DropdownUiBinder.class);
 
 	/**
 	 * Used for Dropdown display
 	 */
 
-	protected FocusPanel            				focus;
-	protected AbsolutePanel                         outer,image;
-	protected Grid 					                display,multiHeader;
+	
+	protected AbsolutePanel                         image;
+	@UiField
+	protected Grid 					                display;
+	protected Grid                                  multiHeader;
 	protected VerticalPanel         				vp;
-	protected Button  					            button,checkAll,uncheckAll,close;
+	@UiField
+	protected Button  					            button;
+	protected Button                                checkAll,uncheckAll,close;
 	protected Table                 				table;
 	protected PopupPanel      					    popup;
 	protected int                   			    cellHeight = 19, itemCount = 10, width, maxDisplay = 3;
 	protected boolean 					            required,queryMode,showingOptions,enabled;
 	protected T                      				value;
 
+	@UiField 
+	protected TextBase                              textbox;
+	
 	/**
 	 * Sorted list of display values for search
 	 */
@@ -158,52 +178,16 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 */
 	public void init() {
 		/*
-		 * Final instance used in Anonymous handlers.
-		 */
-		final Dropdown<T> source = this;
-
-		/*
 		 * Final instance of the private class KeyboardHandler
 		 */
 		final KeyboardHandler keyHandler = new KeyboardHandler();
-
-		/*
-		 * Focus Panel is used to catch Focus and blur events internal to the widget
-		 */
-		focus = new FocusPanel();
 		
-		/*
-		 * Structure of widget
-		 */
-		display = new Grid(1,2);
-		display.setCellPadding(0);
-		display.setCellSpacing(0);
+		initWidget(uiBinder.createAndBindUi(this));
 
-		/*
-		 * New constructor in Button to drop the border and a div with the
-		 * passed style.
-		 */
-		button = new Button();
 		
 		/* Image must be in a div instead of adding the style to cell itself to display correctly */
-		image = new AbsolutePanel();
-		
+		image = new AbsolutePanel();		
 		button.setWidget(image);
-
-		display.setWidget(0,1,button);
-		display.getCellFormatter().setWidth(0,1,"16px");
-
-		focus.add(display);
-
-		/*
-		 * We wrap the focus panel again so that the focus and blur events 
-		 * do not directly go from inner events to being external events;
-		 */
-		outer = new AbsolutePanel();
-		outer.add(focus);
-		initWidget(outer);
-
-		
 
 		/*
 		 * Set the focus style when the Focus event is fired Externally
@@ -226,48 +210,6 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 			}
 		});
 
-		/*
-		 *  Receives the Focus Event internally and exposes it Externally 
-		 */
-		focus.addFocusHandler(new FocusHandler() {
-			public void onFocus(FocusEvent event) {
-				FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
-			}
-		});
-
-		/*
-		 *  Receives the Blur Event internally and determines if it should be
-		 *  fired externally or if the widget still has focus
-		 */
-		focus.addBlurHandler(new BlurHandler() {
-			public void onBlur(BlurEvent event) {
-				
-				if(!showingOptions && isEnabled()) 
-					BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-			}
-		});
-
-		/*
-		 * Register click handler to button to show the popup table
-		 */
-		button.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(isEnabled())
-					showPopup();
-			}
-		});
-
-		/*
-		 * This is a hack to ensure that showingOptions is set true before 
-		 * the blur event is fired 
-		 */
-		button.addMouseDownHandler(new MouseDownHandler() {
-			public void onMouseDown(MouseDownEvent event) {
-				if(isEnabled())
-					showingOptions = true;
-			}
-		});
-
 
 		/*
 		 * Registers the keyboard handling this widget
@@ -278,6 +220,33 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		exceptions = new Exceptions();
 		
 		setCSS(OpenELISResources.INSTANCE.dropdown());
+		
+		setPopupContext(new Table.Builder(10).column(new Column.Builder(100).build()).build());
+		setHelper((WidgetHelper)new StringHelper());
+	}
+	
+	@UiHandler("textbox")
+	protected void onFocus(FocusEvent event) {
+		FocusEvent.fireNativeEvent(event.getNativeEvent(),this);
+	}
+	
+	@UiHandler("textbox")
+	protected void onBlur(BlurEvent event) {
+		
+		if(!showingOptions && isEnabled()) 
+			BlurEvent.fireNativeEvent(event.getNativeEvent(), this);
+	}
+	
+	@UiHandler("button")
+	public void onClick(ClickEvent event) {
+		if(isEnabled())
+			showPopup();
+	}
+	
+	@UiHandler("button")
+	public void onMouseDown(MouseDownEvent event) {
+		if(isEnabled())
+			showingOptions = true;
 	}
 
 
@@ -404,7 +373,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 				sb = new StringBuffer().append(selected+" "+Constants.get().optionSelected());
 		}
 
-		display.setText(0, 0, sb.toString());
+		textbox.setText(sb.toString());
 	}
 
 	@Override
@@ -421,7 +390,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 * set the Textbox to width - 16 to account for button.
 		 */
 
-		display.getCellFormatter().setWidth(0,0,(width - 16) + "px");
+		textbox.setWidth((width - 16) + "px");
 
 		if(table != null) 
 			table.setWidth(width+"px");
@@ -468,12 +437,14 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * Dropdown. 
 	 * 
 	 */
+	@UiChild(limit=1,tagname="popup")
 	public void setPopupContext(Table tableDef) {
 		this.table = tableDef;
-		//table.setStyleName(css.DropdownTable());
+
 		table.setFixScrollbar(false);
 		table.setRowHeight(16);
 		table.setEnabled(true);
+		
 		/*
 		 * This handler will will cancel the selection if the item has been
 		 * disabled.
@@ -535,7 +506,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * Sets the number of visible rows in the Table that shows the options
 	 * @param itemCount
 	 */
-	public void setVisibleItemCount(int itemCount) {
+	public void setVisibleItems(int itemCount) {
 		this.itemCount = itemCount;
 
 		if(table != null) 
@@ -632,7 +603,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * @return
 	 */
 	public String getDisplay() {
-		return display.getText(0,0);
+		return textbox.getText();
 	}
 
 	// ********** Methods Overridden in the ScreenWidetInt ****************
@@ -646,7 +617,10 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		this.enabled = enabled;
 
 		button.setEnabled(enabled);
-		table.setEnabled(enabled);
+		textbox.setEnabled(enabled);
+		
+		if(table != null)
+			table.setEnabled(enabled);
 
 		if (enabled)
 			sinkEvents(Event.ONKEYDOWN | Event.ONKEYPRESS);
@@ -749,7 +723,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 			 * The table will remove the column from the model
 			 */
 			table.removeColumnAt(0);
-			display.setText(0, 0, "");
+			textbox.setText("");
 		}
 	}
 
@@ -1140,7 +1114,7 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	 * Sets/Loses focus to this widget based on the passed boolean.
 	 */
 	public void setFocus(boolean focused) {
-		focus.setFocus(focused);
+		textbox.setFocus(focused);
 	}
 
 	/**
@@ -1266,7 +1240,12 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		css.ensureInjected();
 		this.css = css;
 		image.setStyleName(css.SelectButton());
-		display.setStyleName(css.SelectBox());
+		textbox.setStyleName(css.SelectBox());
+	}
+	
+	public void setField(String field) {
+		if(field.equals("Integer"))
+			setHelper((WidgetHelper)new IntegerHelper());
 	}
 
 }

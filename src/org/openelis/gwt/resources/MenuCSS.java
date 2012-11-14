@@ -1,6 +1,8 @@
 package org.openelis.gwt.resources;
 
-public interface MenuCSS extends GeneralCSS {
+import com.google.gwt.resources.client.CssResource;
+
+public interface MenuCSS extends CssResource {
 	String MenuPanel();
 	String topMenuBar();
 	String topMenuBarWeb();

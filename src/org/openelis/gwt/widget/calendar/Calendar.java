@@ -45,9 +45,11 @@ import org.openelis.gwt.widget.ScreenWidgetInt;
 import org.openelis.gwt.widget.TextBase;
 import org.openelis.gwt.widget.WidgetHelper;
 
-import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -68,15 +70,18 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class extends the TextBox<Datetime> and adds a button for using the
@@ -92,17 +97,25 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 												   HasHelper<Datetime>,
 												   HasExceptions {
 												  
+	@UiTemplate("../Select.ui.xml")
+	interface CalendarUiBinder extends UiBinder<Widget, Calendar>{};
+	public static final CalendarUiBinder uiBinder = GWT.create(CalendarUiBinder.class);
+	
     /**
      * Used for Calendar display
      */
+	@UiField
     protected Grid                                  display;
+	@UiField
     protected Button                                button;
     protected PopupPanel                            popup;
-    protected CalendarWidget                        calendar;
-    protected MonthYearWidget                       monthYearWidget;
+    protected CalendarWidgetUI                      calendar;
+    protected MonthYearWidgetUI                     monthYearWidget;
     protected int                                   width;
     protected boolean                               showingCalendar,queryMode,required;
+    protected AbsolutePanel                         image;
 
+    @UiField
     protected TextBase                              textbox;
     
     protected Datetime                              value;
@@ -122,43 +135,17 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * Default no-arg constructor
      */
     public Calendar() {
-    	init();
     	source = this;
-    }
 
-    /**
-     * This method will set the display of the Calendar and set up Event
-     * Handlers
-     */
-    public void init() {
-    	css = OpenELISResources.INSTANCE.calendar();
-    	css.ensureInjected();
-    	
-        /*
+    	/*
          * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
-
-        display  = new Grid(1,2);
-        display.setCellSpacing(0);
-        display.setCellPadding(0);
         
-        textbox = new TextBase();
+        initWidget(uiBinder.createAndBindUi(this));
 
-        button = new Button();
         AbsolutePanel image = new AbsolutePanel();
-        image.setStyleName(css.CalendarButton());
         button.setWidget(image);
-
-        display.setWidget(0,0,textbox);
-        display.setWidget(0,1,button);
-        display.getCellFormatter().setWidth(0, 1, "14px");
-        
-        initWidget(display);
-
-        display.setStyleName(css.SelectBox());
-        textbox.setStyleName(css.Calendar());
-
         
         /*
          * Set the focus style when the Focus event is fired Externally
@@ -221,6 +208,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
          */
         addHandler(keyHandler, KeyDownEvent.getType());
         
+        setCSS(OpenELISResources.INSTANCE.calendar());
+        
     }
     
     /**
@@ -238,7 +227,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     /**
      * This method will initialize and show the popup panel for this widget.
      */
-    private void showPopup() {
+    protected void showPopup() {
     	showingCalendar = true;
         if (popup == null) {
             popup = new PopupPanel(true);
@@ -257,7 +246,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
                 /*
                  * Set new CalendarWidget withe the precision used by this widget
                  */
-                calendar = new CalendarWidget( ((DateHelper)helper).getBegin(),
+                calendar = new CalendarWidgetUI( ((DateHelper)helper).getBegin(),
                                               ((DateHelper)helper).getEnd());
                 /*
                  * CalendarWidget will fire a ValueChangeEvent<Datetime> when the user selects
@@ -278,25 +267,19 @@ public class Calendar extends Composite implements ScreenWidgetInt,
                 calendar.addMonthSelectHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         if (monthYearWidget == null) { 
-                            monthYearWidget = new MonthYearWidget();
+                            monthYearWidget = new MonthYearWidgetUI();
                             /*
                              * Set popup back to calendar with the selected month and year
                              */
-                            monthYearWidget.addOKHandler(new ClickHandler() {
-                                public void onClick(ClickEvent event) {
+                            monthYearWidget.addChangeHandler(new ChangeHandler() {
+								@Override
+								public void onChange(ChangeEvent event) {
                                     calendar.drawMonth(monthYearWidget.getYear(),
-                                                       monthYearWidget.getMonth());
+                                            monthYearWidget.getMonth());
                                     popup.setWidget(calendar);
-                                }
-                            });
-                            /*
-                             * Set popup back to calendar with month and year it has set
-                             */
-                            monthYearWidget.addCancelHandler(new ClickHandler() {
-                                public void onClick(ClickEvent event) {
-                                    popup.setWidget(calendar);
-                                }
-                            });
+									
+								}
+							});
                         }
                         monthYearWidget.setYear(calendar.getYear());
                         monthYearWidget.setMonth(calendar.getMonth());
@@ -319,12 +302,13 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 
         /*
          * SetFocus to the popup so the calendar will take over the key events
-         */
+         
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			public void execute() {
 				 ((FocusPanel)calendar.def.getWidget("CalFocus")).setFocus(true);
 			}
 		});
+		*/
     }
     
     @Override
@@ -750,7 +734,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      * Set the text alignment.
      */
     public void setTextAlignment(TextAlignment alignment) {
-        textbox.setAlignment(alignment);
+        textbox.setTextAlignment(alignment);
     }
 
 
@@ -760,6 +744,15 @@ public class Calendar extends Composite implements ScreenWidgetInt,
      */
     public void setRequired(boolean required) {
         this.required = required;
+    }
+    
+    public void setCSS(CalendarCSS css) {
+    	css.ensureInjected();
+    	this.css = css;
+    	
+        image.setStyleName(css.CalendarButton());
+        display.setStyleName(css.SelectBox());
+        textbox.setStyleName(css.Calendar());
     }
 
 }

@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget;
 
+import java.util.Iterator;
+
 import org.openelis.gwt.resources.MenuCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 
@@ -33,13 +35,15 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
 /**
  *  This class will display MenuItems in Horizontal row and display Menu 
  *  panels below the items
  * 
  */
-public class MenuBar extends Composite {
+public class MenuBar extends Composite implements HasWidgets {
    
     /**
      * Panel that holds the MenuItems
@@ -99,6 +103,31 @@ public class MenuBar extends Composite {
             }
         });
     }
+
+	@Override
+	public void add(Widget w) {
+		assert w instanceof Menu;
+		
+		addMenu((Menu)w);
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
 
 }

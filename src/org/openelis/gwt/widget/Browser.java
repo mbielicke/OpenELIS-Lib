@@ -30,7 +30,6 @@ import java.util.HashMap;
 import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.resources.WindowCSS;
-import org.openelis.gwt.resources.WindowNoImageCSS;
 import org.openelis.gwt.screen.Screen;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
@@ -46,6 +45,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
@@ -91,23 +91,16 @@ public class Browser extends Composite {
      */
     protected WindowInt focusedWindow;
         
-    protected WindowNoImageCSS css;
-    
-    public Browser() {
-
-    };
-    
+    protected WindowCSS css;
+        
     /**
      * Constructor that takes an arguments if the browser should auto-size to the window,
      * and the number of allowed screens to show at once.
      * @param size
      * @param limit
      */
+    @UiConstructor
     public Browser(boolean size, int limit) {
-    	init(size,limit);
-    }
-    
-    public void init(boolean size, int limit) {
         
     	browser = new AbsolutePanel();
         browser.setWidth("100%");
@@ -320,7 +313,7 @@ public class Browser extends Composite {
         protected int zIndex;
     }
     
-    public void setCSS(WindowNoImageCSS css) {
+    public void setCSS(WindowCSS css) {
     	css.ensureInjected();
     	this.css = css;
     	

@@ -24,6 +24,7 @@
     overflow:hidden;
     background:#FFFFFF;
     border: 1px solid #7eadd9;
+    border-radius : 5px;
 }
 
 .InputError {

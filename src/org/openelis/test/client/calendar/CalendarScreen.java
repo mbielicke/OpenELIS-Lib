@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 
@@ -175,7 +176,7 @@ public class CalendarScreen extends Screen {
 
 		alignment.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
-				test.setTextAlignment(TextAlignment.valueOf(event.getValue().toUpperCase()));
+				test.setTextAlignment(TextBoxBase.TextAlignment.valueOf(event.getValue().toUpperCase()));
 			}
 		});
 		

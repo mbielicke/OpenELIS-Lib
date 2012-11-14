@@ -71,6 +71,13 @@
 
 
 .DateCell {
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+	padding-top:2px;
+	text-align : right;
+	padding-right : 8px;
 }
 
 .MyCell {
@@ -137,13 +144,7 @@
 	gwt-image:'todayBar';
 }
 .DateText {
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:10px;
-    text-align:center;
-    height:16px;
-	padding-top:2px;
-	text-align : right;
-	padding-right : 8px;
+
 }
 @sprite .Hover .DateText {
 	gwt-image:'dateCell';
@@ -169,10 +170,7 @@
 	gwt-image:'todayBar';
 }
 .DayText {
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:10px;
-    text-align:center;
-    color:#233D6D;
+
 }
 
 @sprite .DayBar {
@@ -213,11 +211,11 @@
     border:1px solid #8db2e3;
 }
 
-.DateCell .Current .DateText {
+.DateCell .Current  {
     border:1px solid red;
 }
 
-.MYCell .Current .MYText {
+.MYCell .Current  {
     border:1px solid red;
 }
  
@@ -232,7 +230,12 @@
 	gwt-image:'calendarButton';
 }
 
-.DayCell{}
+.DayCell{
+	font-family:Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    color:#233D6D;
+}
 
 .TextboxUnselected {
     border:1px solid #d8d8d8;

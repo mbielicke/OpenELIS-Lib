@@ -26,10 +26,14 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 import org.openelis.gwt.widget.Label;
 
-import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.uibinder.client.UiChild;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -38,7 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class Column extends AbsolutePanel implements ColumnInt {
+public class Column implements ColumnInt, IsWidget, HasWidgets.ForIsWidget {
 
     /**
      * Reference to the Table containing this column
@@ -59,13 +63,11 @@ public class Column extends AbsolutePanel implements ColumnInt {
     /**
      * Editor widget used for this column
      */
-    @SuppressWarnings({ "rawtypes" })
     protected CellEditor   editor;
 
     /**
      * Render widget used for this column
      */
-    @SuppressWarnings("rawtypes")
 	protected CellRenderer renderer = new LabelCell(new Label<String>());
     
     /**
@@ -82,7 +84,7 @@ public class Column extends AbsolutePanel implements ColumnInt {
     /**
      * Boolean flags used by column
      */
-    protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, isFilterable, required, display;
+    protected boolean      enabled, resizable, isFiltered, isSorted, isSortable, isFilterable, required, display=true;
 
 
     protected String style;
@@ -177,7 +179,10 @@ public class Column extends AbsolutePanel implements ColumnInt {
         //setVisible(false);
     }
     
-    @SuppressWarnings("rawtypes")
+    public Column() {
+    	
+    }
+    
 	public CellEditor getCellEditor() {
         return editor;
     }
@@ -185,7 +190,6 @@ public class Column extends AbsolutePanel implements ColumnInt {
     /**
      * Returns the Editor currently being used by this Column
      */
-    @SuppressWarnings("rawtypes")
 	public CellEditor getCellEditor(int row) {
         return editor;
     }
@@ -198,22 +202,19 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param editor
      */
-    @SuppressWarnings("rawtypes")
-	public Column setCellEditor(CellEditor editor) {
+	public void setCellEditor(CellEditor editor) {
         this.editor = editor;
-        return this;
     }
     
     
-    @SuppressWarnings("rawtypes")
 	public CellRenderer getCellRenderer() {
         return renderer;
     }
-    /**
+
+	/**
      * Method will return the currently set Renderer for this column
      * @return
      */
-    @SuppressWarnings("rawtypes")
 	public CellRenderer getCellRenderer(int row) {
         return renderer;
     }
@@ -222,14 +223,13 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * Method will set the current renderer for this column
      * @param renderer
      */
-    @SuppressWarnings("rawtypes")
-	public Column setCellRenderer(CellRenderer renderer) {
+	@UiChild(limit=1,tagname="renderer")
+	public void setCellRenderer(CellRenderer renderer) {
         this.renderer = renderer;
         if (renderer instanceof CellEditor) {
             editor = (CellEditor)renderer;
             editor.setColumn(this);
         }
-        return this;
     }
 
     /**
@@ -246,9 +246,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param table
      */
-    public Column setTable(Table table) {
+    public void setTable(Table table) {
         this.table = table;
-        return this;
     }
 
     /**
@@ -265,9 +264,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param name
      */
-    public Column setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     /**
@@ -284,11 +282,10 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param label
      */
-    public Column setLabel(String label) {
+    public void setLabel(String label) {
         this.label = label;
         if(table != null && table.view != null && table.view.header != null)
         	table.view.header.layout();
-        return this;
     }
 
     public void setStyle(String style) {
@@ -332,10 +329,10 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param width
      */
-    public Column setWidth(int width) {
+    public void setWidth(int width) {
         this.width = Math.max(width, minWidth);
-        table.resize();
-        return this;
+        if(table != null)
+        	table.resize();
     }
 
     /**
@@ -352,9 +349,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param minWidth
      */
-    public Column setMinWidth(int minWidth) {
+    public void setMinWidth(int minWidth) {
         this.minWidth = minWidth;
-        return this;
     }
 
     /**
@@ -371,9 +367,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param enabled
      */
-    public Column setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        return this;
     }
     
     /**
@@ -381,9 +376,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * 
      * @param resizable
      */
-    public Column setResizable(boolean resizable) {
+    public void setResizable(boolean resizable) {
         this.resizable = resizable;
-        return this;
     }
 
     /**
@@ -400,9 +394,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * being filtered.
      * @param isFiltered
      */
-    public Column setFiltered(boolean isFiltered) {
+    public void setFiltered(boolean isFiltered) {
         this.isFiltered = isFiltered;
-        return this;
     }
 
     /**
@@ -413,9 +406,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
         return isFilterable;
     }
     
-    public Column setFilterable(boolean filterable) {
+    public void setFilterable(boolean filterable) {
         isFilterable = filterable;
-        return this;
     }
     
     /**
@@ -430,11 +422,10 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * Sets the filter to be used when filtering this column
      * @param filter
      */
-    public Column setFilter(Filter filter) {
+    public void setFilter(Filter filter) {
         this.filter = filter;
         isFiltered = false;
         isSortable = true;
-        return this;
     }
     
     /**
@@ -457,9 +448,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * Method used to set the flag if this column is allowed to be sorted
      * @param isSortable
      */
-    public Column setSortable(boolean isSortable) {
+    public void setSortable(boolean isSortable) {
         this.isSortable = isSortable;
-        return this;
     }
 
     /**
@@ -467,11 +457,10 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * @param filterable
      */
     @SuppressWarnings("rawtypes")
-	public Column setSort(Comparator sort) {
+	public void setSort(Comparator sort) {
         this.sort = sort;
         isSorted = false;
         isSortable = true;
-        return this;
     }
     
     /**
@@ -486,9 +475,8 @@ public class Column extends AbsolutePanel implements ColumnInt {
      * Method used to set the required flag for this column
      * @param required
      */
-    public Column setRequired(boolean required) {
+    public void setRequired(boolean required) {
         this.required = required;
-        return this;
     }
     
     /**
@@ -517,9 +505,52 @@ public class Column extends AbsolutePanel implements ColumnInt {
 		table.finishEditing();
 	}
 
+	
 	@Override
-	public Widget asWidget() {
+	public void add(IsWidget w) {
+		assert w instanceof CellRenderer;
+
+		setCellRenderer((CellRenderer)w);
+	}
+	
+	
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return new SimplePanel();
+	}
+
+	@Override
+	public void add(Widget w) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
 }

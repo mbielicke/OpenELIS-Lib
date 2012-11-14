@@ -1,0 +1,30 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:w="urn:import:org.openelis.gwt.widget">
+             
+  <g:VerticalPanel ui:field="outer">
+  	<g:Grid ui:field="top" cellPadding="0" cellSpacing="0" width="100%">
+  	  <g:row>
+  	    <g:customCell cellWidth="100%"> 
+  	      <w:Window.Caption ui:field="cap" width="100%"/>
+  	    </g:customCell>
+  	    <g:customCell width="16px">
+  	      <g:FocusPanel ui:field="collapse" width="16px"/>
+  	    </g:customCell>
+  	    <g:customCell width="16px">
+  	      <g:FocusPanel ui:field="close" width="16px"/>
+  	    </g:customCell>
+  	  </g:row>
+  	</g:Grid>
+  	<g:AbsolutePanel ui:field="body"/>
+  	<g:Grid cellSpacing="0" ui:field="bottom">
+  	  <g:row>
+  	    <g:customCell>
+ 		  <g:FocusPanel ui:field="statusImg"/>
+  	    </g:customCell>
+  	    <g:cell width="100%"/>
+  	  </g:row>
+  	</g:Grid>
+  </g:VerticalPanel>
+
+</ui:UiBinder>

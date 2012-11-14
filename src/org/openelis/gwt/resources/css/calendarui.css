@@ -1,0 +1,86 @@
+.CalendarWidget {
+	margin:2px;
+}
+
+.MonthBar {
+	width : 100%;
+	background : #CCC;
+	border : 1px solid #AAA;
+	border-radius : 4px;
+
+}
+
+@sprite .PreviousMonth {
+	gwt-image:'previousMonth';
+}
+
+.MonthContainer {
+	text-align : center;
+}
+
+.MonthDisplay {
+ 	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:12px;
+    text-align:center;
+}
+
+@sprite .MonthSelect {
+	gwt-image:'monthSelect';
+}
+
+@sprite .NextMonth {
+	gwt-image:'nextMonth';
+}
+
+.CalendarTable {
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;;
+	border-collapse : collapse;
+	margin : 0 0 .4em;
+	width: 17em;
+}
+
+.DayBar td {
+	text-align:center;
+}
+
+.DayCell {
+	padding:.7em .3em;
+	text-align:center;
+	font-weight:bold;
+	border : 0;
+}
+
+.CalendarTable td {
+	border:0;
+	padding:1px;	
+}
+
+.CalendarTable td span {
+	display:block;
+	border: 1px solid lightGrey;
+	background:#e6e6e6;
+	color:#555;
+	text-align:right;
+	padding:1px;
+	
+}
+
+td .OffMonth span {
+	background:#ddd8e8;
+	color:grey;
+}
+
+td .Current span {
+	background:#fff8e8;
+}
+
+td .selected span {
+	background:white;
+	color:balck;
+	border:1px solid black;
+}
+
+.MonthYearPanel {
+	width : 17em;
+}

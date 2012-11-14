@@ -341,7 +341,6 @@ public class ViewGenerator extends Generator {
     	String style,css;
     	String[] styles,resource;
     	String width,height,tip,visible,id,clss;
-    	Node attrib;
     	
     	style = getAttribute(node,"style");
     	width = getAttribute(node,"width");
@@ -352,19 +351,9 @@ public class ViewGenerator extends Generator {
     	id = getAttribute(node,"id");
     	clss = getAttribute(node,"class");
     	
-        if(clss != null) {
-        	sw.print(wid+".setStyleName(");
-        	resource = clss.split("\\.");
-        	for(int i = 0; i < resource.length; i++) {
-        		if(i > 0)
-        			sw.print(".");
-        		sw.print(resource[i]);
-        		if(i > 0)
-        			sw.print("()");
-        	}
-        	sw.println(");");
-        }
-
+    	
+        if(clss != null) 
+        	sw.print(wid+".setStyleName("+getResource(clss)+");");
     	
         if (style != null){
         	styles = style.split(",");
@@ -373,10 +362,7 @@ public class ViewGenerator extends Generator {
                 sw.println(wid+".addStyleName(\""+styles[i]+"\");");
             }
         }
-        
-        if (css != null) 
-        	sw.println("DOM.setElementAttribute("+wid+".getElement(), \"style\",\""+css+"\");");
-       
+               
         if (width != null)
             sw.println(wid+".setWidth(\""+width+"\");");
         
@@ -493,7 +479,7 @@ public class ViewGenerator extends Generator {
                 	addTabHandler(node,"wid"+id);
                 
                 sw.println("wid"+id+".setCase(Case.valueOf(\""+fcase+"\"));");
-                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+                sw.println("wid"+id+".setVisibleItems("+visibleItems+");");
  
                 if(table == null) {
                     table = doc.createElement("table");
@@ -561,9 +547,7 @@ public class ViewGenerator extends Generator {
     			sizeToWindow = getAttribute(node,"sizeToWindow","false");
     			limit = getAttribute(node,"winLimit","10");
     			
-    			sw.println("Browser wid"+id+" = (Browser)GWT.create(Browser.class);");
-    			sw.println("wid"+id+".init("+sizeToWindow+","+limit+");");
-    	        //sw.println("wid"+id+".setStyleName(\"ScreenWindowBrowser\");");
+    			sw.println("Browser wid"+id+" = new Browser("+sizeToWindow+","+limit+");");
     	        setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
@@ -573,7 +557,7 @@ public class ViewGenerator extends Generator {
     	
     	factoryMap.put("button", new Factory() {
     		public void getNewInstance(Node node, int id) {    			
-    			String toggle,action,enabled,icon,text,css;
+    			String toggle,action,enabled,icon,rightIcon,text,css;
     			NodeList widgets;
     			Node widget;
     			
@@ -582,23 +566,13 @@ public class ViewGenerator extends Generator {
     			enabled = getAttribute(node,"enabled");
     			icon = getAttribute(node,"icon","");
     			text = getAttribute(node,"text","");
+    			rightIcon = getAttribute(node,"rightIcon","");
     			css = getAttribute(node,"css");
-    			
-    			if(icon.indexOf(".") > 0) {
-    	        	String[] resource = icon.split("\\.");
-    	        	icon  = resource[0];
-    	        	for(int i = 1; i < resource.length; i++) 
-    	        		icon += "."+resource[i] + "()";
-    			}
-    			
-    			if(text.equals("") && icon.equals(""))
-    				sw.println("Button wid"+id+" = new Button();");
-    			else
-    				if(icon.indexOf(".") > 0)
-    					sw.println("Button wid"+id+" = new Button("+icon+",\""+text+"\");");
-    				else
-    					sw.println("Button wid"+id+" = new Button(\""+icon+"\",\""+text+"\");");
-    			
+    			    			
+   				sw.println("Button wid"+id+" = new Button();");
+   				sw.println("wid"+id+".setText(\""+text+"\");");
+    			sw.println("wid"+id+".leftIcon("+getResource(icon)+");");
+    			sw.println("wid"+id+".rightIcon("+getResource(rightIcon)+");");
 
     			
 				if(node.getAttributes().getNamedItem("tab") != null) 
@@ -625,25 +599,13 @@ public class ViewGenerator extends Generator {
     	            }
     	        }
     	        
-    	        if(css != null){
-    	        	String[] resource;
-    	        	resource = css.split("\\.");
-    	        	sw.println("wid"+id+".setCSS(");
-    	        	for(int i = 0; i < resource.length; i++) {
-    	        		if(i > 0)
-    	        			sw.print(".");
-    	        		sw.print(resource[i]);
-    	        		if(i > 0)
-    	        			sw.print("()");
-    	        	}
-    	        	sw.println(");");
-    	        }
+    	        if(css != null)
+    	        	sw.println("wid"+id+".setCSS("+getResource(css)+");");
+
 
     	        if(enabled != null)
     	        	sw.println("wid"+id+".setEnabled("+enabled+");");
-    	        
-
-    	        	
+    	     
     	        
     	        setDefaults(node, "wid"+id);
     		}
@@ -1007,7 +969,7 @@ public class ViewGenerator extends Generator {
 				if(node.getAttributes().getNamedItem("shortcut") != null)
 					addShortcutHandler(node, "wid"+id);
 				
-                sw.println("wid"+id+".setVisibleItemCount("+visibleItems+");");
+                sw.println("wid"+id+".setVisibleItems("+visibleItems+");");
 
 				if(table == null) {
 				    table = doc.createElement("table");
@@ -2727,6 +2689,16 @@ public class ViewGenerator extends Generator {
     	Node attrib;
     	
     	return (attrib = node.getAttributes().getNamedItem(key)) != null ? attrib.getNodeValue() : def;
+    }
     
+    private String getResource(String rsc) {
+		if(rsc.indexOf(".") > 0) {
+        	String[] resource = rsc.split("\\.");
+        	rsc  = resource[0];
+        	for(int i = 1; i < resource.length; i++) 
+        		rsc += "."+resource[i] + "()";
+        	return rsc;
+		}else
+			return "\""+rsc+"\"";
     }
 }

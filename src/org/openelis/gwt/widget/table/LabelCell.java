@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
@@ -33,6 +34,9 @@ import org.openelis.gwt.common.data.QueryData;
 import org.openelis.gwt.widget.Label;
 
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -41,12 +45,17 @@ import com.google.gwt.user.client.ui.HTMLTable;
  * @author tschmidt
  * 
  */
-public class LabelCell implements CellRenderer {
+public class LabelCell implements CellRenderer, IsWidget, HasWidgets.ForIsWidget {
     
     /**
      * Widget used to edit the cell
      */
     private Label  editor;
+    
+    
+    public LabelCell() {
+    	this.editor = new Label<String>();
+    }
     
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -82,6 +91,48 @@ public class LabelCell implements CellRenderer {
 	@Override
 	public ArrayList<LocalizedException> validate(Object value) {
 		 return editor.getHelper().validate(value);
+	}
+
+	@Override
+	public void add(Widget w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof Label;
+		
+		this.editor = (Label)w;
+	}
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Widget asWidget() {
+		return new Label("");
 	}
     
 }

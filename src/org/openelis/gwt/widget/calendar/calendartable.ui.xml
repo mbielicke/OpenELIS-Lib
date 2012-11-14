@@ -1,0 +1,88 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+             ui:generateLocales="default">
+
+  <ui:with field="res" type="org.openelis.gwt.resources.OpenELISResources"/>
+
+  <g:Grid ui:field="table" styleName="{res.calendarui.CalendarTable}" cellSpacing="2">
+    <g:row styleName="{res.calendarui.DayBar}">
+      <g:cell>
+        <ui:msg key="day0" description="First day of the week">Su</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day1" description="Second day of the Week">Mo</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day2" description="Third day of the Week">Tu</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day3" description="Fourth day of the Week">We</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day4" description="Fifth day of the Week">Th</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day5" description="Sixth day of the Week">Fr</ui:msg>
+      </g:cell>
+      <g:cell>
+        <ui:msg key="day6" description="Seventh day of the Week">Sa</ui:msg>
+      </g:cell>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>
+    <g:row>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+      <g:cell/>
+    </g:row>  
+  </g:Grid>
+
+</ui:UiBinder>

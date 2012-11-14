@@ -28,15 +28,20 @@ package org.openelis.gwt.widget;
 import org.openelis.gwt.resources.ButtonCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 /**
  * This widget class implements a Button on the screen. We have not used or
@@ -50,42 +55,31 @@ import com.google.gwt.user.client.ui.Grid;
  * be disabled on the initial state of the screen set enable="false" in the xsl.
  */
 public class Button extends FocusPanel implements ScreenWidgetInt {
+	@UiTemplate("Button.ui.xml")
+	interface ButtonUiBinder extends UiBinder<HTMLPanel,Button>{};
+	public static final ButtonUiBinder uiBinder = GWT.create(ButtonUiBinder.class);
+	
 
     /*
      * State variables for the button.
      */
     private boolean toggles, enabled, pressed, locked;
-    private String  action,text,leftIcon,rightIcon;
+    private String  action;
     private ButtonCSS css;
     int eventsToSink;
     
-    private Grid grid;
+    @UiField
+    protected TableCellElement leftIcon,text,rightIcon;
        
-
     /**
      * Default no-arg constructor
      */
     public Button() {
-        init();
-    }
-    
-    public Button(String icon,String label) {
-    	this(icon,label,"");
-    }
-    
-    public Button(String leftIcon,String label,String rightIcon) {
-    	init();
-    	setDisplay(leftIcon,label,rightIcon);
-    }
-
-
-    /**
-     * Sets up event handling for the button.
-     */
-    public void init() {
-        final Button source = this;
-
-        /**
+    	final Button source = this;
+    	
+    	setWidget(uiBinder.createAndBindUi(this));
+     
+    	/**
          * Click Handler to check if the button toggles and to set the 
          * Pressed Style.
          */
@@ -119,36 +113,31 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
             }
         });
         
-        css = OpenELISResources.INSTANCE.button();
-        
+        setCss(OpenELISResources.INSTANCE.button());
     }
     
+    public Button(String icon,String label) {
+    	this();
+    	setLeftIcon(icon);
+    	setText(label);
+    }
+    
+    public Button(String leftIcon,String label,String rightIcon) {
+    	this();
+    	setLeftIcon(leftIcon);
+    	setText(label);
+    	setRightIcon(rightIcon);
+    }
+
+
     /**
-     * Method to create a Button using a Grid that will display text and icon 
-     * @param icon
-     *        CSS style name to reference of image to display
-     * @param label
-     *        The text to display for the button
-     * @param wrap
-     *        Boolean switch to wrap button with borders
+     * Sets up event handling for the button.
      */
-    public void setDisplay(String leftIcon,String label,String rightIcon) {   
-    	
-    	this.leftIcon = leftIcon;
-    	this.rightIcon = rightIcon;
-    	this.text     = label;
-    	
-   		grid = new Grid(1,3);
-    	grid.setCellPadding(0);
-    	grid.setCellSpacing(1);
-   		grid.getCellFormatter().setStyleName(0,0,leftIcon);
-    	grid.setText(0,0,"");
-    	grid.setText(0, 1, label);
-    	grid.getCellFormatter().setStyleName(0,2,rightIcon);
-    	
-    	setWidget(grid);
-    	
-    	setCSS(css);
+    public void init() {
+        final Button source = this;
+
+
+        
     }
 
     /**
@@ -280,7 +269,11 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * @param text
      */
     public void setText(String text) {
-    	setDisplay(leftIcon,text,rightIcon);
+    	if(text != null && !"".equals(text)) {
+    		this.text.setInnerText(text);
+    		this.text.removeAttribute("style");
+    	}else
+    		this.text.setAttribute("style","display:none;");
     }
     
     /**
@@ -288,11 +281,19 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
      * @param icon
      */
     public void setLeftIcon(String icon) {
-    	setDisplay(icon,text,rightIcon);
+    	if(icon != null && !"".equals(icon)) {
+    		leftIcon.setAttribute("class",icon);
+    		leftIcon.removeAttribute("style");
+    	}else
+    		leftIcon.setAttribute("style","display:none;");
     }
     
     public void setRightIcon(String icon) {
-    	setDisplay(leftIcon,text,icon);
+    	if(icon != null && !"".equals(icon)) {
+    		rightIcon.setAttribute("class",icon);
+    		rightIcon.removeAttribute("style");
+    	}else
+    		rightIcon.setAttribute("style","display:none;");
     }
 
 	@Override
@@ -301,7 +302,7 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 		
 	}
 	
-	public void setCSS(ButtonCSS css) {
+	public void setCss(ButtonCSS css) {
 		if(!isEnabled() && this.css != null)
 			removeStyleName(this.css.Disabled());
 		
@@ -311,7 +312,6 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 		this.css = css;
 		css.ensureInjected();
 		setStyleName(css.Button());
-	   	grid.getCellFormatter().setStyleName(0, 1, css.ScreenLabel());
 	   	
 	   	if(!isEnabled())
 	   		addStyleName(css.Disabled());
@@ -321,30 +321,8 @@ public class Button extends FocusPanel implements ScreenWidgetInt {
 	   		
 	}
 	
-	/**
-	 * These methods were added to ensure the button will be correctly enabled or disabled 
-	 * when it is first drawn.
-	 */
-	@Override
-	public void sinkEvents(int eventBitsToAdd) {
-		if(isOrWasAttached())
-			super.sinkEvents(eventBitsToAdd);
-		else
-			eventsToSink |= eventBitsToAdd;
-	}
-    
-	@Override
-	public void unsinkEvents(int eventBitsToRemove) {
-		if(isOrWasAttached())
-			super.unsinkEvents(eventBitsToRemove);
-		else
-			eventsToSink &= ~eventBitsToRemove;
-	}
-    
-	@Override
-	protected void onAttach() {
-		super.onAttach();
-		super.sinkEvents(eventsToSink);
+	public void setCSS(ButtonCSS css) {
+		setCss(css);
 	}
     
     

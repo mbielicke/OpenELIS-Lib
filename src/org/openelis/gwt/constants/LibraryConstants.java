@@ -244,6 +244,30 @@ public interface LibraryConstants extends Messages {
 	@Key("report.generatingReport")
 	String generatingReport();
 	
+	@Key("btn.query")
+	String query();
+	
+	@Key("btn.add")
+	String add();
+	
+	@Key("btn.next")
+	String next();
+	
+	@Key("btn.previous")
+	String previous();
+	
+	@Key("btn.update")
+	String update();
+	
+	@Key("btn.delete")
+	String delete();
+	
+	@Key("btn.commit")
+	String commit();
+	
+	@Key("btn.abort")
+	String abort();
+	
 	/************** TimeOut ***********/
 	@Key("gen.timeoutHeader")
 	String timeoutHeader();
@@ -259,4 +283,41 @@ public interface LibraryConstants extends Messages {
 	
 	@Key("gen.couldNotCall")
 	String couldNotCall();
+	
+	@Key("cal.month0")
+	String month0();
+	
+	@Key("cal.month1")
+	String month1();
+	
+	@Key("cal.month2")
+	String month2();
+	
+	@Key("cal.month3")
+	String month3();
+	
+	@Key("cal.month4")
+	String month4();
+	
+	@Key("cal.month5")
+	String month5();
+	
+	@Key("cal.month6")
+	String month6();
+	
+	@Key("cal.month7")
+	String month7();
+	
+	@Key("cal.month8")
+	String month8();
+	
+	@Key("cal.month9")
+	String month9();
+	
+	@Key("cal.month10")
+	String month10();
+	
+	@Key("cal.month11")
+	String month11();
+	
 }

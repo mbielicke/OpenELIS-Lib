@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -43,6 +44,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -50,7 +53,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class CheckBoxCell implements CellEditor, CellRenderer {
+public class CheckBoxCell implements CellEditor, CellRenderer, IsWidget, HasWidgets.ForIsWidget {
 
     /**
      * Widget used to edit the cell
@@ -61,12 +64,20 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
     
     protected CheckboxCSS css;
     
+    public CheckBoxCell() {
+    	
+    }
+    
     /**
      * Constructor that takes the editor to be used for the cell.
      * 
      * @param editor
      */
     public CheckBoxCell(CheckBox editor) {
+    	setEditor(editor);
+    }
+    
+    public void setEditor(CheckBox editor) {
         this.editor = editor;
         
         css = OpenELISResources.INSTANCE.checkbox();
@@ -190,6 +201,49 @@ public class CheckBoxCell implements CellEditor, CellRenderer {
         div.setStyleName(style);
         table.setWidget(row, col, div);
         table.getCellFormatter().setHorizontalAlignment(row, col, HasAlignment.ALIGN_CENTER);
+	}
+
+	@Override
+	public void add(Widget w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof CheckBox;
+		
+		setEditor((CheckBox)w);
+	}
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
   
 

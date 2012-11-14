@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
@@ -39,6 +40,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -49,7 +52,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class AutoCompleteCell implements CellRenderer,
-                             		     CellEditor {
+                             		     CellEditor,IsWidget,HasWidgets.ForIsWidget {
 
     /**
      * Widget used to edit the cell
@@ -61,6 +64,10 @@ public class AutoCompleteCell implements CellRenderer,
     private ColumnInt    column;
     
     protected TableCSS   css;
+    
+    public AutoCompleteCell() {
+
+    }
 
     /**
      * Constructor that takes the editor to be used for the cell.
@@ -68,6 +75,10 @@ public class AutoCompleteCell implements CellRenderer,
      * @param editor
      */
     public AutoCompleteCell(AutoComplete editor) {
+    	setEditor(editor);
+    }
+    
+    public void setEditor(AutoComplete editor) {
         this.editor = editor;
         css = OpenELISResources.INSTANCE.table();
         css.ensureInjected();
@@ -172,5 +183,48 @@ public class AutoCompleteCell implements CellRenderer,
 	@Override
 	public void setColumn(ColumnInt col) {
 		this.column = col;
+	}
+
+	@Override
+	public void add(Widget w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof AutoComplete;
+		
+		setEditor((AutoComplete)w);
+	}
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

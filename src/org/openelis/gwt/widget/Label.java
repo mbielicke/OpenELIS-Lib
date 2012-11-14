@@ -201,4 +201,12 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
     	setStylePrimaryName(css.ScreenLabel());	
     }
 
+    public void setField(String field) {
+    	if(field.equals("Date")) {
+    		DateHelper helper = new DateHelper();
+    		helper.setBegin((byte)0);
+    		helper.setEnd((byte)2);
+    		setHelper((WidgetHelper)helper);
+    	}
+    }
 }

@@ -101,7 +101,7 @@ public class AutoCompleteScreen extends Screen {
 		visibleItems.setEnabled(true);
 		visibleItems.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				test.setVisibleItemCount(event.getValue());
+				test.setVisibleItems(event.getValue());
 			}
 		});
 		visibleItems.setValue(10);

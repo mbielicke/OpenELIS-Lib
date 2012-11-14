@@ -33,14 +33,13 @@ import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.event.BeforeCloseEvent;
 import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.resources.OpenELISResources;
-import org.openelis.gwt.resources.WindowNoImageCSS;
+import org.openelis.gwt.resources.WindowCSS;
 import org.openelis.gwt.screen.ViewPanel;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
-import com.google.gwt.dom.client.Document;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -61,7 +60,9 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -76,14 +77,24 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Window extends FocusPanel implements WindowInt {
+	
+	@UiTemplate("Window.ui.xml")
+	interface WindowUiBinder extends UiBinder<Widget, Window>{};
+	public static final WindowUiBinder uiBinder = GWT.create(WindowUiBinder.class);
     
+    @UiField 
     protected Caption                               cap;
-    protected VerticalPanel                         outer,messagePanel;
+    @UiField 
+    protected VerticalPanel                         outer;
+    protected VerticalPanel                         messagePanel;
     protected PopupPanel                            pop;
-    
-    protected Grid                                  bottom,top;
-    protected FocusPanel                            statusImg,close,collapse;
-    protected AbsolutePanel                         body,glass;
+    @UiField 
+    protected Grid                                  top,bottom;
+    @UiField 
+    protected FocusPanel                            statusImg, close,collapse;
+    @UiField 
+    protected AbsolutePanel                         body;
+    protected AbsolutePanel                         glass;
     protected HTML                                  label;
  
    // protected ResizeDragController  dragController = new ResizeDragController(RootPanel.get(),this);
@@ -93,63 +104,36 @@ public class Window extends FocusPanel implements WindowInt {
      */
     protected Widget                                content;
            
-    protected WindowNoImageCSS                      css;
+    protected WindowCSS                             css;
     
     protected Window                                source = this;
     
     
     public Window() {
         
-    	/* Create container for Window elements */
-    	outer =  new VerticalPanel() {
-    		public void onBrowserEvent(Event event) {
-    			switch (DOM.eventGetType(event)) {
-    				case Event.ONCLICK: {
-    					//FocusEvent.fireNativeEvent(Document.get().createFocusEvent(),source);
-    					//setFocus(true);
-    					break;
-    				}
-    			}
-    			super.onBrowserEvent(event);
-    		}
-    	};
+    	setWidget(uiBinder.createAndBindUi(this));
     	
-    	setWidget(outer);
         setVisible(false);
         
-        /* Create top of window consisting of a caption and close, collapse buttons */
-        
-        top = new Grid(1,3);
-        top.setCellPadding(0);
-        top.setCellSpacing(1);
-        top.setWidth("100%");
-        
-        cap = new Caption();
         cap.addMouseDownHandler(new MouseDownHandler() {
             public void onMouseDown(MouseDownEvent event) {
                 setFocus(true);
             }
         });
-        cap.setWidth("100%");
         
         label = new HTML();
         label.setText(" ");
        
         cap.add(label);
-        
-        top.setWidget(0,0,cap);
-        top.getCellFormatter().setWidth(0,0,"100%");
-        
-        close = new FocusPanel();
-      
+                
+             
         close.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 close();
             }
         });
         
-        collapse = new FocusPanel();
-        
+         
         collapse.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if(body.isVisible())
@@ -160,21 +144,7 @@ public class Window extends FocusPanel implements WindowInt {
                 bottom.setVisible(!bottom.isVisible());
             }
         });
-        
-        
-        top.setWidget(0,1,collapse);
-        
-        top.setWidget(0,2,close);
-        
-        outer.add(top);
-        
-        /* Set up middle of the window that contains window content */
-        body = new AbsolutePanel();
-        
-        outer.add(body);
-        
-        /* Set up bottom of the window that contans the status message */
-        statusImg = new FocusPanel();
+     
         
         statusImg.addMouseOverHandler(new MouseOverHandler() {
             public void onMouseOver(MouseOverEvent event) {
@@ -212,12 +182,10 @@ public class Window extends FocusPanel implements WindowInt {
             } 
         });
         
-        bottom = new Grid(1,2);
-        bottom.setWidget(0, 0,statusImg);
+        top.getCellFormatter().setWidth(0, 1, "16px");
+        top.getCellFormatter().setWidth(0, 2, "16px");
+        
         bottom.setText(0,1,Constants.get().loading());
-        bottom.getCellFormatter().setWidth(0,1,"100%");
-        bottom.setCellSpacing(0);
-        outer.add(bottom);
         
         /* Sink events and add resize Handler */
         outer.sinkEvents(Event.ONCLICK);
@@ -233,7 +201,7 @@ public class Window extends FocusPanel implements WindowInt {
         });
         
         /* Apply style to the window elements */
-        setCSS(OpenELISResources.INSTANCE.windowNoImage());
+        setCSS(OpenELISResources.INSTANCE.window());
     }
 
     /**
@@ -315,7 +283,7 @@ public class Window extends FocusPanel implements WindowInt {
     }
     
     public void setStatus(String text, String style){
-    	bottom.setText(0, 1, text);
+    	bottom.setText(0,1,text);
         statusImg.setStyleName(style);
         unlockWindow();
     }
@@ -372,7 +340,7 @@ public class Window extends FocusPanel implements WindowInt {
         }
     }
     
-    public void setCSS(WindowNoImageCSS css) {
+    public void setCSS(WindowCSS css) {
     	this.css = css;
     	css.ensureInjected();
     	top.setStyleName(css.top());
@@ -411,7 +379,7 @@ public class Window extends FocusPanel implements WindowInt {
      * @author tschmidt
      *
      */
-    protected class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
+    protected static class Caption extends AbsolutePanel implements HasAllMouseHandlers { 
 
     	
         public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {

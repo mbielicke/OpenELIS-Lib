@@ -196,31 +196,5 @@ public class Check extends FocusPanel implements HasValueChangeHandlers<Boolean>
 		setStyle();
 	}
 
-	/**
-	 * These methods were added to ensure the button will be correctly enabled or disabled 
-	 * when it is first drawn.
-	 */
-	@Override
-	public void sinkEvents(int eventBitsToAdd) {
-		if(isOrWasAttached())
-			super.sinkEvents(eventBitsToAdd);
-		else
-			eventsToSink |= eventBitsToAdd;
-	}
-    
-	@Override
-	public void unsinkEvents(int eventBitsToRemove) {
-		if(isOrWasAttached())
-			super.unsinkEvents(eventBitsToRemove);
-		else
-			eventsToSink &= ~eventBitsToRemove;
-	}
-    
-	@Override
-	protected void onAttach() {
-		super.onAttach();
-		super.sinkEvents(eventsToSink);
-	}
-
 
 }

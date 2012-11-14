@@ -28,10 +28,10 @@ package org.openelis.gwt.widget.calendar;
 import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.event.DataChangeEvent;
+import org.openelis.gwt.constants.Constants;
 import org.openelis.gwt.screen.Calendar;
-import org.openelis.gwt.screen.ScreenEventHandler;
 import org.openelis.gwt.widget.Button;
+import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
 
 import com.google.gwt.core.client.GWT;
@@ -46,9 +46,13 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -59,7 +63,11 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  * 
  */
-public class CalendarWidget extends Composite implements HasValueChangeHandlers<Datetime> {
+public class CalendarWidgetUI extends Composite implements HasValueChangeHandlers<Datetime> {
+	
+	@UiTemplate("calendar.ui.xml")
+	interface CalendarUiBinder extends UiBinder<Widget, CalendarWidgetUI>{};
+	public static final CalendarUiBinder uiBinder = GWT.create(CalendarUiBinder.class);
 
     /*
      * Currently selected date by the widget
@@ -78,24 +86,42 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
     /*
      * Buttons from xsl
      */
-    protected Button            prevMonth, nextMonth, monthSelect, today;
+    @UiField
+    protected FocusPanel        prevMonth, nextMonth, monthSelect;
 
+    /*
+    @UiField(provided=true)
     protected TextBox<Datetime> time;
+    */
+    
+    @UiField
     protected Label             monthDisplay;
+ 
+    /*
+    @UiField
+    protected HorizontalPanel   TimeBar;
+    */
 
-    protected CalendarTable     table;
+    @UiField
+    protected CalendarTableUI   table;
     
     private byte                begin,end;
-    
-    CalendarDef                 def;
 
     /*
      * Constructor that takes the precision of the date to be used.
      */
-    public CalendarWidget(byte begin, byte end) throws Exception {
-    	def = GWT.create(CalendarDef.class);
+    public CalendarWidgetUI(byte begin, byte end) throws Exception {
+    	/*
+    	time = new TextBox<Datetime>();
     	
-    	initWidget(def.asWidget());
+    	DateHelper helper = new DateHelper();
+    	helper.setBegin((byte)3);
+    	helper.setEnd((byte)5);
+    	helper.setPattern("HH:MM");
+    	
+    	time.setHelper(helper);
+    	*/
+    	initWidget(uiBinder.createAndBindUi(this));
 
         //service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
 
@@ -113,26 +139,13 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
     /*
      * Initialize widgets on Screen.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("deprecation")
 	private void initialize() throws Exception {
 
         /*
          * Final reference to this class to be used by anon handlers
          */
-        final CalendarWidget source = this;
-
-        /*
-         * Create a CalendarTable and set in the screen
-         */
-        table = new CalendarTable();
-        ((VerticalPanel)def.getWidget("calContainer")).add(table);
-
-        def.addScreenHandler(table, new ScreenEventHandler<Object>() {
-            public void onDataChange(DataChangeEvent event) {
-                selected = selected == null ? current : selected; 
-                table.setCalendar(year, month, selected, current);
-            }
-        });
+        final CalendarWidgetUI source = this;
 
         table.addSelectionHandler(new SelectionHandler<Datetime>() {
             public void onSelection(SelectionEvent<Datetime> event) {
@@ -141,50 +154,42 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
             	
             	value = event.getSelectedItem();
             	if(end > Datetime.DAY){
-            		date = new Date(value.getDate().getYear(),value.getDate().getMonth(),value.getDate().getDate(),time.getValue().getDate().getHours(),time.getValue().getDate().getMinutes());
+            		date = new Date(value.getDate().getYear(),
+            				        value.getDate().getMonth(),
+            				        value.getDate().getDate());
+            				        //time.getValue().getDate().getHours(),
+            				        //time.getValue().getDate().getMinutes());
             		value = Datetime.getInstance(begin,end,date);
             	}
                 ValueChangeEvent.fire(source, value);
             }
         });
 
-        monthDisplay = (Label)def.getWidget("MonthDisplay");
-        def.addScreenHandler(monthDisplay, new ScreenEventHandler<String>() {
-            public void onDataChange(DataChangeEvent event) {
-                monthDisplay.setText( ((Label)def.getWidget("month" + month)).getText() + " " +
-                                     (year + 1900));
-            }
-        });
+        //monthSelect.setEnabled(true);
 
-        monthSelect = (Button)def.getWidget("monthSelect");
-        monthSelect.setEnabled(true);
-
-
-        prevMonth = (Button)def.getWidget("prevMonth");
         prevMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 CalendarImpl cal = CalendarImpl.getInstance();
                 cal.set(year, month, 1, 0, 0, 0);
                 cal.add(CalendarImpl.MONTH, -1);
                 month = cal.get(CalendarImpl.MONTH);
-                DataChangeEvent.fire(def);
+                setDateDisplay();
             }
         });
-        prevMonth.setEnabled(true);
+        //prevMonth.setEnabled(true);
 
-        nextMonth = (Button)def.getWidget("nextMonth");
         nextMonth.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 CalendarImpl cal = CalendarImpl.getInstance();
                 cal.set(year, month, 1, 0, 0, 0);
                 cal.add(CalendarImpl.MONTH, 1);
                 month = cal.get(CalendarImpl.MONTH);
-                DataChangeEvent.fire(def);
+                setDateDisplay();
             }
         });
-        nextMonth.setEnabled(true);
+        //nextMonth.setEnabled(true);
 
-        today = (Button)def.getWidget("today");
+        /*
         today.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 try {
@@ -196,21 +201,14 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
                 }
             }
         });
+        */
 
         /*
          * Show or hide time component based on the widget precision.
-         */
-        if (current.getEndCode() > Datetime.DAY) {
-            time = (TextBox<Datetime>)def.getWidget("time");
-            def.addScreenHandler(time, new ScreenEventHandler<Datetime>() {
-                public void onDataChange(DataChangeEvent event) {
-                    time.setValue(selected);
-                }
-            });
-            ((Widget)def.getWidget("TimeBar")).setVisible(true);
-        } else
-            ((Widget)def.getWidget("TimeBar")).setVisible(false);
-        
+         
+        if (current.getEndCode() > Datetime.DAY) 
+            TimeBar.setVisible(true);
+        */
         /*
          * KeyHandler to let the user arrow around the calendar
          */
@@ -240,6 +238,7 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
 
             }
         }, KeyDownEvent.getType());
+        
 
     }
 
@@ -260,7 +259,59 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
             year = date.get(Datetime.YEAR);
             month = date.get(Datetime.MONTH);
         }
-        DataChangeEvent.fire(def);
+        setDateDisplay();
+    }
+    
+    private void setDateDisplay() {
+    	String monthText = "";
+        
+    	selected = selected == null ? current : selected; 
+        table.setCalendar(year, month, selected, current);
+        
+        switch(month) {
+        	case 0 :
+        		monthText = Constants.get().month0();
+        		break;
+        	case 1 : 
+        		monthText = Constants.get().month1();
+        		break;
+        	case 2 : 
+        		monthText = Constants.get().month2();
+        		break;
+        	case 3 : 
+        		monthText = Constants.get().month3();
+        		break;
+        	case 4 : 
+        		monthText = Constants.get().month4();
+        		break;
+        	case 5 : 
+        		monthText = Constants.get().month5();
+        		break;
+        	case 6 : 
+        		monthText = Constants.get().month6();
+        		break;
+        	case 7 : 
+        		monthText = Constants.get().month7();
+        		break;
+        	case 8 : 
+        		monthText = Constants.get().month8();
+        		break;
+        	case 9 : 
+        		monthText = Constants.get().month9();
+        		break;
+        	case 10 : 
+        		monthText = Constants.get().month10();
+        		break;
+        	case 11 : 
+        		monthText = Constants.get().month11();
+        		break;
+        }
+        
+        monthDisplay.setText(monthText + " " + (year + 1900));
+        /*
+        if (current.getEndCode() > Datetime.DAY) 
+        	time.setValue(selected);
+        */
     }
 
     /**
@@ -270,7 +321,7 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
     public void drawMonth(int year, int month) {
         this.year = year;
         this.month = month;
-        DataChangeEvent.fire(def);
+        setDateDisplay();
     }
 
     /**

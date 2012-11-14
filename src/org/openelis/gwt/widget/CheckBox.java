@@ -53,9 +53,13 @@ import com.google.gwt.user.client.ui.HasValue;
  * @author tschmidt
  * 
  */
-public class CheckBox extends FocusPanel implements ScreenWidgetInt, Queryable, HasBlurHandlers,
-                                        HasFocusHandlers, HasValueChangeHandlers<String>,
-                                        HasValue<String>, HasExceptions {
+public class CheckBox extends FocusPanel implements ScreenWidgetInt, 
+													Queryable, 
+													HasBlurHandlers,
+													HasFocusHandlers, 
+													HasValueChangeHandlers<String>,
+													HasValue<String>, 
+													HasExceptions {
 
     /*
      * Fields for query mode

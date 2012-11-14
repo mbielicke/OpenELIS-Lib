@@ -25,6 +25,8 @@
  */
 package org.openelis.gwt.widget.tree;
 
+import java.util.Iterator;
+
 import org.openelis.gwt.widget.Label;
 import org.openelis.gwt.widget.table.CellEditor;
 import org.openelis.gwt.widget.table.CellRenderer;
@@ -32,13 +34,17 @@ import org.openelis.gwt.widget.table.ColumnInt;
 import org.openelis.gwt.widget.table.LabelCell;
 import org.openelis.gwt.widget.table.Column.Builder;
 
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
+
 /**
  * This is a logical class used to describe a column in a Table
  * 
  * @author tschmidt
  * 
  */
-public class Column implements ColumnInt {
+public class Column implements ColumnInt, IsWidget, HasWidgets.ForIsWidget {
 
     /**
      * Reference to the Table containing this column
@@ -379,6 +385,50 @@ public class Column implements ColumnInt {
 	@Override
 	public void finishEditing() {
 		tree.finishEditing();
+	}
+
+	@Override
+	public void add(Widget w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof CellRenderer;
+
+		setCellRenderer((CellRenderer)w);
+		
+	}
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

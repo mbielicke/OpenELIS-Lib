@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
@@ -38,6 +39,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -48,7 +51,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class CalendarCell implements CellRenderer, CellEditor {
+public class CalendarCell implements CellRenderer, CellEditor, IsWidget, HasWidgets.ForIsWidget {
     /**
      * Editor used by this cell
      */
@@ -56,12 +59,21 @@ public class CalendarCell implements CellRenderer, CellEditor {
     private boolean   query;
     private ColumnInt column;
 
+    
+    public CalendarCell() {
+    	
+    }
+    
     /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor
      */
     public CalendarCell(Calendar editor) {
+    	setEditor(editor);
+    }
+    
+    public void setEditor(Calendar editor) {
         this.editor = editor;
         editor.setEnabled(true);
        // editor.setStyleName("TableCalendar");
@@ -161,5 +173,52 @@ public class CalendarCell implements CellRenderer, CellEditor {
 	public void setColumn(ColumnInt col) {
 		this.column = col;
 	}
+
+	@Override
+	public void add(Widget w) {
+		assert w instanceof Calendar;
+		
+		setEditor((Calendar)w);
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof Calendar;
+		
+		setEditor((Calendar)w);
+	}
+
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }

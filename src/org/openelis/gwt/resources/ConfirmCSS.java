@@ -2,7 +2,7 @@ package org.openelis.gwt.resources;
 
 
 
-public interface ConfirmCSS extends WindowNoImageCSS {
+public interface ConfirmCSS extends WindowCSS {
 	
 	String ConfirmWindow();
 	String Button();

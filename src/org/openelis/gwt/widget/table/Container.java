@@ -29,7 +29,6 @@ import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.resources.TableCSS;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,7 +48,7 @@ public class Container extends AbsolutePanel {
     	css.ensureInjected();
     	
         setStyleName(css.CellContainer());
-        command = new Command() {
+        command = new Scheduler.ScheduledCommand() {
             public void execute() {
                 ((Focusable)editor).setFocus(true);
             }

@@ -25,24 +25,28 @@
  */
 package org.openelis.gwt.widget;
 
+import java.util.Iterator;
+
 import org.openelis.gwt.resources.MenuCSS;
 import org.openelis.gwt.resources.OpenELISResources;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -50,7 +54,10 @@ import com.google.gwt.user.client.ui.Widget;
  * a Menu to display a sub menu of MenuItems when either moused over or clicked.
  * 
  */
-public class Menu extends Composite {
+public class Menu extends Composite implements HasWidgets {
+	@UiTemplate("Menu.ui.xml")
+	interface MenuUiBinder extends UiBinder<HTML, Menu>{};
+	public static final MenuUiBinder uiBinder = GWT.create(MenuUiBinder.class);
 
     /**
      * Reference to the open child menu if present
@@ -70,18 +77,30 @@ public class Menu extends Composite {
     
     protected MenuCSS        css;
     
-    protected Grid           grid;
+    protected SimplePanel    outer;
+    
+    @UiField
+    protected TableCellElement icon,display,arrow,description;
+    
+    @UiField
+    protected TableRowElement bottomRow;
 
     /**
      * No-Arg constructor that sets up Hovering
      */
     public Menu() {
+    	outer = new SimplePanel();
+    	initWidget(outer);
+    	outer.setWidget(uiBinder.createAndBindUi(this));
+    	
     	css = OpenELISResources.INSTANCE.menuCss();
     	css.ensureInjected();
     	
         panel = new PopupMenuPanel();
         panel.addStyleName(css.MenuPanel());
-		panel.setVisible(false);
+		panel.setVisible(false);		
+		
+		setEnabled(true);
     }
 
     /**
@@ -89,14 +108,11 @@ public class Menu extends Composite {
      * will be created into a Label and set as the display for this menu.
      * @param display
      */
-    public Menu(String display) {
-        this();
-        Label<String> label;
-
-        label = new Label<String>(display);
-        label.setStyleName(css.ScreenLabel());
-        label.setWordWrap(false);
-        initWidget(label);
+    public void setLabel(String label) {
+    	com.google.gwt.user.client.ui.Label display = new com.google.gwt.user.client.ui.Label(label);
+        //display.setStyleName(css.ScreenLabel());
+        display.setWordWrap(false);
+        outer.setWidget(display);
         setEnabled(true);
     }
 
@@ -108,56 +124,12 @@ public class Menu extends Composite {
      * @param description
      */
     public Menu(String icon, String display, String description) {
-        this();
-        grid = new Grid(2, 3);
-        grid.setCellPadding(0);
-        grid.setCellSpacing(0);
-        grid.setStyleName(css.TopMenuRowContainer());
-
-        grid.getCellFormatter().setStylePrimaryName(0, 0, css.topMenuIcon());
-        grid.getCellFormatter().setStylePrimaryName(1, 0, css.topMenuIcon());
-        grid.setText(0, 0, "");
-        grid.setText(1, 0, " ");
-        grid.getCellFormatter().setStylePrimaryName(0, 1, css.topMenuItemMiddle());
-        grid.getCellFormatter().setWordWrap(0, 1, false);
-
-        if ( !"".equals(icon))
-            grid.getCellFormatter().addStyleName(0, 0, icon);
-        else
-        	grid.getCellFormatter().setVisible(0, 0, false);
-
-        grid.setText(0, 1, display);
-        grid.getCellFormatter().addStyleName(0, 1, css.topMenuItemTitle());
-        grid.getCellFormatter().addStyleName(0, 1, css.locked());
-
-        if ("".equals(description))
-            grid.removeRow(1);
-        else {
-            grid.setText(1, 1, description);
-            grid.getCellFormatter().setStylePrimaryName(1, 1, css.topMenuItemMiddle());
-            grid.getCellFormatter().addStyleName(1, 1, css.topMenuItemDesc());
-        }
-
-        grid.getCellFormatter().setStyleName(0, 2, css.MenuArrow());
-        grid.setText(0,2,"");
-
-        initWidget(grid);
-        
-        setEnabled(true);		
+    	this();
+    	setIcon(icon);
+    	setDisplay(display);
+    	setDescription(description);
     }
-
-    /**
-     * Constructor that takes a Widget as a param to be used as the display
-     * widget
-     * 
-     * @param display
-     */
-    public Menu(Widget display) {
-        this();
-        initWidget(display);
-        setEnabled(true);
-    }
-
+    
     /**
      * The Command passed will be executed when a user clicks on it.  This method can be called more than once
      * to add multiple commands to the Menu.  The Commands will be executed in the order they are added.
@@ -271,14 +243,6 @@ public class Menu extends Composite {
     	
         if (panel.isShowing() || !showPanel)
             return panel;
-
-        /*
-        if (showBelow)
-            panel.setPopupPosition(getAbsoluteLeft(), getAbsoluteTop() + getOffsetHeight());
-        else
-            panel.setPopupPosition(getAbsoluteLeft() + getOffsetWidth(), getAbsoluteTop());
-
-		*/
         
         panel.showRelativeTo(this);
 
@@ -301,6 +265,22 @@ public class Menu extends Composite {
         return parent;
     }
     
+    public void setIcon(String icon) {
+    	this.icon.setAttribute("class",icon);
+    }
+    
+    public void setDisplay(String display) {
+    	this.display.setInnerText(display);
+    }
+    
+    public void setDescription(String description) {
+    	if(description != null || "".equals(description)){
+    		this.description.setInnerText(description);
+    		bottomRow.removeAttribute("style");
+    	}else
+    		bottomRow.setAttribute("style", "display:none;");
+    }
+    
     /**
      * We override onAttach to call setEnabled() because of a bug in GWT that will not correctly
      * sink or unsink the events until the widget is attached to the DOM.
@@ -312,10 +292,38 @@ public class Menu extends Composite {
     }
     
     public void hideArrow() {
-    	grid.getCellFormatter().setVisible(0, 2, false);
+    	if(arrow != null)
+    		arrow.setAttribute("style","display:none;");
     }
 
     public void showArrow() {
-    	grid.getCellFormatter().setVisible(0, 2, true);
+    	if(arrow != null)
+    		arrow.removeAttribute("style");
     }
+
+	@Override
+	public void add(Widget w) {
+		if(w instanceof MenuItem)
+			addItem((MenuItem)w);
+		else if(w instanceof Menu)
+			addItem((Menu)w);
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

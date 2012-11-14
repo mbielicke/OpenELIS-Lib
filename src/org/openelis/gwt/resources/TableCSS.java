@@ -1,6 +1,8 @@
 package org.openelis.gwt.resources;
 
-public interface TableCSS extends GeneralCSS {
+import com.google.gwt.resources.client.CssResource;
+
+public interface TableCSS extends CssResource {
 	String Table();
 	String Selection();
 	String SubHeader();

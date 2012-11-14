@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
@@ -38,6 +39,9 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -48,7 +52,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class TextBoxCell implements CellRenderer, CellEditor {
+public class TextBoxCell implements CellRenderer, CellEditor, IsWidget, HasWidgets.ForIsWidget {
 
     /**
      * Editor used by this cell
@@ -60,12 +64,20 @@ public class TextBoxCell implements CellRenderer, CellEditor {
     private ColumnInt   column;
     
     protected TableCSS  css;
+    
+    public TextBoxCell() {
+    	
+    }
     /**
      * Constructor that takes the editor to be used as a param
      * 
      * @param editor
      */
     public TextBoxCell(final TextBox editor) {
+    	setEditor(editor);
+    }
+    
+    public void setEditor(TextBox editor) {
     	css = OpenELISResources.INSTANCE.table();
     	css.ensureInjected();
         this.editor = editor;
@@ -148,6 +160,43 @@ public class TextBoxCell implements CellRenderer, CellEditor {
 	@Override
 	public void setColumn(ColumnInt col) {
 		this.column = col;
+	}
+	@Override
+	public void add(Widget w) {
+		assert w instanceof TextBox;
+		
+		setEditor((TextBox)w);
+	}
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void add(IsWidget w) {
+		assert w instanceof TextBox;
+		
+		setEditor((TextBox)w);
+	}
+	@Override
+	public boolean remove(IsWidget w) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return new Label("TextBox Cell");
 	}
 
 }

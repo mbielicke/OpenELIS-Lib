@@ -26,30 +26,29 @@
 package org.openelis.gwt.widget.tree;
 
 import org.openelis.gwt.common.data.QueryData;
-import org.openelis.gwt.event.ScrollBarEvent;
-import org.openelis.gwt.event.ScrollBarHandler;
 import org.openelis.gwt.resources.OpenELISResources;
 import org.openelis.gwt.resources.TreeCSS;
 import org.openelis.gwt.widget.DragItem;
 import org.openelis.gwt.widget.ExceptionHelper;
-import org.openelis.gwt.widget.ScrollBar;
 import org.openelis.gwt.widget.VerticalScrollbar;
 import org.openelis.gwt.widget.table.CellEditor;
 import org.openelis.gwt.widget.table.CellRenderer;
 import org.openelis.gwt.widget.table.Container;
 import org.openelis.gwt.widget.tree.Tree.Scrolling;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.logical.shared.VisibleEvent;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
@@ -70,6 +69,10 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class View extends Composite {
+	@UiTemplate("view.ui.xml")
+	interface ViewUiBinder extends UiBinder<Widget, View>{};
+	public static final ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
+	
     /**
      * Reference to Table this View is used in
      */
@@ -78,29 +81,38 @@ public class View extends Composite {
     /**
      * Table used to draw Table flexTable
      */
+    @UiField
     protected FlexTable       flexTable;
 
     /**
      * Table used to draw Header flexTable for the table
      */
+    @UiField(provided=true)
     protected Header          header;
 
     /**
      * Scrollable area that contains flexTable and possibly header for
      * horizontal scroll.
      */
+    @UiField
     protected ScrollPanel     scrollView;
 
     /**
      * Vertical ScrollBar
      */
+    @UiField
     protected VerticalScrollbar  vertScrollBar;
 
     /**
      * Panel to hold Scrollable view area and ScrollBar together.
      */
+    @UiField
     protected HorizontalPanel outer;
+    @UiField
     protected VerticalPanel   inner;
+    
+    @UiField
+    protected FocusPanel      fp;
 
     /**
      * Computed first and last model indexes displayed in the table
@@ -134,6 +146,8 @@ public class View extends Composite {
     private Container         container;
     
     protected TreeCSS         css;
+    
+    protected View            source = this;
 
     /**
      * Constructor that takes a reference to the table that will use this view
@@ -141,20 +155,13 @@ public class View extends Composite {
      * @param tree
      */
     public View(Tree tre) {
-        FocusPanel fp;
-
         css = OpenELISResources.INSTANCE.tree();
         css.ensureInjected();
         
+        header = new Header(tre);
+        initWidget(uiBinder.createAndBindUi(this));
+        
         this.tree = tre;
-        /*
-         * Create and set outer once here as the composite widget instead of in
-         * layout() because it can only be called once.
-         */
-        outer = new HorizontalPanel();
-        initWidget(outer);
-
-        scrollView = new ScrollPanel();
 
         /*
          * Setup so Horizontal scrollbar is include in the offsetHeight when
@@ -162,58 +169,8 @@ public class View extends Composite {
          */
         scrollView.setAlwaysShowScrollBars(true);
 
-        outer.add(scrollView);
-
-        flexTable = new FlexTable();
-
-        /*
-         * The FlexTable is placed in a FocusPanel to provide MouseMove events
-         * so mousing in and out of cells can be detected.
-         */
-        fp = new FocusPanel();
-        fp.setWidget(flexTable);
         
-        flexTable.addClickHandler(new ClickHandler() {
-            @SuppressWarnings("rawtypes")
-			public void onClick(ClickEvent event) {
-            	int r,c;
-            	
-                c = tree.getColumnForX(event.getX());
-                r = firstVisibleRow + (event.getY() / rowHeight);
-                
-                if(tree.fireCellClickedEvent(r, c, event.isControlKeyDown(), event.isShiftKeyDown()))
-                	tree.startEditing(r, c, (GwtEvent)event);
-            }
-        });
 
-        fp.addMouseMoveHandler(new MouseMoveHandler() {
-            public void onMouseMove(MouseMoveEvent event) {
-
-                int mr, c;
-
-                lastX = event.getClientX();
-                lastY = event.getClientY();
-                c = tree.getColumnForX(event.getX());
-                mr = firstVisibleRow + (event.getY() / rowHeight);
-
-                if (mr == lastRow && c == lastCol)
-                    return;
-
-                ExceptionHelper.closePopup();
-
-                timer.cancel();
-
-                lastRow = mr;
-                lastCol = c;
-
-                timer.schedule(250);
-            }
-        });
-
-        inner = new VerticalPanel();
-        scrollView.setWidget(inner);
-        inner.add(fp);
-        inner.setSpacing(0);
 
         timer = new Timer() {
             public void run() {
@@ -232,6 +189,42 @@ public class View extends Composite {
         
         container = new Container();
         
+        setCSS(OpenELISResources.INSTANCE.tree());
+        
+    }
+    
+    @UiHandler("flexTable")
+    protected void handleClick(ClickEvent event) {
+        	int r,c;
+        	
+            c = tree.getColumnForX(event.getX());
+            r = firstVisibleRow + (event.getY() / rowHeight);
+            
+            if(tree.fireCellClickedEvent(r, c, event.isControlKeyDown(), event.isShiftKeyDown()))
+            	tree.startEditing(r, c, (GwtEvent)event);
+   }
+    
+   @UiHandler("fp")
+   protected void onMouseMove(MouseMoveEvent event) {
+
+            int mr, c;
+
+            lastX = event.getClientX();
+            lastY = event.getClientY();
+            c = tree.getColumnForX(event.getX());
+            mr = firstVisibleRow + (event.getY() / rowHeight);
+
+            if (mr == lastRow && c == lastCol)
+                return;
+
+            ExceptionHelper.closePopup();
+
+            timer.cancel();
+
+            lastRow = mr;
+            lastCol = c;
+
+            timer.schedule(250);
     }
 
     /**
@@ -265,21 +258,25 @@ public class View extends Composite {
         	return;
         }
         
-        flexTable.setStyleName(css.Tree());
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			
+			@Override
+			public void execute() {
+				// TODO Auto-generated method stub
         flexTable.removeAllRows();
-        for (int c = 0; c < tree.getColumnCount(); c++ ) 
+        
+        for (int c = 0; c < tree.getColumnCount(); c++ )  
             flexTable.getColumnFormatter().setWidth(c, tree.getColumnAt(c).getWidth() + "px");
+        
         flexTable.setWidth(tree.getTotalColumnWidth() + "px");
 
         // ********** Create and attach Header **************
-        if (tree.hasHeader() && header == null) {
-            header = new Header(tree);
-            inner.insert(header, 0);
-        } else if ( !tree.hasHeader() && header != null) {
-            inner.remove(0);
-            header = null;
-        } else if ( tree.hasHeader() && header != null)
-        	header.layout();
+        if (tree.hasHeader()) {
+            header.setVisible(true);
+            header.layout();
+        } else {
+        	header.setVisible(false);
+        }
         
         DOM.setStyleAttribute(scrollView.getElement(), "overflowY", "hidden");
 
@@ -307,25 +304,23 @@ public class View extends Composite {
             
             for (int i = 0; i < tree.getVisibleRows(); i++ )
                 flexTable.removeRow(0);
+            
+            vertScrollBar.addScrollHandler(new ScrollHandler() {
+            	public void onScroll(ScrollEvent event) {
+            		renderView(-1,-1);
+            	}
+            });
+            vertScrollBar.addMouseWheelHandler(source, rowHeight);
         }
         
         scrollView.setWidth(tree.viewWidth+"px");
 
         // **** Vertical ScrollBar **************
-        if (tree.getVerticalScroll() != Scrolling.NEVER && vertScrollBar == null) {
-            vertScrollBar = new VerticalScrollbar();
-            vertScrollBar.addScrollHandler(new ScrollHandler() {
-                public void onScroll(ScrollEvent event) {
-                    renderView( -1, -1);
-                }
-            });
-            vertScrollBar.addMouseWheelHandler(this,rowHeight);
-            outer.add(vertScrollBar);
-        } else if (tree.getVerticalScroll() == Scrolling.NEVER && vertScrollBar != null) {
-            outer.remove(1);
-            vertScrollBar = null;
-        } else if (tree.getVerticalScroll() == Scrolling.ALWAYS)
-        	vertScrollBar.setVisible(true);
+        if (tree.getVerticalScroll() != Scrolling.NEVER) {
+            vertScrollBar.setVisible(true);
+        } else if (tree.getVerticalScroll() == Scrolling.NEVER) {
+        	vertScrollBar.setVisible(false);
+        }
 
         // *** Horizontal ScrollBar *****************
         if (tree.getHorizontalScroll() == Scrolling.NEVER)
@@ -360,6 +355,8 @@ public class View extends Composite {
        renderView( -1, -1);
 
        adjustScrollBarHeight();
+			}
+        });
 
     }
 
@@ -676,8 +673,6 @@ public class View extends Composite {
 
         cellEditor = tree.getCellEditor(r,c);
 
-        //tree.setValidateException(r, c, cellEditor.validate());
-
         return cellEditor.finishEditing();
     }
 
@@ -850,6 +845,32 @@ public class View extends Composite {
         }
         
         return grid;
+    }
+    
+    public void setCSS(TreeCSS css) {
+    	css.ensureInjected();
+    	
+    	for(int i = 0; i < flexTable.getRowCount(); i++) {
+    		if(flexTable.getRowFormatter().getStyleName(i).contains(this.css.Selection())) {
+    			flexTable.getRowFormatter().removeStyleName(i, this.css.Selection());
+    			flexTable.getRowFormatter().addStyleName(i,css.Selection());
+    		}
+    		for(int j = 0; j < flexTable.getCellCount(i); j++) {
+    			if(flexTable.getCellFormatter().getStyleName(i, j).contains(this.css.InputError())) {
+    				flexTable.getCellFormatter().removeStyleName(i, j, this.css.InputError());
+    				flexTable.getCellFormatter().addStyleName(i,j, css.InputError());
+    			}
+    			if(flexTable.getCellFormatter().getStyleName(i, j).contains(this.css.InputWarning())) {
+    				flexTable.getCellFormatter().removeStyleName(i, j, this.css.InputWarning());
+    				flexTable.getCellFormatter().addStyleName(i,j, css.InputWarning());
+    			}
+    		}
+    	}
+    	
+    	this.css = css;
+    	
+    	flexTable.setStyleName(css.Table());
+    	
     }
 
     protected class TreeGrid extends Grid {

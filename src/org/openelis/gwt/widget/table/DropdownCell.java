@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.LocalizedException;
@@ -37,6 +38,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -47,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @param <T>
  */
-public class DropdownCell implements CellRenderer, CellEditor {
+public class DropdownCell implements CellRenderer, CellEditor, IsWidget, HasWidgets {
 
     /**
      * Widget used to edit the cell
@@ -58,6 +61,10 @@ public class DropdownCell implements CellRenderer, CellEditor {
     
     private ColumnInt     column;
 
+    public DropdownCell() {
+    	this(new Dropdown<String>());
+    	
+    }
     /**
      * Constructor that takes the editor to be used for the cell.
      * 
@@ -157,5 +164,43 @@ public class DropdownCell implements CellRenderer, CellEditor {
 	@Override
 	public void setColumn(ColumnInt col) {
 		this.column = col;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public void setWidth(int width) {
+		editor.setWidth(width+"px");
+	}
+	@Override
+	public void add(Widget w) {
+		if(w instanceof Dropdown) {
+			this.editor = (Dropdown)w;
+		    editor.setStyleName("TableDropdown");
+	        editor.addBlurHandler(new BlurHandler() {
+				public void onBlur(BlurEvent event) {
+					column.finishEditing();
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Iterator<Widget> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean remove(Widget w) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

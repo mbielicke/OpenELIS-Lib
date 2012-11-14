@@ -1,5 +1,5 @@
 package org.openelis.gwt.resources;
 
-public interface WindowNoCap extends WindowNoImageCSS {
+public interface WindowNoCap extends WindowCSS {
 
 }

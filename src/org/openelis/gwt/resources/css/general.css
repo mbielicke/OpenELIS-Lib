@@ -1,5 +1,25 @@
-@external ScreenLabel; 
+
 .ScreenLabel{
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
+}
+
+.WhiteContentPanel {
+	background:white;
+}
+
+.Form {
+    font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    margin:4px 8px ;
+}
+
+.Prompt {
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size:11px;
+    -moz-user-select: none;
+	color:gray;
+	padding:2px 0 2px 2px;
+	text-align:right;
+	vertical-align:top;
 }

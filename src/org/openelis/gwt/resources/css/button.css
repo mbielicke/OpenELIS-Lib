@@ -2,6 +2,8 @@
 .Button{
 	border:1px solid #7293be;
 	border-radius : 3px;
+	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:11px;
 }
 
 @if user.agent gecko1_8 {

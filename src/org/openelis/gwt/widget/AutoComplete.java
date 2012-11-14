@@ -49,7 +49,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
@@ -60,7 +59,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -74,6 +72,11 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiChild;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -82,6 +85,7 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class is used by OpenELIS Screens to display and input values in forms
@@ -101,11 +105,18 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 													   HasExceptions,
 													   HasGetMatchesHandlers,
 													   HasBeforeGetMatchesHandlers {
+	@UiTemplate("Select.ui.xml")
+	interface ACUiBinder extends UiBinder<Widget, AutoComplete>{};
+	public static final ACUiBinder uiBinder = GWT.create(ACUiBinder.class);
+
     /**
      * Used for AutoComplete display
      */
-	protected AbsolutePanel                         outer,image;
+
+	protected AbsolutePanel                         image;
+	@UiField
     protected Grid                                  display;
+	@UiField
     protected Button                                button;
     protected Table                                 table;
     protected PopupPanel                            popup;
@@ -114,16 +125,17 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     protected boolean                               required,queryMode,showingOptions;
     protected String                                prevText;
     
+    @UiField
     protected TextBase                              textbox;
     
     protected AutoCompleteValue                     value;
-
-    final AutoComplete                              source;
     
     /**
      * Exceptions list
      */
     protected Exceptions                           exceptions;
+    
+    final AutoComplete                             source;
 
     /**
      * Instance of the Renderer interface. Initially set to the DefaultRenderer
@@ -141,50 +153,16 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * Default no-arg constructor
      */
     public AutoComplete() {
-    	init();
-        /*
-         * Final instance used in Anonymous handlers.
-         */
-        source = this;
-    }
-
-    /**
-     * Sets the display of the widget and handlers for click and key handling
-     */
-    public void init() {
+    	source = this;
         /*
          * Final instance of the private class KeyboardHandler
          */
         final KeyboardHandler keyHandler = new KeyboardHandler();
 
-        /*
-         * Focus Panel is used to catch Focus and blur events internal to the widget
-         */
-        display = new Grid(1,2);
-        display.setCellPadding(0);
-        display.setCellSpacing(0);
+        initWidget(uiBinder.createAndBindUi(this));
 
-        textbox = new TextBase();
-        /*
-         * New constructor in Button to drop the border and a div with the
-         * passed style.
-         */
-        button = new Button();
         image = new AbsolutePanel();
         button.setWidget(image);
-
-        display.setWidget(0,0,textbox);
-        display.setWidget(0,1,button);
-        display.getCellFormatter().setWidth(0, 1, "16px");
-                
-        /*
-         * We wrap the focus panel again so that the focus and blur events 
-         * do not directly go from inner events to being external events;
-         */
-        outer = new AbsolutePanel();
-        outer.add(display);
-        initWidget(outer);
-
         /*
          * Set the focus style when the Focus event is fired Externally
          */
@@ -207,70 +185,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         	}
         });
         
-        /*
-         *  Receives the Focus Event internally and exposes it Externally 
-         */
-        textbox.addFocusHandler(new FocusHandler() {
-            public void onFocus(FocusEvent event) {
-            	FocusEvent.fireNativeEvent(event.getNativeEvent(),source);
-            }
-        });
-        
-        /*
-         *  Receives the Blur Event internally and determines if it should be
-         *  fired externally or if the widget still has focus
-         */
-        textbox.addBlurHandler(new BlurHandler() {
-            public void onBlur(BlurEvent event) {
-                Item<Integer> item;
-
-                
-                if(!showingOptions && isEnabled() && !queryMode) {
-                	if("".equals(textbox.getText()) && getValue() != null){
-                		setValue(null,"",true);
-                	}else {
-                		item = getSelectedItem();
-
-                		if (item != null)
-                			setValue(item.key, renderer.getDisplay(item),true);
-                	}
-                	BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-                }
-            }
-        });
-        
-        /*
-         * Register click handler to button to show the popup table
-         */
-        button.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-            	BeforeGetMatchesEvent bgme;
-            	
-            	bgme = BeforeGetMatchesEvent.fire(source, textbox.getText());
-            	if(bgme != null && bgme.isCancelled())
-            		return;
-            	
-                GetMatchesEvent.fire(source, textbox.getText());
-                /*
-                 * Call showPopup because the textbox will have lost focus so
-                 * showMatches will not call.
-                 */
-                showPopup();
-                textbox.setFocus(true);
-            }
-        });
-        
-        /*
-         * This is added so the showingOptions can be set before the BlurEvent for textbox is 
-         * handled.
-         */
-        button.addMouseDownHandler(new MouseDownHandler() {			
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				showingOptions = true;
-			}
-		});
-
         /*
          * Registers the keyboard handling this widget
          */
@@ -310,7 +224,52 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
         
         setCSS(OpenELISResources.INSTANCE.autocomplete());
     }
+    
+    @UiHandler("textbox")
+    protected void onFocus(FocusEvent event) {
+    	FocusEvent.fireNativeEvent(event.getNativeEvent(),this);
+    }
 
+    @UiHandler("textbox")
+    protected void onBlur(BlurEvent event) {
+        Item<Integer> item;
+
+        
+        if(!showingOptions && isEnabled() && !queryMode) {
+        	if("".equals(textbox.getText()) && getValue() != null){
+        		setValue(null,"",true);
+        	}else {
+        		item = getSelectedItem();
+
+        		if (item != null)
+        			setValue(item.key, renderer.getDisplay(item),true);
+        	}
+        	BlurEvent.fireNativeEvent(event.getNativeEvent(), this);
+        }
+    }
+    
+    @UiHandler("button")
+    protected void buttonClick(ClickEvent evet) {
+    	BeforeGetMatchesEvent bgme;
+    	
+    	bgme = BeforeGetMatchesEvent.fire(this, textbox.getText());
+    	if(bgme != null && bgme.isCancelled())
+    		return;
+    	
+        GetMatchesEvent.fire(this, textbox.getText());
+        /*
+         * Call showPopup because the textbox will have lost focus so
+         * showMatches will not call.
+         */
+        showPopup();
+        textbox.setFocus(true);
+    }
+    
+    @UiHandler("button")
+    protected void onMouseDown(MouseDownEvent event) {
+    	showingOptions = true;
+    }
+    
     /**
      * This method will display the table set as the PopupContext for this
      * Dropdown. Will create the Popup and initialize the first time if null. We
@@ -380,7 +339,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * Method sets the number of suggestions to show at once before scrolling.
      * @param itemCount
      */
-    public void setVisibleItemCount(int itemCount) {
+    public void setVisibleItems(int itemCount) {
         this.itemCount = itemCount;
     }
     
@@ -403,9 +362,9 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * 
      * @param tree
      */
+    @UiChild(limit=1,tagname="popup")
     public void setPopupContext(Table tableDef) {
         this.table = tableDef;
-        //table.setStyleName(css.DropdownTable());
         table.setFixScrollbar(false);
         table.setRowHeight(16);
         table.setEnabled(true);
@@ -859,6 +818,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 		exceptions.clearValidateExceptions();
 		ExceptionHelper.checkExceptionHandlers(this);
 	}
+	
 	@Override
 	public void addExceptionStyle() {
 		if(ExceptionHelper.isWarning(this))
@@ -972,6 +932,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     public void setCase(TextBase.Case textCase) {
     	textbox.setCase(textCase);
     }
+    
     
     public void setRequired(boolean required) {
     	this.required = required;

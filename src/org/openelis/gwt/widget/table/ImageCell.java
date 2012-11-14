@@ -26,11 +26,15 @@
 package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.common.data.QueryData;
 
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This class implements the CellRenderer and CellEditor interfaces and is used
@@ -39,7 +43,7 @@ import com.google.gwt.user.client.ui.HTMLTable;
  * @author tschmidt
  * 
  */
-public class ImageCell implements CellRenderer {
+public class ImageCell implements CellRenderer,IsWidget {
     
     
     /**
@@ -70,6 +74,12 @@ public class ImageCell implements CellRenderer {
 
 	@Override
 	public ArrayList<LocalizedException> validate(Object value) {
+		return null;
+	}
+
+	@Override
+	public Widget asWidget() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
