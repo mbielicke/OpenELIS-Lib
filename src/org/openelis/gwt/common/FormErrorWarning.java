@@ -39,7 +39,7 @@ public class FormErrorWarning extends FormErrorException implements Warning {
         super(key);
     }
     
-    public FormErrorWarning(String key, String... params){
+    public FormErrorWarning(String key, Object... params){
         super(key,params);
     }
 }

@@ -40,7 +40,7 @@ public class FormErrorException extends LocalizedException {
     	super(key);
     }
     
-    public FormErrorException(String key, String... params){
+    public FormErrorException(String key, Object... params){
     	super(key,params);
     }
 }
