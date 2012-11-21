@@ -195,6 +195,68 @@ public class DataBaseUtil {
     public static boolean isDifferentDT(Datetime a, Datetime b) {
         return isDifferent(toHM(a), toHM(b));
     }
+    
+    public static Double getPercentHoldingUsed(Datetime startedDate, Datetime collectionDate,
+                                                Datetime collectionTime, Integer timeHolding) {
+        Long hour, diff;
+        Double numHrs;
+        Date scd;
+        Datetime stdt;
+        
+        if (collectionDate == null) 
+            return 0.0;
+        
+        scd = collectionDate.getDate();
+        if (collectionTime == null) {
+            scd.setHours(0);
+            scd.setMinutes(0);
+        } else {
+            scd.setHours(collectionTime.getDate().getHours());
+            scd.setMinutes(collectionTime.getDate().getMinutes());
+        }
+        
+        stdt = startedDate != null ? startedDate : Datetime.getInstance();
+        diff = (stdt.getDate().getTime() - scd.getTime());
+        hour = 3600000L;
+        numHrs = diff.doubleValue() / hour.doubleValue();
+
+        return (numHrs / timeHolding.doubleValue()) * 100;        
+    }
+    
+    public static Double getPercentExpectedCompletion(Datetime collectionDate, Datetime collectionTime,
+                                                      Datetime receivedDate, Integer priority,
+                                                      Integer timeTaAverage) {
+        Long day, diff;
+        Double numDays, factor;
+        Date scd;
+        Datetime now, begin;
+
+        if (collectionDate == null && receivedDate == null)
+            return 0.0;
+
+        if (collectionDate != null) {
+            scd = collectionDate.getDate();
+            if (collectionTime == null) {
+                scd.setHours(0);
+                scd.setMinutes(0);
+            } else {
+                scd.setHours(collectionTime.getDate().getHours());
+                scd.setMinutes(collectionTime.getDate().getMinutes());
+            }
+            begin = collectionDate;
+        } else {
+            begin = receivedDate;
+        }
+
+        now = Datetime.getInstance();
+        diff = now.getDate().getTime() - begin.getDate().getTime();
+        day = 86400000L;
+        numDays = diff.doubleValue() / day.doubleValue();
+
+        factor = priority != null ? priority.doubleValue() : timeTaAverage.doubleValue();
+
+        return (numDays / factor) * 100;
+    }
 
     /**
      * Compares the two parameters to see if they are the same
