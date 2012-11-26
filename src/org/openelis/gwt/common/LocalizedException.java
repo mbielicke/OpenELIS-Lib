@@ -23,7 +23,7 @@ public class LocalizedException extends Exception implements Cloneable {
 
     public LocalizedException(String key, Object... params) {
         this(key);
-        if (params.length > 0) {
+        if (params != null && params.length > 0) {
             this.params = new String[params.length];
             for (int i = 0; i < params.length; i++ )
                 if (params[i] != null)
