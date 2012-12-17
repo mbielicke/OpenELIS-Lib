@@ -31,8 +31,6 @@ import org.openelis.gwt.common.DataBaseUtil;
 
 public class QueryFieldUtil {
 
-    private static final long serialVersionUID = 1L;
-
     protected ArrayList<String> comparator;
 
     public ArrayList<String> parameter;
