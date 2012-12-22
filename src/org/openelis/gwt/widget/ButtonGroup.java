@@ -3,7 +3,6 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.arjuna.ats.arjuna.coordinator.OnePhaseResource;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;

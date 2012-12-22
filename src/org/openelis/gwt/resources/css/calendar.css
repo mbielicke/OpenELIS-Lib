@@ -224,9 +224,6 @@
 }
 
 @sprite .CalendarButton{
-	width:14px;
-	height:19px;
-	border-bottom: 1px solid #d8d8d8;
 	gwt-image:'calendarButton';
 }
 

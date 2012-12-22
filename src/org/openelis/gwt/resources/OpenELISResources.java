@@ -83,8 +83,8 @@ public interface OpenELISResources extends ClientBundle {
 	@Source("css/calendarui.css")
 	CalendarUICSS calendarui();
 	
-	@Source("css/calendarbutton.css")
-	ButtonCSS calendarbutton();
+	@Source("css/lookupbutton.css")
+	LookupButtonCSS lookupButton();
 	
 	@Source("images/close.png")
 	ImageResource closeButton();
@@ -340,5 +340,13 @@ public interface OpenELISResources extends ClientBundle {
 	@Source("images/selectedtab.gif")
 	ImageResource selectedTab();
 	
+	@Source("images/autoarrow.gif")
+	ImageResource autoArrow();
+	
+	@Source("images/duplicaterowbuttonimage.gif")
+	ImageResource duplicateRowButtonImage();
+	
+	@Source("images/duplicaterowbuttonimagedisabled.gif")
+	ImageResource duplicateRowButtonImageDisabled();
 	
 }

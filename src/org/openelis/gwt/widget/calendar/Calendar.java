@@ -60,7 +60,6 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -72,9 +71,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Grid;
@@ -97,7 +96,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 												   HasHelper<Datetime>,
 												   HasExceptions {
 												  
-	@UiTemplate("../Select.ui.xml")
+	@UiTemplate("Select.ui.xml")
 	interface CalendarUiBinder extends UiBinder<Widget, Calendar>{};
 	public static final CalendarUiBinder uiBinder = GWT.create(CalendarUiBinder.class);
 	
@@ -109,11 +108,10 @@ public class Calendar extends Composite implements ScreenWidgetInt,
 	@UiField
     protected Button                                button;
     protected PopupPanel                            popup;
-    protected CalendarWidgetUI                      calendar;
+    protected CalendarWidget                      calendar;
     protected MonthYearWidgetUI                     monthYearWidget;
     protected int                                   width;
     protected boolean                               showingCalendar,queryMode,required;
-    protected AbsolutePanel                         image;
 
     @UiField
     protected TextBase                              textbox;
@@ -143,9 +141,6 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         final KeyboardHandler keyHandler = new KeyboardHandler();
         
         initWidget(uiBinder.createAndBindUi(this));
-
-        AbsolutePanel image = new AbsolutePanel();
-        button.setWidget(image);
         
         /*
          * Set the focus style when the Focus event is fired Externally
@@ -167,39 +162,6 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         	}
         });
         
-        /*
-         * Since HorizontalPanel is not a Focusable widget we need to listen to
-         * the textbox focus and blur events and pass them through to the
-         * handlers registered to source.
-         */
-        textbox.addFocusHandler(new FocusHandler() {
-            public void onFocus(FocusEvent event) {
-                FocusEvent.fireNativeEvent(event.getNativeEvent(), source);
-            }
-        });
-
-        textbox.addBlurHandler(new BlurHandler() {
-            public void onBlur(BlurEvent event) {
-            	if(!showingCalendar && isEnabled())
-            		BlurEvent.fireNativeEvent(event.getNativeEvent(), source);
-            }
-        });
-
-        /*
-         * Register click handler to button to show the popup table
-         */
-        button.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                showPopup();
-            }
-        });
-        
-        button.addMouseDownHandler(new MouseDownHandler() {
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				showingCalendar = true;
-			}
-		});
         
         exceptions = new Exceptions();
 
@@ -211,6 +173,27 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         setCSS(OpenELISResources.INSTANCE.calendar());
         
     }
+    
+    @UiHandler("textbox")
+    public void onFocus(FocusEvent event) {
+        FocusEvent.fireNativeEvent(event.getNativeEvent(), this);
+    }
+    
+    @UiHandler("textbox")
+    public void onBlur(BlurEvent event) {
+    	if(!showingCalendar && isEnabled())
+    		BlurEvent.fireNativeEvent(event.getNativeEvent(), this);
+    }
+    
+    @UiHandler("button")
+    public void onClick(ClickEvent event) {
+        showPopup();
+    }
+    
+    @UiHandler("button")
+	public void onMouseDown(MouseDownEvent event) {
+		showingCalendar = true;
+	}
     
     /**
      * This method is overwritten to implement case management. Use the
@@ -246,7 +229,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
                 /*
                  * Set new CalendarWidget withe the precision used by this widget
                  */
-                calendar = new CalendarWidgetUI( ((DateHelper)helper).getBegin(),
+                calendar = new CalendarWidget( ((DateHelper)helper).getBegin(),
                                               ((DateHelper)helper).getEnd());
                 /*
                  * CalendarWidget will fire a ValueChangeEvent<Datetime> when the user selects
@@ -323,8 +306,8 @@ public class Calendar extends Composite implements ScreenWidgetInt,
         /*
          * set the Textbox to width - 14 to account for button.
          */
-        
-        textbox.setWidth((width - 14) + "px");
+        display.getCellFormatter().setWidth(0,0,(width-16)+"px");
+        textbox.setWidth((width - 16) + "px");
         
     }
     
@@ -334,7 +317,7 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     
     @Override
     public void setHeight(String height) {
-        textbox.setHeight(height);
+        display.setHeight(height);
         button.setHeight(height);
     }
 
@@ -750,9 +733,9 @@ public class Calendar extends Composite implements ScreenWidgetInt,
     	css.ensureInjected();
     	this.css = css;
     	
-        image.setStyleName(css.CalendarButton());
+        button.setLeftIcon(css.CalendarButton());
         display.setStyleName(css.SelectBox());
-        textbox.setStyleName(css.Calendar());
+        textbox.setStyleName(css.SelectText());
     }
 
 }

@@ -39,6 +39,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiChild;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Command;
@@ -143,7 +144,7 @@ public class Menu extends Composite implements HasWidgets {
         }, ClickEvent.getType());
     }
     
-    public void setSelfShow() {
+    public void setSelfShow(boolean show) {
     	addDomHandler(new ClickHandler() {
     		public void onClick(ClickEvent event) {
     			showSubMenu();
@@ -180,6 +181,11 @@ public class Menu extends Composite implements HasWidgets {
      */
     protected HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
         return addHandler(handler, MouseOverEvent.getType());
+    }
+    
+    @UiChild(limit=1,tagname="display")
+    public void setDisplay(Widget widget) {
+    	outer.setWidget(widget);
     }
 
     /**

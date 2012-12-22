@@ -27,5 +27,6 @@ public interface ButtonPanelCSS extends ButtonCSS {
 	String duplicateRecordIcon();
 	String historyIcon();
 	String ProcessButtonImage();
+	String DuplicateRowButtonImage();
 	
 }

@@ -64,6 +64,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -241,16 +242,17 @@ public class ViewPanel extends AbsolutePanel implements FocusHandler, ScreenView
                 
             }
         }
-        
+        /*
         if (formErrors.size() == 0)
             window.setError("Please correct the errors indicated, then press Commit");
         else if (formErrors.size() == 1)
             window.setError(formErrors.get(0).getMessage());
         else {
             window.setError("(Error 1 of " + formErrors.size() + ") " +
-                            formErrors.get(0).getMessage());
+                             formErrors.get(0).getMessage());
             window.setMessagePopup(formErrors, "ErrorPanel");
         }
+        */
     }
     
     public void clearErrors(WindowInt window) {
@@ -347,6 +349,7 @@ public class ViewPanel extends AbsolutePanel implements FocusHandler, ScreenView
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 
 } 

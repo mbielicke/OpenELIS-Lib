@@ -32,14 +32,14 @@ public class FieldErrorException extends LocalizedException {
 
 	private String fieldName;
     
-    public FieldErrorException(String key, String field) {
-    	super(key);
-    	this.fieldName = field;
+    public FieldErrorException(String message, String meta) {
+    	super(message);
+    	this.fieldName = meta;
     }
     
-    public FieldErrorException(String key, String field, String... params) {
-    	super(key,params);
-    	this.fieldName = field;
+    public FieldErrorException(String message, String meta, String... params) {
+    	super(message,params);
+    	this.fieldName = meta;
     }
     
     public FieldErrorException() {

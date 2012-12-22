@@ -66,7 +66,7 @@ public class Shortcut {
 		this.ctrl = ctrl;
 		this.shift = shift;
 		this.alt = alt;
-		this.key = key;
+		this.key = Character.toUpperCase(key);
 		this.wid = wid;
 	}
 	

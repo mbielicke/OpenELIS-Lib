@@ -1,8 +1,11 @@
 package org.openelis.gwt.constants;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Messages;
 
 public interface LibraryConstants extends Messages {
+    
+    public static final LibraryConstants INSTANCE = GWT.create(LibraryConstants.class);
 	
 	/******** Exceptions *****************/
 	@Key("exc.fieldRequired")

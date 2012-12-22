@@ -38,72 +38,72 @@ UIRF Software License are applicable instead of those above.
             <g:Grid cellPadding="0" cellSpacing="0" width="100%">
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month0" enabled="true" text="January" action="0" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month0" enabled="true" text="January" action="0" css="{res.lookupButton}">
                   	<ui:attribute name="text" key="month0Text" description="First Month"/>
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month6" text="July" action="6" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month6" text="July" action="6" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month6Text" description="Seventh Month"/>
                   </shl:Button>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month1" text="February" action="1" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month1" text="February" action="1" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month1Text" description="Second Month"/>
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month7" text="August" action="7" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month7" text="August" action="7" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month7Text" description="Eighth Month"/>
                   </shl:Button>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month2" text="March" action="2" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month2" text="March" action="2" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month2Text" description="Third Month" />
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month8" text="September" action="8" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month8" text="September" action="8" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month8Text" description="Ninth Month" />
                   </shl:Button>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month3" text="April" action="3" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month3" text="April" action="3" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month3Text" description="Fourth Month" />
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month9" text="October" action="9" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month9" text="October" action="9" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month9Text" description="Tenth Month" />
                   </shl:Button>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month4" text="May" action="4" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month4" text="May" action="4" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month4Text" description="Fifth Month" />
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month10" text="November" action="10" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month10" text="November" action="10" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month10Text" description="Elevebth Month" />
                   </shl:Button>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="month5" text="June" action="5" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month5" text="June" action="5" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month5Text" description="Sixth Month" />
                   </shl:Button>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="month11" text="December" action="11" enabled="true" css="{res.calendarbutton}">
+                  <shl:Button ui:field="month11" text="December" action="11" enabled="true" css="{res.lookupButton}">
                     <ui:attribute name="text" key="month11Text" description="Twelfth Month" />
                   </shl:Button>
                 </g:customCell>
@@ -115,50 +115,50 @@ UIRF Software License are applicable instead of those above.
             <g:Grid cellPadding="0" cellSpacing="0" width="100%">
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="prevDecade" leftIcon="{res.calendar.prevNavIndex}" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="prevDecade" leftIcon="{res.calendar.prevNavIndex}" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="nextDecade" leftIcon="{res.calendar.nextNavIndex}" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="nextDecade" leftIcon="{res.calendar.nextNavIndex}" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="year0" action="0" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year0" action="0" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="year5" action="5" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year5" action="5" enabled="true" css="{res.lookupButton}"/>
 				</g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="year1" action="1" enabled="true" css="{res.calendarbutton}"/>
-				</g:customCell>
-				<g:customCell>
-                  <shl:Button ui:field="year6" action="6" enabled="true" css="{res.calendarbutton}"/>
-                </g:customCell>
-              </g:row>
-              <g:row>
-                <g:customCell>
-                  <shl:Button ui:field="year2" action="2" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year1" action="1" enabled="true" css="{res.lookupButton}"/>
 				</g:customCell>
 				<g:customCell>
-                  <shl:Button ui:field="year7" action="7" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year6" action="6" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="year3" action="3" enabled="true" css="{res.calendarbutton}"/>
-                </g:customCell>
-                <g:customCell>
-                  <shl:Button ui:field="year8" action="8" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year2" action="2" enabled="true" css="{res.lookupButton}"/>
+				</g:customCell>
+				<g:customCell>
+                  <shl:Button ui:field="year7" action="7" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
               </g:row>
               <g:row>
                 <g:customCell>
-                  <shl:Button ui:field="year4" action="4" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year3" action="3" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
                 <g:customCell>
-                  <shl:Button ui:field="year9" action="9" enabled="true" css="{res.calendarbutton}"/>
+                  <shl:Button ui:field="year8" action="8" enabled="true" css="{res.lookupButton}"/>
+                </g:customCell>
+              </g:row>
+              <g:row>
+                <g:customCell>
+                  <shl:Button ui:field="year4" action="4" enabled="true" css="{res.lookupButton}"/>
+                </g:customCell>
+                <g:customCell>
+                  <shl:Button ui:field="year9" action="9" enabled="true" css="{res.lookupButton}"/>
                 </g:customCell>
               </g:row>
             </g:Grid>

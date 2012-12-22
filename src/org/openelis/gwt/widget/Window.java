@@ -228,6 +228,8 @@ public class Window extends FocusPanel implements WindowInt {
          	 public void onKeyDown(KeyDownEvent event) {
          		 if(content instanceof ViewPanel)
          			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((ViewPanel)content));
+         		 if(content instanceof UIViewPanel)
+         			 KeyDownEvent.fireNativeEvent(event.getNativeEvent(), ((UIViewPanel)content));
         	 }
         },KeyDownEvent.getType());
     }

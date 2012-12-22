@@ -2,10 +2,7 @@
 }
 
 @sprite .AutoDropdownButton{
-    width:16px;
-    height:19px;
-    border-bottom: 1px solid #d8d8d8;
-	gwt-image:'trigger';
+	gwt-image:'autoArrow';
 }
 
 .AutoBox {

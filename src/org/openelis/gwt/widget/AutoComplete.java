@@ -113,7 +113,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
      * Used for AutoComplete display
      */
 
-	protected AbsolutePanel                         image;
 	@UiField
     protected Grid                                  display;
 	@UiField
@@ -161,8 +160,6 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
 
         initWidget(uiBinder.createAndBindUi(this));
 
-        image = new AbsolutePanel();
-        button.setWidget(image);
         /*
          * Set the focus style when the Focus event is fired Externally
          */
@@ -323,6 +320,8 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
          * set the Textbox to width - 16 to account for button.
          */        
         textbox.setWidth((width - 16) + "px");
+        
+        display.getCellFormatter().setWidth(0, 0, (width - 16)+"px");
     }
     
     public int getWidth() {
@@ -960,7 +959,7 @@ public class AutoComplete extends Composite implements ScreenWidgetInt,
     	css.ensureInjected();
     	this.css = css;
     	
-        image.setStyleName(css.AutoDropdownButton());
+        button.setLeftIcon(css.AutoDropdownButton());
         display.setStyleName(css.SelectBox());
         textbox.setStyleName(css.AutoBox());
     }

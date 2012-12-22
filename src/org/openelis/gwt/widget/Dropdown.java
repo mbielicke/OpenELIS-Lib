@@ -186,8 +186,8 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 
 		
 		/* Image must be in a div instead of adding the style to cell itself to display correctly */
-		image = new AbsolutePanel();		
-		button.setWidget(image);
+		//image = new AbsolutePanel();		
+		//button.setWidget(image);
 
 		/*
 		 * Set the focus style when the Focus event is fired Externally
@@ -385,12 +385,15 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 		 */
 		if (display != null)
 			display.setWidth(width+"px");
+		
 
 		/*
 		 * set the Textbox to width - 16 to account for button.
 		 */
 
 		textbox.setWidth((width - 16) + "px");
+		display.getCellFormatter().setWidth(0, 0, (width - 16)+"px");
+		button.setWidth("16px");
 
 		if(table != null) 
 			table.setWidth(width+"px");
@@ -1239,8 +1242,10 @@ public class Dropdown<T> extends Composite implements ScreenWidgetInt,
 	public void setCSS(DropdownCSS css) {
 		css.ensureInjected();
 		this.css = css;
-		image.setStyleName(css.SelectButton());
-		textbox.setStyleName(css.SelectBox());
+		//image.setStyleName(css.SelectButton());
+		display.setStyleName(css.SelectBox());
+		textbox.setStyleName(css.SelectText());
+		button.setLeftIcon(css.SelectButton());
 	}
 	
 	public void setField(String field) {

@@ -9,6 +9,17 @@
     table-layout : fixed;
 }
 
+.SelectText {
+   background:white;
+   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+   font-weight: normal;
+   font-size: 11px;
+   height: 16px;
+   cursor: default;
+   border: none;
+   tex-overflow: ellipsis;
+}
+
 .Focus {
 	 border:1px solid #63b159;
 }

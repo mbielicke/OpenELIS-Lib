@@ -225,6 +225,14 @@
 	gwt-image:'menuDown';
 }
 
+@sprite .DuplicateRowButtonImage{
+    gwt-image:'duplicateRowButtonImage';
+}
+
+@sprite .Disabled .DuplicateRowButtonImage{
+    gwt-image:'duplicateRowButtonImageDisabled';
+}
+
 @sprite .duplicateRecordIcon {
 	gwt-image:'duplicate';
 }

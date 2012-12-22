@@ -94,6 +94,15 @@ public abstract class ScreenNavigator {
         initialize();
     }
     
+    public ScreenNavigator(Table table, Button next, Button prev) {
+        oldPage = -1;
+        selection = -1;
+        this.table = table;
+        atozNext = next;
+        atozPrev = prev;
+        initialize();
+    }
+    
     protected void initialize() {
         
         if (table != null) {
