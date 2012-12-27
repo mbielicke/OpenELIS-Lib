@@ -25,9 +25,10 @@
 */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Preferences implements RPC{
+public class Preferences implements Serializable {
     
     private static final long serialVersionUID = 1L;
     

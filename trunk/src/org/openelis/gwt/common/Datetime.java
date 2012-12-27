@@ -25,9 +25,10 @@
  */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Datetime implements RPC, Comparable<Datetime> {
+public class Datetime implements Serializable, Comparable<Datetime> {
 
 	private static final long serialVersionUID = 1L;
 	/**

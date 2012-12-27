@@ -25,11 +25,13 @@
 */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
+
 
 /**
  * This class is used to update/send the status of report to the client (GWT and/or servlet).
  */
-public class ReportStatus implements RPC {
+public class ReportStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

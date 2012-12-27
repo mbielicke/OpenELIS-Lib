@@ -46,7 +46,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openelis.gwt.common.PermissionException;
-import org.openelis.util.SessionManager;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -92,12 +91,6 @@ public abstract class StaticFilter implements Filter {
         boolean error;
         Date now;
         HttpServletRequest hreq = (HttpServletRequest)req;
-
-        //
-        // register this session with SessionManager so we can access it
-        // statically in gwt code
-        //
-        SessionManager.setSession(hreq.getSession());
 
         //
         // pass-through for images and if we are logged-in
@@ -165,7 +158,7 @@ public abstract class StaticFilter implements Filter {
             }
             ((HttpServletResponse)response).setContentType("text/html");
             ((HttpServletResponse)response).setCharacterEncoding("UTF-8");
-            response.getWriter().write(ServiceUtils.getXML(loginXSL, doc));
+            response.getWriter().write(ServiceUtils.getXML(loginXSL, doc,(String)hreq.getSession().getAttribute("locale")));
         } catch (Exception e) {
             log.log(Level.SEVERE, e.getMessage(), e);
         }

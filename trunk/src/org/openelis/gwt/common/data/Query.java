@@ -1,13 +1,12 @@
 package org.openelis.gwt.common.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-
-import org.openelis.gwt.common.RPC;
 
 /**
  * Class used to transfer query fields and the page number to the query service.
  */
-public class Query implements RPC {
+public class Query implements Serializable {
 
     private static final long      serialVersionUID = 1L;
 

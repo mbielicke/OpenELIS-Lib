@@ -31,13 +31,15 @@ import java.util.Locale;
 
 import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
-import org.openelis.util.SessionManager;
+import org.openelis.gwt.services.CalendarServiceInt;
 import org.openelis.util.UTFResource;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class CalendarService {
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+public class CalendarServlet extends RemoteServiceServlet implements CalendarServiceInt {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,8 +51,8 @@ public class CalendarService {
     public CalendarRPC getMonth(CalendarRPC form) throws Exception {
         try {
         	if(resource == null)
-        	resource = UTFResource.getBundle("org.openelis.gwt.server.CalendarConstants",new Locale(((SessionManager.getSession() == null  || (String)SessionManager.getSession().getAttribute("locale") == null) 
-                    ? "en" : (String)SessionManager.getSession().getAttribute("locale"))));
+        	resource = UTFResource.getBundle("org.openelis.gwt.server.CalendarConstants",new Locale(((getThreadLocalRequest().getSession() == null  || (String)getThreadLocalRequest().getSession().getAttribute("locale") == null) 
+                    ? "en" : (String)getThreadLocalRequest().getSession().getAttribute("locale"))));
             Calendar cal = Calendar.getInstance();
             if(form.date != null && !form.date.equals("")){
                 cal.setTime(form.date.getDate());
@@ -100,8 +102,8 @@ public class CalendarService {
             Element yearCellEl = doc.createElement("yearCell");
             yearCellEl.appendChild(doc.createTextNode(String.valueOf(form.year%10)));
             root.appendChild(yearCellEl);
-            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/monthYear.xsl");
-            form.xml = ServiceUtils.getXML(is,doc);
+            InputStream is = CalendarServlet.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/monthYear.xsl");
+            form.xml = ServiceUtils.getXML(is,doc,(String)getThreadLocalRequest().getAttribute("locale"));
             return form;
         }catch(Exception e){
             e.printStackTrace();
@@ -132,8 +134,8 @@ public class CalendarService {
             System.out.println("date = "+rpc.date.toString());
             day.appendChild(doc.createTextNode(rpc.date.toString()));
             root.appendChild(day);
-            InputStream is = CalendarService.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/calendar.xsl");
-            rpc.xml = ServiceUtils.getXML(is,doc);
+            InputStream is = CalendarServlet.class.getClassLoader().getResourceAsStream("org/openelis/gwt/server/calendar.xsl");
+            rpc.xml = ServiceUtils.getXML(is,doc,(String)getThreadLocalRequest().getAttribute("locale"));
             return rpc;
         }catch(Exception e){
             e.printStackTrace();

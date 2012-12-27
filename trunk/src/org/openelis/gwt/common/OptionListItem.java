@@ -26,12 +26,14 @@
 
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
+
 
 /**
  * This class represents the structure of an option list entry
  */
 
-public class OptionListItem implements RPC{
+public class OptionListItem implements Serializable {
     
     private static final long serialVersionUID = 1L;
     private String key, label;

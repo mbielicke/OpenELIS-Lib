@@ -25,9 +25,9 @@
  */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.RPC;
+import java.io.Serializable;
 
-public class SectionPermission implements RPC {
+public class SectionPermission implements Serializable {
 
     public enum SectionFlags {
         VIEW, ASSIGN, COMPLETE, RELEASE, CANCEL

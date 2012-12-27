@@ -207,13 +207,7 @@ public class WindowBrowser extends Composite implements HasKeyPressHandlers, Key
                 wid.zIndex = index;
                 int top = browser.getWidgetTop(wid);
                 int left = browser.getWidgetLeft(wid);
-                if (wid.content instanceof ReportFrame) {
-                    // browser.setWidgetPosition(wid, left, top);
-                    DOM.setStyleAttribute(wid.getElement(), "zIndex", String.valueOf(index));
-                    DOM.setStyleAttribute(wid.content.getElement(), "zIndex", String.valueOf(index));
-
-                } else
-                    browser.add(wid, left, top);
+                browser.add(wid, left, top);
                 setFocusedWindow();
             }
             return true;

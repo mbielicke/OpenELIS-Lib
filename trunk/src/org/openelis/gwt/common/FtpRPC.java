@@ -1,6 +1,8 @@
 package org.openelis.gwt.common;
 
-public class FtpRPC implements RPC {
+import java.io.Serializable;
+
+public class FtpRPC implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

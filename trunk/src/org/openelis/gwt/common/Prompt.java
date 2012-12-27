@@ -50,6 +50,7 @@
  */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -59,7 +60,7 @@ import java.util.ArrayList;
  * 
  */
 
-public class Prompt implements RPC {
+public class Prompt implements Serializable {
 
     private static final long           serialVersionUID = 1L;
     protected String                    name, prompt, mask, defaultValue;

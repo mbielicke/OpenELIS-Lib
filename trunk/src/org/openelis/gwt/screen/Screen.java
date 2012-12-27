@@ -17,7 +17,6 @@ import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
-import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWindowInt;
 import org.openelis.gwt.widget.table.TableWidget;
@@ -49,7 +48,6 @@ public class Screen extends Composite implements
 	
 
 	protected ScreenDefInt def;
-	protected ScreenService service;
 
 	public final AbsolutePanel screenpanel = new AbsolutePanel();
 	public static HashMap<String, String> consts;

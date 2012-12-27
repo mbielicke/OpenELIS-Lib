@@ -44,7 +44,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openelis.gwt.common.PermissionException;
-import org.openelis.util.SessionManager;
 
 /**
  * This class provides a framework for a default user login to web applications.
@@ -66,12 +65,6 @@ public abstract class HostedFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException {
         HttpServletRequest hreq = (HttpServletRequest)req;
-
-        //
-        // register this session with SessionManager so we can access it
-        // statically in gwt code
-        //
-        SessionManager.setSession(hreq.getSession());
 
         //
         // pass-through for images and if we are logged-in

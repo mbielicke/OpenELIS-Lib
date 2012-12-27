@@ -29,10 +29,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpSession;
 import javax.xml.transform.stream.StreamResult;
 
-import org.openelis.util.SessionManager;
 import org.openelis.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,25 +38,37 @@ import org.w3c.dom.Element;
 public class ServiceUtils {
 
     public static String props;
-
+    
     public static String getXML(String url) throws Exception {
-        Document doc;
+        return getXML(url,"en");
+    }
 
+    public static String getXML(String url, String locale) throws Exception {
+        Document doc;
+        if(locale == null)
+            locale = "en";
         try {
             doc = XMLUtil.createNew("doc");
-            return getXML(url, doc);
+            return getXML(url, doc, locale);
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
 
+    public static String getGeneratorXML(InputStream xsl, String props) throws Exception {
+        return getGeneratorXML(xsl,props,"en");
+    }
+    
     public static String getGeneratorXML(InputStream xsl, String props, String language) throws Exception {
         Document doc;
         Element root, l;
         String locale = "en";
         ByteArrayOutputStream output;
-
+        
+        if(language != null)
+            locale = language;
+        
         doc = XMLUtil.createNew("doc");
         root = doc.getDocumentElement();
 
@@ -79,12 +89,17 @@ public class ServiceUtils {
     }
 
     public static String getXML(String url, Document doc) throws Exception {
+        return getXML(url,doc,"en");
+    }
+    
+    public static String getXML(String url, Document doc, String locale) throws Exception {
         Element root, l;
-        String locale = "en";
         ByteArrayOutputStream output;
+        
+        if(locale == null)
+            locale = "en";
 
         try {
-            locale = getLocale();
             root = doc.getDocumentElement();
             l = doc.createElement("locale");
             l.appendChild(doc.createTextNode(locale));
@@ -105,21 +120,26 @@ public class ServiceUtils {
     }
 
     public static String getXML(InputStream is, Document doc) throws Exception {
+        return getXML(is,doc,"en");
+    }
+    
+    public static String getXML(InputStream is, Document doc, String locale) throws Exception {
         Element root, l;
-        String locale = "en";
         ByteArrayOutputStream output;
+        
+        if(locale == null)
+            locale = "en";
 
         try {
-            locale = getLocale();
             root = doc.getDocumentElement();
             l = doc.createElement("locale");
             l.appendChild(doc.createTextNode(locale));
             root.appendChild(l);
-
+/*
             l = doc.createElement("props");
             l.appendChild(doc.createTextNode(props));
             root.appendChild(l);
-            
+*/            
             output = new ByteArrayOutputStream();
             XMLUtil.transformXML(doc, is, new StreamResult(output));
         
@@ -130,17 +150,4 @@ public class ServiceUtils {
         }
     }
 
-    private static String getLocale() {
-        String l;
-        HttpSession s;
-        
-        l = null;
-        s = SessionManager.getSession();
-        if (s != null)
-            l = (String) s.getAttribute("locale");
-        if (l == null)
-            l = "en";
-        
-        return l;
-    }
 }

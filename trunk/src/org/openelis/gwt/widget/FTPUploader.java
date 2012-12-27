@@ -6,7 +6,6 @@ import gwtupload.client.IUploadStatus;
 import org.openelis.gwt.common.FtpRPC;
 import org.openelis.gwt.event.FTPStartUploadEvent;
 import org.openelis.gwt.event.FTPStartUploadHandler;
-import org.openelis.gwt.services.ScreenService;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,7 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 	  
 	  protected String URL;
 	  protected String service;
-	  final ScreenService uploadservice = new ScreenService("controller?service=org.openelis.gwt.server.UploadServlet");
+	  //final ScreenService uploadservice = new ScreenService("controller?service=org.openelis.gwt.server.UploadServlet");
 	  
 	  protected final Timer FTPUploadTimer = new Timer() {
 		   boolean firstTime = true;
@@ -42,7 +41,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 		final FtpRPC rpc = new FtpRPC();
 		rpc.path = URL;
 		rpc.service = ((FTPFileUpload)fileInput).getService();
-		
+		/*
 			uploadservice.call("startFTPLoad",rpc, new AsyncCallback() {
 				public void onSuccess(Object result) {
 					
@@ -54,7 +53,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 					statusWidget.setError(caught.getMessage());
 				}
 			});
-
+         */
 		
 		  uploading = true;
 	       finished = false;
@@ -63,10 +62,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 	       new Timer() {
 	           public void run() {
 	        	 try {
+	        	     /*
 	        		 parseAjaxResponse(uploadservice.callString("getFTPStatus",URL));
 	        		 if(finished ){
 	        			 this.cancel();
 	        		 }
+	        		 */
 	        	 }catch(Exception e) {
 	        		 e.printStackTrace();
 	        	 }
