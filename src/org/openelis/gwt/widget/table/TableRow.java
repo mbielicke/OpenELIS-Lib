@@ -38,7 +38,11 @@ public class TableRow extends Widget implements HasAllMouseHandlers {
     
     public TableRow(Element elem) {
         setElement(elem);
-        sinkEvents(Event.MOUSEEVENTS);
+        sinkEvents(Event.ONMOUSEDOWN);
+        sinkEvents(Event.ONMOUSEMOVE);
+        sinkEvents(Event.ONMOUSEOUT);
+        sinkEvents(Event.ONMOUSEOVER);
+        sinkEvents(Event.ONMOUSEUP);
         onAttach();
     }
     

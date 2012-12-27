@@ -42,7 +42,7 @@ public class ScreenControllerServlet extends AppServlet implements ScreenService
         HashMap<String, Object> busyPool;
 
         try {
-            serviceInst = Class.forName(service).newInstance();
+            serviceInst = Class.forName(service,true,Thread.currentThread().getContextClassLoader()).newInstance();
             return serviceInst.getClass().getMethod(method, paramTypes).invoke(serviceInst, params);
         } catch (InvocationTargetException e) {
             t = e;

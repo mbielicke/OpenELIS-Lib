@@ -44,7 +44,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.openelis.gwt.common.PermissionException;
 import org.openelis.util.SessionManager;
@@ -92,16 +91,19 @@ public abstract class StaticFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException {
         boolean error;
         Date now;
-        HttpSession session;
         HttpServletRequest hreq = (HttpServletRequest)req;
+
+        //
+        // register this session with SessionManager so we can access it
+        // statically in gwt code
+        //
+        SessionManager.setSession(hreq.getSession());
 
         //
         // pass-through for images and if we are logged-in
         //
-        session = hreq.getSession(false);
-
         if (hreq.getRequestURI().endsWith(".jpg") || hreq.getRequestURI().endsWith(".gif") ||
-            (session != null && session.getAttribute("USER_NAME") != null)) {
+            hreq.getSession().getAttribute("USER_NAME") != null) {
             //
             // prevent cache
             //
@@ -120,6 +122,12 @@ public abstract class StaticFilter implements Filter {
             }
             return;
         }
+
+        //
+        // used for language binding
+        //
+        if (hreq.getParameter("locale") != null)
+            hreq.getSession().setAttribute("locale", req.getParameter("locale"));
 
         //
         // check to see if we are coming from login screen
@@ -188,7 +196,7 @@ public abstract class StaticFilter implements Filter {
              * all the parts. see UserCacheBean. see OpenELISLDAPModule see
              * OpenELISRolesModule
              */
-            locale = (String)req.getParameter("locale");
+            locale = (String)req.getSession().getAttribute("locale");
             parts = name + ";" + req.getSession().getId() + ";" + (locale == null ? "en" : locale);
 
             localctx = new InitialContext();
@@ -209,8 +217,10 @@ public abstract class StaticFilter implements Filter {
             loginAttempt.success(name, ipAddress);
         } catch (PermissionException p) {
             loginAttempt.fail(name, ipAddress);
+            p.printStackTrace();
             throw p;
         } catch (Exception e) {
+        	e.printStackTrace();
             log.log(Level.SEVERE, e.getMessage(), e);
             loginAttempt.fail(name, ipAddress);
             throw e;

@@ -114,6 +114,8 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
+        setFocus(true);
+       
         
     }
     
@@ -131,6 +133,7 @@ public class PopupTable extends TableWidget implements CloseHandler<PopupPanel> 
             }
         });
         focused = true;
+        setFocus(true);
     }
     
     public void hideTable() {

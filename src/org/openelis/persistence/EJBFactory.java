@@ -27,7 +27,6 @@ package org.openelis.persistence;
 
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
 
@@ -40,7 +39,7 @@ import org.openelis.util.SessionManager;
  * StaticFilter).
  */
 public class EJBFactory {
-    private static final Logger      log = Logger.getLogger("openelis");
+    //private static Logger log = Logger.getLogger(EJBFactory.class.getName());
 
     /**
      * This class provides a caching EJB bean factory. All cached beans are stored in
@@ -77,15 +76,15 @@ public class EJBFactory {
             try {
                 p = (Properties)SessionManager.getSession().getAttribute("jndiProps");
                 if (p == null) {
-                    log.severe("Failed to get user properties for thread id " + Thread.currentThread());
+                   // log.error("Failed to get user properties for thread id " + Thread.currentThread());
                     return null;
                 }
 
                 c = new InitialContext(p);
                 object = c.lookup(bean);
             } catch (Exception e) {
-                log.severe("Failed to lookup "+ bean +" for thread id "+ Thread.currentThread()+": " +
-                          e.getMessage());
+                //log.error("Failed to lookup "+ bean +" for thread id "+ Thread.currentThread()+": " +
+                  //        e.getMessage());
                 e.printStackTrace();
                 object = null;
             }

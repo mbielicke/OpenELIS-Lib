@@ -308,7 +308,6 @@ import com.google.gwt.user.client.ui.Widget;
 	}
 
 	public void setValue(Datetime value, boolean fireEvents) {
-		Datetime old = form.date;
 		form.date = value;
 		if(fireEvents)
 			ValueChangeEvent.fire(this, getValue());

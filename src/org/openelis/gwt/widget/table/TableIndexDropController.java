@@ -76,6 +76,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onPreviewDrop(DragContext context) throws VetoDragException {
+		System.out.println("onPreview");
 		if(scroll != null) {
 			scroll.cancel();
 			scroll = null;
@@ -97,6 +98,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onEnter(DragContext context) {
+		System.out.println("On Enter");
 		super.onEnter(context);
 		positioner = newPositioner(context); 
 		//((TableDragController)context.dragController).dropIndicator.setStyleName("DragStatus Drop");
@@ -104,6 +106,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onDrop(DragContext context) {
+		System.out.println("OnDrop");
 		TableRow drop = null;
 		drop = (TableRow)context.draggable;
 		TableDataRow row = drop.dragRow;
@@ -144,6 +147,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onLeave(DragContext context) {
+		System.out.println("On Leave");
 		if(positioner != null) {
 			positioner.removeFromParent();
 			positioner = null;
@@ -155,6 +159,7 @@ public final class TableIndexDropController extends AbstractPositioningDropContr
 
 	@Override
 	public void onMove(DragContext context) {
+		System.out.println("On Move");
 		super.onMove(context);
 		if(scroll != null){
 			scroll.cancel();

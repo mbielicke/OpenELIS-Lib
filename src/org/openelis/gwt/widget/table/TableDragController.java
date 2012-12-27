@@ -68,6 +68,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void previewDragStart() throws VetoDragException {
+		System.out.println("Preview Drag Start");
 		if(getHandlerCount(BeforeDragStartEvent.getType()) > 0 ){
 			BeforeDragStartEvent<TableRow> event = BeforeDragStartEvent.fire(this, (TableRow)context.draggable);
 			if(event != null && event.isCancelled()){
@@ -85,10 +86,12 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void previewDragEnd() throws VetoDragException {
+		System.out.println("Preview Drag end");
 		super.previewDragEnd();
 	}
 
 	public void dragMove() {
+		System.out.println("Drag Move");
 		context.desiredDraggableX = context.mouseX;
 		context.desiredDraggableY = context.mouseY;
 		super.dragMove();
@@ -96,6 +99,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void dragStart() {
+		System.out.println("Drag Start");
 		((TableRow)context.draggable).dragRow.enabled = false;
 		((TableRow)context.draggable).addStyleName(TableView.disabledStyle);
 		super.dragStart();
@@ -146,6 +150,7 @@ public class TableDragController extends PickupDragController implements HasBefo
 
 	@Override
 	public void dragEnd() {
+		System.out.println("Drag end");
 		//context.draggable.removeStyleName("TableHighlighted");
 		((TableRow)context.draggable).dragRow.enabled = true;
 		if(((TableRow)context.draggable).controller.isRowDrawn(((TableRow)context.draggable).dragModelIndex))

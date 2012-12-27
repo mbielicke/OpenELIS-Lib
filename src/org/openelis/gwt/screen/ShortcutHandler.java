@@ -47,7 +47,9 @@ public class ShortcutHandler implements KeyPressHandler {
 	}
 	
 	public void onKeyPress(final KeyPressEvent event) {
-		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && event.getCharCode() == key){
+		if(key == '*')
+			KeyPressEvent.fireNativeEvent(event.getNativeEvent(), (ScreenPanel)wid);
+		if(event.isControlKeyDown() == ctrl && event.isAltKeyDown() == alt && event.isShiftKeyDown() == shift && Character.toLowerCase(event.getCharCode()) == key){
 			if(wid instanceof AppButton) {
 				if(((AppButton)wid).isEnabled() && !((AppButton)wid).isLocked()){
 					panel.fireChangeEvent();
