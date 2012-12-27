@@ -1,0 +1,59 @@
+<module  rename-to="report">
+
+      <!-- Inherit the core Web Toolkit stuff.                        -->
+      <inherits name='com.google.gwt.user.User'/>
+      <inherits name="com.google.gwt.xml.XML"/>
+	  <inherits name="com.google.gwt.i18n.I18N"/> 
+      <inherits name="org.openelis.gwt.Widget"/>
+      <inherits name="org.openelis.gwt.Common"/>
+      <inherits name="org.openelis.gwt.Screen"/>	
+      <!-- 
+      <inherits name="org.openelis.ELISCommon"/> 
+      
+      <inherits name="gwt.canvas.gwt-canvas"/>
+      
+      <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
+      --> 
+      <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+      <!-- >
+      <inherits name="org.openelis.ks.modules.main.Main"/>
+      <inherits name="org.openelis.ks.modules.textboxes.Textboxes"/>
+     <inherits name="org.openelis.ks.modules.dropdown.Dropdown"/> 
+      <inherits name="org.openelis.ks.modules.dragdrop.DragDrop"/>
+	  <inherits name="org.openelis.ks.modules.scriptlet.Scriptlet"/>
+	  <inherits name="org.openelis.ks.modules.tree.Tree"/>
+	  <inherits name="org.openelis.ks.modules.table.Table"/>
+ 	  <inherits name="org.openelis.ks.modules.richtext.RichText"/>
+ 	  -->
+      <inherits name="org.openelis.gwt.Report"/>
+ 	  <!-- 
+      <inherits name="org.openelis.ks.modules.diagram.Diagram"/>
+      -->
+
+      
+      <!-- Inherit the default GWT style sheet.  You can change       -->
+      <!-- the theme of your GWT application by uncommenting          -->
+      <!-- any one of the following lines.   --> 
+      <!--                         
+      <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+      -->
+      <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+      <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+      <!-- Other module inherits                                      -->
+       
+	  <set-property name="user.agent" value="ie6,ie8,safari,gecko1_8" />
+	      
+      <!-- Specify the app entry point class.                         -->
+      <entry-point class='org.openelis.gwt.widget.Report'/>
+    
+      <!-- Specify the application specific style sheet.              -->
+      <stylesheet src='KitchenSink.css' />
+     
+      <define-property name="props" values="org_openelis_ks_modules_main_server_constants_OpenELISConstants"/>
+      <set-property name="props" value="org_openelis_ks_modules_main_server_constants_OpenELISConstants"/>
+      <!-- 
+      <extend-property name="locale" values="fr"/>
+      -->
+
+</module>

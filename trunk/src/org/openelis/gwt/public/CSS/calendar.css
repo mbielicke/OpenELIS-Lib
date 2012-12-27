@@ -1,0 +1,248 @@
+.CalendarWidget {
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 14px; 
+    font-weight: normal;
+    padding:0px;
+    background-color:white;
+    border:1px solid #718bb7;
+}
+
+.CalendarWidget .navbar {
+    width: 100%;
+    background-color: #fff;
+}
+
+.CalendarWidget .navbar .gwt-Button {
+
+
+}
+/*
+.CalendarWidget .timebar {
+    width:100%;
+    border-top: 3px solid #e6eaf6; 
+    background-color: #fff;
+}*/
+.TimeBar .ScreenTextBox {
+    text-align:center;
+}
+.CalendarWidget .table {
+    width:100%;
+    text-align: center;
+}
+
+.CalendarWidget .weekheader {
+    background-color: #e6eaf6;
+}
+
+.CalendarWidget .weekheader .days {
+    padding:2px;
+}
+
+.CalendarWidget .cell {
+    cursor:pointer;
+    padding:0;
+}
+
+.CalendarWidget .cell .gwt-HTML {
+    padding:1px;
+}
+
+.CalendarWidget .cell .gwt-HTML span {
+}
+
+.CalendarWidget .selected{
+	border :1px solid red;
+}
+
+.CalendarWidget .selectedRow .cell{
+	border-top:1px solid red;
+	border-bottom:1px solid red;
+}
+
+.CalendarWidget .calinactive{
+	border:1px solid grey;
+}
+
+.CalendarWidget .today .gwt-HTML {
+    background-color: #C3D9FF;
+}
+
+.CalendarWidget .weekend {
+    background-color: #f0f1f6;
+}
+
+.CalendarWidget .day .gwt-HTML {
+} 
+
+
+.DateCell {
+}
+
+.MyCell {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.MonthBar {/*
+    width:100%;
+    height:25px;
+    url('../Images/monthbar.gif') repeat-x*/
+    background:#FBFBFB;
+}
+.Current{
+
+}
+
+/*******Calendar Button Class**********
+ }
+
+.MonthBar .ButtonRightSide{
+    padding:0;
+    margin:0;
+    background:none;
+}
+.MonthBar .disabled .ButtonRightSide{
+}
+
+.MonthBar .ButtonLeftSide{
+    padding:0;
+    margin:0;
+    background:none; 
+}
+.MonthBar .disabled .ButtonLeftSide{
+}
+
+/*.MonthBar .ButtonContent{
+    padding:4px 4px 0 4px;
+    margin:0;
+    background:none;
+}*/
+.Button{
+padding:0;
+}
+.MonthBar .Hover .ButtonContent, .Pressed .ButtonContent {
+/*    background:url("/openelis/Images/previousmonth.gif") no-repeat;
+*/ /*   cursor:pointer;
+    background:none;*/
+}
+.MonthBar .disabled .ButtonContent{
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
+}
+
+.MonthBar .disabled .ScreenLabel{
+color:gray;
+}
+
+.PreviousMonth, .MonthSelect, .NextMonth{
+margin-top:5px;
+    width:7px;
+    height:7px;
+}
+.PreviousMonth{
+    background:url("../Images/previousmonth.gif") no-repeat center center;
+}
+.Hover .PreviousMonth{
+    background:url("../Images/previousmonthhover.gif") no-repeat center center;
+}
+.MonthSelect{
+    background:url("../Images/monthselect.gif") no-repeat;
+}
+.Hover .MonthSelect{
+    background:url("../Images/monthselecthover.gif") no-repeat;
+}
+.NextMonth{
+    background:url("../Images/nextmonth.gif") no-repeat;
+}
+.Hover .NextMonth{
+    background:url("../Images/nextmonthhover.gif") no-repeat;
+}
+ 
+/*******End Calendar Button Class***********/
+.TimeBar{
+padding:2px;
+    background:url("../Images/todaybar.gif") repeat-x 0 -1px;;
+}
+.TodayBar{
+    padding-top:1px;
+    background:url("../Images/todaybar.gif") repeat-x;
+}
+.DateText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+	padding-top:2px;
+}
+.Hover .DateText {
+background:#C7D8ED url(../Images/datecell.gif) repeat-x scroll 0 0;
+cursor:pointer;
+}
+.MYText {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    height:16px;
+}
+
+.MonthDisplay {
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    padding:5px 0 0 0;
+    color:#333;
+    width:98px;
+}
+.SelectBar{
+    padding-top:1px;
+    background:url("../Images/todaybar.gif") repeat-x;
+}
+.DayText {
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:10px;
+    text-align:center;
+    color:#233D6D;
+}
+
+.DayBar {
+   height:18px;
+   background:url('../Images/daybar.gif') repeat-x;
+}
+
+.Calendar {
+   background:white;
+}
+.DateCell, .MYCell{
+}
+.Hover .DateCell {
+    background:#ddecfe;
+    cursor:pointer;
+}
+
+.MYCell .Hover {
+    background:#ddecfe;
+    cursor:pointer;
+}
+
+.DateCell .Current {/*
+   border:1px solid #8b0000;*/
+   background:#c7d8ed url('../Images/datecell.gif') repeat-x;
+}
+
+.MYCell .Current {
+   background:#c7d8ed url('../Images/datecell.gif') repeat-x;
+   border:1px solid #8db2e3;
+}
+
+.DateCell .Current .DateText {
+  border:1px solid red;
+}
+
+.MYCell .Current .MYText {
+  border:1px solid red;
+}
+ 
+.OffMonth {
+   color:gray;
+}
