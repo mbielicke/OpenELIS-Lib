@@ -25,13 +25,11 @@
 */
 package org.openelis.gwt.widget;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.screen.ScreenDefInt;
-import org.openelis.gwt.widget.Button;
-import org.openelis.gwt.widget.Item;
 import org.openelis.gwt.widget.table.Table;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedEvent;
 import org.openelis.gwt.widget.table.event.BeforeCellEditedHandler;
@@ -68,10 +66,10 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
  * 
  * For all screen queries, call nav.setQuery(query).
  */
-public abstract class ScreenNavigator {
+public abstract class ScreenNavigator<T extends Serializable> {
     protected int         selection, oldPage;
     protected boolean     byRow, enable;
-	protected ArrayList<? extends RPC>   result;
+	protected ArrayList<T>   result;
     protected Query       query;
     protected Table       table;
     protected Button   atozNext, atozPrev;
@@ -193,9 +191,8 @@ public abstract class ScreenNavigator {
         select(row);
     }
 
-	@SuppressWarnings("unchecked")
-	public <T extends RPC> ArrayList<T> getQueryResult() {
-        return (ArrayList<T>)result;
+	public ArrayList<T> getQueryResult() {
+        return result;
     }
 
     /**
@@ -240,7 +237,7 @@ public abstract class ScreenNavigator {
      * represent the selection. A null RPC parameter tells the screen to clear
      * its data.
      */
-    public abstract boolean fetch(RPC entry);
+    public abstract boolean fetch(T entry);
 
     /**
      * This method is called when a new query needs to be executed. The screen
@@ -281,7 +278,7 @@ public abstract class ScreenNavigator {
         } else if (row < 0) {
             setPage(query.getPage() - 1);
         } else {
-            if (fetch((RPC)result.get(row))) {
+            if (fetch(result.get(row))) {
                 selection = row;
                 if (table != null) 
                     table.selectRowAt(selection);
