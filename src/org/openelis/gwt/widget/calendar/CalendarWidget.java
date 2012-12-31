@@ -29,7 +29,7 @@ import java.util.Date;
 
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.constants.Constants;
-import org.openelis.gwt.screen.Calendar;
+import org.openelis.gwt.services.CalendarService;
 import org.openelis.gwt.widget.Button;
 import org.openelis.gwt.widget.DateHelper;
 import org.openelis.gwt.widget.TextBox;
@@ -128,7 +128,7 @@ public class CalendarWidget extends Composite implements HasValueChangeHandlers<
         this.begin = begin;
         this.end = end;
         
-        current = Calendar.get().getCurrentDatetime(begin, end);
+        current = CalendarService.get().getCurrentDatetime(begin, end);
 
         year = current.get(Datetime.YEAR);
         month = current.get(Datetime.MONTH);
