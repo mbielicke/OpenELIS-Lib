@@ -1,4 +1,4 @@
-package org.openelis.gwt.screen;
+package org.openelis.gwt.services;
 
 import org.openelis.gwt.common.Datetime;
 

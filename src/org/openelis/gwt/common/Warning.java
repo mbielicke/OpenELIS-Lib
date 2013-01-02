@@ -25,9 +25,11 @@
 */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
+
 /**
  * This marks an exception as being a warning only
  */
-public interface Warning extends RPC {
+public interface Warning extends Serializable {
 
 }

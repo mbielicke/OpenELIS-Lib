@@ -42,7 +42,6 @@ import org.openelis.gwt.event.HasDataChangeHandlers;
 import org.openelis.gwt.event.HasStateChangeHandlers;
 import org.openelis.gwt.event.StateChangeEvent;
 import org.openelis.gwt.event.StateChangeHandler;
-import org.openelis.gwt.services.ScreenService;
 import org.openelis.gwt.widget.DeckPanel;
 import org.openelis.gwt.widget.HasExceptions;
 import org.openelis.gwt.widget.Queryable;
@@ -90,7 +89,6 @@ public class Screen extends SimplePanel implements HasStateChangeHandlers,
     /**
      * Default service for the screen
      */
-    protected ScreenService               service;
     
     protected String                      fatalError;
 

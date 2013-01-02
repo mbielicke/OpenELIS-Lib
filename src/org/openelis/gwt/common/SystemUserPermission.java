@@ -25,6 +25,7 @@
  */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.openelis.gwt.common.ModulePermission.ModuleFlags;
@@ -34,7 +35,7 @@ import org.openelis.gwt.common.SectionPermission.SectionFlags;
  * This class contains a basic set of information for a system user including
  * all the user's security permissions.
  */
-public class SystemUserPermission implements RPC {
+public class SystemUserPermission implements Serializable {
 
     private static final long                    serialVersionUID = 1L;
 

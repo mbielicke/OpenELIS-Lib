@@ -31,7 +31,6 @@ import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.OptionListItem;
 import org.openelis.gwt.common.Prompt;
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.ReportStatus;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
@@ -68,7 +67,7 @@ import com.google.gwt.user.client.ui.Widget;
  * should extend this class and specify the report servlet service to get report
  * prompts and run the report.
  */
-public class ReportScreen extends Screen {
+public abstract class ReportScreen<T> extends Screen {
 
 	protected ArrayList<Prompt> reportParameters;
 
@@ -149,20 +148,17 @@ public class ReportScreen extends Screen {
 	protected void getReportParameters() {
 		window.setBusy(consts.get("gettingReportParam"));
 
-		service.callList(promptsInterface,
-				new AsyncCallback<ArrayList<Prompt>>() {
-					public void onSuccess(ArrayList<Prompt> result) {
-						reportParameters = result;
-						createReportWindow();
-						window.setDone(consts.get("loadCompleteMessage"));
-					}
-
-					public void onFailure(Throwable caught) {
-						window.close();
-						Window.alert("Failed to get parameters for " + name);
-					}
-				});
+        try {
+            reportParameters = getPrompts();
+            createReportWindow();
+            window.setDone(consts.get("loadCompleteMessage"));
+        } catch (Exception e) {
+            window.close();
+            Window.alert("Failed to get parameters for " + name);
+        }       
 	}
+	
+	protected abstract ArrayList<Prompt> getPrompts() throws Exception;
 
 	/**
 	 * Draws the prompts and fields in the report window
@@ -290,17 +286,19 @@ public class ReportScreen extends Screen {
 
 		query = new Query();
 		query.setFields(getQueryFields());
-		runReport(query);		
+		runReport((T)query);		
 	}
 	
+    public abstract void runReport(T rpc, AsyncCallback<ReportStatus> callback);
+    
 	/**
      * Provides a more generic interface to run reports so that screens not 
      * implementing ReportScreen can utilize this functionality too
      */
-    public void runReport(RPC rpc) {
+    public void runReport(T rpc) {
         window.setBusy(consts.get("genReportMessage"));
 
-        service.call(runReportInterface, rpc, new AsyncCallback<ReportStatus>() {
+        runReport(rpc, new AsyncCallback<ReportStatus>() {
             public void onSuccess(ReportStatus status) {
                 String url;
 

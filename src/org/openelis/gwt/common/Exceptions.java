@@ -1,8 +1,9 @@
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Exceptions implements RPC {
+public class Exceptions implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

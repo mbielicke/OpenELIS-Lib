@@ -25,13 +25,13 @@
  */
 package org.openelis.gwt.common.data;
 
-import org.openelis.gwt.common.RPC;
+import java.io.Serializable;
 
 /**
  * This class is used to pass Query strings for all data types that a query can be done
  * on between the GWT client and the back end server.
  */
-public class QueryData implements RPC {
+public class QueryData implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

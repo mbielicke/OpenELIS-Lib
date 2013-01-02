@@ -32,7 +32,6 @@ import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.common.OptionListItem;
 import org.openelis.gwt.common.Prompt;
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.ReportStatus;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.common.data.QueryData;
@@ -74,7 +73,7 @@ import com.google.gwt.user.client.ui.Widget;
  * should extend this class and specify the report servlet service to get report
  * prompts and run the report.
  */
-public class ReportViewPanel extends ViewPanel {
+public abstract class ReportViewPanel<T> extends ViewPanel {
 
 	protected ArrayList<Prompt> reportParameters;
 
@@ -86,17 +85,15 @@ public class ReportViewPanel extends ViewPanel {
 	protected static String defaultPrinter, defaultBarcodePrinter;
 	
 	protected WindowInt window;
-	protected ReportService  service;
 	
 	protected HashMap<String,Widget> widgets;
 	
 	protected GeneralCSS css;
 	
 	
-	protected ReportViewPanel(String url, WindowInt window) throws Exception {
+	protected ReportViewPanel(WindowInt window) throws Exception {
 		this.window = window;
 		widgets = new HashMap<String,Widget>();
-		service = new ReportService(url);
 		
 		name = null;
 		attachmentName = null;
@@ -167,20 +164,17 @@ public class ReportViewPanel extends ViewPanel {
 	protected void getReportParameters() {
 		//window.setBusy(consts.get("gettingReportParam"));
 
-		service.getPrompts( 
-				new AsyncCallback<ArrayList<Prompt>>() {
-					public void onSuccess(ArrayList<Prompt> result) {
-						reportParameters = result;
-						createReportWindow();
-						window.setDone(Constants.get().done());
-					}
-
-					public void onFailure(Throwable caught) {
-						window.close();
-						Window.alert("Failed to get parameters for " + name);
-					}
-				});
+        try {
+            reportParameters = getPrompts();
+            createReportWindow();
+            window.setDone("loadCompleteMessage");
+        } catch (Exception e) {
+            window.close();
+            Window.alert("Failed to get parameters for " + name);
+        }      
 	}
+	
+	public abstract ArrayList<Prompt> getPrompts() throws Exception;
 
 	/**
 	 * Draws the prompts and fields in the report window
@@ -308,17 +302,19 @@ public class ReportViewPanel extends ViewPanel {
 
 		query = new Query();
 		query.setFields(getQueryFields());
-		runReport(query);		
+		runReport((T)query);		
 	}
 	
-	/**
+    public abstract void runReport(T rpc, AsyncCallback<ReportStatus> callback);
+    
+    /**
      * Provides a more generic interface to run reports so that screens not 
      * implementing ReportScreen can utilize this functionality too
      */
-    public void runReport(RPC rpc) {
-        window.setBusy(Constants.get().generatingReport());
+    public void runReport(T rpc) {
+        window.setBusy("genReportMessage");
 
-        service.runReport((Query)rpc, new AsyncCallback<ReportStatus>() {
+        runReport(rpc, new AsyncCallback<ReportStatus>() {
             public void onSuccess(ReportStatus status) {
                 String url;
 

@@ -23,9 +23,10 @@
 * license ("UIRF Software License"), in which case the provisions of a
 * UIRF Software License are applicable instead of those above. 
 */
-package org.openelis.gwt.screen;
+package org.openelis.gwt.services;
 
 import org.openelis.gwt.common.Datetime;
+import org.openelis.gwt.screen.Callback;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,20 +35,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * This class provides date and calendar functionality for front end screens
  *
  */
-public class Calendar implements CalendarServiceInt, CalendarServiceIntAsync {
+public class CalendarService implements CalendarServiceInt, CalendarServiceIntAsync {
 	
 	private CalendarServiceIntAsync service;
  
-	private static Calendar instance;
+	private static CalendarService instance;
 	
-	public static Calendar get() {
+	public static CalendarService get() {
 		if(instance == null)
-			instance = new Calendar();
+			instance = new CalendarService();
 		
 		return instance;
 	}
 	
-	private Calendar() {
+	private CalendarService() {
 		service = (CalendarServiceIntAsync)GWT.create(CalendarServiceInt.class);
 	}
 

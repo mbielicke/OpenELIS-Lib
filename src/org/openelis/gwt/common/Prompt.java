@@ -50,10 +50,8 @@
  */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-
-import org.openelis.gwt.common.DataBaseUtil;
-import org.openelis.gwt.common.RPC;
 
 /**
  * This class is used by reports to build a user input request. Reports may
@@ -61,7 +59,7 @@ import org.openelis.gwt.common.RPC;
  * 
  */
 
-public class Prompt implements RPC {
+public class Prompt implements Serializable {
 
     private static final long           serialVersionUID = 1L;
     protected String                    name, prompt, mask, defaultValue;

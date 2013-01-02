@@ -25,9 +25,9 @@
  */
 package org.openelis.gwt.common;
 
-import org.openelis.gwt.common.RPC;
+import java.io.Serializable;
 
-public class DataObject implements RPC {
+public class DataObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
     protected boolean _changed;

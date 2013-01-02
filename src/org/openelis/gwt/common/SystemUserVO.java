@@ -25,13 +25,15 @@
  */
 package org.openelis.gwt.common;
 
+import java.io.Serializable;
+
 
 /**
  *  Class represents a system user object with the fields in the database 
  *  security for table system_user. 
  */
 
-public class SystemUserVO implements RPC {
+public class SystemUserVO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
