@@ -8,6 +8,7 @@ public class RemoteServlet extends RemoteServiceServlet {
 
     private static final long serialVersionUID = 1L;
     
+    @Override
     protected void onBeforeRequestDeserialized(String serializedRequest) {
         super.onBeforeRequestDeserialized(serializedRequest);
         
