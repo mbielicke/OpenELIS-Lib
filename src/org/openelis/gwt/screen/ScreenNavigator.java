@@ -1,8 +1,8 @@
 package org.openelis.gwt.screen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.RPC;
 import org.openelis.gwt.common.data.Query;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.table.TableDataRow;
@@ -43,7 +43,7 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
  * 
  * For all screen queries, call nav.setQuery(query).
  */
-public abstract class ScreenNavigator {
+public abstract class ScreenNavigator<T extends Serializable> {
     protected int         selection, oldPage;
     protected boolean     byRow, enable;
     protected ArrayList   result;
@@ -190,7 +190,7 @@ public abstract class ScreenNavigator {
      * represent the selection. A null RPC parameter tells the screen to clear
      * its data.
      */
-    public abstract boolean fetch(RPC entry);
+    public abstract boolean fetch(T entry);
 
     /**
      * This method is called when a new query needs to be executed. The screen
@@ -231,7 +231,7 @@ public abstract class ScreenNavigator {
         } else if (row < 0) {
             setPage(query.getPage() - 1);
         } else {
-            if (fetch((RPC)result.get(row))) {
+            if (fetch((T)result.get(row))) {
                 selection = row;
                 if (table != null)
                     table.selectRow(selection);

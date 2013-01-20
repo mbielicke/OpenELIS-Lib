@@ -60,9 +60,9 @@ public class XMLUtil {
 		public Source resolve(String href, String base)
 				throws TransformerException {
 			if(href.startsWith("IMPORT"))
-				return new StreamSource(new File(System.getenv("IMPORT")+href.substring(6)));
+				return new StreamSource(new File(System.getProperty("IMPORT")+href.substring(6)));
 			if(href.startsWith("OPENELIS"))
-				return new StreamSource(new File(System.getenv("OPENELIS")+href.substring(8)));
+				return new StreamSource(new File(System.getProperty("OPENELIS")+href.substring(8)));
 			return null;
 		}
 		
