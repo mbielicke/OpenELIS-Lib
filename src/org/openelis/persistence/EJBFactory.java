@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
 
-import org.openelis.gwt.server.ScreenControllerServlet;
 import org.openelis.util.SessionManager;
 
 /**

@@ -32,7 +32,7 @@ import org.openelis.gwt.common.CalendarRPC;
 import org.openelis.gwt.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
-import org.openelis.gwt.services.ScreenService;
+import org.openelis.gwt.services.CalendarService;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -62,8 +62,7 @@ import com.google.gwt.user.client.ui.Widget;
     protected AppButton nextDecade;
     protected AppButton today;
     protected ArrayList<AppButton> months;
-    protected ArrayList<AppButton> years;
-    protected ScreenService service; 
+    protected ArrayList<AppButton> years; 
     protected CalendarRPC form;
     protected TextBox<Datetime> time;
     protected ScreenDefInt calendarDef;
@@ -72,12 +71,11 @@ import com.google.gwt.user.client.ui.Widget;
     public CalendarWidget(Datetime date,byte begin, byte end) throws Exception {
     	super((ScreenDefInt)GWT.create(CalendarDef.class));
     	calendarDef = def;
-    	service = new ScreenService("controller?service=org.openelis.gwt.server.CalendarService");
         form = new CalendarRPC();
         form.date = date;
         form.begin = begin;
         form.end = end;
-        form = service.call("getMonth",form);
+        form = CalendarService.get().getMonth(form);
         //ScreenDef def = new ScreenDef();
         //def.setXMLString(form.xml);
 		//drawScreen(def);
@@ -201,7 +199,7 @@ import com.google.gwt.user.client.ui.Widget;
                 form.year--;
             }
             try {
-            	form = service.call("getMonth",form);
+            	form = CalendarService.get().getMonth(form);
             	setHandlers();
             }catch(Exception e) {
             	e.printStackTrace();
@@ -216,7 +214,7 @@ import com.google.gwt.user.client.ui.Widget;
                 form.year++;
             }
             try {
-            	form = service.call("getMonth", form);
+            	form = CalendarService.get().getMonth(form);
             	setHandlers();
             }catch(Exception e) {
             	e.printStackTrace();
@@ -242,7 +240,7 @@ import com.google.gwt.user.client.ui.Widget;
         if(event.getSource() == ok || 
            event.getSource() == cancel){
         	try {
-        		form = service.call("getMonth", form);
+        		form = CalendarService.get().getMonth(form);
         		drawScreen(calendarDef);
         		setHandlers();
         	}catch(Exception e) {
@@ -277,7 +275,7 @@ import com.google.gwt.user.client.ui.Widget;
         }
         if(event.getSource() == today) {
         	try {
-        		setValue(service.callDatetime("getCurrentDatetime",form.begin,form.end),true);
+        		setValue(CalendarService.get().getCurrentDatetime(form.begin,form.end),true);
         		return;
         	}catch(Exception e) {
         		e.printStackTrace();
