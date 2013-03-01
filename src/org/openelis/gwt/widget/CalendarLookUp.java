@@ -3,9 +3,8 @@ package org.openelis.gwt.widget;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.Datetime;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -420,7 +419,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
      * Adds a an error to the widget.  An error style is added to the widget and on MouseOver a popup will 
      * be displayed with errors.
      */
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -492,17 +491,17 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.DATE;
+			qd.setQuery(field.queryString);
+			qd.setKey(key);
+			qd.setType(QueryData.Type.DATE);
 			list.add(qd);
 		}
 	}
 	
 	public void setQuery(QueryData qd) {
 		if(qd != null) {
-			textbox.setText(qd.query);
-			field.queryString = qd.query;
+			textbox.setText(qd.getQuery());
+			field.queryString = qd.getQuery();
 		}else
 			textbox.setText("");
 	}
@@ -510,7 +509,7 @@ public class CalendarLookUp extends FocusPanel implements HasValue<Datetime>,
 	/**
 	 * The current list of error for this widget.
 	 */
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 

@@ -437,4 +437,18 @@ public class DataBaseUtil {
         }
         return buf.toString();
     }
+    
+    public static ArrayList<Exception> getExceptions(ArrayList<LocalizedException> formErrors) {
+        ArrayList<Exception> errors = new ArrayList<Exception>();
+        
+        for(LocalizedException le : formErrors) {
+            if(le instanceof FormErrorWarning)
+                errors.add(new org.openelis.ui.common.FormErrorWarning(le.getMessage()));
+            else
+                errors.add(new Exception(le.getMessage()));
+        }
+        
+        return errors;
+        
+    } 
 }

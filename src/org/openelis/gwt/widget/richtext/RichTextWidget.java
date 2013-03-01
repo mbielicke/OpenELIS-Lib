@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.richtext;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
@@ -169,7 +168,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 		addDomHandler(handler,KeyPressEvent.getType());
 	}
 
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -214,7 +213,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 

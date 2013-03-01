@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Warning;
+import org.openelis.ui.common.Warning;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -36,7 +35,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     protected PopupPanel pop;
     public boolean queryMode;
     public String queryString;
-    public ArrayList<LocalizedException> exceptions;
+    public ArrayList<Exception> exceptions;
     public boolean drawErrors = true;
     
     public void validate() {
@@ -136,9 +135,9 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         valid = true;
     }
     
-    public void addException(LocalizedException e){
+    public void addException(Exception e){
     	if(exceptions == null)
-    		exceptions = new ArrayList<LocalizedException>();
+    		exceptions = new ArrayList<Exception>();
     	if(!exceptions.contains(e))
     		exceptions.add(e);
     }
@@ -147,7 +146,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     	if(exceptions == null)
     		return;
     	for(int i = 0; i < exceptions.size(); i++){
-    		if(exceptions.get(i).getKey().equals(key))
+    		if(exceptions.get(i).getMessage().equals(key))
     			exceptions.remove(i);
     	}
     	if(exceptions.size() == 0)
@@ -165,7 +164,7 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         	return;
         }
         String style = "InputWarning";
-        for (LocalizedException exception : exceptions) {
+        for (Exception exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
         	if(exception instanceof Warning) {
         		hp.add(new Image("Images/bullet_yellow.png"));

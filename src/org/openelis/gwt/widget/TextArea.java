@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -16,7 +15,7 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 	private Field<String> field;
 	private boolean enabled;
 	
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -56,15 +55,15 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.STRING;
+			qd.setQuery(field.queryString);
+			qd.setKey(key);
+			qd.setType(QueryData.Type.STRING);
 			list.add(qd);
 		}
 		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 

@@ -2,7 +2,6 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.HasBeforeCloseHandlers;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -17,7 +16,7 @@ public interface ScreenWindowInt extends HasBeforeCloseHandlers<ScreenWindow> {
 	
 	public void destroy();
 	
-	public void setMessagePopup(ArrayList<LocalizedException> exceptions, String style);
+	public void setMessagePopup(ArrayList<Exception> exceptions, String style);
 	
 	public void clearMessagePopup(String style);
 	

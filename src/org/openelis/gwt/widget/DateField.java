@@ -27,8 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.Date;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.LocalizedException;
+import org.openelis.ui.common.Datetime;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -86,7 +85,7 @@ public class DateField extends Field<Datetime> {
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new LocalizedException("fieldRequiredException"));
+                addException(new Exception("fieldRequiredException"));
             }else
             	removeException("fieldRequiredException");
         }
@@ -131,7 +130,7 @@ public class DateField extends Field<Datetime> {
     					removeException("invalidDateFormat");
     				}catch(Exception e) {
     					valid = false;
-    					addException(new LocalizedException("invalidDateFormat"));
+    					addException(new Exception("invalidDateFormat"));
     					return;
     				}
     			}
@@ -165,13 +164,13 @@ public class DateField extends Field<Datetime> {
     	Date today = new Date();
         if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
-            addException(new LocalizedException("fieldPastException"));
+            addException(new Exception("fieldPastException"));
         }else
         	removeException("fieldPastException");
         if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
-            addException(new LocalizedException("fieldFutureException"));
+            addException(new Exception("fieldFutureException"));
         }else{
         	removeException("fieldFutureException");
         }
@@ -315,7 +314,7 @@ public class DateField extends Field<Datetime> {
         			date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
         	}catch(Exception e) {
         		valid = false;
-        		addException(new LocalizedException("invalidDateFormat"));
+        		addException(new Exception("invalidDateFormat"));
         	}
         }
         return Datetime.getInstance(begin, end, date);

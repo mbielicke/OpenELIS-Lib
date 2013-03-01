@@ -27,7 +27,6 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.screen.ShortcutHandler;
 import org.openelis.gwt.screen.TabHandler;
 
@@ -346,7 +345,7 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
 		
 	}
 
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}

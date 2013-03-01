@@ -43,7 +43,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.openelis.gwt.common.PermissionException;
+import org.openelis.ui.common.PermissionException;
 import org.openelis.util.SessionManager;
 
 /**

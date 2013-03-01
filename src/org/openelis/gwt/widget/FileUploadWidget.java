@@ -5,8 +5,7 @@ import gwtupload.client.IUploader.OnFinishUploaderHandler;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -40,7 +39,7 @@ public class FileUploadWidget extends Composite implements HasField<ArrayList<St
 		});
 	}
 
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -73,7 +72,7 @@ public class FileUploadWidget extends Composite implements HasField<ArrayList<St
 			//setWidget(new Label("Not Enabled"));
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.openelis.gwt.common.CalendarRPC;
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.screen.ScreenDefInt;
 import org.openelis.gwt.services.CalendarService;
@@ -137,7 +137,7 @@ import com.google.gwt.user.client.ui.Widget;
     			if(time == null) {
     				time = (TextBox<Datetime>)def.getWidget("time");
     			}
-    			time.setValue(Datetime.getInstance(Datetime.HOUR,Datetime.MINUTE,form.date.getDate()));
+    			time.setFieldValue(Datetime.getInstance(Datetime.HOUR,Datetime.MINUTE,form.date.getDate()));
     			def.getWidget("TimeBar").setVisible(true);
     		}else
     			def.getWidget("TimeBar").setVisible(false);

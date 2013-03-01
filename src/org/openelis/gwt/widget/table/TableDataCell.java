@@ -2,12 +2,11 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 
 public class TableDataCell  {
 
 	public Object value;
-	public ArrayList<LocalizedException> exceptions;
+	public ArrayList<Exception> exceptions;
 	public String style;
 	
 	public TableDataCell() {
@@ -18,9 +17,9 @@ public class TableDataCell  {
 		this.value = value;
 	}
 	
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		if(exceptions == null)
-			exceptions = new ArrayList<LocalizedException>();
+			exceptions = new ArrayList<Exception>();
 		exceptions.add(exception);
 	}
 	
@@ -28,7 +27,7 @@ public class TableDataCell  {
 		exceptions = null;
 	}
 	
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return exceptions;
 	}
 

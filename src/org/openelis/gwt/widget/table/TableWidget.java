@@ -32,8 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jdt.internal.compiler.ast.ThisReference;
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Util;
+import org.openelis.ui.common.Util;
 import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.BeforeDropHandler;
@@ -186,7 +185,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     protected ArrayList<TableDataRow> model = new ArrayList<TableDataRow>();
     protected int shownRows; 
     protected ArrayList<Integer> selections = new ArrayList<Integer>(1);
-    protected ArrayList<LocalizedException> exceptions;
+    protected ArrayList<Exception> exceptions;
     protected boolean queryMode;
     protected boolean mouseOver;
     protected boolean fireEvents = true;    
@@ -943,13 +942,13 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     }
    
     
-    public void setCellException(int row, int col, LocalizedException ex) {
+    public void setCellException(int row, int col, Exception ex) {
         model.get(row).cells.get(col).addException(ex);
         if(isRowDrawn(row))
         	renderer.cellUpdated(row, col);
     }
     
-    public void setCellException(int row, String col, LocalizedException ex) {
+    public void setCellException(int row, String col, Exception ex) {
     	for(TableColumn column : columns) {
     		if(col.equals(column.key)){
     			setCellException(row,columns.indexOf(column),ex);
@@ -958,7 +957,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	}
     }
     
-    public void removeCellException(int row, int col, LocalizedException ex) {
+    public void removeCellException(int row, int col, Exception ex) {
     	if(model.get(row).cells.get(col).exceptions != null) {
     		model.get(row).cells.get(col).exceptions.remove(ex);
     		if(model.get(row).cells.get(col).exceptions.size() == 0)
@@ -993,7 +992,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
     	selectRow(n.intValue());
     }
 
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -1058,7 +1057,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 		}
 	}
 	
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return exceptions;
 	}
 
@@ -1088,9 +1087,9 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 					}
 					if(((HasField)wid).getExceptions() != null){
 						exceptions = ((HasField)wid).getExceptions();
-	        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-	        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
-	        				exceps.add((LocalizedException)exc.clone());
+	        			ArrayList<Exception> exceps =  new ArrayList<Exception>(); 
+	        			for(Exception exc : (ArrayList<Exception>)((HasField)wid).getExceptions()){
+	        				exceps.add(new Exception(exc.getMessage()));
 	        				if(model.get(i).cells.get(j).exceptions != null){
 	        					if(!model.get(i).cells.get(j).getExceptions().contains(exc))
 	        						model.get(i).cells.get(j).exceptions.add(exc);

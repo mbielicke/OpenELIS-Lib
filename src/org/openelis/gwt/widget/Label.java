@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -46,7 +45,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -67,7 +66,7 @@ public class Label<T> extends com.google.gwt.user.client.ui.Label implements Has
 		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

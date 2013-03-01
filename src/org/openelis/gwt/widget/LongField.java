@@ -1,7 +1,5 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.LocalizedException;
-
 import com.google.gwt.i18n.client.NumberFormat;
 
 
@@ -26,13 +24,13 @@ public class LongField extends Field<Long> {
     	valid = true;
         if (invalid) {
             valid = false;
-            addException(new LocalizedException("fieldNumericException"));
+            addException(new Exception("fieldNumericException"));
         }else
         	removeException("fieldNumericException");
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new LocalizedException("fieldRequiredException"));
+                addException(new Exception("fieldRequiredException"));
             }else
             	removeException("fieldRequiredException");
         }
@@ -57,7 +55,7 @@ public class LongField extends Field<Long> {
         				Double.parseDouble(param);
         				removeException("fieldNumericException");
         			} catch (Exception e) {
-        				addException(new LocalizedException("fieldNumericException"));
+        				addException(new Exception("fieldNumericException"));
         				valid = false;
         				return;
         			}
@@ -72,12 +70,12 @@ public class LongField extends Field<Long> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addException(new LocalizedException("fieldMaxException"));
+            addException(new Exception("fieldMaxException"));
         }else
         	removeException("fieldMaxException");
         if (min != null && value < min) {
         	valid = false;
-            addException(new LocalizedException("fieldMinException"));
+            addException(new Exception("fieldMinException"));
         }else
         	removeException("fieldMinException");
         return true;
@@ -124,7 +122,7 @@ public class LongField extends Field<Long> {
             } catch (Exception e) {
                 valid = false;
                 invalid=true;
-                addException(new LocalizedException("fieldNumericException"));
+                addException(new Exception("fieldNumericException"));
             }
         } else {
             try {
@@ -137,7 +135,7 @@ public class LongField extends Field<Long> {
             } catch (Exception e) {
                 valid = false;
                 invalid = true;
-                addException(new LocalizedException("fieldNumericException"));
+                addException(new Exception("fieldNumericException"));
             }
         }
     }

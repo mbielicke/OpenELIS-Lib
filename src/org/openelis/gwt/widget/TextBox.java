@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -124,7 +123,7 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		addMouseOverHandler(field);
 	}
 	
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -163,22 +162,22 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 			return;
 		if(field.queryString != null && !"".equals(field.queryString)) {
 			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
+			qd.setQuery(field.queryString);
+			qd.setKey(key);
 			if(field instanceof StringField)
-				qd.type = QueryData.Type.STRING;
+				qd.setType(QueryData.Type.STRING);
 			else if(field instanceof IntegerField)
-				qd.type = QueryData.Type.INTEGER;
+				qd.setType(QueryData.Type.INTEGER);
 			else if(field instanceof DoubleField)
-				qd.type = QueryData.Type.DOUBLE;
+				qd.setType(QueryData.Type.DOUBLE);
 			else if(field instanceof DateField)
-				qd.type = QueryData.Type.DATE;
+				qd.setType(QueryData.Type.DATE);
 			list.add(qd);
 		}
 		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 
@@ -219,8 +218,8 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 		return field.addValueChangeHandler(handler);
 	}
 	
-	public void setValue(T value) {
-		setFieldValue(value);
+	public void setValue(String value) {
+		setFieldValue((T)value);
 	}
 
 	public void addExceptionStyle(String style) {

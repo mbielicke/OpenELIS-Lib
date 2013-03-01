@@ -27,14 +27,16 @@ package org.openelis.gwt.widget.web;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.screen.Screen;
 import org.openelis.gwt.widget.Confirm;
 import org.openelis.gwt.widget.ScreenWindow;
 import org.openelis.gwt.widget.ScreenWindowInt;
 import org.openelis.gwt.widget.WindowBrowser;
+import org.openelis.ui.widget.WindowInt;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -48,7 +50,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This is an implementation of the ScreenWindowInt to be used by the Web portal of OpenELIS
  *
  */
-public class WebWindow extends FocusPanel implements ScreenWindowInt {
+public class WebWindow extends FocusPanel implements WindowInt {
 	
 	protected AbsolutePanel glass,title,contentPanel;
 	protected Widget content;
@@ -137,12 +139,6 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 
 	}
 
-	/**
-	 * Stub method implemented to satisfy interface
-	 */
-	public void setMessagePopup(ArrayList<LocalizedException> exceptions,
-			String style) {
-	}
 
 	/**
 	 * Stub method implemented to satisfy interface
@@ -235,6 +231,42 @@ public class WebWindow extends FocusPanel implements ScreenWindowInt {
 	}
 	
     public WindowBrowser getBrowser() {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addCloseHandler(CloseHandler<WindowInt> handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBeforeClosedHandler(org.openelis.ui.event.BeforeCloseHandler<WindowInt> handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setMessagePopup(ArrayList<Exception> exceptions, String style) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void makeDragable(DragController controller) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void positionGlass() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Widget getContent() {
+        // TODO Auto-generated method stub
         return null;
     }
 }

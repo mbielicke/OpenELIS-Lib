@@ -27,13 +27,14 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Warning;
+import org.openelis.ui.common.Warning;
 import org.openelis.gwt.event.BeforeCloseEvent;
 import org.openelis.gwt.event.BeforeCloseHandler;
 import org.openelis.gwt.event.HasBeforeCloseHandlers;
 import org.openelis.gwt.screen.Screen;
+import org.openelis.ui.widget.WindowInt;
 
+import com.allen_sauer.gwt.dnd.client.DragController;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -86,7 +87,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author tschmidt
  *
  */
-public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler, HasCloseHandlers<ScreenWindow>, HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
+public class ScreenWindow extends FocusPanel implements WindowInt, ClickHandler, MouseOverHandler, MouseOutHandler, MouseDownHandler, HasKeyPressHandlers, KeyPressHandler,  HasBeforeCloseHandlers<ScreenWindow>, ResizeHandler {
         /**
          * Inner class used to create the Draggable Caption portion of the Window.
          * @author tschmidt
@@ -388,7 +389,7 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
         	setName(((Screen)content).getDefinition().getName());
         	setVisible(true);
             RootPanel.get().removeStyleName("ScreenLoad");
-            setStatus(Screen.consts.get("loadCompleteMessage"),"");
+            //setStatus(Screen.consts.get("loadCompleteMessage"),"");
             addKeyPressHandler(this);
             
         }
@@ -483,11 +484,12 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
 
     }
         
-    public void setMessagePopup(ArrayList<LocalizedException> exceptions, String style) {
+    @Override
+    public void setMessagePopup(ArrayList<Exception> exceptions, String style) {
         statusImg.setStyleName(style);
         statusImg.sinkEvents(Event.MOUSEEVENTS);
         messagePanel = new VerticalPanel();
-        for (LocalizedException exception : exceptions) {
+        for (Exception exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
         	if(exception instanceof Warning) {
                 hp.add(new Image("Images/bullet_yellow.png"));
@@ -636,7 +638,7 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
 	}
 
 	public HandlerRegistration addCloseHandler(
-			CloseHandler<ScreenWindow> handler) {
+			CloseHandler<WindowInt> handler) {
 		return addHandler(handler, CloseEvent.getType());
 	}
 
@@ -671,5 +673,24 @@ public class ScreenWindow extends FocusPanel implements ScreenWindowInt, ClickHa
 
     public WindowBrowser getBrowser() {
         return browser;
+    }
+
+    @Override
+    public HandlerRegistration addBeforeClosedHandler(org.openelis.ui.event.BeforeCloseHandler<WindowInt> handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public void makeDragable(DragController controller) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Widget getContent() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

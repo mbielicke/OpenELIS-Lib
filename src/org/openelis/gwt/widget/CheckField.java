@@ -25,8 +25,6 @@
 */
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.LocalizedException;
-
 
 /**
  * @author tschmidt
@@ -44,7 +42,7 @@ public class CheckField extends Field<String> {
         if (required) {
             if (value == null) {
             	valid =  false;
-                addException(new LocalizedException("fieldRequiredException"));
+                addException(new Exception("fieldRequiredException"));
             }else
             	removeException("fieldRequiredException");
         }

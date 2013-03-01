@@ -27,8 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenDef;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -217,7 +216,7 @@ public class EditBox extends Composite implements ClickHandler,
 		return addHandler(handler,ValueChangeEvent.getType());
 	}
 
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 	}
 
@@ -235,7 +234,7 @@ public class EditBox extends Composite implements ClickHandler,
 		text.setReadOnly(!enabled);		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 
@@ -252,9 +251,9 @@ public class EditBox extends Composite implements ClickHandler,
 			return;
 		if(field.queryString != null) {
 			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.STRING;
+			qd.setQuery(field.queryString);
+			qd.setKey(key);
+			qd.setType(QueryData.Type.STRING);
 			list.add(qd);
 		}
 		

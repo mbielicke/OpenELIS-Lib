@@ -82,7 +82,7 @@ public class UIGenerator extends Generator {
         composer.addImport("java.util.Date");
         composer.addImport("java.util.HashMap");
         composer.addImport("java.util.List");
-        composer.addImport("org.openelis.gwt.common.Datetime");
+        composer.addImport("org.openelis.ui.common.Datetime");
         composer.addImport("org.openelis.gwt.widget.StringField");
         composer.addImport("org.openelis.gwt.widget.DateField");
         composer.addImport("org.openelis.gwt.widget.IntegerField");

@@ -32,8 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Util;
+import org.openelis.ui.common.Util;
 import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
 import org.openelis.gwt.event.BeforeDropHandler;
@@ -197,7 +196,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     protected ArrayList<TreeColumn> headers;
     protected boolean fireEvents = true;
     protected boolean queryMode;
-    ArrayList<LocalizedException> exceptions;
+    ArrayList<Exception> exceptions;
     
     public TreeWidget() {
 
@@ -1274,7 +1273,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      * @param ex
      */
-    public void setCellException(int row, int col, LocalizedException ex) {
+    public void setCellException(int row, int col, Exception ex) {
         rows.get(row).cells.get(col).addException(ex);
         renderer.cellUpdated(row, col);
         
@@ -1303,7 +1302,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      * @param col
      * @param ex
      */
-    public void setCellException(int row, String col, LocalizedException ex) {
+    public void setCellException(int row, String col, Exception ex) {
     	int index = -1;
     	for(TreeColumn column : columns.get(getRow(row).leafType)) {
     		if(column.key.equals(col)){
@@ -1506,7 +1505,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	/**
 	 * Stub method inherited from HasField interface
 	 */
-    public void addException(LocalizedException exception) {
+    public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 	}
     
@@ -1528,9 +1527,9 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 						exceptions = rows.get(i).cells.get(j).exceptions;
 					if(((HasField)wid).getExceptions() != null) {
 						exceptions = ((HasField)wid).getExceptions();
-	        			ArrayList<LocalizedException> exceps =  new ArrayList<LocalizedException>(); 
-	        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
-	        				exceps.add((LocalizedException)exc.clone());
+	        			ArrayList<Exception> exceps =  new ArrayList<Exception>(); 
+	        			for(Exception exc : (ArrayList<Exception>)((HasField)wid).getExceptions()){
+	        				exceps.add(new Exception(exc.getMessage()));
 	        				if(rows.get(i).cells.get(j).exceptions != null){
 	        					if(!rows.get(i).cells.get(j).getExceptions().contains(exc))
 	        						rows.get(i).cells.get(j).exceptions.add(exc);
@@ -1558,7 +1557,7 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
 	 * Returns any exceptions that may have been found in checkValue so the screen
 	 * knows the tree has errors and will cancel commit
 	 */
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		// TODO Auto-generated method stub
 		return exceptions;
 	}

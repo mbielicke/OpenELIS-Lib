@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.openelis.gwt.common.DataBaseUtil;
-import org.openelis.gwt.common.ReportStatus;
+import org.openelis.ui.common.DataBaseUtil;
+import org.openelis.ui.common.ReportStatus;
 
 /**
  * This servlet streams report files back to the requester.

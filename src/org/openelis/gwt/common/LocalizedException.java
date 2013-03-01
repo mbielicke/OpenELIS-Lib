@@ -48,7 +48,7 @@ public class LocalizedException extends Exception implements Cloneable {
         String m;
 
         try {
-            m = Screen.consts.get(key);
+            m = "";
         } catch (Throwable any) {
             m = null;
         }
