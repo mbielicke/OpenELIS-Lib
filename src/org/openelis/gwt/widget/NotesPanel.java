@@ -1,6 +1,6 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;

@@ -2,8 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -169,7 +168,7 @@ public class PercentBar extends Composite implements HasField<Double>{
 	}
 
 	@Override
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -199,7 +198,7 @@ public class PercentBar extends Composite implements HasField<Double>{
 	}
 
 	@Override
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

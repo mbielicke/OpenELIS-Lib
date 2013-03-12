@@ -27,7 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.DataBaseUtil;
+import org.openelis.ui.common.DataBaseUtil;
 
 public class QueryFieldUtil {
 

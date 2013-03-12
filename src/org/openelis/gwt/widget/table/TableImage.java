@@ -2,8 +2,7 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 
@@ -26,7 +25,7 @@ public class TableImage extends AbsolutePanel implements HasField<String>{
 	}
 
 	@Override
-	public void addException(LocalizedException exception) {
+	public void addException(Exception exception) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -56,7 +55,7 @@ public class TableImage extends AbsolutePanel implements HasField<String>{
 	}
 
 	@Override
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

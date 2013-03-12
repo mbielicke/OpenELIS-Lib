@@ -3,7 +3,7 @@ package org.openelis.gwt.screen;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.data.Query;
+import org.openelis.ui.common.data.Query;
 import org.openelis.gwt.widget.AppButton;
 import org.openelis.gwt.widget.table.TableDataRow;
 import org.openelis.gwt.widget.table.TableRow;

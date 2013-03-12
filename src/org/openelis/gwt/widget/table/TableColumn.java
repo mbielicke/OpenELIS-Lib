@@ -29,9 +29,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import org.openelis.gwt.common.Datetime;
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.Warning;
+import org.openelis.ui.common.Datetime;
+import org.openelis.ui.common.Warning;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.CheckBox;
@@ -342,7 +341,7 @@ public class TableColumn {
     	return enabled;
     }
     
-    public void setExceptions(final Widget wid, ArrayList<LocalizedException> exceptions) {
+    public void setExceptions(final Widget wid, ArrayList<Exception> exceptions) {
 		//Clean up previous MouseHandlers
     	if(mouseOver != null){
     		try {
@@ -369,7 +368,7 @@ public class TableColumn {
 			((HasField)wid).clearExceptions();
 			((HasField)wid).getField().drawErrors = false;
 		}
-		for (LocalizedException error : exceptions) {
+		for (Exception error : exceptions) {
 			HorizontalPanel hp = new HorizontalPanel();
 			if(error instanceof Warning){
 				AbsolutePanel ap = new AbsolutePanel();

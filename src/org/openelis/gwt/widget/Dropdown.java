@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.table.ColumnComparator;
@@ -323,7 +322,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	}
 
 
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -374,19 +373,19 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			return;
 		if(selections.size() > 0) {
 			QueryData qd = new QueryData();
-			qd.key = key;
+			qd.setKey(key);
 			if(field instanceof StringField)
-				qd.type = QueryData.Type.STRING;
+				qd.setType(QueryData.Type.STRING);
 			else if(field instanceof IntegerField)
-				qd.type = QueryData.Type.INTEGER;
-			qd.query = "";
+				qd.setType(QueryData.Type.INTEGER);
+			qd.setQuery("");
 			for(TableDataRow row : selections) {
 				if(selections.indexOf(row) > 0)
-					qd.query += "|";
+					qd.setQuery(qd.getQuery() + "|");
 				if(row.key == null)
-					qd.query += "NULL";
+					qd.setQuery(qd.getQuery() + "NULL");
 				else
-					qd.query += row.key.toString();
+					qd.setQuery(qd.getQuery() + row.key.toString());
 			}
 			list.add(qd);
 		}
@@ -402,12 +401,12 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 			return;
 		}
 		
-		keys = qd.query.split("\\|");
+		keys = qd.getQuery().split("\\|");
 		
 		selections = new ArrayList<Object>();
 		
 		for(String key : keys) {
-			if(qd.type == QueryData.Type.INTEGER) 
+			if(qd.getType() == QueryData.Type.INTEGER) 
 				selections.add(Integer.valueOf(key));
 			else
 				selections.add(key);
@@ -452,7 +451,7 @@ public class Dropdown<T> extends DropdownWidget implements FocusHandler, BlurHan
 	}
 	
 	@Override
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 	

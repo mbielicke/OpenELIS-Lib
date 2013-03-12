@@ -1,7 +1,5 @@
 package org.openelis.gwt.widget;
 
-import org.openelis.gwt.common.LocalizedException;
-
 import com.google.gwt.i18n.client.NumberFormat;
 
 public class DoubleField extends Field<Double> {
@@ -26,13 +24,13 @@ public class DoubleField extends Field<Double> {
         
         if (invalid) {
             valid = false;
-            addException(new LocalizedException("fieldNumericException"));
+            addException(new Exception("fieldNumericException"));
         }else
         	removeException("fieldNumericException");
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new LocalizedException("fieldRequiredException"));
+                addException(new Exception("fieldRequiredException"));
             }else
             	removeException("fieldRequiredException");
         }
@@ -57,7 +55,7 @@ public class DoubleField extends Field<Double> {
         				Double.parseDouble(vals[i]);
         				removeException("invalidDouble");
         			} catch (Exception e) {
-        				addException(new LocalizedException("invalidDouble"));
+        				addException(new Exception("invalidDouble"));
         				valid = false;
         				return;
         			}
@@ -72,12 +70,12 @@ public class DoubleField extends Field<Double> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addException(new LocalizedException("fieldMaxException"));
+            addException(new Exception("fieldMaxException"));
         }else
         	removeException("fieldMaxException");
         if (min != null && value < min) {
         	valid = false;
-            addException(new LocalizedException("fieldMinException"));
+            addException(new Exception("fieldMinException"));
         }else
         	removeException("fieldMinException");
         return true;
@@ -125,7 +123,7 @@ public class DoubleField extends Field<Double> {
             } catch (Exception e) {
                 valid = false;
                 invalid = true;
-                addException(new LocalizedException("invalidDouble"));
+                addException(new Exception("invalidDouble"));
             }
         } else {
             try {
@@ -141,7 +139,7 @@ public class DoubleField extends Field<Double> {
             	}catch(Exception ee) {
             	    valid = false;
             	    invalid = true;
-            	    addException(new LocalizedException("invalidDouble"));
+            	    addException(new Exception("invalidDouble"));
             	}
             }
         }

@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import org.openelis.gwt.common.CalendarRPC;
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 import org.openelis.util.SessionManager;
 import org.openelis.util.UTFResource;
 import org.openelis.util.XMLUtil;

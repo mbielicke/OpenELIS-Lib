@@ -1,6 +1,6 @@
 package org.openelis.gwt.server;
 
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

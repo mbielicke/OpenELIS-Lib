@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.openelis.gwt.common.FieldErrorException;
-import org.openelis.gwt.common.FormErrorException;
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.TableFieldErrorException;
-import org.openelis.gwt.common.ValidationErrorsList;
-import org.openelis.gwt.common.Warning;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.FieldErrorException;
+import org.openelis.ui.common.FormErrorException;
+import org.openelis.ui.common.TableFieldErrorException;
+import org.openelis.ui.common.ValidationErrorsList;
+import org.openelis.ui.common.Warning;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.event.DataChangeEvent;
 import org.openelis.gwt.event.DataChangeHandler;
 import org.openelis.gwt.event.HasDataChangeHandlers;
@@ -20,6 +19,7 @@ import org.openelis.gwt.event.StateChangeHandler;
 import org.openelis.gwt.widget.HasField;
 import org.openelis.gwt.widget.ScreenWindowInt;
 import org.openelis.gwt.widget.table.TableWidget;
+import org.openelis.ui.widget.WindowInt;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.HasResizeHandlers;
@@ -44,13 +44,13 @@ public class Screen extends Composite implements
 	};
 
 	public State state = null;
-	public ScreenWindowInt window;
+	public WindowInt window;
 	
 
 	protected ScreenDefInt def;
 
 	public final AbsolutePanel screenpanel = new AbsolutePanel();
-	public static HashMap<String, String> consts;
+	//public static HashMap<String, String> consts;
 
 	/**
 	 * No arg constructor will initiate a blank panel
@@ -81,11 +81,11 @@ public class Screen extends Composite implements
 	/**
 	 * Sets the parent window for this screen.
 	 */
-	public void setWindow(ScreenWindowInt window) {
+	public void setWindow(WindowInt window) {
 		this.window = window;
 	}
 
-	public ScreenWindowInt getWindow() {
+	public WindowInt getWindow() {
 		return window;
 	}
 
@@ -171,14 +171,14 @@ public class Screen extends Composite implements
 	 * the error type, the error is either added to a widget or the screen.
 	 */
 	public void showErrors(ValidationErrorsList errors) {
-		ArrayList<LocalizedException> formErrors;
+		ArrayList<Exception> formErrors;
 		TableFieldErrorException tableE;
 		FormErrorException formE;
 		FieldErrorException fieldE;
 		TableWidget tableWid;
 		HasField field;
 
-		formErrors = new ArrayList<LocalizedException>();
+		formErrors = new ArrayList<Exception>();
 		for (Exception ex : errors.getErrorList()) {
 			if (ex instanceof TableFieldErrorException) {
 				tableE = (TableFieldErrorException) ex;
@@ -196,13 +196,13 @@ public class Screen extends Composite implements
 			}
 		}
 		if (formErrors.size() == 0)
-			window.setError(consts.get("correctErrors"));
+			window.setError("Please correct the errors indicated, then press Commit");
 		else if (formErrors.size() == 1)
 			window.setError(formErrors.get(0).getMessage());
 		else {
 			window.setError("(Error 1 of " + formErrors.size() + ") "
 					+ formErrors.get(0).getMessage());
-			window.setMessagePopup(formErrors, "ErrorPanel");
+			//window.setMessagePopup(formErrors, "ErrorPanel");
 		}
 	}
 
@@ -211,13 +211,14 @@ public class Screen extends Composite implements
 	 * need to override the commitWithWarnings() method to catch the user's response.
 	 */
 	protected void showWarningsDialog(ValidationErrorsList warnings) {
-		String warningText = consts.get("warningDialogLine1") + "\n";
+		String warningText = "There are warnings on the screen:" + "\n";
 
 		for (Exception ex : warnings.getErrorList()) {
 			if (ex instanceof Warning)
 				warningText += " * " + ex.getMessage() + "\n";
 		}
-		warningText += "\n" + consts.get("warningDialogLastLine");
+		warningText += "\n" + "Press Ok to commit anyway or cancel to fix these warnings.";
+		
 
 		if (Window.confirm(warningText))
 			commitWithWarnings();
@@ -262,8 +263,8 @@ public class Screen extends Composite implements
 		 // sets focus back to the window to allow short-cuts to work
 		 //
 		if (widget == null && window != null) {
-		    if (window.getBrowser() != null)
-		        window.getBrowser().setFocusedWindow();
+		    //if (window.getBrowser() != null)
+		      //  window.getBrowser().setFocusedWindow();
 		}
 	}
 

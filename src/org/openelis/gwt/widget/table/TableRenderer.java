@@ -27,7 +27,6 @@ package org.openelis.gwt.widget.table;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
 import org.openelis.gwt.widget.AutoComplete;
 import org.openelis.gwt.widget.CalendarLookUp;
 import org.openelis.gwt.widget.Dropdown;
@@ -261,16 +260,16 @@ public class TableRenderer  {
         	boolean changed = (currVal == null && newVal != null) || (currVal != null && !currVal.equals(newVal));
         	//if(changed) {
         	Widget wid = controller.activeWidget;
-    		ArrayList<LocalizedException> exceps = null;
+    		ArrayList<Exception> exceps = null;
 			if(controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions != null)
 				exceps = controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions;
 			else
-				exceps =  new ArrayList<LocalizedException>(); 
+				exceps =  new ArrayList<Exception>(); 
         	if(wid instanceof HasField){
         		if(((HasField)wid).getExceptions() != null){
-        			for(LocalizedException exc : (ArrayList<LocalizedException>)((HasField)wid).getExceptions()){
+        			for(Exception exc : (ArrayList<Exception>)((HasField)wid).getExceptions()){
         				if(!exceps.contains(exc))
-        					exceps.add((LocalizedException)exc.clone());
+        					exceps.add(new Exception(exc.getMessage()));
         			}
         			
         			controller.getRow(controller.selectedRow).cells.get(controller.selectedCol).exceptions = exceps;

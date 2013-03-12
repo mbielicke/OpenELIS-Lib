@@ -1,7 +1,7 @@
 package org.openelis.gwt.services;
 
 import org.openelis.gwt.common.CalendarRPC;
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 import org.openelis.gwt.screen.Callback;
 
 import com.google.gwt.core.client.GWT;

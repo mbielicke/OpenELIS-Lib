@@ -1,7 +1,7 @@
 package org.openelis.gwt.services;
 
 import org.openelis.gwt.common.CalendarRPC;
-import org.openelis.gwt.common.Datetime;
+import org.openelis.ui.common.Datetime;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

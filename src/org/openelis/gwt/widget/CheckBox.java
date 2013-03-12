@@ -27,8 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
-import org.openelis.gwt.common.LocalizedException;
-import org.openelis.gwt.common.data.QueryData;
+import org.openelis.ui.common.data.QueryData;
 import org.openelis.gwt.screen.TabHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -187,7 +186,7 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 		return addDomHandler(handler,MouseOverEvent.getType());
 	}
 
-	public void addException(LocalizedException error) {
+	public void addException(Exception error) {
 		field.addException(error);
 		field.drawExceptions(this);
 	}
@@ -253,15 +252,15 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 			return;
 		if(field.queryString != null && !field.queryString.equals("")){
 			QueryData qd = new QueryData();
-			qd.query = field.queryString;
-			qd.key = key;
-			qd.type = QueryData.Type.STRING;
+			qd.setQuery(field.queryString);
+			qd.setKey(key);
+			qd.setType(QueryData.Type.STRING);
 			list.add(qd);
 		}
 		
 	}
 
-	public ArrayList<LocalizedException> getExceptions() {
+	public ArrayList<Exception> getExceptions() {
 		return field.exceptions;
 	}
 
