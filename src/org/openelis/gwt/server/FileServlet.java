@@ -35,18 +35,21 @@ public class FileServlet  extends HttpServlet {
 			
 			files = upload.parseRequest(req);
 			
-			file = files.get(0);
+			req.getSession().setAttribute("upload", files.get(0));
 			
+			/*
 			for(int i = 1; i < files.size(); i++) {
 				if(files.get(i).getFieldName().equals("service")) 
 					service = files.get(i).getString();
 				else if(files.get(i).getFieldName().equals("method"))
 					method = files.get(i).getString();
 			}
+			*/
 		}catch(Exception e) {
 			throw (ServletException)e.getCause();
 		}
 
+		/*
 		Class[] paramTypes = {FileItem.class};
 		Object[] params = {file};
 		try {
@@ -65,6 +68,7 @@ public class FileServlet  extends HttpServlet {
             e.printStackTrace();
             throw new ServletException(e.getMessage());
         }
+        */
 	}
 	
 	@Override
