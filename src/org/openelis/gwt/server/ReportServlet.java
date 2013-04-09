@@ -3,6 +3,7 @@ package org.openelis.gwt.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -63,11 +64,21 @@ public class ReportServlet extends HttpServlet {
             contentType = getContentType(filename);
             resp.setContentType(contentType);    
 
-            attachment = req.getParameter("attachment");            
-            if (!DataBaseUtil.isEmpty(attachment))
+            attachment = req.getParameter("attachment");
+            if (!DataBaseUtil.isEmpty(attachment)) {
                 resp.setHeader("Content-Disposition", "attachment;filename=\""+ attachment + "\""); 
-            else
-                resp.setHeader("Content-Disposition", "filename=\""+ filename + "\""); 
+            }else{
+                resp.setHeader("Content-Disposition", "filename=\""+ filename + "\"");
+            }
+            
+            /*
+             * These headers are set this wat here to fix ie8 download bug
+             */
+            resp.setDateHeader("Date", new Date().getTime());
+            resp.setDateHeader("Expires", new Date().getTime() - 86400000L);
+            resp.setHeader("Pragma","token");
+            resp.setHeader("Cache-control", "private");
+            
             in = new FileInputStream(file);
             out = resp.getOutputStream();
 
@@ -77,6 +88,7 @@ public class ReportServlet extends HttpServlet {
             
             file.delete();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ServletException(e.getMessage());
         } finally {
             if (in != null)
