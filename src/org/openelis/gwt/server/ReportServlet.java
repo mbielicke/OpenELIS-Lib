@@ -3,7 +3,6 @@ package org.openelis.gwt.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -19,11 +18,11 @@ import org.openelis.ui.common.ReportStatus;
  */
 public class ReportServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;        
+    private static final long serialVersionUID = 1L;
 
     @Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+                                                                                  IOException {
         int l;
         byte b[];
         File file;
@@ -31,13 +30,14 @@ public class ReportServlet extends HttpServlet {
         ServletOutputStream out;
         ReportStatus status;
         String filename, contentType, attachment;
-        
+
         in = null;
         out = null;
         filename = null;
         try {
             /*
-             * make sure the requested file is in user session (we have generated the file)
+             * make sure the requested file is in user session (we have
+             * generated the file)
              */
             filename = req.getParameter("file");
             if (DataBaseUtil.isEmpty(filename)) {
@@ -45,47 +45,45 @@ public class ReportServlet extends HttpServlet {
                 return;
             }
 
-            status = (ReportStatus) req.getSession().getAttribute(filename);
+            status = (ReportStatus)req.getSession().getAttribute(filename);
             if (status == null || status.getStatus() != ReportStatus.Status.SAVED) {
                 error(resp, "Specified file key is not valid; please report this error to Lab IT");
                 return;
             }
 
             file = new File(status.getPath(), status.getMessage());
-            if (! file.exists()) {
+            if (!file.exists()) {
                 error(resp, "Specified file is not valid; please report this error to Lab IT");
-                System.out.println("File "+file.getAbsolutePath()+" not found");
+                System.out.println("File " + file.getAbsolutePath() + " not found");
                 return;
             }
-                        
+
             /*
-             * stream the file 
+             * stream the file
              */
             contentType = getContentType(filename);
-            resp.setContentType(contentType);    
+            resp.setContentType(contentType);
 
             attachment = req.getParameter("attachment");
-            if (!DataBaseUtil.isEmpty(attachment)) {
-                resp.setHeader("Content-Disposition", "attachment;filename=\""+ attachment + "\""); 
-            }else{
-                resp.setHeader("Content-Disposition", "filename=\""+ filename + "\"");
-            }
-            
+            if (!DataBaseUtil.isEmpty(attachment))
+                resp.setHeader("Content-Disposition", "attachment;filename=\"" + attachment + "\"");
+            else
+                resp.setHeader("Content-Disposition", "filename=\"" + filename + "\"");
+
             /*
-             * These headers are set this wat here to fix ie8 download bug
+             * TODO: Remove this when we no longer support IE8
+             * Headers are set to fix IE8 download bug
              */
-            resp.setDateHeader("Date", new Date().getTime());
-            resp.setDateHeader("Expires", new Date().getTime() - 86400000L);
-            resp.setHeader("Pragma","token");
+            resp.setHeader("Pragma", "token");
             resp.setHeader("Cache-control", "private");
-            
+
             in = new FileInputStream(file);
             out = resp.getOutputStream();
 
             b = new byte[1024];
-            while ((l = in.read(b)) > 0) 
+            while ((l = in.read(b)) > 0)
                 out.write(b, 0, l);
-            
+
             file.delete();
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,40 +97,38 @@ public class ReportServlet extends HttpServlet {
                 req.getSession().removeAttribute(filename);
         }
     }
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		doGet(req,resp);		
-	}
-	
-	/**
-	 * Displays the specified message in html 
-	 */
-	private void error(HttpServletResponse resp, String message) {
-	    String htmlMessage;
-	    	    
-	    htmlMessage = "<html>\n" +
-	    		      "<header>Error in generating report:</header>" +
-	    		      "<body>"+message+"</body>"+
-	    		      "</html>";
-	    
-	    resp.setContentType("text/html");
-	    try {
-	        resp.getWriter().println(htmlMessage);
-	    } catch (Exception e) {
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+                    IOException {
+        doGet(req, resp);
+    }
+
+    /**
+     * Displays the specified message in html
+     */
+    private void error(HttpServletResponse resp, String message) {
+        String htmlMessage;
+
+        htmlMessage = "<html>\n" + "<header>Error in generating report:</header>" + "<body>" +
+                      message + "</body>" + "</html>";
+
+        resp.setContentType("text/html");
+        try {
+            resp.getWriter().println(htmlMessage);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-	} 
-	
-	/**
-	 * Returns a mime type based on the filename extension
-	 */
-	protected String getContentType(String filename) {
-	    if (DataBaseUtil.isEmpty(filename))
-	        return "text/html";
-	    else if (filename.endsWith(".pdf"))
-	        return "application/pdf";
+    }
+
+    /**
+     * Returns a mime type based on the filename extension
+     */
+    protected String getContentType(String filename) {
+        if (DataBaseUtil.isEmpty(filename))
+            return "text/html";
+        else if (filename.endsWith(".pdf"))
+            return "application/pdf";
         else if (filename.endsWith(".xls"))
             return "application/vnd.ms-excel";
         else if (filename.endsWith(".xlsx"))
@@ -145,5 +141,5 @@ public class ReportServlet extends HttpServlet {
             return "text/xml";
         else
             return "application/octet-stream";
-	}
+    }
 }
