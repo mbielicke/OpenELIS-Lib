@@ -258,6 +258,52 @@ public class DataBaseUtil {
         return (numDays / factor) * 100;
     }
 
+    /*
+     * Compute the number of days before the analysis is expected to be finshed
+     */
+    public static Integer getDueDays(Datetime received, Integer expectedDays) {
+        long     due;
+        Datetime now, expectedDate;
+        
+        if (received == null || expectedDays == null)
+            return null;
+        
+        now = Datetime.getInstance(Datetime.YEAR, Datetime.MINUTE);
+        
+        expectedDate = received.add(expectedDays);
+        
+        due = expectedDate.getDate().getTime() - now.getDate().getTime();
+        
+        // convert from milliseconds to days
+        due = due / 1000 / 60 / 60 / 24;
+        
+        return (int)due;
+    }
+    
+    /*
+     * Compute the Datetime after which the sample is no longer viable for analysis
+     */
+    public static Datetime getExpireDate(Datetime collectionDate, Datetime collectionTime, int holdingHours) {
+        Date tempDate;
+        Datetime expireDate;
+        
+        expireDate = null;
+        if (collectionDate != null) {
+            tempDate = collectionDate.getDate();
+            if (collectionTime != null) {
+                tempDate.setHours(collectionTime.get(Datetime.HOUR));
+                tempDate.setMinutes(collectionTime.get(Datetime.MINUTE));
+            } else {
+                tempDate.setHours(0);
+                tempDate.setMinutes(0);
+            }
+            tempDate.setTime(tempDate.getTime() + holdingHours * 60 * 60 * 1000);
+            expireDate = new Datetime(Datetime.YEAR, Datetime.MINUTE, tempDate);
+        }
+
+        return expireDate;
+    }
+
     /**
      * Compares the two parameters to see if they are the same
      * @return true if object is the same; otherwise false
