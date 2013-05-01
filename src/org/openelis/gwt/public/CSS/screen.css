@@ -1464,7 +1464,7 @@ font-weight:bold;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:10px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 */
@@ -1475,7 +1475,7 @@ font-weight:bold;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:10px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 
@@ -1593,7 +1593,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 .ScreenCalendar .TextboxUnselected{
@@ -1602,7 +1602,7 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     cursor:default;
 }
 /************************ End Calendar ***************************/
@@ -1818,7 +1818,7 @@ tr .DropOnRow{
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     border:1px solid #d8d8d8;
     cursor:default;
    /* background:#FBFBFB;*/
@@ -1828,7 +1828,7 @@ tr .DropOnRow{
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-weight: normal;
     font-size:11px;
-    height:20px;
+    height:16px;
     background-color:#EEEEEE;
     border:1px solid #d8d8d8;
     cursor:default;
