@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+import com.sun.org.apache.xpath.internal.operations.Number;
 
 public class UIGenerator extends Generator {
 	
@@ -221,13 +222,9 @@ public class UIGenerator extends Generator {
             }
         }
         if (node.getAttributes().getNamedItem("width") != null)
-            sw.println(wid+".setWidth(\""+node.getAttributes()
-                                     .getNamedItem("width")
-                                     .getNodeValue()+"\");");
+            sw.println(wid+".setWidth(\""+withUnits(node.getAttributes().getNamedItem("width"))+"\");");
         if (node.getAttributes().getNamedItem("height") != null)
-            sw.println(wid+".setHeight(\""+node.getAttributes()
-                                      .getNamedItem("height")
-                                      .getNodeValue()+"\");");
+            sw.println(wid+".setHeight(\""+withUnits(node.getAttributes().getNamedItem("height"))+"\");");
         if (node.getAttributes().getNamedItem("tip") != null){
             sw.println(wid+".setTitle(\""+node.getAttributes().getNamedItem("tip").getNodeValue()+"\");");
         }
@@ -438,7 +435,7 @@ public class UIGenerator extends Generator {
     	                }
     	                if(widgets.item(k).getAttributes().getNamedItem("width") != null) {
     	                	if(!widgets.item(k).getAttributes().getNamedItem("width").getNodeValue().equals("auto"))
-    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+widgets.item(k).getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	                		sw.println("wid"+id+".setCellWidth(wid"+child+",\""+withUnits(widgets.item(k).getAttributes().getNamedItem("width"))+"\");");
     	                }
     	            }
     	        }
@@ -487,16 +484,10 @@ public class UIGenerator extends Generator {
     	                    if(widgets.item(l).getNodeName().equals("widget")) {
     	                    	if (widgets.item(l).getAttributes().getNamedItem("width") != null)
     	                    		sw.println("wid"+id+".getFlexCellFormatter().setWidth("+k+","+w+",\""+
-    	                    						widgets.item(l)
-    	                    						.getAttributes()
-    	                    						.getNamedItem("width")
-    	                    						.getNodeValue()+"\");");
+    	                    						withUnits(widgets.item(l).getAttributes().getNamedItem("width"))+"\");");
     	                    	if (widgets.item(l).getAttributes().getNamedItem("height") != null)
     	                    		sw.println("wid"+id+".getFlexCellFormatter().setHeight("+k+","+w+",\""+
-    	                    						widgets.item(l)
-    	                    						.getAttributes()
-    	                    						.getNamedItem("height")
-    	                    						.getNodeValue()+"\");");
+    	                    						withUnits(widgets.item(l).getAttributes().getNamedItem("height"))+"\");");
     	                    	if (widgets.item(l).getAttributes().getNamedItem("colspan") != null)
     	                    		sw.println("wid"+id+".getFlexCellFormatter().setColSpan("+k+","+w+","+
     	                    				Integer.parseInt(widgets.item(l)
@@ -778,7 +769,7 @@ public class UIGenerator extends Generator {
     		       }
     		    }
     		    if(node.getAttributes().getNamedItem("height") != null)
-    		       sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    		       sw.println("wid"+id+".setHeight(\""+withUnits(node.getAttributes().getNamedItem("width"))+"\");");
     		       
     		    setDefaults(node, "wid"+id);
     		}
@@ -805,7 +796,7 @@ public class UIGenerator extends Generator {
     		       }
     		    }
     		    if(node.getAttributes().getNamedItem("height") != null)
-    		       sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    		       sw.println("wid"+id+".setHeight(\""+withUnits(node.getAttributes().getNamedItem("height"))+"\");");
     		       
     		    setDefaults(node, "wid"+id);
     		}
@@ -818,9 +809,9 @@ public class UIGenerator extends Generator {
     			sw.println("DeckPanel wid"+id+" = new DeckPanel();");
     	        sw.println("wid"+id+".setStyleName(\"gwt-TabPanelBottom\");");
     	        if(node.getAttributes().getNamedItem("height") != null)
-                	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+                	sw.println("wid"+id+".setHeight(\""+withUnits(node.getAttributes().getNamedItem("height"))+"\");");
                 if(node.getAttributes().getNamedItem("width") != null)
-                	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+                	sw.println("wid"+id+".setWidth(\""+withUnits(node.getAttributes().getNamedItem("width"))+"\");");
     	        NodeList decks = ((Element)node).getElementsByTagName("deck");
     	        for (int k = 0; k < decks.getLength(); k++) {
     	            NodeList widgets = decks.item(k).getChildNodes();
@@ -1288,10 +1279,10 @@ public class UIGenerator extends Generator {
     	        String width = "100%";
     	        String height = "300px";
     	        if(node.getAttributes().getNamedItem("width") != null){
-    	            width = node.getAttributes().getNamedItem("width").getNodeValue();
+    	            width = withUnits(node.getAttributes().getNamedItem("width"));
     	        }
     	        if(node.getAttributes().getNamedItem("height") != null) {
-    	            height = node.getAttributes().getNamedItem("height").getNodeValue();
+    	            height = withUnits(node.getAttributes().getNamedItem("height"));
     	        }
     	        sw.println("wid"+id+".init("+tools+");");
     	        sw.println("wid"+id+".area.setSize(\""+width+"\",\""+height+"\");");
@@ -1372,11 +1363,11 @@ public class UIGenerator extends Generator {
     			sw.println("TabPanel wid"+id+" = new TabPanel();");
     	        sw.println("wid"+id+".setStyleName(\"ScreenTab\");");
     	        if(node.getAttributes().getNamedItem("width") != null)
-    	        	sw.println("wid"+id+".setWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+    	        	sw.println("wid"+id+".setWidth(\""+withUnits(node.getAttributes().getNamedItem("width"))+"\");");
     	        else
     	        	sw.println("wid"+id+".setWidth(\"auto\");");
     	        if(node.getAttributes().getNamedItem("height") != null)
-    	        	sw.println("wid"+id+".setHeight(\""+node.getAttributes().getNamedItem("height").getNodeValue()+"\");");
+    	        	sw.println("wid"+id+".setHeight(\""+withUnits(node.getAttributes().getNamedItem("height"))+"\");");
     	        else
     	        	sw.println("wid"+id+".setHeight(\"auto\");");
     	        NodeList tabs = ((Element)node).getElementsByTagName("tab");
@@ -1569,7 +1560,7 @@ public class UIGenerator extends Generator {
 					sw.println("wid"+id+".addTabHandler(new TabHandler(\""+tabs[0]+"\",\""+tabs[1]+"\",this,\""+key+"\"));");
 				}
 			                   
-                sw.println("wid"+id+".setTableWidth(\""+node.getAttributes().getNamedItem("width").getNodeValue()+"\");");
+                sw.println("wid"+id+".setTableWidth(\""+withUnits(node.getAttributes().getNamedItem("width"))+"\");");
                 sw.println("wid"+id+".setMaxRows(Integer.parseInt(\""+node.getAttributes().getNamedItem("maxRows").getNodeValue()+"\"));");
 
                 if(node.getAttributes().getNamedItem("title") != null){
@@ -2153,13 +2144,13 @@ public class UIGenerator extends Generator {
     			Node range,attrib;
     			String width,barWidth;
     			
-    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? attrib.getNodeValue() : null;
+    			width = (attrib = node.getAttributes().getNamedItem("width")) != null ? withUnits(attrib) : null;
     			barWidth = (attrib = node.getAttributes().getNamedItem("barWidth")) != null ? attrib.getNodeValue() : null;
     			
     			sw.println("PercentBar wid"+id+" = new PercentBar();");
     			
     			if(width != null)
-    				sw.println("wid"+id+".setWidth(\""+width+"px\");");
+    				sw.println("wid"+id+".setWidth(\""+width+"\");");
     			
     			if(barWidth != null) {
     				sw.println("wid"+id+".setBarWidth("+barWidth+");");
@@ -2323,6 +2314,25 @@ public class UIGenerator extends Generator {
     			composer.addImport("org.openelis.gwt.widget.web.LinkButton");
     		}
     	});
+    }
+    
+    
+    private String withUnits(Node node) {
+        String val;
+        
+        val = node.getNodeValue();
+        
+        if(val == null)
+            return null;
+        
+        try {
+            Integer.parseInt(val);
+        }catch(Exception e) {
+            return val;
+        }
+        
+        return val+"px";
+                        
     }
 
 
