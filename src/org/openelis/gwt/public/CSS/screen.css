@@ -779,10 +779,10 @@ border:1px solid #D8D8D8;
     color:gray;
     background:none;
 }
-/*.disabled  .ButtonPanelButton .ButtonContent{
+.disabled  .ButtonPanelButton .ButtonContent{
 cursor:default;
     background:none;
-}*/
+}
 
 .ButtonPanelButton .ButtonRightSide{
 	width:2px;
