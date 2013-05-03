@@ -469,19 +469,6 @@ background:white;
        -moz-user-select: none;
 }
 
-.disabled .ButtonContent{
-    cursor:default;
-    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
-}
-
-.Hover .ButtonContent{
-    cursor:pointer;
-}
-
-.Pressed .ButtonContent {
-    background: url(../Images/screenbuttonpressed.gif) repeat-x;
-    cursor:default;
-}
 
 .disabled .ScreenLabel{
     color:gray;
@@ -780,7 +767,9 @@ border:1px solid #D8D8D8;
 }
 .disabled .ButtonContent{
     cursor:default
+    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;    
 }
+
 .ButtonPanelButton .ButtonContent .ScreenLabel{
     color:black;
     background:none;
