@@ -1352,10 +1352,13 @@ font-weight:bold;
 }
 
 .None .gwt-TabBarFirst {
+	height:19px;
 	background:white;
+	
 }
 
 .gwt-TabBarFirst{
+	height:19px;
     background:url('../Images/tabfirst.gif') no-repeat;
 }   
 
