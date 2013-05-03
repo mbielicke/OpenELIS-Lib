@@ -127,7 +127,7 @@ width:100%;
 .errorPopupLabel, .warnPopupLabel{
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:12px;
-    padding:0 4px 2px 0;
+    padding:0px 4px 2px 0px;
 }
 /*******TOP MENU BAR CSS***********/
 .topMenuBar { 
@@ -147,7 +147,7 @@ width:100%;
     //filter: alpha(opacity=50);
 }
 .topMenuBarItem {
-    margin:3px 0 0 8px;
+    margin:3px 0px 0px 8px;
     padding:4px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:10px;
@@ -156,7 +156,7 @@ width:100%;
 }
 
 .heading {
-    margin:3px 0 0 8px;
+    margin:3px 0px 0px 8px;
     padding:4px;
 	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
     font-size:12px;
@@ -206,7 +206,7 @@ width:100%;
     margin-left:4px;
 }
 .favoritesMenuContainer .topMenuBar{
-margin:0;      
+ 	margin:0px;      
 }
 .favoritesMenuContainer  .ButtonLeftSide, .favoritesMenuContainer .ButtonContent, .favoritesMenuContainer .ButtonRightSide{
     margin-top:4px;
@@ -219,7 +219,7 @@ margin:0;
 }
 
 .topMenuItemMiddle{
-    padding:0 0 0 8px;
+    padding:0px 0px 0px 8px;
 
 }
 .topMenuItemTitle{
@@ -228,7 +228,7 @@ margin:0;
 }
 
 .disabled .topMenuItemTitle {
-color:gray;
+	color:gray;
 }
 
 .topMenuItemDesc{
@@ -248,13 +248,13 @@ color:gray;
 }
 .Ascending{
 	background:url('../Images/go-up.png') no-repeat center center;
-	width:16;
-	height:16;
+	width:16px;
+	height:16px;
 }
 .Descending{
 	background:url('../Images/go-down.png') no-repeat center center;
-	width:16;
-	height:16;
+	width:16px;
+	height:16px;
 }
 .FavMenuRowContainer{
     width:200px;
@@ -396,8 +396,8 @@ color:gray;
 /*******lookupbutton Button Class***********/
 
 .LookupButton .ButtonContent{
-    margin:0;
-    padding:0;
+    margin:0px;
+    padding:0px;
     height:20px;
 }
 
@@ -407,24 +407,24 @@ color:gray;
 }
 
 .LookupButton .ButtonLeftSide{
-margin:0;
-width:0;
+	margin:0px;
+	width:0px;
 }
 
 .LookupButton .ButtonRightSide{
-margin:0;
-width:0;
+	margin:0px;
+	width:0px;
 }
 /*******General Button Class***********/
 
 .TableButtonFooter .Button{
-padding:0;
+	padding:0px;
 }
 .RichTextContentPanel{
-background:white;
+	background:white;
 }
 .gwt-RichTextToolbar{
-        height:26px;
+    height:26px;
     background:url("../Images/buttonbarbg.gif") repeat-x
 }
 .Button{
@@ -432,7 +432,7 @@ background:white;
 }
 
 .ButtonRightSide{
-    margin:2px 0 0 0 ;
+    margin:2px 0px 0px 0px ;
     width:2px;
     height:21px;
     background:url("../Images/screenbuttonrsdisabled.gif") no-repeat;
@@ -446,7 +446,7 @@ background:white;
 }
 
 .ButtonLeftSide{
-    margin:2px 0 0 2px;
+    margin:2px 0px 0px 2px;
     width:2px;    
     height:21px;
     background:url("../Images/screenbuttonlsdisabled.gif") no-repeat;
@@ -461,8 +461,8 @@ background:white;
 }
 
 .ButtonContent{
-    margin:2px 0 0 0;
-    padding: 2px 4px 0 4px;
+    margin:2px 0px 0px 0px;
+    padding: 2px 4px 0px 4px;
     height:21px;
     cursor:default;
     background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
@@ -643,9 +643,9 @@ background:white;
 }
 
 .FavHeader .ButtonRightSide{
-    margin:0;
-    width:0;    
-    height:0;
+    margin:0px;
+    width:0px;    
+    height:0px;
     background:none;
     cursor:default;
 }
@@ -654,9 +654,9 @@ background:white;
 }
 
 .FavHeader .ButtonLeftSide{
-    margin:0;
-    width:0;    
-    height:0;
+    margin:0px;
+    width:0px;    
+    height:0px;
     background:none;
     cursor:default;
 }
@@ -665,7 +665,7 @@ background:white;
 }
 
 .FavHeader .ButtonContent{
-    margin:0;
+    margin:0px;
     width:16px;    
     height:16px;
     cursor:default;
@@ -745,7 +745,7 @@ border:1px solid #D8D8D8;
 .ButtonDivider{
     width:2px;
     height:13px;
-    margin:6px 2px 0 2px;
+    margin:6px 2px 0px 2px;
     background:url("../Images/buttondivider.gif") no-repeat;
 }
 
@@ -767,9 +767,7 @@ border:1px solid #D8D8D8;
 }
 .disabled .ButtonContent{
     cursor:default
-    background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;    
 }
-
 .ButtonPanelButton .ButtonContent .ScreenLabel{
     color:black;
     background:none;
@@ -786,13 +784,13 @@ cursor:default;
 }*/
 
 .ButtonPanelButton .ButtonRightSide{
-width:2px;
-     background:none;
+	width:2px;
+    background:none;
 }
 .Hover .ButtonPanelButton .ButtonRightSide,
 .Pressed .ButtonPanelButton .ButtonRightSide{
-background:url("../Images/screenbuttonrs.gif") no-repeat;
-cursor:pointer;
+	background:url("../Images/screenbuttonrs.gif") no-repeat;
+	cursor:pointer;
 }
 
 .Current .ButtonRightSide{
@@ -802,23 +800,23 @@ cursor:pointer;
 
 .Pressed .ButtonRightSide{cursor:default;}
 .Disabled .ButtonPanelButton .ButtonRightSide{
-background:none;
+	background:none;
     cursor:default;
 }
 .ButtonPanelButton .ButtonLeftSide{
     background:none;
 }
 .Hover .ButtonPanelButton .ButtonLeftSide, .Pressed .ButtonPanelButton .ButtonLeftSide{
-background:url("../Images/screenbuttonls.gif") no-repeat;
+	background:url("../Images/screenbuttonls.gif") no-repeat;
 }
 
 .Current .ButtonLeftSide{
-background:url("../Images/screenbuttonls.gif") no-repeat;
+	background:url("../Images/screenbuttonls.gif") no-repeat;
     cursor:default;
 }
  .Pressed  .ButtonLeftSide{cursor:default;}
 .Disabled .ButtonPanelButton .ButtonLeftSide{
-background:none;
+	background:none;
     cursor:default;
 }
 .addTestButtonImage, .cancelTestButtonImage, .expandButtonImage, .collapseButtonImage, .similarButtonImage, .privateWellWaterSampleLoginIcon, .QueryButtonImage, .PreviousButtonImage, .NextButtonImage, .AddButtonImage, .AddButtonIcon, .UpdateButtonImage, .DeleteButtonImage, .DeleteButtonIcon, .CommitButtonImage, .AbortButtonImage, .OpenButtonImage{
@@ -907,8 +905,8 @@ background:none;
 
 /************ AtoZ button ***************/
 .smallButton .ButtonContent, .FavHeaderButton .ButtonContent{
-    margin:0 0 0 0;
-    padding:0 0 0 0;
+    margin:0px 0px 0px 0px;
+    padding:0px 0px 0px 0px;
     width:1em;
     height:16px;
     text-align:center;
@@ -927,14 +925,14 @@ background:none;
 .Pressed .smallButton .ButtonContent{cursor:default;}
 
 .smallButton .ButtonRightSide, .FavHeaderButton .ButtonRightSide{
-    margin:0 0 0 0;
+    margin:0px 0px 0px 0px;
     width:2px;
     height:16px;
     cursor:default;
     background:none;
 }
 .smallButton .ButtonLeftSide, .FavHeaderButton .ButtonLeftSide{
-    margin:0 0 0 0;
+    margin:0px 0px 0px 0px;
     width:2px;
     height:16px;
     cursor:default;
@@ -954,8 +952,7 @@ background:none;
     background:url("../Images/screenbuttonlssmall.gif") no-repeat;
 }
 .Pressed .smallButton .ButtonLeftSide,  .Current .smallButton .ButtonLeftSide{cursor:default;}
-.disabled .smallButton .ButtonContent {    background:none;
-cursor:default;}
+.disabled .smallButton .ButtonContent {    background:none; cursor:default;}
 
 /************ end AtoZ button ***************/
 
@@ -1137,7 +1134,7 @@ cursor:default;}
 }
 .ConfirmWindow .middleCenterInner{
     padding:4px;
-    padding-top:0;
+    padding-top:0px;
     /*padding-left:20;*/}
 .ConfirmWindow .Button{
     padding-top:16px;}
@@ -1148,28 +1145,28 @@ cursor:default;}
     text-align:center}    
     
 .largeWarnIcon{
-	height:32;
-	width:32;
+	height:32px;
+	width:32px;
     background: url("../Images/icon-warning.gif") no-repeat left top;
 }
 .largeErrorIcon{
-	height:32;
-	width:32;
+	height:32px;
+	width:32px;
     background: url("../Images/icon-error.gif") no-repeat left top;
 }
 .largeQuestionIcon{
-	height:32;
-	width:32;
+	height:32px;
+	width:32px];
     background: url("../Images/icon-question.gif") no-repeat left top;
 }
 .ConfirmCaption{
-  padding:4;
+  padding:4px;
 }
 .ConfirmCaptionLabel{
-color:#486095;
-font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-font-size:11px;
-font-weight:bold;
+	color:#486095;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
 }
 /*ErrorWindow end*/
 .favorite .LeftMenuPanePanelClosed{
@@ -1212,7 +1209,7 @@ font-weight:bold;
 	width:6px;
 	height:116px;
 	position:relative;
-	left:-3;
+	left:-3px;
     background:url("../Images/openleftbar.gif") no-repeat center;
 }
 .SlideClose {
@@ -1246,7 +1243,7 @@ font-weight:bold;
 
 .ScreenMenuList {
     border:1px solid #99bbe8;
-    margin:0 8px 8px 8px;
+    margin:0px 8px 8px 8px;
     background:white;
 }
 
@@ -1278,7 +1275,7 @@ font-weight:bold;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    padding:0 8px 0 4px;
+    padding:0px 8px 0px 4px;
     height:18px;
     background:url("../Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
@@ -1306,12 +1303,12 @@ font-weight:bold;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    padding:0 8px 0 4px;
+    padding:0px 8px 0px 4px;
     width:100%;
     height:18px;
     background:url("../Images/headersprite.gif") repeat-x;
     border-bottom:1px solid #99bbe8;
-       -moz-user-select: none;
+    -moz-user-select: none;
 }
 
 .ScreenLeftTable{
@@ -1329,7 +1326,7 @@ font-weight:bold;
     color:#486095;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
-    margin:1px 0 0 4px;
+    margin:1px 0px 0px 4px;
 }
 /*******TAB PANEL CSS***********/
 .ScreenTab{
@@ -1356,7 +1353,7 @@ font-weight:bold;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size:11px;
     height:19px;
-    padding:0 8 0 4;
+    padding:0px 8px 0px 4px;
     cursor:pointer;
     background:url('../Images/tab.gif') no-repeat right;
        -moz-user-select: none;
@@ -1365,7 +1362,7 @@ font-weight:bold;
 .gwt-TabBar .gwt-TabBarItem-selected {
     cursor:default;
     background:url('../Images/selectedtab.gif') no-repeat right;
-       -moz-user-select: none;
+    -moz-user-select: none;
 }
 
 .gwt-TabBarText {
@@ -1505,20 +1502,20 @@ font-weight:bold;
 }
 
 .TableAutoDropdownButton{
-width:16;
-height:17;
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/trigger.gif) 0px 0px no-repeat;
+	width:16px;
+	height:17px;
+	border-bottom: 1px solid #d8d8d8;
+	background: url(../Images/trigger.gif) 0px 0px no-repeat;
 }
 .TableAutoDropdown .Hover{
-cursor:pointer;
-background: url(../Images/trigger.gif) -16px 0px no-repeat;
+	cursor:pointer;
+	background: url(../Images/trigger.gif) -16px 0px no-repeat;
 }
 .TableAutoDropdown .Selected{
-background: url(../Images/trigger.gif) -64px 0px no-repeat;
+	background: url(../Images/trigger.gif) -64px 0px no-repeat;
 }
 .TableAutoDropdown .Pressed{
-background: url(../Images/trigger.gif) -48px 0px no-repeat;
+	background: url(../Images/trigger.gif) -48px 0px no-repeat;
 }
 /*******end autodropdown css********/
 .ScreenSplit {
@@ -1555,27 +1552,27 @@ background: url(../Images/trigger.gif) -48px 0px no-repeat;
 
 /***************** Calendar *******************/
 .Calendar{
-height:19px;
+	height:19px;
 }
 
 .CalendarButton{
-width:14px;
-height:19px;
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
+	width:14px;
+	height:19px;
+	border-bottom: 1px solid #d8d8d8;
+	background: url(../Images/date-trigger.gif) 0px 0px no-repeat;
 }
 .ScreenCalendar .Hover{
-cursor:pointer;
-border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
+	cursor:pointer;
+	border-bottom: 1px solid  #7eadd9;
+	background: url(../Images/date-trigger.gif) -14px 0px no-repeat;
 }
 .ScreenCalendar .Selected{
-border-bottom: 1px solid  #7eadd9;
-background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
+	border-bottom: 1px solid  #7eadd9;
+	background: url(../Images/date-trigger.gif) -56px 0px no-repeat;
 }
 .ScreenCalendar .Pressed{
-border-bottom: 1px solid #d8d8d8;
-background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
+	border-bottom: 1px solid #d8d8d8;
+	background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
 }
 
 .ScreenCalendar .TextboxSelected{
@@ -1613,18 +1610,19 @@ background: url(../Images/date-trigger.gif) -28px 0px no-repeat;
     -moz-user-select:none;
 }
 .WeekPicker{
-padding:8px;
-padding-bottom:0;
+	padding:8px;
+	padding-bottom:0px;
 }
 /************** Drag & Drop ************/
 .dragdrop-movable-panel .middleCenter{
-background:white;
-opacity:0.8;
-border:1px solid #d8d8d8;
-border-top:0;
-		}
+	background:white;
+	opacity:0.8;
+	border:1px solid #d8d8d8;
+	border-top:0px;
+}
 .dragdrop-movable-panel .ErrorWindow{
-    width:176px;}
+    width:176px;
+ }
 .dragdrop-movable-panel .ErrorWindow .middle{
     padding:0px;
     border:0px;
@@ -1632,7 +1630,7 @@ border-top:0;
 .dragdrop-movable-panel .ErrorWindow .topRight {
     width:6px;
     height:6px;
-background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
+	background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
 }
 .dragdrop-movable-panel .ErrorWindow .middleRight {
     width:6px;
@@ -1641,7 +1639,7 @@ background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
 }
 .dragdrop-movable-panel .ErrorWindow .middleRightInner{
  /*   background: transparent url("../Images/popupright-y.png") top repeat-y;*/
- background:none;
+ 	background:none;
     height:100%;
     margin-top:6px;
 }
@@ -1682,17 +1680,17 @@ background: transparent url("../Images/shadow.png") no-repeat 0 -18px;
     background:white;
     height:5px;
     border:1px solid #d8d8d8;
-    border-bottom:0;
+    border-bottom:0px;
     opacity:0.8;
 }
 .DragProxy{
- margin-top:-3;
+ 	margin-top:-3px;
 }
 
 .dragdrop-proxy{
 /**	border:1px solid #d8d8d8;**/
 	background:none;
-opacity:0.9;
+	opacity:0.9;
 }
 
 tr .DropOnRow{
@@ -1705,13 +1703,13 @@ tr .DropOnRow{
 	
 .dragdrop-proxy .ScreenLabel{
 	border:1px solid #d8d8d8;
-	border-left:0;
+	border-left:0px;
 	background:white;
 	padding-right:4px;
 		}
 
 .DropPositioner {
-		border-top:1px dashed #63B159;}
+	border-top:1px dashed #63B159;}
 
 .DragSelector{
    border:1px solid #99bbe8;
@@ -1735,7 +1733,7 @@ tr .DropOnRow{
 .Dragstatus{
     width:20px;
     height:18px;
-    margin:0 0 2 2;
+    margin:0px 0px 2px 2px;
 }
 .Drop{
     background:url('../Images/commitbuttonimage.gif') no-repeat center;
@@ -1863,9 +1861,9 @@ border:none;
     font-size:11px;
 }
 .ScreenLabelLink{
-color:blue;
-text-decoration:underline;
-cursor:pointer;
+	color:blue;
+	text-decoration:underline;
+	cursor:pointer;
 }
 .WarningLabel{
 	color: #FF0000;    
@@ -1906,7 +1904,7 @@ cursor:pointer;
 }
 
 .subform .Form {
-margin:0px;
+	margin:0px;
 }
 
 .FormTitle{
@@ -1950,7 +1948,7 @@ margin:0px;
     font-size:11px;
     -moz-user-select: none;
 	color:gray;
-	padding:2px 0 2px 2px;
+	padding:2px 0px 2px 2px;
 	vertical-align:top;
 }
 /********   End Input  Form ***********/
@@ -2125,15 +2123,15 @@ cursor:wait;
 }
 
 .notesPanelContainer{
-padding-right:10px;
-padding-bottom:4px;
+	padding-right:10px;
+	padding-bottom:4px;
 }
 
 .notesSubjectText {
-color:#486095;
-font-family:Arial,Helvetica,sans-serif;
-font-size:12px;
-font-weight:bold;
+	color:#486095;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+	font-weight:bold;
 }
 
 .MenuUp {
@@ -2208,122 +2206,122 @@ rich text css
 	    background: url(../Images/transgrey.png);
 	    filter:alpha(opacity=50),
 }.Italic {
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/italic.gif) no-repeat;
 }
 
 .Bold {
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/bold.png) no-repeat ;
 }
 
 .Underline{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/underline.png) no-repeat ;
 }
 
 .Subscript{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/subscript.png) no-repeat;
 }
 
 .Superscript{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/superscript.png) no-repeat;
 }
 
 .JustifyLeft{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/justifyLeft.gif) no-repeat;
 }
 
 .JustifyCenter{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/justifyCenter.gif) no-repeat;
 }
 
 .JustifyRight{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/justifyRight.gif) no-repeat;
 }
 
 .StrikeThrough{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/strikeThrough.png) no-repeat;
 }
 
 .Indent{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/indent.gif) no-repeat;
 }
 
 .Outdent{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/outdent.gif) no-repeat;
 }
 
 .HR{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/hr.gif) no-repeat;
 }
 
 .OL{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/ol.png) no-repeat;
 }
 
 .UL{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/ul.png) no-repeat;
 }
 
 .redo{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/arrow_redo.png) no-repeat;
 }
 
 .undo{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/arrow_undo.png) no-repeat;
 }
 
 .InsertImage{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/insertImage.gif);
 }
 
 .CreateLink{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/createLink.gif);
 }
 
 .RemoveLink{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/removeLink.gif);
 }
 
 .RemoveFormat{
-    width:20;
-    height:20;
+    width:20px;
+    height:20px;
     background: url(../Images/removeFormat.png) no-repeat;
 }
 
