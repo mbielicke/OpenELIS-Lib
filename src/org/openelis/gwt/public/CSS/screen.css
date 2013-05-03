@@ -766,6 +766,7 @@ border:1px solid #D8D8D8;
     cursor:default;
 }
 .disabled .ButtonContent{
+	background:url("../Images/screenbuttonbgdisabled.gif") repeat-x;
     cursor:default
 }
 .ButtonPanelButton .ButtonContent .ScreenLabel{
