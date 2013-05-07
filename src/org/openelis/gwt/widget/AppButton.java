@@ -225,7 +225,8 @@ public class AppButton extends Composite implements MouseOutHandler, MouseOverHa
      * @param event
      */
     public void onMouseOver(MouseOverEvent event) {
-    	panel.addStyleName("Hover");
+        if(enabled)
+            panel.addStyleName("Hover");
     }
     
     /**

@@ -185,7 +185,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         hp.add(icon);
         setWidget(hp);
         hp.setWidth(width);
-        setStyleName("AutoDropDown");
+        setStyleName("AutoDropdown");
         textbox.setStyleName("TextboxUnselected");
         textbox.addFocusHandler(this);
         textbox.addBlurHandler(this);
@@ -196,7 +196,7 @@ public class AutoComplete<T> extends DropdownWidget implements FocusHandler, Blu
         textbox.setReadOnly(!enabled);
         textbox.addMouseOutHandler(mouseHandler);
         textbox.addMouseOverHandler(mouseHandler);
-        icon.setStyleName("AutoDropDownButton");
+        icon.setStyleName("AutoDropdownButton");
         icon.addClickHandler(listener);
         icon.addFocusHandler(this);
         addDomHandler(keyboardHandler,KeyDownEvent.getType());
