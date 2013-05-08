@@ -905,7 +905,7 @@ cursor:default;
 
 
 /************ AtoZ button ***************/
-.smallButton .ButtonContent{
+.smallButton{
      margin: 2px;
     padding:1px;
 	border:1px solid transparent;
@@ -938,6 +938,13 @@ cursor:default;
 	background:none;
     cursor:default;
 	box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
+}
+
+.smallButton .ButtonLeftSide,.smallButton  .ButtonContent,.smallButton  .ButtonRightSide{
+	background:none;
+	cursor:auto;
+	margin:0;
+	width:auto;
 }
 
 /************ end AtoZ button ***************/
