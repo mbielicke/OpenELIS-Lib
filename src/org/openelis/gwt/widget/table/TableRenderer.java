@@ -95,9 +95,13 @@ public class TableRenderer  {
         if(controller.isDropdown) {
         	ScrollHeight += controller.cellHeight;
         }
+        /*
         int testStart = new Double(Math.ceil(((double)(controller.maxRows*controller.cellHeight)/(controller.cellHeight)))).intValue();
-        if(testStart < controller.shownRows() - controller.maxRows)
+        if(testStart < controller.shownRows() - controller.maxRows) {
+            System.out.println("testStart = "+testStart+"shown Rows = "+controller.shownRows+" maxRows = "+controller.maxRows);
             ScrollHeight += controller.cellHeight;
+        }
+        */
         controller.view.setScrollHeight(ScrollHeight);
         controller.view.scrollBar.setScrollPosition(pos);
         int tRows = controller.maxRows;
@@ -190,6 +194,7 @@ public class TableRenderer  {
         if(loadStart+rowsPer > numRows){
             loadStart = loadStart - ((loadStart+rowsPer) - numRows);
         }
+        
         for(int i = 0; i < rowsPer; i++){
             while(loadStart+i < controller.numRows() && !controller.getRow(loadStart+i).shown)
                 loadStart++;
