@@ -193,7 +193,8 @@ public class TableRenderer  {
         for(int i = 0; i < rowsPer; i++){
             while(loadStart+i < controller.numRows() && !controller.getRow(loadStart+i).shown)
                 loadStart++;
-            loadRow(i,loadStart+i);
+            if(loadStart+i < controller.numRows() && controller.getRow(loadStart+i).shown)
+                loadRow(i,loadStart+i);
         }
 
     }

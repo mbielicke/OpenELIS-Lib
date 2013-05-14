@@ -70,13 +70,15 @@ public class PercentBar extends Composite implements HasField<Double>{
 		AbsolutePanel panel;
 		ColorRange color = null;
 		
-		if(percent == null) 
+		if(percent == null || percent < 0.0) 
 			percent = 0.0;
+		
 		
 		panel = new AbsolutePanel();
 		bar.clear();
 		bar.add(panel);
 		panel.setHeight("100%");
+		
 		panel.setWidth(percent.intValue()+"%");
 		/*
 		 * Determines which color to use when filling in the bar.
