@@ -284,7 +284,7 @@ public class TableView extends Composite implements ScrollHandler, MouseWheelHan
                 top = scrollBar.getScrollPosition();
             }
         }
-        if(event == null || event.getSource() == cellView && header != null){
+        if((event == null || event.getSource() == cellView) && controller.showHeader){
             if(left != cellView.getHorizontalScrollPosition()){
                 headerView.setWidgetPosition(header, -cellView.getHorizontalScrollPosition(), 0);
                 left = cellView.getHorizontalScrollPosition();
