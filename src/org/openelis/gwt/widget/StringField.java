@@ -26,6 +26,7 @@
 package org.openelis.gwt.widget;
 
 import org.openelis.ui.common.Datetime;
+import org.openelis.ui.messages.Messages;
 
 /**
  * @author tschmidt
@@ -47,9 +48,9 @@ public class StringField extends Field<String> {
         if (required) {
             if (value == null || value.trim().length() == 0) {
                 valid = false;
-                addException(new Exception("fieldRequiredException"));
+                addException(new Exception(Messages.get().exc_fieldRequired()));
             } else
-                removeException("fieldRequiredException");
+                removeException(Messages.get().exc_fieldRequired());
         }
         if (value != null && !isInRange())
             valid = false;
@@ -62,9 +63,9 @@ public class StringField extends Field<String> {
         try {
             qField.parse(value);
             queryString = value;
-            removeException("invalidQueryFormat");
+            removeException(Messages.get().exc_invalidQuery());
         } catch (Exception e) {
-            addException(new Exception("invalidQueryFormat"));
+            addException(new Exception(Messages.get().exc_invalidQuery()));
         }
     }
 
@@ -79,14 +80,14 @@ public class StringField extends Field<String> {
         if (value != null) {
             if (max != null && value.length() > max.intValue()) {
                 rangeVal = false;
-                addException(new Exception("fieldMaxLengthException"));
+                addException(new Exception(Messages.get().exc_fieldMaxLength()));
             } else
-                removeException("fieldMaxLengthException");
+                removeException(Messages.get().exc_fieldMaxLength());
             if (min != null && value.length() < min.intValue() && value.length() > 0) {
                 rangeVal = false;
-                addException(new Exception("fieldMinLengthException"));
+                addException(new Exception(Messages.get().exc_fieldMinLength()));
             } else
-                removeException("fieldMinLengthException");
+                removeException(Messages.get().exc_fieldMinLength());
         }
         return rangeVal;
     }

@@ -1,6 +1,8 @@
 package org.openelis.gwt.widget;
 
 
+import org.openelis.ui.messages.Messages;
+
 import com.google.gwt.i18n.client.NumberFormat;
 
 
@@ -25,15 +27,15 @@ public class IntegerField extends Field<Integer> {
     	valid = true;
         if (invalid) {
             valid = false;
-            addException(new Exception("fieldNumericException"));
+            addException(new Exception(Messages.get().exc_invalidNumeric()));
         }else
-        	removeException("fieldNumericException");
+        	removeException(Messages.get().exc_invalidNumeric());
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new Exception("fieldRequiredException"));
+                addException(new Exception(Messages.get().exc_fieldRequired()));
             }else
-            	removeException("fieldRequiredException");
+            	removeException(Messages.get().exc_fieldRequired());
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -55,9 +57,9 @@ public class IntegerField extends Field<Integer> {
         		if(!vals[i].equalsIgnoreCase("null")){
         			try {
         				Integer.parseInt(vals[i]);
-        				removeException("fieldNumericException");
+        				removeException(Messages.get().exc_invalidNumeric());
         			} catch (Exception e) {
-        				addException(new Exception("fieldNumericException"));
+        				addException(new Exception(Messages.get().exc_invalidNumeric()));
         				valid = false;
         				return;
         			}
@@ -72,14 +74,14 @@ public class IntegerField extends Field<Integer> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addException(new Exception("fieldMaxException"));
+            addException(new Exception(Messages.get().exc_fieldMaxValue()));
         }else
-        	removeException("fieldMaxException");
+        	removeException(Messages.get().exc_fieldMaxValue());
         if (min != null && value < min) {
         	valid = false;
-            addException(new Exception("fieldMinException"));
+            addException(new Exception(Messages.get().exc_fieldMinValue()));
         }else
-        	removeException("fieldMinException");
+        	removeException(Messages.get().exc_fieldMinValue());
         return true;
     }
 
@@ -118,11 +120,11 @@ public class IntegerField extends Field<Integer> {
                 } else {
                     value = null;
                 }
-                removeException("fieldNumericException");
+                removeException(Messages.get().exc_invalidNumeric());
             } catch (Exception e) {
                 valid = false;
                 invalid = true;
-                addException(new Exception("fieldNumericException"));
+                addException(new Exception(Messages.get().exc_invalidNumeric()));
             }
         } else {
             try {
@@ -131,11 +133,11 @@ public class IntegerField extends Field<Integer> {
                                                              .parse(val.toString())));
                 else if(val.equals(""))
                 	setValue(null);
-                removeException("fieldNumericException");
+                removeException(Messages.get().exc_invalidNumeric());
             } catch (Exception e) {
                 valid = false;
                 invalid = true;
-                addException(new Exception("fieldNumericException"));
+                addException(new Exception(Messages.get().exc_invalidNumeric()));
             }
         }
     }

@@ -1,5 +1,7 @@
 package org.openelis.gwt.widget;
 
+import org.openelis.ui.messages.Messages;
+
 import com.google.gwt.i18n.client.NumberFormat;
 
 public class DoubleField extends Field<Double> {
@@ -24,15 +26,15 @@ public class DoubleField extends Field<Double> {
         
         if (invalid) {
             valid = false;
-            addException(new Exception("fieldNumericException"));
+            addException(new Exception(Messages.get().exc_invalidNumeric()));
         }else
-        	removeException("fieldNumericException");
+        	removeException(Messages.get().exc_invalidNumeric());
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new Exception("fieldRequiredException"));
+                addException(new Exception(Messages.get().exc_fieldRequired()));
             }else
-            	removeException("fieldRequiredException");
+            	removeException(Messages.get().exc_fieldRequired());
         }
         if (value != null && !isInRange()) {
             valid = false;
@@ -53,9 +55,9 @@ public class DoubleField extends Field<Double> {
         		if(!vals[i].equalsIgnoreCase("null")) {
         			try {
         				Double.parseDouble(vals[i]);
-        				removeException("invalidDouble");
+        				removeException(Messages.get().exc_invalidNumeric());
         			} catch (Exception e) {
-        				addException(new Exception("invalidDouble"));
+        				addException(new Exception(Messages.get().exc_invalidNumeric()));
         				valid = false;
         				return;
         			}
@@ -70,14 +72,14 @@ public class DoubleField extends Field<Double> {
             return true;
         if (max != null && value > max) {
         	valid = false;
-            addException(new Exception("fieldMaxException"));
+            addException(new Exception(Messages.get().exc_fieldMaxValue()));
         }else
-        	removeException("fieldMaxException");
+        	removeException(Messages.get().exc_fieldMaxValue());
         if (min != null && value < min) {
         	valid = false;
-            addException(new Exception("fieldMinException"));
+            addException(new Exception(Messages.get().exc_fieldMinValue()));
         }else
-        	removeException("fieldMinException");
+        	removeException(Messages.get().exc_fieldMinValue());
         return true;
     }
 
@@ -119,11 +121,11 @@ public class DoubleField extends Field<Double> {
                 } else {
                     value = null;
                 }
-                removeException("invalidDouble");
+                removeException(Messages.get().exc_invalidNumeric());
             } catch (Exception e) {
                 valid = false;
                 invalid = true;
-                addException(new Exception("invalidDouble"));
+                addException(new Exception(Messages.get().exc_invalidNumeric()));
             }
         } else {
             try {
@@ -132,14 +134,14 @@ public class DoubleField extends Field<Double> {
                                                        .parse(val.toString())));
                 else if(val.equals(""))
                 	setValue(null);
-                removeException("invalidDouble");
+                removeException(Messages.get().exc_invalidNumeric());
             } catch (Exception e) {
             	try {
             		setValue(Double.valueOf(val.toString()));
             	}catch(Exception ee) {
             	    valid = false;
             	    invalid = true;
-            	    addException(new Exception("invalidDouble"));
+            	    addException(new Exception(Messages.get().exc_invalidNumeric()));
             	}
             }
         }

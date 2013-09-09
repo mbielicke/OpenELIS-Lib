@@ -28,6 +28,7 @@ package org.openelis.gwt.widget;
 import java.util.Date;
 
 import org.openelis.ui.common.Datetime;
+import org.openelis.ui.messages.Messages;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -85,9 +86,9 @@ public class DateField extends Field<Datetime> {
         if (required) {
             if (value == null) {
             	valid = false;
-                addException(new Exception("fieldRequiredException"));
+                addException(new Exception(Messages.get().exc_fieldRequired()));
             }else
-            	removeException("fieldRequiredException");
+            	removeException(Messages.get().exc_fieldRequired());
         }
         if (value != null && !isInRange()) {
         	valid = false;
@@ -127,10 +128,10 @@ public class DateField extends Field<Datetime> {
     						date = new Date(dates[i]);
     					}
     					sb.append(DateTimeFormat.getFormat(pattern).format(date));
-    					removeException("invalidDateFormat");
+    					removeException(Messages.get().exc_invalidDate());
     				}catch(Exception e) {
     					valid = false;
-    					addException(new Exception("invalidDateFormat"));
+    					addException(new Exception(Messages.get().exc_invalidDate()));
     					return;
     				}
     			}
@@ -164,15 +165,15 @@ public class DateField extends Field<Datetime> {
     	Date today = new Date();
         if (min != null && value.before(Datetime.getInstance().add(-min.intValue()).getDate())) {
         	valid = false;
-            addException(new Exception("fieldPastException"));
+            addException(new Exception(Messages.get().exc_fieldPast()));
         }else
-        	removeException("fieldPastException");
+        	removeException(Messages.get().exc_fieldPast());
         if (max != null && value.after(Datetime.getInstance()
                                                   .add(max.intValue()).getDate())) {
         	valid = false;
-            addException(new Exception("fieldFutureException"));
+            addException(new Exception(Messages.get().exc_fieldFuture()));
         }else{
-        	removeException("fieldFutureException");
+        	removeException(Messages.get().exc_fieldFuture());
         }
         return true;
     }
@@ -314,7 +315,7 @@ public class DateField extends Field<Datetime> {
         			date = DateTimeFormat.getFormat(getPattern()).parseStrict(val);
         	}catch(Exception e) {
         		valid = false;
-        		addException(new Exception("invalidDateFormat"));
+        		addException(new Exception(Messages.get().exc_invalidDate()));
         	}
         }
         return Datetime.getInstance(begin, end, date);

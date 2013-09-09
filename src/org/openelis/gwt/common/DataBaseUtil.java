@@ -484,10 +484,10 @@ public class DataBaseUtil {
         return buf.toString();
     }
     
-    public static ArrayList<Exception> getExceptions(ArrayList<LocalizedException> formErrors) {
+    public static ArrayList<Exception> getExceptions(ArrayList<Exception> formErrors) {
         ArrayList<Exception> errors = new ArrayList<Exception>();
         
-        for(LocalizedException le : formErrors) {
+        for(Exception le : formErrors) {
             if(le instanceof FormErrorWarning)
                 errors.add(new org.openelis.ui.common.FormErrorWarning(le.getMessage()));
             else
