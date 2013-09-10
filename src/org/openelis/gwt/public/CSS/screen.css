@@ -906,11 +906,9 @@ cursor:default;
 
 /************ AtoZ button ***************/
 .smallButton{
-	height:16px;
 	border:1px solid transparent;
 	border-radius:2px;
     margin: 0 2px 0 0;
-    padding:2px;
     text-shadow: 1px 1px 1px rgba(255,255,255, .22);
     box-shadow: 1px 1px 1px rgba(0,0,0, .0), inset 1px 1px 1px rgba(255,255,255, .0);
 }
