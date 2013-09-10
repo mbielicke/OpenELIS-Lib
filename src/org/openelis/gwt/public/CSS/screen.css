@@ -906,30 +906,20 @@ cursor:default;
 
 /************ AtoZ button ***************/
 .smallButton{
+	height:16px;
 	border:1px solid transparent;
-	-moz-border-radius:2px;
 	border-radius:2px;
-	font-family:"Open Sans",sans-serif;
-    font-size:11px;
-    font-weight:bold;
     margin: 0 2px 0 0;
-    padding:1px;
+    padding:3px;
     text-shadow: 1px 1px 1px rgba(255,255,255, .22);
-    -webkit-box-shadow: 1px 1px 1px rgba(0,0,0, .0), inset 1px 1px 1px rgba(255,255,255, .0);
-    -moz-box-shadow: 1px 1px 1px rgba(0,0,0, .0), inset 1px 1px 1px rgba(255,255,255, .0);
     box-shadow: 1px 1px 1px rgba(0,0,0, .0), inset 1px 1px 1px rgba(255,255,255, .0);
-
 }
 
 .smallButton:hover {
-		border:1px solid #7293be;
-    	cursor:pointer; 
-	    box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
-	    -moz-box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
-		background: -moz-linear-gradient(top,  #e7f0f7 0%, #b4c9e2 100%);
-		background-image: -ms-linear-gradient(top,#b4c9e2,#e7f0f7);
-		background-image: -webkit-linear-gradient(top,#b4c9e2,#e7f0f7);
-		-webkit-box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
+    border:1px solid #7293be;
+    cursor:pointer; 
+	box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
+	background-image:linear-gradient(top,#b4c9e2,#e7f0f7);
 }
 
 
@@ -1861,8 +1851,7 @@ border:none;
     background:#e6eaf6;
 }
 .ScreenLabel{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:11px;
+
 }
 .ScreenLabelLink{
 	color:blue;
