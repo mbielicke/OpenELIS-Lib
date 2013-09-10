@@ -27,6 +27,7 @@ package org.openelis.gwt.widget;
 
 import java.util.Date;
 
+import org.openelis.gwt.common.DataBaseUtil;
 import org.openelis.ui.common.Datetime;
 import org.openelis.ui.messages.Messages;
 
@@ -326,9 +327,11 @@ public class DateField extends Field<Datetime> {
 			queryString = getString(value);
 			validateQuery();
 		}else {
-			this.value = value;
-			if(fireEvents)
-				ValueChangeEvent.fire(this, getValue());
+		    if(DataBaseUtil.isDifferent(this.value, value)) {
+		        this.value = value;
+		        if(fireEvents)
+		            ValueChangeEvent.fire(this, getValue());
+		    }
 		}
 		
 	}
