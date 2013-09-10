@@ -1711,54 +1711,53 @@ public class UIGenerator extends Generator {
                 NodeList colList = ((Element)node).getElementsByTagName("col");
                 sw.println("wid"+id+".setColumns(new ArrayList<TableColumn>());");
                 if(colList.getLength() > 0){
-                	for(int i = 0; i < colList.getLength(); i++) {
-                		Node col = colList.item(i);
-                		sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
-                		sw.println("column"+id+"_"+i+".controller = drop;");
-                		if(col.getAttributes().getNamedItem("key") != null)
-                			sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
-                		if(col.getAttributes().getNamedItem("header") != null){
-                			sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
-                			sw.println("wid"+id+".showHeader(true);");
-                		}
-                		if(col.getAttributes().getNamedItem("width") != null)
-                			sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("sort") != null)
-                			sw.println("column"+id+"_"+i+".setSortable("+col.getAttributes().getNamedItem("sort").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("filter") != null)
-                			sw.println("column"+id+"_"+i+".setFilterable("+col.getAttributes().getNamedItem("filter").getNodeValue()+");");
-                		if(col.getAttributes().getNamedItem("align") != null){
-                			String align = col.getAttributes().getNamedItem("align").getNodeValue();
-                			if (align.equals("left"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
-                			if (align.equals("center"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
-                			if (align.equals("right"))
-                				sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
-                		}
-                		sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
-                		boolean widgetDefined = false;
-                    	NodeList editor = col.getChildNodes();
-                    	for(int j = 0; j < editor.getLength(); j++){
-                    		if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                    			int child = count++;
-                    			if(!createWidget(editor.item(j),child)){
-                    				count--;
-                    				continue;
-                    			}
-                    			widgetDefined = true;
-                    			sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    			break;
-                    		}
-                    	}
-                    	if(!widgetDefined){
-                    		int child = count++;
-                    		factoryMap.get("label").getNewInstance(colList.item(i),child);
-                    		sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
-                    	}
-                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");	
-                		sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");
-                	}
+                    for(int i = 0; i < colList.getLength(); i++) {
+                        Node col = colList.item(i);
+                        sw.println("TableColumn column"+id+"_"+i+" = new TableColumn();");
+                        sw.println("column"+id+"_"+i+".controller = wid"+id+";");
+                        if(col.getAttributes().getNamedItem("key") != null)
+                            sw.println("column"+id+"_"+i+".setKey(\""+col.getAttributes().getNamedItem("key").getNodeValue()+"\");");
+                        if(col.getAttributes().getNamedItem("header") != null) {
+                            sw.println("column"+id+"_"+i+".setHeader(\""+col.getAttributes().getNamedItem("header").getNodeValue()+"\");");
+                            sw.println("wid"+id+".showHeader(true);");
+                        }
+                        if(col.getAttributes().getNamedItem("width") != null)
+                            sw.println("column"+id+"_"+i+".setCurrentWidth("+col.getAttributes().getNamedItem("width").getNodeValue()+");");
+                        if(col.getAttributes().getNamedItem("sort") != null)
+                            sw.println("column"+id+"_"+i+".setSortable(\""+col.getAttributes().getNamedItem("sort").getNodeValue()+"\");");
+                        if(col.getAttributes().getNamedItem("filter") != null)
+                            sw.println("column"+id+"_"+i+".setFilterable(\""+col.getAttributes().getNamedItem("filter").getNodeValue()+"\");");
+                        if(col.getAttributes().getNamedItem("align") != null){
+                            String align = col.getAttributes().getNamedItem("align").getNodeValue();
+                            if (align.equals("left"))
+                                sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_LEFT);");
+                            if (align.equals("center"))
+                                sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_CENTER);");
+                            if (align.equals("right"))
+                                sw.println("column"+id+"_"+i+".setAlign(HasAlignment.ALIGN_RIGHT);");
+                        }
+                        sw.println("column"+id+"_"+i+".columnIndex = "+i+";");
+                        boolean widgetDefined = false;
+                        NodeList editor = col.getChildNodes();
+                        for(int j = 0; j < editor.getLength(); j++){
+                            if(editor.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                int child = ++count;
+                                if(!createWidget(editor.item(j),child)){
+                                    count--;
+                                    continue;
+                                }
+                                widgetDefined = true;
+                                sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                                break;
+                            }
+                        }
+                        if(!widgetDefined){
+                            int child = ++count;
+                            factoryMap.get("label").getNewInstance(colList.item(i),child);
+                            sw.println("column"+id+"_"+i+".setColumnWidget(wid"+child+");");
+                        }
+                        sw.println("wid"+id+".getColumns().add(column"+id+"_"+i+");");  
+                    }
                 }else{
                 	sw.println("TableColumn column"+id+" = new TableColumn();");
                 	sw.println("column"+id+".controller = wid"+id+";");
