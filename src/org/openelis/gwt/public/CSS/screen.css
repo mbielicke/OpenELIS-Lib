@@ -916,10 +916,13 @@ cursor:default;
 }
 
 .smallButton:hover {
-    border:1px solid #7293be;
-    cursor:pointer; 
-	box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
-	background-image:linear-gradient(top,#b4c9e2,#e7f0f7);
+		border:1px solid #7293be;
+    	cursor:pointer; 
+	    box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
+	    background: -moz-linear-gradient(top,  #e7f0f7 0%, #b4c9e2 100%);
+		background-image: -ms-linear-gradient(top,#b4c9e2,#e7f0f7);
+		background-image: -webkit-linear-gradient(top,#b4c9e2,#e7f0f7);
+		-webkit-box-shadow: 1px 1px 1px rgba(0,0,0, .29), inset 1px 1px 1px rgba(255,255,255, .44);
 }
 
 
