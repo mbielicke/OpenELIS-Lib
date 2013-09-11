@@ -1882,10 +1882,7 @@ border:none;
 }
 /********   End Input  Form ***********/
 .Form {
-    font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-    font-size:11px;
         margin:4px 8px ;
-       /* background:#FBFBFB;*/
 }
 
 .subform{
@@ -1905,19 +1902,14 @@ border:none;
 	-moz-user-select: none;
     text-align:center;
     color:#486095;
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size:11px;
     height:18px;
     background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 }
 .Prompt {
-	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-    font-size:11px;
     -moz-user-select: none;
 	color:gray;
 	padding:2px 0 2px 2px;
 	text-align:right;
-	vertical-align:top;
 }
 .CondensedPrompt {
    -moz-user-select: none;
@@ -1938,8 +1930,6 @@ border:none;
    vertical-align:top;
 }
 .LeftAlignPrompt {
-	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-    font-size:11px;
     -moz-user-select: none;
 	color:gray;
 	padding:2px 0px 2px 2px;
@@ -1966,26 +1956,17 @@ legend {
 
 
 .Panels{
-    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size:11px;
     vertical-align:text-bottom;
 }
 .AppMessage{
-	font-family: Arial, Helvetica, sans-serif; 
-	font-size: 14px; 
 	color: #333333; 
-	font-weight: bold;
 	background:url(../Images/goldbarno.jpg);
 }
 .invisible{
 	visibility:hidden;
 }
 .NavLinks {
-	font-family: Arial, Helvetica, sans-serif; 
-	font-size: 14px; 
 	color: #003366; 
-	font-weight: bold;
 	cursor:pointer;
 }	
 .focused {
@@ -2085,27 +2066,18 @@ cursor:wait;
   padding:5px;
   border:2px solid red;
   background:white;
-  font-family: Arial, Helvetica, sans-serif; 
-  font-size: 14px; 
   color: #003366;  
-  font-weight: bold;
 }
 
 .MessagePopup {
   padding:5px;
   border:2px solid red;
   background:white;
-  font-family: Arial, Helvetica, sans-serif; 
-  font-size: 14px; 
   color: #003366;  
-  font-weight: bold;
 }
 
 .NotesText {
    color:#000000;
-   font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
-   font-size:11px;
-   font-weight:normal;
    vertical-align:top;
 }
 
@@ -2123,9 +2095,6 @@ cursor:wait;
 
 .notesSubjectText {
 	color:#486095;
-	font-family:Arial,Helvetica,sans-serif;
-	font-size:12px;
-	font-weight:bold;
 }
 
 .MenuUp {
