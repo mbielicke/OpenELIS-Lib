@@ -55,6 +55,10 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
     }
     
     public String getText() {
+        if(enforceMask && picture != null && picture.equals(super.getText())) 
+            return "";
+        
+        
         if (textCase == Case.UPPER)
             return super.getText().toUpperCase();
         else if(textCase == Case.LOWER)
