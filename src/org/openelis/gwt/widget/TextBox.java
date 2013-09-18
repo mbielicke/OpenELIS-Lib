@@ -227,7 +227,11 @@ public class TextBox<T> extends com.google.gwt.user.client.ui.TextBox implements
 	}
 
 	public Object getWidgetValue() {
-		return getText();
+	    if(enforceMask && picture != null && picture.equals(getText())) {
+	        setText("");
+            return null;
+	    }else
+            return getText();
 	}
 
 	public void removeExceptionStyle(String style) {
