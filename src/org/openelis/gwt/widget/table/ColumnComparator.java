@@ -19,17 +19,21 @@ public class ColumnComparator implements Comparator<TableDataRow> {
 	public int compare(TableDataRow row1, TableDataRow row2) {
 		if(dir == SortDirection.ASCENDING) {
 			if(row1.cells.get(col).getValue() != null){
-				if(row2.getCells().get(col) == null)
-					return 0;
+				if(row2.cells.get(col).getValue() == null)
+					return 1;
 				return ((Comparable)row1.cells.get(col).getValue()).compareTo(row2.cells.get(col).getValue());
-			}else 
+			}else if(row2.getCells().get(col) == null)
+			    return 0;
+			else
 				return -1;
 		}else {
 			if(row2.cells.get(col).getValue() != null) {
 				if(row1.cells.get(col).getValue() == null)
-					return 0;
+					return 1;
 				return ((Comparable)row2.cells.get(col).getValue()).compareTo(row1.cells.get(col).getValue());
-			}else 
+			}else if(row1.cells.get(col).getValue() == null)
+			    return 0;
+			else
 				return -1;
 		}
 	}
