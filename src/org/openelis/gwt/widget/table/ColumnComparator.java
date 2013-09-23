@@ -20,12 +20,12 @@ public class ColumnComparator implements Comparator<TableDataRow> {
 		if(dir == SortDirection.ASCENDING) {
 			if(row1.cells.get(col).getValue() != null){
 				if(row2.cells.get(col).getValue() == null)
-					return 1;
+					return -1;
 				return ((Comparable)row1.cells.get(col).getValue()).compareTo(row2.cells.get(col).getValue());
 			}else if(row2.getCells().get(col) == null)
 			    return 0;
 			else
-				return -1;
+				return 1;
 		}else {
 			if(row2.cells.get(col).getValue() != null) {
 				if(row1.cells.get(col).getValue() == null)
