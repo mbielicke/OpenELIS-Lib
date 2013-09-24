@@ -677,20 +677,17 @@ public class ScreenWindow extends FocusPanel implements WindowInt, ClickHandler,
 
     @Override
     public HandlerRegistration addBeforeClosedHandler(org.openelis.ui.event.BeforeCloseHandler<WindowInt> handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addHandler(handler,org.openelis.ui.event.BeforeCloseEvent.getType());
     }
 
 
     @Override
     public void makeDragable(DragController controller) {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public Widget getContent() {
-        // TODO Auto-generated method stub
-        return null;
+        return content;
     }
 }
