@@ -449,6 +449,11 @@ public class ScreenWindow extends FocusPanel implements WindowInt, ClickHandler,
     		if(event != null && event.isCancelled())
     			return;
     	}
+        if(getHandlerCount(org.openelis.ui.event.BeforeCloseEvent.getType()) > 0) {
+            org.openelis.ui.event.BeforeCloseEvent<WindowInt> event = org.openelis.ui.event.BeforeCloseEvent.fire(this, this);
+            if(event != null && event.isCancelled())
+                return;
+        }
         if(modalGlass != null) {
            removeFromParent();
            RootPanel.get().remove(modalGlass);
