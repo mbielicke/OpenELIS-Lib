@@ -223,6 +223,7 @@ public class TableRenderer  {
         if(controller.activeWidget != null){
             if(controller.activeWidget instanceof CalendarLookUp && ((CalendarLookUp)controller.activeWidget).getField().queryMode) {
                 setCellDisplay(controller.selectedRow,controller.selectedCol);
+                controller.getData().get(controller.selectedRow).cells.get(controller.selectedCol).setValue(((HasField)controller.activeWidget).getField().queryString);
                 controller.activeWidget = null;
                 return true;
             }
