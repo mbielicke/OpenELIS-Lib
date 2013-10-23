@@ -1852,7 +1852,8 @@ border:none;
     background:#e6eaf6;
 }
 .ScreenLabel{
-
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	font-size:11px;
 }
 .ScreenLabelLink{
 	color:blue;
@@ -1906,6 +1907,8 @@ border:none;
     background:transparent url(../Images/buttonbarbg.gif) repeat-x scroll 0 0;
 }
 .Prompt {
+	font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;
+    font-size: 11px;
     -moz-user-select: none;
 	color:gray;
 	padding:2px 0 2px 2px;
