@@ -1036,9 +1036,9 @@ cursor:default;
     height:100%;
 }
 .ErrorWindow .middleRightInner{
+	width:8px;
+    height:18px;
     background: transparent url("../Images/popupright-y.png") top repeat-y;
-    height:100%;
-    margin-bottom:8px;
 }
 .ErrorWindow .bottomRight {
     background: transparent url("../Images/popupbr.png") no-repeat left bottom;
