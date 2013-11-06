@@ -27,10 +27,13 @@ package org.openelis.gwt.widget.richtext;
 
 import java.util.ArrayList;
 
+import org.openelis.gwt.screen.ScreenPanel;
 import org.openelis.gwt.screen.TabHandler;
 import org.openelis.gwt.widget.Field;
 import org.openelis.gwt.widget.HasField;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
@@ -48,7 +51,7 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers, Focusable {
+public class RichTextWidget extends Composite implements FocusHandler, HasValue<String>, HasField<String>, HasFocusHandlers, HasBlurHandlers, BlurHandler, Focusable {
 
 	private VerticalPanel vp = new VerticalPanel();
 	public RichTextArea area;
@@ -184,7 +187,7 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	public void setField(Field<String> field) {
 		this.field = field;
 		addValueChangeHandler(field);
-		area.addBlurHandler(field);
+		addBlurHandler(field);
 		area.addMouseOutHandler(field);
 		area.addMouseOverHandler(field);
 	}
@@ -194,11 +197,11 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 	}
 
 	public HandlerRegistration addFocusHandler(FocusHandler handler) {
-		return area.addFocusHandler(handler);
+		return addDomHandler(handler, FocusEvent.getType());
 	}
 
 	public HandlerRegistration addBlurHandler(BlurHandler handler) {
-		return area.addBlurHandler(handler);
+		return addDomHandler(handler, BlurEvent.getType());
 	}
 
 	public void setQueryMode(boolean query) {
@@ -253,6 +256,12 @@ public class RichTextWidget extends Composite implements FocusHandler, HasValue<
 		// TODO Auto-generated method stub
 		
 	}
+	
+    public void onBlur(BlurEvent event) {
+	    area.removeStyleName("Focus");
+        BlurEvent.fireNativeEvent(Document.get().createBlurEvent(), this);
+	}
+	   
 
 
 }
