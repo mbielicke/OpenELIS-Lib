@@ -138,6 +138,13 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
     public void addException(Exception e){
     	if(exceptions == null)
     		exceptions = new ArrayList<Exception>();
+    	
+    	//Check for repeating exceptions
+    	for(int i = 0; i < exceptions.size(); i++){
+            if(exceptions.get(i).getMessage().equals(e.getMessage()))
+                return;
+        }
+    	
     	if(!exceptions.contains(e))
     		exceptions.add(e);
     }
