@@ -174,10 +174,10 @@ public class Field<T> extends HandlesEvents implements ValueChangeHandler<String
         for (Exception exception : exceptions) {
         	HorizontalPanel hp = new HorizontalPanel();
         	if(exception instanceof Warning) {
-        		hp.add(new Image("Images/bullet_yellow.png"));
+        		hp.add(new Image("/openelis/openelis/Images/bullet_yellow.png"));
         		hp.setStyleName("warnPopupLabel");
         	}else{
-        		hp.add(new Image("Images/bullet_red.png"));
+        		hp.add(new Image("/openelis/openelis/Images/bullet_red.png"));
         		hp.setStyleName("errorPopupLabel");
         		style = "InputError";
         	}
