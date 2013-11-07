@@ -194,7 +194,7 @@ public class ScreenWindow extends FocusPanel implements WindowInt, ClickHandler,
      * The Screen or panel that is displayed by this window.
      */
     public Widget content;
-    private Label message = new Label("Loading...");
+    private Label message = new Label();
     private Label winLabel = new Label();
     
     private AbsolutePanel glass;
