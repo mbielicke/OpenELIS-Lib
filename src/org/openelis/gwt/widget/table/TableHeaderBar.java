@@ -368,6 +368,10 @@ public class TableHeaderBar extends Composite implements MouseMoveHandler,
         DeferredCommand.addCommand(new Command() {
             public void execute() {
             	int scrollWidth = 0;
+            	
+            	if(columns.size() == 0)
+            	    return;
+            	
             	for(int i = 0; i <  headers.size(); i++) {
             		scrollWidth += columns.get(i).getCurrentWidth();
             		HorizontalPanel header = headers.get(i);
