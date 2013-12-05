@@ -1275,7 +1275,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
      */
     public void setCellException(int row, int col, Exception ex) {
         rows.get(row).cells.get(col).addException(ex);
-        renderer.cellUpdated(row, col);
+        if (isRowDrawn(row))
+        	renderer.cellUpdated(row, col);
         
     }
     
@@ -1311,7 +1312,8 @@ public class TreeWidget extends FocusPanel implements FocusHandler,
     			break;
     		}
     	}
-        renderer.cellUpdated(row, index);
+    	if (isRowDrawn(row))
+    		renderer.cellUpdated(row, index);
         
     }
     
