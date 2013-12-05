@@ -25,6 +25,8 @@
 */
 package org.openelis.gwt.widget.tree;
 
+import org.openelis.gwt.widget.table.TableView.VerticalScroll;
+
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
@@ -137,6 +139,8 @@ public class TreeView extends Composite implements ScrollHandler, MouseWheelHand
             header.init(controller);
             headerView.add(header);
         }
+        if(showScroll == VerticalScroll.ALWAYS)
+        	cellView.setAlwaysShowScrollBars(true);
         cellView.setWidget(table);
         DOM.setStyleAttribute(headerView.getElement(), "overflow", "hidden");
         cellView.addScrollHandler(this);
