@@ -2294,9 +2294,11 @@ rich text css
 }
 
 .TableWidget, .TableWidget .TextboxUnselected, .TableWidget .TextboxSelected, .TableWidget .CalendarButton{
+    height:14px;
 }
+
 .TableWidget .CalendarButton, .TableWidget .DotsButton{
-   height:17px;
+    height:17px;
 }
 
 
