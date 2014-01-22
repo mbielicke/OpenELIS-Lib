@@ -2,6 +2,7 @@ package org.openelis.gwt.widget;
 
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.Command;
@@ -44,16 +45,58 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 		super.add(scroll, tabText);
 		scroll.setWidth(width);
 		scroll.setHeight(height);
-		if(isAttached()) {
+		//if(isAttached()) {
 			DeferredCommand.addCommand(new Command() {
 				public void execute() {
 					barScroller.checkScroll();
 				}
 			});
-		}
+		//}
 		
 	
 	}
+	
+	@Override
+	public boolean remove(int index) {
+	    boolean ret;
+	    ret = super.remove(index);
+	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            
+            @Override
+            public void execute() {
+                checkScroll();
+            }
+        });
+	   
+	    return ret;
+	}
+	
+	@Override
+	public boolean remove(Widget widget) {
+	    boolean ret;
+	    ret = super.remove(widget);
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            
+            @Override
+            public void execute() {
+                checkScroll();
+            }
+        });
+	    return ret;
+	}
+	
+	@Override
+	public void clear() {
+	    super.clear();
+	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+	            
+	         @Override
+	         public void execute() {
+	             checkScroll();
+	         }
+	    });
+	}
+	
 	
 	public String getNextTabWidget() {
 		return keyTabList.get(getTabBar().getSelectedTab()).split(",")[0];
@@ -78,13 +121,13 @@ public class TabPanel extends com.google.gwt.user.client.ui.TabPanel {
 	
 	public void setTabVisible(int index, boolean visible) {
 		((Widget)getTabBar().getTab(index)).setVisible(visible);
-		if(isAttached()) {
+		//if(isAttached()) {
 			DeferredCommand.addCommand(new Command() {
 				public void execute() {
 					barScroller.checkScroll();
 				}
 			});
-		}
+		//}
 	}
 	
 	@Override

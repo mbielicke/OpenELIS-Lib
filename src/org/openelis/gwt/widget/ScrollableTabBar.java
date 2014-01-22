@@ -74,29 +74,34 @@ public class ScrollableTabBar extends Composite implements HasSelectionHandlers<
   public void addTab(Widget widget){
       tabBar.addTab(widget);  
       tabBar.setVisible(true);
+      barScroller.checkScroll();
   }
   
   public void addTabAndSelect(String text){      
       tabBar.addTab(text); 
       selectTab(tabBar.getTabCount()-1);
       tabBar.setVisible(true);
+      barScroller.checkScroll();
   }
   
   public void addTabAndSelect(Widget widget){
       tabBar.addTab(widget);
       selectTab(tabBar.getTabCount()-1);
       tabBar.setVisible(true);
+      barScroller.checkScroll();
   }
     
   public void removeTab(int index){
      tabBar.removeTab(index);
      if(tabBar.getTabCount() == 0)
     	 tabBar.setVisible(false);
+     barScroller.checkScroll();
   }
   
   public void clearTabs(){   
      while(tabBar.getTabCount() > 0) 
          removeTab(0); 
+     barScroller.checkScroll();
   }
   
   public TabBar getTabBar(){
