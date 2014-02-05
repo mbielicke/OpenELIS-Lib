@@ -566,7 +566,7 @@ public class UIGenerator extends Generator {
     			setDefaults(node,"wid"+id);
     		}
     		public void addImport() {
-    			composer.addImport("org.openelis.gwt.widget.FileLoad");
+    			composer.addImport("org.openelis.ui.widget.fileupload.FileLoad");
     		}
     	});
     	factoryMap.put("AbsolutePanel", new Factory() {

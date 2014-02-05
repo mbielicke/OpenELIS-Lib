@@ -5,6 +5,7 @@ import gwtupload.client.IFileInput;
 import gwtupload.client.IUploader.UploaderConstants;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.openelis.gwt.event.FTPStartUploadEvent;
 import org.openelis.gwt.event.FTPStartUploadHandler;
@@ -343,4 +344,40 @@ public class FTPFileUpload extends Composite implements HasText, HasName, HasCha
 		public String getService() {
 			return service;
 		}
+
+        @Override
+        public List<String> getFilenames() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void setEnabled(boolean b) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void updateSize() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void enableMultiple(boolean b) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void setAccept(String accept) {
+            // TODO Auto-generated method stub
+            
+        }
 }

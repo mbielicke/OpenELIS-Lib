@@ -50,7 +50,9 @@ import gwtupload.client.IsUpdateable;
 import gwtupload.client.UpdateTimer;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.Utils;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -218,7 +220,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
  protected final ChangeHandler onFileInputChanged = new ChangeHandler() {
    public void onChange(ChangeEvent event) {
      basename = Utils.basename(getFileName());
-     statusWidget.setFileName(basename);
+     statusWidget.setFileNames(Arrays.asList(basename));
      if (autoSubmit && validateExtension(basename) && basename.length() > 0) {
        if (avoidRepeatedFiles && fileDone.contains(fileInput.getFilename())) {
          return;
@@ -259,7 +261,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
        GWT.log("GWTUpload: onStatusReceivedCallback timeout error, asking the server again.", null);
      } else {
        GWT.log("GWTUpload: onStatusReceivedCallback error: " + exception.getMessage(), exception);
-       updateStatusTimer.finish();
+       updateStatusTimer.cancel();
        String message = removeHtmlTags(exception.getMessage());
        message += "\n" + exception.getClass().getName();
        message += "\n" + exception.toString();
@@ -563,7 +565,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
    automaticUploadTimer.cancel();
    GWT.log("cancelling " +  uploading, null);
    if (uploading) {
-     updateStatusTimer.finish();
+     updateStatusTimer.cancel();
      try {
        sendAjaxRequestToCancelCurrentUpload();
      } catch (Exception e) {
@@ -671,7 +673,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
   */
  public void reset() {
    this.uploadForm.reset();
-   updateStatusTimer.finish();
+   updateStatusTimer.cancel();
    uploading = cancelled = finished = successful = false;
    basename = serverResponse = null;
    fileDone = new HashSet<String>();
@@ -999,7 +1001,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
      removeFromQueue();
      finished = true;
      uploading = false;
-     updateStatusTimer.finish();
+     updateStatusTimer.cancel();
 
      if (successful) {
        if (avoidRepeatedFiles) {
@@ -1038,7 +1040,7 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
    if (filename == null || filename.length() == 0) {
      return false;
    }
-   boolean valid = Utils.validateExtension(validExtensions, filename);
+   boolean valid = Utils.validateExtension(Arrays.asList(validExtensions), filename);
    if (!valid) {
      if (autoSubmit) {
        uploaderPanel.remove(uploadForm);
@@ -1048,4 +1050,56 @@ public class OpenELISUploader extends Composite implements IsUpdateable, IUpload
    return valid;
  }
 
+@Override
+public void add(Widget widget, int index) {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public String getServerRawResponse() {
+    // TODO Auto-generated method stub
+    return null;
+}
+
+@Override
+public UploadedInfo getServerInfo() {
+    // TODO Auto-generated method stub
+    return null;
+}
+
+@Override
+public boolean isEnabled() {
+    // TODO Auto-generated method stub
+    return false;
+}
+
+@Override
+public void setEnabled(boolean b) {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public void setServerMessage(ServerMessage msg) {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public void setMultipleSelection(boolean b) {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public ServerMessage getServerMessage() {
+    // TODO Auto-generated method stub
+    return null;
+}
+
+@Override
+    public Widget getWidget() {
+        return super.getWidget();
+    }
 }

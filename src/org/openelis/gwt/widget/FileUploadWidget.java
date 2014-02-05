@@ -34,7 +34,7 @@ public class FileUploadWidget extends Composite implements HasField<ArrayList<St
 			public void onFinish(IUploader uploader) {
 				if(files == null)
 					files = new ArrayList<String>();
-				files.add(uploader.getFileName());
+				files.add(uploader.getInputName());
 			}
 		});
 	}

@@ -1,7 +1,10 @@
 package org.openelis.gwt.widget;
 
+import java.util.Arrays;
+
 import gwtupload.client.IFileInput;
 import gwtupload.client.IUploadStatus;
+import gwtupload.client.Utils;
 
 import org.openelis.gwt.common.FtpRPC;
 import org.openelis.gwt.event.FTPStartUploadEvent;
@@ -89,7 +92,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 	public void onFTPStart(FTPStartUploadEvent event) {
 		  URL = event.getURL();
 		  basename = Utils.basename(event.getURL());
-	      statusWidget.setFileName(basename);
+	      statusWidget.setFileNames(Arrays.asList(basename));
 	      if (autoSubmit && validateExtension(basename) && basename.length() > 0) {
 	        if (avoidRepeatedFiles && fileDone.contains(fileInput.getFilename())) {
 	          return;

@@ -2,16 +2,16 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry exported="true" kind="lib" path="lib/gwt-dnd-3.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-vfs-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gwt-ajaxloader.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gwt-visualization-noredist.jar"/>
-	<classpathentry kind="lib" path="lib/gwtupload-0.6-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-dnd-55b29bc583e9f0a1126efdc201fd370fe76e2f35.jar"/>
+	<classpathentry kind="lib" path="lib/gwtupload-1.0.0.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/usr/local/java/jboss-as-7.1.1.Final/bin/client/jboss-client.jar"/>
 	<classpathentry kind="lib" path="/usr/local/java/jboss-as-7.1.1.Final/modules/javax/persistence/api/main/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OpenELIS-UI"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

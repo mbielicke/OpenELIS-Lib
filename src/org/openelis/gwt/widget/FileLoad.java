@@ -64,6 +64,7 @@ public class FileLoad extends Composite {
 	
 	public void setWidget(Widget widget) {
 		upload.setButton(widget);
+		upload.setEnabled(true);
 	}
 
 }
