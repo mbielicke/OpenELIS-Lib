@@ -1062,11 +1062,7 @@ public String getServerRawResponse() {
     return null;
 }
 
-@Override
-public UploadedInfo getServerInfo() {
-    // TODO Auto-generated method stub
-    return null;
-}
+
 
 @Override
 public boolean isEnabled() {
@@ -1102,4 +1098,10 @@ public ServerMessage getServerMessage() {
     public Widget getWidget() {
         return super.getWidget();
     }
+
+@Override
+public UploadedInfo getServerInfo() {
+    // TODO Auto-generated method stub
+    return null;
+}
 }

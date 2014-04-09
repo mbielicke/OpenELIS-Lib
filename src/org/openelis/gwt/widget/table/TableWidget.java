@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.openelis.ui.common.Util;
 import org.openelis.gwt.event.BeforeDragStartEvent;
 import org.openelis.gwt.event.BeforeDragStartHandler;
@@ -1274,7 +1273,7 @@ public class TableWidget extends FocusPanel implements ClickHandler,
 
 	public HandlerRegistration addBeforeRowMovedHandler(
 			BeforeRowMovedHandler handler) {
-		return addHandler(handler, BeforeRowMovedEvent.getType());
+		return addHandler((BeforeRowMovedHandler<?>)handler, BeforeRowMovedEvent.getType());
 	}
 
 	public HandlerRegistration addRowMovedHandler(RowMovedHandler handler) {
