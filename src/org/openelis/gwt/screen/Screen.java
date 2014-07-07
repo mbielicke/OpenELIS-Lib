@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.openelis.ui.common.Caution;
 import org.openelis.ui.common.FieldErrorException;
 import org.openelis.ui.common.FormErrorException;
 import org.openelis.ui.common.TableFieldErrorException;
@@ -214,20 +215,20 @@ public class Screen extends Composite implements
 		String warningText = "There are warnings on the screen:" + "\n";
 
 		for (Exception ex : warnings.getErrorList()) {
-			if (ex instanceof Warning)
+			if (ex instanceof Warning || ex instanceof Caution )
 				warningText += " * " + ex.getMessage() + "\n";
 		}
 		warningText += "\n" + "Press Ok to commit anyway or cancel to fix these warnings.";
 		
 
 		if (Window.confirm(warningText))
-			commitWithWarnings();
+			commitWithWarnings(warnings);
 	}
 
 	/**
 	 * Override this method to handle user's confirmation for showWarningDialog.
 	 */
-	protected void commitWithWarnings() {
+	protected void commitWithWarnings(ValidationErrorsList warnings) {
 	}
 
 	/**
