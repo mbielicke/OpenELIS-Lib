@@ -203,7 +203,7 @@ public class Screen extends Composite implements
 		else {
 			window.setError("(Error 1 of " + formErrors.size() + ") "
 					+ formErrors.get(0).getMessage());
-			//window.setMessagePopup(formErrors, "ErrorPanel");
+			window.setMessagePopup(formErrors, "ErrorPanel");
 		}
 	}
 
