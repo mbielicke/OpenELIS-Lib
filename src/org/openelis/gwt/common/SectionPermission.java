@@ -44,7 +44,7 @@ public class SectionPermission implements RPC {
     public SectionPermission(String name, String view, String assign, String complete,
                            String release, String cancel) {
         this.name = name;
-        hasView = "Y".equals("view");
+        hasView = "Y".equals(view);
         hasAssign = "Y".equals(assign);
         hasComplete = "Y".equals(complete);
         hasRelease = "Y".equals(release);
