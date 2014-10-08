@@ -1,11 +1,15 @@
 package org.openelis.gwt.server;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,82 +23,75 @@ import org.openelis.ui.common.ReportStatus;
 public class ReportServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Logger log = Logger.getLogger("openelis");
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-                                                                                  IOException {
-        int l;
-        byte b[];
-        File file;
-        FileInputStream in;
-        ServletOutputStream out;
+                    IOException {
+        Path path;
         ReportStatus status;
-        String filename, contentType, attachment;
+        String key, contentType, attachment;
+        OutputStream out;
 
-        in = null;
+        key = null;
         out = null;
-        filename = null;
         try {
             /*
              * make sure the requested file is in user session (we have
              * generated the file)
              */
-            filename = req.getParameter("file");
-            if (DataBaseUtil.isEmpty(filename)) {
+            key = req.getParameter("file");
+            if (DataBaseUtil.isEmpty(key)) {
                 error(resp, "Missing file name; please report this error to Lab IT");
                 return;
             }
 
-            status = (ReportStatus)req.getSession().getAttribute(filename);
+            status = (ReportStatus)req.getSession().getAttribute(key);
             if (status == null || status.getStatus() != ReportStatus.Status.SAVED) {
                 error(resp, "Specified file key is not valid; please report this error to Lab IT");
                 return;
             }
 
-            file = new File(status.getPath(), status.getMessage());
-            if (!file.exists()) {
+            path = null;
+            try {
+                path = Paths.get(status.getPath());
+            } catch (InvalidPathException e) {
                 error(resp, "Specified file is not valid; please report this error to Lab IT");
-                System.out.println("File " + file.getAbsolutePath() + " not found");
+                log.severe("File " + status.getPath() + " not found");
                 return;
             }
 
             /*
              * stream the file
              */
-            contentType = getContentType(filename);
+            contentType = getContentType(key);
             resp.setContentType(contentType);
 
             attachment = req.getParameter("attachment");
-            if (!DataBaseUtil.isEmpty(attachment))
+            if ( !DataBaseUtil.isEmpty(attachment))
                 resp.setHeader("Content-Disposition", "attachment;filename=\"" + attachment + "\"");
             else
-                resp.setHeader("Content-Disposition", "filename=\"" + filename + "\"");
+                resp.setHeader("Content-Disposition", "filename=\"" + status.getMessage() + "\"");
 
             /*
-             * TODO: Remove this when we no longer support IE8
-             * Headers are set to fix IE8 download bug
+             * TODO: Remove this when we no longer support IE8 Headers are set
+             * to fix IE8 download bug
              */
             resp.setHeader("Pragma", "token");
             resp.setHeader("Cache-control", "private");
 
-            in = new FileInputStream(file);
             out = resp.getOutputStream();
-
-            b = new byte[1024];
-            while ((l = in.read(b)) > 0)
-                out.write(b, 0, l);
-
-            file.delete();
+            Files.copy(path, out);
+            Files.delete(path);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, e.getMessage(), e);
             throw new ServletException(e.getMessage());
         } finally {
-            if (in != null)
-                in.close();
             if (out != null)
                 out.close();
-            if (filename != null)
-                req.getSession().removeAttribute(filename);
+            if (key != null)
+                req.getSession().removeAttribute(key);
         }
     }
 
@@ -117,7 +114,7 @@ public class ReportServlet extends HttpServlet {
         try {
             resp.getWriter().println(htmlMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -125,20 +122,25 @@ public class ReportServlet extends HttpServlet {
      * Returns a mime type based on the filename extension
      */
     protected String getContentType(String filename) {
-        if (DataBaseUtil.isEmpty(filename))
+        String temp;
+        
+        temp = filename.toLowerCase();
+        if (DataBaseUtil.isEmpty(temp))
             return "text/html";
-        else if (filename.endsWith(".pdf"))
+        else if (temp.endsWith(".pdf"))
             return "application/pdf";
-        else if (filename.endsWith(".xls"))
+        else if (temp.endsWith(".xls"))
             return "application/vnd.ms-excel";
-        else if (filename.endsWith(".xlsx"))
+        else if (temp.endsWith(".xlsx"))
             return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        else if (filename.endsWith(".doc"))
+        else if (temp.endsWith(".doc"))
             return "application/msword";
-        else if (filename.endsWith(".docx"))
+        else if (temp.endsWith(".docx"))
             return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        else if (filename.endsWith(".xml"))
+        else if (temp.endsWith(".xml"))
             return "text/xml";
+        else if (temp.endsWith(".png"))
+            return "image/png";
         else
             return "application/octet-stream";
     }
