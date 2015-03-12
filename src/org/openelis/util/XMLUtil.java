@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -98,13 +99,18 @@ public class XMLUtil {
                                                     .newTransformer();
         DOMSource source = new DOMSource(doc);
         try {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        StreamResult result = new StreamResult(output);
+        //ByteArrayOutputStream output = new ByteArrayOutputStream();
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
         transformer.transform(source, result);
-        
-        return new String(output.toByteArray(),"UTF-8");
+  
+        String ret = writer.toString();
+        System.out.println("Changes = "+ret);
+        return writer.toString();
+       
         }catch(Exception e){
-            return null;
+        	e.printStackTrace();
+            return "";
         }
     }
 
