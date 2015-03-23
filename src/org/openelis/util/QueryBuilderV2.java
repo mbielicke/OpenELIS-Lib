@@ -323,7 +323,7 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if("NULL".equals(param)) {
+    		if(!"NULL".equals(param)) {
     			if (param.indexOf("..") > -1) {
     				String[] bparams = param.split("\\.\\.");
     				query.setParameter(paramName + i + "0", bparams[0]);
@@ -359,7 +359,7 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if("NULL".equals(param)) {
+    		if(!"NULL".equals(param)) {
     			if (param.indexOf("..") > -1) {
     				String param1 = param.substring(0, param.indexOf(".."));
     				String param2 = param.substring(param.indexOf("..") + 2,
@@ -400,7 +400,7 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if("NULL".equals(param)) {
+    		if(!"NULL".equals(param)) {
     			if (param.indexOf("..") > -1) {
     				String param1 = param.substring(0, param.indexOf(".."));
     				String param2 = param.substring(param.indexOf("..") + 2,
@@ -452,7 +452,7 @@ public class QueryBuilderV2 {
     	int i = 0;
     	while (fieldParamIt.hasNext()) {
     		String param = (String)fieldParamIt.next();
-    		if("NULL".equals(param)) {
+    		if(!"NULL".equals(param)) {
     			if(param.indexOf(":") > -1)
     				dateType = TemporalType.TIMESTAMP;
     			if (param.indexOf("..") > -1) {
