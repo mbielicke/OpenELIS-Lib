@@ -128,14 +128,14 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
     	if(!enabled)
     		return;
        if(type == CheckType.TWO_STATE){
-           if(state == CHECKED)
+           if(CHECKED.equals(state))
                setValue(UNCHECKED,true);
            else
                setValue(CHECKED,true);
        }else{
-           if(state == CHECKED) 
+           if(CHECKED.equals(state)) 
                setValue(UNCHECKED,true);
-           else if (state == UNCHECKED)
+           else if (UNCHECKED.equals(state))
                setValue(UNKNOWN,true);
            else
                setValue(CHECKED,true);
@@ -216,14 +216,14 @@ public class CheckBox extends FocusPanel implements ClickHandler, HasValue<Strin
 	    	if(!enabled)
 	    		return;
 	       if(type == CheckType.TWO_STATE){
-	           if(state == CHECKED)
+	           if(CHECKED.equals(state))
 	               setValue(UNCHECKED,true);
 	           else
 	               setValue(CHECKED,true);
 	       }else{
-	           if(state == CHECKED) 
+	           if(CHECKED.equals(state)) 
 	               setValue(UNCHECKED,true);
-	           else if (state == UNCHECKED)
+	           else if (UNCHECKED.equals(state))
 	               setValue(UNKNOWN,true);
 	           else
 	               setValue(CHECKED,true);

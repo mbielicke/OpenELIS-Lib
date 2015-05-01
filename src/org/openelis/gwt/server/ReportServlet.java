@@ -36,6 +36,7 @@ public class ReportServlet extends HttpServlet {
 
         key = null;
         out = null;
+        path = null;
         try {
             /*
              * make sure the requested file is in user session (we have
@@ -53,7 +54,6 @@ public class ReportServlet extends HttpServlet {
                 return;
             }
 
-            path = null;
             try {
                 path = Paths.get(status.getPath());
             } catch (InvalidPathException e) {
@@ -70,7 +70,8 @@ public class ReportServlet extends HttpServlet {
 
             attachment = req.getParameter("attachment");
             if ( !DataBaseUtil.isEmpty(attachment))
-                resp.setHeader("Content-Disposition", "attachment;filename=\"" + attachment + "\"");
+                resp.setHeader("Content-Disposition", "attachment;filename=\"" + removeCRLF(attachment) +
+                               "\"");
             else
                 resp.setHeader("Content-Disposition", "filename=\"" + status.getMessage() + "\"");
 
@@ -83,15 +84,20 @@ public class ReportServlet extends HttpServlet {
 
             out = resp.getOutputStream();
             Files.copy(path, out);
-            Files.delete(path);
         } catch (Exception e) {
             log.log(Level.SEVERE, e.getMessage(), e);
             throw new ServletException(e.getMessage());
         } finally {
-            if (out != null)
-                out.close();
-            if (key != null)
-                req.getSession().removeAttribute(key);
+            try {
+                if (out != null)
+                    out.close();
+                if (key != null)
+                    req.getSession().removeAttribute(key);
+                if (path != null)
+                    Files.delete(path);
+            } catch (Exception e) {
+                log.log(Level.SEVERE, e.getMessage(), e);
+            }
         }
     }
 
@@ -143,5 +149,12 @@ public class ReportServlet extends HttpServlet {
             return "image/png";
         else
             return "application/octet-stream";
+    }
+    
+    /**
+     * Remove cr/lf from attachment
+     */
+    protected String removeCRLF(String attachment) {
+        return attachment.replaceAll("[\n\r]", "");
     }
 }
