@@ -26,6 +26,7 @@
 package org.openelis.gwt.common;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -354,9 +355,9 @@ public class DataBaseUtil {
     }
 
     /**
-     * Convert a List to ArrayList
+     * Convert a Collection to ArrayList
      */
-    public static <T> ArrayList<T> toArrayList(List<T> from) {
+    public static <T> ArrayList<T> toArrayList(Collection<T> from) {
         if (from instanceof ArrayList)
             return (ArrayList<T>)from;
         return new ArrayList<T>(from);
