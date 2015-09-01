@@ -1,0 +1,10 @@
+<ivysettings>
+  <settings defaultResolver="nexus"/>
+  <property name="nexus-public"
+                   value="http://ap-serv-j:8081/nexus/content/groups/public"/>
+  <property name="nexus-snapshots" value="http://ap-serv-j:8081:nexus/content/groups/snapshots"/>
+  <resolvers>
+    <ibiblio name="nexus" m2compatible="true" root="${nexus-public}"/>
+    <ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots}"/>
+  </resolvers>
+</ivysettings>
